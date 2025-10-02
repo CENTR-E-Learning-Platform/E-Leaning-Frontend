@@ -13,6 +13,7 @@ const MainRegister = () => {
 
   return (
     <main className="h-[100vh] flex w-full">
+      {/*  */}
       <section className="w-[50%] flex justify-center bg-[#F9FBFC]">
         <div className="flex flex-col items-center justify-center">
           <header className="flex flex-col justify-center items-center">
