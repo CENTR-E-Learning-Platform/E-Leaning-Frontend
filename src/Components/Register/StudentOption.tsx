@@ -9,7 +9,7 @@ const StudentOption = () => {
           
           <section className="flex items-start justify-center">
             <div>
-              <header>
+              <header className='flex justify-center items-center'>
                 <h1 className='mt-[34.453125px] font-semibold text-[32px] text-[#2A2D34]'>logo</h1>
               </header>
 
@@ -34,14 +34,14 @@ const StudentOption = () => {
                   </div>
                 </section>
 
-                <nav className="flex items-center gap-6 justify-center mt-6">
+                <div className="flex items-center gap-6 justify-center mt-6">
                   <button type="button" className='w-[178.59375px] cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]'>
                     Back
                   </button>
                   <button type="button" className='w-[178.59375px] cursor-pointer h-[36.5625px] bg-[#525FE1] text-[#fff] border border-[#525FE1] rounded-[8px]'>
                     Continue
                   </button>
-                </nav>
+                </div>
               </article>
             </div>
           </section>

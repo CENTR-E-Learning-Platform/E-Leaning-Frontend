@@ -9,7 +9,7 @@ const TeacherOption = () => {
           
             <section className="flex items-start justify-center">
                 <div>
-                    <header>
+                    <header className='flex justify-center items-center'>
                         <h1 className='mt-[34.453125px] font-semibold text-[32px] text-[#2A2D34]'>logo</h1>
                     </header>
 

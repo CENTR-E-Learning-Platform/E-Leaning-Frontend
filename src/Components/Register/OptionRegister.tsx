@@ -12,12 +12,12 @@ const OptionRegister: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
           <section className="flex items-start justify-center">
             <div>
-              <header>
+              <header className='flex justify-center items-center'>
                 <h1 className='mt-[34.453125px] font-semibold text-[32px] text-[#2A2D34]'>logo</h1>
               </header>
 
               <article className="flex flex-col items-center justify-center">
-                <h2 className='text-[40px] mt-[117.421875px] font-bold leading-[29px] font-poppins text-[#2A2D34]'>Join as a </h2>
+                <h2 className='text-[40px] mt-[117.421875px] font-bold leading-[29px] font-poppins text-[#2A2D34]'>Join as a</h2>
 
                 <section className="h-[251.015625px] mt-[10px] w-[379.6875px] mb-[10px] flex items-center gap-6 justify-center">
                   
@@ -28,13 +28,13 @@ const OptionRegister: React.FC = () => {
                       shadow-[0px_6px_12px_0px_#00000024] 
                       border-2 
                       cursor-pointer
-                      transition-all duration-300
+                      transition-all duration-400
                       ${selected === "student" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} 
                       hover:border-[#525FE1]
                     `}
                   >
                     <img className='h-[154.6875px] m-auto w-[154.6875px]' src={student_img} alt="Student illustration" />
-                    <h3 className='font-medium text-[18px] leading-[12px] text-[#2A2D34]'>Student</h3>
+                    <h3 className='font-medium text-[18px] text-center leading-[12px] text-[#2A2D34]'>Student</h3>
                     <p className='font-normal p-1.5 text-[16px] leading-[122%] text-center text-[#6D7588]'>Start your learning journey</p>
                   </div>
 
@@ -45,13 +45,13 @@ const OptionRegister: React.FC = () => {
                       shadow-[0px_6px_12px_0px_#00000024] 
                       border-2 
                       cursor-pointer
-                      transition-all duration-300
+                      transition-all duration-400
                       ${selected === "teacher" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} 
                       hover:border-[#525FE1]
                     `}
                   >
                     <img className='h-[154.6875px] m-auto w-[154.6875px]' src={teacher_img} alt="Teacher illustration" />
-                    <h3 className='font-medium text-[18px] leading-[12px] text-[#2A2D34]'>Teacher</h3>
+                    <h3 className='font-medium text-[18px] text-center leading-[12px] text-[#2A2D34]'>Teacher</h3>
                     <p className='font-normal p-1.5 text-[16px] leading-[122%] text-center text-[#6D7588]'>Share your knowledge & earn</p>
                   </div>
                 </section>
