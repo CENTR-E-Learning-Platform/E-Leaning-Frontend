@@ -7,6 +7,7 @@ import google_icon from "../../assets/icons/material-icon-theme_google.png";
 import facebook_icon from "../../assets/icons/logos_facebook.png";
 
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const MainLogin = () => {
   const [openEye, setOpenEye] = useState(false);
@@ -20,18 +21,18 @@ const MainLogin = () => {
               Welcome back!
             </h1>
             <nav className="flex bg-[#FFFFFF] border-[1px] border-[#6D7588] rounded-[4px] w-[379px] h-[37px] p-[2px]">
-              <button
-                className="w-[50%] bg-[#DCDFF9] rounded-[4px] text-[12px] font-bold text-[#525FE1] cursor-pointer"
-                type="button"
+              <NavLink
+                className="w-[50%] flex justify-center items-center bg-[#DCDFF9] rounded-[4px] text-[12px] font-bold text-[#525FE1] cursor-pointer"
+                to={"/login"}
               >
                 Log in
-              </button>
-              <button
-                className="w-[50%] text-[12px] font-bold text-[#2A2D34] cursor-pointer"
-                type="button"
+              </NavLink>
+              <NavLink
+                className="w-[50%] flex justify-center items-center text-[12px] font-bold text-[#2A2D34] cursor-pointer"
+                to={"/register"}
               >
                 Sign up
-              </button>
+              </NavLink>
             </nav>
           </header>
 

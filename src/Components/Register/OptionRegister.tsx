@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Reg_Log from '../../assets/images/Reg&Log.png'
 import teacher_img from '../../assets/images/Teacher.png'
 import student_img from '../../assets/images/Student.png'
+import { NavLink } from 'react-router-dom'
+import { useRegContext } from '../Contexts/RegContext'
 
 const OptionRegister: React.FC = () => {
-  const [selected, setSelected] = useState<string | null>(null);
 
+  const { role , setrole } = useRegContext();
+  
   return (
     <React.Fragment>
       <main className="w-screen h-screen">
@@ -22,14 +25,14 @@ const OptionRegister: React.FC = () => {
                 <section className="h-[251.015625px] mt-[10px] w-[379.6875px] mb-[10px] flex items-center gap-6 justify-center">
                   
                   <div
-                    onClick={() => setSelected("student")}
+                    onClick={() => setrole("Student")}
                     className={`
                       rounded-2xl h-[218px] w-[178.59375px] 
                       shadow-[0px_6px_12px_0px_#00000024] 
-                      border-2 
+                      border-2
                       cursor-pointer
                       transition-all duration-400
-                      ${selected === "student" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} 
+                      ${role === "Student" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} 
                       hover:border-[#525FE1]
                     `}
                   >
@@ -39,14 +42,14 @@ const OptionRegister: React.FC = () => {
                   </div>
 
                   <div
-                    onClick={() => setSelected("teacher")}
+                    onClick={() => setrole("Teacher")}
                     className={`
                       rounded-2xl h-[218px] w-[178.59375px] 
                       shadow-[0px_6px_12px_0px_#00000024] 
                       border-2 
                       cursor-pointer
                       transition-all duration-400
-                      ${selected === "teacher" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} 
+                      ${role === "Teacher" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} 
                       hover:border-[#525FE1]
                     `}
                   >
@@ -57,8 +60,14 @@ const OptionRegister: React.FC = () => {
                 </section>
 
                 <div className="flex items-center gap-6 justify-center mt-6">
-                  <button type="button" className='w-[178.59375px] cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]'>Back</button>
-                  <button type="button" className='w-[178.59375px] cursor-pointer h-[36.5625px] bg-[#525FE1] text-[#fff] border border-[#525FE1] rounded-[8px]'>continue</button>
+                  <NavLink className='w-[178.59375px] flex justify-center items-center cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]' to={'/Register'}>Back</NavLink>
+                  <NavLink className={`w-[178.59375px] flex justify-center items-center h-[36.5625px] border rounded-[8px] transition-all duration-300
+                      ${
+                        role
+                          ? "bg-[#525FE1] text-white border-[#525FE1] cursor-pointer"
+                          : "bg-gray-300 text-gray-500 border-[#525FE1] cursor-not-allowed"
+                      }
+                    `} to={role==='Teacher'?'/TeacherOption':'/StudentOption'}>continue</NavLink>
                 </div>
               </article>
             </div>
