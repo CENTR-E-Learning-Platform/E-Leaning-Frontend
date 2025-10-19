@@ -1,7 +1,7 @@
 import { RouterProvider } from 'react-router-dom'
 import './App.css'
-import { router } from './Components/Routes/Routes'
-import { RegProvider } from './Components/Contexts/RegContext'
+import { router } from './Routes/Routes'
+import { RegProvider } from './Features/Auth/Contexts/RegContext'
 
 
 
@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-    
+      
       <RegProvider>
         <RouterProvider router={router}/>
       </RegProvider>
