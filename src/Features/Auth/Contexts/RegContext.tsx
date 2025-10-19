@@ -1,22 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import type {FormRegisterType , UserRegister  } from '../Types/user';
 
-export interface User {
-  email: string;
-  fullName: string;
-  password: string;
-}
-
-interface FormRegisterType {
-  email?: string;
-  fullName?: string;
-  password?: string;
-  role?: string | null;
-  educationLevelOrSubject?: string | null;
-}
 
 interface AuthContextType {
-  userData: User | null;
-  setUserData: React.Dispatch<React.SetStateAction<User | null>>;
+  userData: UserRegister | null;
+  setUserData: React.Dispatch<React.SetStateAction<UserRegister | null>>;
   role: string | null;
   setrole: React.Dispatch<React.SetStateAction<string | null>>;
   educationLevelOrSubject: string | null;
@@ -33,7 +21,7 @@ export const RegProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const storeEducationLevelOrSubject = localStorage.getItem("educationLevelOrSubject");
 
 
-  const [userData, setUserData] = useState<User | null>(
+  const [userData, setUserData] = useState<UserRegister | null>(
     storedUser ? JSON.parse(storedUser) : null
   );
   const [role, setrole] = useState<string | null>(

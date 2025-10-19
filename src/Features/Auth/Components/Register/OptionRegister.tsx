@@ -1,9 +1,9 @@
 import React from 'react'
-import Reg_Log from '../../assets/images/Reg&Log.png'
-import teacher_img from '../../assets/images/Teacher.png'
-import student_img from '../../assets/images/Student.png'
+import Reg_Log from '../../../../assets/images/Reg&Log.png'
+import teacher_img from '../../../../assets/images/Teacher.png'
+import student_img from '../../../../assets/images/Student.png'
 import { NavLink } from 'react-router-dom'
-import { useRegContext } from '../Contexts/RegContext'
+import { useRegContext } from '../../Contexts/RegContext'
 
 const OptionRegister: React.FC = () => {
 

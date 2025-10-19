@@ -1,7 +1,7 @@
 import React from 'react'
-import ST_page from "../../assets/images/studentPage.png"
+import ST_page from "../../../../assets/images/studentPage.png"
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useRegContext } from '../Contexts/RegContext';
+import { useRegContext } from '../../Contexts/RegContext';
 import axios from 'axios';
 
 const StudentOption = () => {

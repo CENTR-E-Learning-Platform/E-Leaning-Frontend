@@ -1,8 +1,8 @@
 import React from 'react'
-import Teach_page from "../../assets/images/TeacherPage.png"
+import Teach_page from "../../../../assets/images/TeacherPage.png";
 
 import axios from 'axios';
-import { useRegContext } from '../Contexts/RegContext';
+import { useRegContext } from '../../Contexts/RegContext';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 
