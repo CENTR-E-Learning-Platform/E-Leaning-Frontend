@@ -7,7 +7,7 @@ const GoogleButton = () => {
   return (
     <button
       type="button"
-      onClick={() => loginWithGoogle()} 
+      onClick={loginWithGoogle}
       className="cursor-pointer flex justify-center items-center mt-[8px] text-[#2A2D34] w-[379px] h-[36px] border-[#6D7588] border-[1px] rounded-[4px]"
     >
       <img className="w-[17px] me-[5px]" src={google_icon} alt="Google icon" />

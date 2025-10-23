@@ -1,25 +1,27 @@
-import { useGoogleLogin } from "@react-oauth/google";
-import { googleLogin } from "../Services/googleAPI";
-
+import { useRegContext } from "../Contexts/RegContext";
+import {EXTERNAL_LOGIN_API} from '../Utils/api';
 export const useGoogle = () => {
-  const login = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const token = tokenResponse.access_token;
-        console.log("Google Access Token:", token);
+  const { role, educationLevelOrSubject } = useRegContext();
 
-      
-        const res = await googleLogin(token);
-        console.log("Backend JWT:", res.data);
+  const login = () => {
+    const data = {
+      returnURL: `https://localhost:7251/OptionRegister`,
+      Role: role ?? "student",
+      Provider: "Google",
+      GradeOrSubject: educationLevelOrSubject ?? "",
+    };
 
-        
-        localStorage.setItem("token", res.data.token);
-      } catch (error) {
-        console.error("Backend error:", error);
-      }
-    },
-    onError: () => console.error("Google Login Failed"),
-  });
+
+    const params = new URLSearchParams({
+      returnURL: data.returnURL,
+      Role: data.Role,
+      Provider: data.Provider,
+      GradeOrSubject : data.GradeOrSubject
+    });
+
+  
+    window.location.href = `${EXTERNAL_LOGIN_API}?${params.toString()}`;
+  };
 
   return login;
 };
