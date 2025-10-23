@@ -22,7 +22,13 @@ const LoginForm = () => {
             <input
               id="email"
               name="email"
-              className="w-[379px] h-[36px] border-[#6D7588] border-[1px] rounded-[4px] pl-[35px] pb-[2px] pr-5 focus:outline-none focus:ring-1 focus:ring-[#2A2D34]"
+              className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${
+              formik.touched.email && formik.errors.email
+                ? "border-red-600"
+                : formik.touched.email && formik.errors.email
+                ? "border-[#525FE1]"
+                : "border-[#6D7588]"
+              }`}
               type="email"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -52,7 +58,13 @@ const LoginForm = () => {
             <input
               id="password"
               name="password"
-              className="w-[379px] h-[36px] border-[#6D7588] border-[1px] rounded-[4px] pl-[35px] pb-[2px] pr-5 focus:outline-none focus:ring-1 focus:ring-[#2A2D34]"
+              className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${
+              formik.touched.password && formik.errors.password
+                ? "border-red-600"
+                : formik.touched.password && formik.errors.password
+                ? "border-[#525FE1]"
+                : "border-[#6D7588]"
+              }`}
               type={openEye ? "text" : "password"}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -111,7 +123,7 @@ const LoginForm = () => {
 
         {/* Social Logins */}
         <GoogleButton />
-        <FacebookButton />
+        <FacebookButton/>
       </section>
     </>
   );

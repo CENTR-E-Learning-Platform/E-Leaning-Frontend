@@ -24,7 +24,13 @@ const RegisterForm = () => {
           onBlur={formik.handleBlur}
           value={formik.values.fullName}
           placeholder="Your name"
-          className="w-[379px] h-[36px] rounded-[4px] pl-[35px] border border-[#6D7588]"
+          className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${
+            formik.touched.fullName && formik.errors.fullName
+              ? "border-red-600"
+              : formik.touched.fullName && formik.errors.fullName
+              ? "border-[#525FE1]"
+              : "border-[#6D7588]"
+          }`}
         />
         <CircleUserRound className="absolute left-[10px] top-[27px] w-[17px] text-[#2A2D34]" />
         {formik.touched.fullName && formik.errors.fullName && (
@@ -47,7 +53,13 @@ const RegisterForm = () => {
           onBlur={formik.handleBlur}
           value={formik.values.email}
           placeholder="Your email"
-          className="w-[379px] h-[36px] rounded-[4px] pl-[35px] border border-[#6D7588]"
+          className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${
+            formik.touched.email && formik.errors.email
+              ? "border-red-600"
+              : formik.touched.email && formik.errors.email
+              ? "border-[#525FE1]"
+              : "border-[#6D7588]"
+          }`}
         />
         <Mail className="absolute left-[10px] top-[27px] w-[17px] text-[#2A2D34]" />
         {formik.touched.email && formik.errors.email && (

@@ -3,10 +3,8 @@ import ST_page from "../../../../assets/images/studentPage.png"
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useRegContext } from '../../Contexts/RegContext';
 import axios from 'axios';
-
 const StudentOption = () => {
    const NavigateLogin = useNavigate()
-
   const { educationLevelOrSubject, seteducationLevelOrSubject, FormRegister } = useRegContext();
   async function handelRegister(){
     axios.post('https://runnier-uncongealable-samuel.ngrok-free.dev/Account/Register', FormRegister)
