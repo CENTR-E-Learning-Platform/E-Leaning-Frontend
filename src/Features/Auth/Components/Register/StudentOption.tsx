@@ -1,25 +1,12 @@
 import React from 'react'
 import ST_page from "../../../../assets/images/studentPage.png"
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useRegContext } from '../../Contexts/RegContext';
-import axios from 'axios';
+import { handelRegister } from '../../Hooks/useRegister';
 const StudentOption = () => {
-   const NavigateLogin = useNavigate()
+
   const { educationLevelOrSubject, seteducationLevelOrSubject, FormRegister } = useRegContext();
-  async function handelRegister(){
-    axios.post('https://runnier-uncongealable-samuel.ngrok-free.dev/Account/Register', FormRegister)
-    .then((res) => {
-      NavigateLogin('/login')
-      console.log('✅ Success:', res.data);
-    })
-    .catch((error) => {
-      console.log('❌ Error:', error.message);
-      if (error.response) {
-        console.log('Server said:', error.response.data.title);
-      }
-    });
-  }
-  
+
   return (
     <React.Fragment>
       <main className="w-screen h-screen">
@@ -61,7 +48,7 @@ const StudentOption = () => {
                   <NavLink to={"/OptionRegister"} className='w-[178.59375px] flex justify-center items-center cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]'>
                     Back
                   </NavLink>
-                  <button onClick={handelRegister} type="button" className='w-[178.59375px] cursor-pointer h-[36.5625px] bg-[#525FE1] text-[#fff] border border-[#525FE1] rounded-[8px]'>
+                  <button onClick={()=>handelRegister(FormRegister)} type="button" className='w-[178.59375px] cursor-pointer h-[36.5625px] bg-[#525FE1] text-[#fff] border border-[#525FE1] rounded-[8px]'>
                     Continue
                   </button> 
                 </div>
@@ -69,7 +56,6 @@ const StudentOption = () => {
             </div>
           </section>
 
-          
           <aside style={{
             background: "linear-gradient(to bottom, #CBCFF6 10%, #525FE1 90%)",}} 
             className="flex h-full items-center justify-center">
