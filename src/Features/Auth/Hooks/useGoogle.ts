@@ -5,7 +5,7 @@ export const useGoogle = () => {
 
   const login = () => {
     const data = {
-      returnURL: `https://localhost:7251/OptionRegister`,
+      returnURL: `http://localhost:5051/Dashboard`,
       Role: role ?? "student",
       Provider: "Google",
       GradeOrSubject: educationLevelOrSubject ?? "",
