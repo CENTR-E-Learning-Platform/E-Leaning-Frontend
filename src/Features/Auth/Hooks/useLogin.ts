@@ -3,8 +3,6 @@ import { useFormik } from "formik";
 import { loginSchema } from "../Validation/loginSchema";
 import { loginUser } from "../Services/loginAPI";
 import { useNavigate } from "react-router-dom";
-import { useRegContext } from "../Contexts/RegContext";
-import { usehandelRegister } from "./useRegister";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -38,26 +36,4 @@ export const useLogin = () => {
   });
 
   return formik;
-};
-export const usehandelClickLogin = () => {
-  const navigate = useNavigate();
-
-  const { educationLevelOrSubject , seteducationLevelOrSubject, FormRegister } =
-    useRegContext();
-  function RegisterClick() {
-    if (!educationLevelOrSubject) {
-      return;
-    }
-    usehandelRegister(FormRegister);
-  }
-  function BackOption() {
-    localStorage.removeItem("educationLevelOrSubject");
-    navigate("/OptionRegister");
-  }
-  return {
-    seteducationLevelOrSubject,
-    RegisterClick,
-    BackOption,
-    educationLevelOrSubject,
-  };
 };

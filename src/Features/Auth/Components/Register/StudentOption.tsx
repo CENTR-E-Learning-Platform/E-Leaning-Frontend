@@ -1,23 +1,12 @@
 import React from 'react'
 import ST_page from "../../../../assets/images/studentPage.png"
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useRegContext } from '../../Contexts/RegContext';
-import { usehandelRegister } from '../../Hooks/useRegister';
+import { NavLink } from 'react-router-dom';
+import { usehandelClickLogin } from '../../Hooks/useRegister';
 const StudentOption = () => {
 
-  const { educationLevelOrSubject, seteducationLevelOrSubject, FormRegister } = useRegContext();
-  const Navigate = useNavigate();
-
-  function RegisterClick(){
-    if (!educationLevelOrSubject){
-      return;
-    }  
-    usehandelRegister(FormRegister);
-  }
-  function BackOption() {
-    localStorage.removeItem("educationLevelOrSubject");
-    Navigate("/OptionRegister");
-  }
+  
+  const {  BackOption , RegisterClick ,educationLevelOrSubject, seteducationLevelOrSubject} = usehandelClickLogin();
+  
   
   return (
     <React.Fragment>
