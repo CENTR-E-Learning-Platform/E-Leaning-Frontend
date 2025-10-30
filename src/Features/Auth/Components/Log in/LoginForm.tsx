@@ -4,9 +4,11 @@ import { useState } from "react";
 import GoogleButton from "../Shared/GoogleButton";
 import FacebookButton from "../Shared/FacebookButton";
 import { useLogin } from "../../Hooks/useLogin";
+import { useSendEmail } from "../../Hooks/useforgetpasswordAndSendemail";
 const LoginForm = () => {
   const [openEye, setOpenEye] = useState(false);
   const formik = useLogin();
+  const {ClickSendEmail} = useSendEmail();
   return (
     <>
       <section className="mt-[12px]">
@@ -48,12 +50,13 @@ const LoginForm = () => {
               className="flex justify-between text-[#2A2D34] text-[14px] font-semibold"
             >
               Password
-              <a
-                href="#"
+              <button
+                type="button"
+                onClick={() => ClickSendEmail()}
                 className="text-[#525FE1] underline cursor-pointer text-[13px]"
               >
                 Forget password?
-              </a>
+              </button>
             </label>
             <input
               id="password"

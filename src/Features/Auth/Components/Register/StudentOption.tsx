@@ -1,12 +1,13 @@
 import React from 'react'
 import ST_page from "../../../../assets/images/studentPage.png"
 import { NavLink } from 'react-router-dom';
-import { useRegContext } from '../../Contexts/RegContext';
-import { handelRegister } from '../../Hooks/useRegister';
+import { usehandelClickLogin } from '../../Hooks/useRegister';
 const StudentOption = () => {
 
-  const { educationLevelOrSubject, seteducationLevelOrSubject, FormRegister } = useRegContext();
-
+  
+  const {  BackOption , RegisterClick ,educationLevelOrSubject, seteducationLevelOrSubject} = usehandelClickLogin();
+  
+  
   return (
     <React.Fragment>
       <main className="w-screen h-screen">
@@ -45,12 +46,18 @@ const StudentOption = () => {
                 </section>
 
                 <div className="flex items-center gap-6 justify-center mt-6">
-                  <NavLink to={"/OptionRegister"} className='w-[178.59375px] flex justify-center items-center cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]'>
+                  <button onClick={BackOption} className='w-[178.59375px] flex justify-center items-center cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]'>
                     Back
-                  </NavLink>
-                  <button onClick={()=>handelRegister(FormRegister)} type="button" className='w-[178.59375px] cursor-pointer h-[36.5625px] bg-[#525FE1] text-[#fff] border border-[#525FE1] rounded-[8px]'>
+                  </button>
+                <NavLink to="/confing">
+                    <button onClick={RegisterClick} type="button" className={`w-[178.59375px] h-[36.5625px] rounded-[8px] border border-[#525FE1]
+                  ${educationLevelOrSubject
+                    ? "bg-[#525FE1] text-white cursor-pointer"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}>
                     Continue
                   </button> 
+                </NavLink>
                 </div>
               </article>
             </div>

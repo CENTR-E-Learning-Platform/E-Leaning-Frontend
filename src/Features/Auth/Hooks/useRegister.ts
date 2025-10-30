@@ -28,17 +28,76 @@ export const useRegister = () => {
   return formik;
 };
 
-export function handelRegister(formData: { fullName?: string; email?: string; password?: string; educationLevelOrSubject?: string; role?: string;} | any) {
+const usehandelRegister = (
+  formData:
+    | {
+        fullName?: string;
+        email?: string;
+        password?: string;
+        educationLevelOrSubject?: string;
+        role?: string;
+      }
+    | any
+) => {
+
   return registerUser(formData)
-  .then((res) => {
-    console.log('Success :', res.data);
-    return res;
-  })
-  .catch((error) => {
-    console.log('Error :', error.message);
-    if (error.response) {
-      console.log('Server :', error.response.data.title);
+    .then((res) => {
+      console.log("Success :", res.data);
+      return res;
+    })
+    .catch((error) => {
+      console.log("Error :", error.message);
+      if (error.response) {
+        console.log("Server :", error.response.data.title);
+      }
+      throw error;
+    });
+}
+export const usehandelClickLogin = () => {
+  const navigate = useNavigate();
+
+  const { educationLevelOrSubject , seteducationLevelOrSubject, FormRegister } =
+    useRegContext();
+  function RegisterClick() {
+    if (!educationLevelOrSubject) {
+      return;
     }
-    throw error;
-  });
+    usehandelRegister(FormRegister);
+  }
+  function BackOption() {
+    localStorage.removeItem("educationLevelOrSubject");
+    navigate("/OptionRegister");
+  }
+  return {
+    seteducationLevelOrSubject,
+    RegisterClick,
+    BackOption,
+    educationLevelOrSubject,
+  };
+};
+
+export const usehandelBackRegister = () => {
+  const navigate = useNavigate();
+  const { role, setrole } = useRegContext();
+  const handleContinue = () => {
+    if (!role) {
+      return;
+    }
+    if (role === "Teacher") {
+      navigate("/TeacherOption");
+    } else {
+      navigate("/StudentOption");
+    }
+  };
+  function BackReg() {
+    localStorage.removeItem("role");
+    navigate("/Register");
+  }
+
+  return {
+    handleContinue,
+    BackReg,
+    role,
+    setrole,
+  };
 };

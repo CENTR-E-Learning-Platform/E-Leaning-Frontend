@@ -1,8 +1,11 @@
-import image from "../../assets/images/Forgot password-amico.png";
-import name_icon from "../../assets/icons/ix_user-profile.png";
-import left_arrow from "../../assets/icons/mingcute_left-line.png";
+import image from "../../../../assets/images/Forgot password-amico.png";
+import left_arrow from "../../../../assets/icons/mingcute_left-line.png";
+import { useSendEmail } from "../../Hooks/useforgetpasswordAndSendemail";
+import { CircleUserRound } from "lucide-react";
 
 const ForgetPassword = () => {
+  const { formik } = useSendEmail();
+
   return (
     <main className="h-[100vh] flex w-full">
       {/* Left Section (Form) */}
@@ -20,7 +23,7 @@ const ForgetPassword = () => {
 
           {/* Form */}
           <section className="mt-[12px]">
-            <form>
+            <form onSubmit={formik.handleSubmit}>
               {/* Email Input */}
               <div className="flex flex-col relative">
                 <label
@@ -30,18 +33,27 @@ const ForgetPassword = () => {
                   Email
                 </label>
                 <input
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
                   id="email"
                   name="email"
-                  className="w-[379px] h-[36px] border-[#6D7588] border-[1px] rounded-[4px] pl-[35px] pb-[2px] pr-5 focus:outline-none focus:ring-1 focus:ring-[#2A2D34]"
+                  className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${
+                    formik.touched.email && formik.errors.email
+                      ? "border-red-600"
+                      : formik.touched.email && formik.errors.email
+                      ? "border-[#525FE1]"
+                      : "border-[#6D7588]"
+                  }`}
                   type="email"
                   placeholder="Your email"
-                  required
                 />
-                <img
-                  src={name_icon}
-                  className="absolute left-3 top-[39px] -translate-y-1/2 w-[17px]"
-                  alt="User icon"
-                />
+                <CircleUserRound className="absolute left-[10px] top-[27px] w-[17px] text-[#2A2D34]" />
+                {formik.touched.email && formik.errors.email && (
+                  <p className="text-red-600 text-[12px]">
+                    {formik.errors.email}
+                  </p>
+                )}
               </div>
 
               {/* Reset Button */}
@@ -49,7 +61,7 @@ const ForgetPassword = () => {
                 className="font-semibold text-[#F9FBFC] cursor-pointer text-[14px] w-[379px] h-[36px] bg-[#525FE1] rounded-[4px] mt-[13px]"
                 type="submit"
               >
-                Reset password
+                Send
               </button>
             </form>
 

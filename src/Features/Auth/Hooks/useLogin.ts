@@ -1,12 +1,11 @@
 // src/Features/Auth/Hooks/useLogin.ts
 import { useFormik } from "formik";
 import { loginSchema } from "../Validation/loginSchema";
-// import { useLoginContext } from "../Contexts/LoginContext";
 import { loginUser } from "../Services/loginAPI";
+import { useNavigate } from "react-router-dom";
 
 export const useLogin = () => {
-//   const { setloginData } = useLoginContext();
-
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -19,13 +18,17 @@ export const useLogin = () => {
         const res = await loginUser(values);
         console.log(" Login successful:", res.data);
         var token = res.data.data.token;
-        localStorage.setItem("token" , token);
+        localStorage.setItem("token", token);
         console.log(token);
-        // setloginData(res.data);
-
       } catch (error: any) {
-        console.error(" Login failed:", error.response?.data || error.message);
-        alert("Invalid email or password");
+        const MSError = error.response?.data.errors[0] || error.message;
+        console.error(" Login failed:", error.status);
+        if (MSError === "OTP verification required. Check your email." ||  error.status === 403) {
+          localStorage.setItem("emailForOTP", values.email);
+          navigate("/login/otp");
+        } else {
+          alert(MSError);
+        }
       } finally {
         setSubmitting(false);
       }
@@ -34,4 +37,3 @@ export const useLogin = () => {
 
   return formik;
 };
-
