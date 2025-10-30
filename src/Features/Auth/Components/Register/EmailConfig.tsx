@@ -1,8 +1,9 @@
 import React from "react";
 
-import email_Config from "../../assets/images/EmailConfig.png";
-
+import email_Config from "../../../../assets/images/EmailConfig.png";
+import { useRegContext } from "../../Contexts/RegContext";
 const EmailConfig = () => {
+  const { userData } = useRegContext();
   return (
     <React.Fragment>
       <main className="w-screen h-screen">
@@ -22,7 +23,7 @@ const EmailConfig = () => {
 
                 <section className="h-[90px] mt-[20px] mb-[10px]">
                   <p className="text-[17px] w-[425px] leading-[155%] font-normal text-gray-900 mb-1">
-                    We’ve sent an email to user@gmail.com <br />
+                    We’ve sent an email to {userData?.email} <br />
                     Confirm this is correct by clicking the link in the email.
                   </p>
 
