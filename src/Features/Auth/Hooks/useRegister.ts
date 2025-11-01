@@ -28,7 +28,7 @@ export const useRegister = () => {
   return formik;
 };
 
-export const usehandelRegister = (
+const usehandelRegister = (
   formData:
     | {
         fullName?: string;
@@ -53,6 +53,28 @@ export const usehandelRegister = (
       throw error;
     });
 }
+export const usehandelClickLogin = () => {
+  const navigate = useNavigate();
+
+  const { educationLevelOrSubject , seteducationLevelOrSubject, FormRegister } =
+    useRegContext();
+  function RegisterClick() {
+    if (!educationLevelOrSubject) {
+      return;
+    }
+    usehandelRegister(FormRegister);
+  }
+  function BackOption() {
+    localStorage.removeItem("educationLevelOrSubject");
+    navigate("/OptionRegister");
+  }
+  return {
+    seteducationLevelOrSubject,
+    RegisterClick,
+    BackOption,
+    educationLevelOrSubject,
+  };
+};
 
 export const usehandelBackRegister = () => {
   const navigate = useNavigate();

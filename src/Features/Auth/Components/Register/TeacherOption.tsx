@@ -1,7 +1,7 @@
 import React from "react";
 import Teach_page from "../../../../assets/images/TeacherPage.png";
-import { usehandelClickLogin } from "../../Hooks/useLogin";
 import { NavLink } from "react-router-dom";
+import { usehandelClickLogin } from "../../Hooks/useRegister";
 
 const TeacherOption: React.FC = () => {
   
