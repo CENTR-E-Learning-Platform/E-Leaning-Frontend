@@ -5,11 +5,11 @@ import student_img from "../../../../assets/images/Student.png";
 import { usehandelBackRegister } from "../../Hooks/useRegister";
 
 const OptionRegister: React.FC = () => {
-  const { role, setrole, handleContinue, BackReg } = usehandelBackRegister();
+  const { role, setrole, handleContinue } = usehandelBackRegister();
 
   return (
     <React.Fragment>
-      <main className="w-screen h-screen">
+      <main className="w-screen h-screen max-[390px]:overflow-auto max-[390px]:min-h-screen max-[390px]:w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
           <section className="flex items-start justify-center">
             <div>
@@ -24,12 +24,12 @@ const OptionRegister: React.FC = () => {
                   Join as a
                 </h2>
 
-                <section className="h-[251.015625px] mt-[10px] w-[379.6875px] mb-[10px] flex items-center gap-6 justify-center">
+                <section className="h-[251.015625px] mt-[10px] w-[379.6875px] mb-[10px] flex items-center gap-6 justify-center max-[390px]:flex-col max-[390px]:h-auto max-[390px]:w-full">
                   <div
                     onClick={() => setrole("Student")}
                     className={`
-                      rounded-2xl h-[218px] w-[178.59375px] 
-                      shadow-[0px_6px_12px_0px_#00000024] 
+                      rounded-2xl h-[218px] w-[178.59375px]
+                      shadow-[0px_6px_12px_0px_#00000024]
                       border-2
                       cursor-pointer
                       transition-all duration-400
@@ -57,8 +57,8 @@ const OptionRegister: React.FC = () => {
                   <div
                     onClick={() => setrole("Teacher")}
                     className={`
-                      rounded-2xl h-[218px] w-[178.59375px] 
-                      shadow-[0px_6px_12px_0px_#00000024] 
+                      rounded-2xl h-[218px] w-[178.59375px]
+                      shadow-[0px_6px_12px_0px_#00000024]
                       border-2 
                       cursor-pointer
                       transition-all duration-400
@@ -84,9 +84,9 @@ const OptionRegister: React.FC = () => {
                   </div>
                 </section>
 
-                <div className="flex items-center gap-6 justify-center mt-6">
+                <div className="flex max-[390px]:flex-col-reverse sm:flex-row items-center gap-3 justify-center mt-6 mb-3">
                   <button
-                    onClick={BackReg}
+                    // onClick={BackReg}
                     className="w-[178.59375px] flex justify-center items-center cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]"
                   >
                     Back
@@ -114,7 +114,7 @@ const OptionRegister: React.FC = () => {
               background:
                 "linear-gradient(to bottom, #CBCFF6 10%, #525FE1 90%)",
             }}
-            className="flex h-full items-center justify-center"
+            className="hidden md:flex h-full items-center justify-center"
           >
             <img
               className="h-[450px] w-[450px]"

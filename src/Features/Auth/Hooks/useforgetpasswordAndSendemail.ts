@@ -4,6 +4,7 @@ import {  SendEmail } from "../Services/sendemailAPI";
 import { emailSchema } from "../Validation/emailSchema";
 import { PassAndRepassSchema } from "../Validation/Pass&repas";
 import { forgetpassword } from "../Services/forgetpasswordAPI";
+import { useRegContext } from "../Contexts/RegContext";
 
 export const useSendEmail = () => {
     const navigate = useNavigate();
@@ -41,6 +42,8 @@ export const useSendEmail = () => {
 
 export const useResetpassword = () => {
   const navigate = useNavigate();
+  
+  const { setUserData } = useRegContext();
   const Email = localStorage.getItem("emailSendEmail");
   const OTPforgetPassword = localStorage.getItem("otpForForgetPassword");
   const formik = useFormik({
@@ -57,6 +60,7 @@ export const useResetpassword = () => {
         email: Email,
         otp: OTPforgetPassword,
       };
+      setUserData(prev => prev ? { ...prev, password: values.NewPassword } : prev);
       console.log(finalResetPassword)
       try {
         setSubmitting(true);

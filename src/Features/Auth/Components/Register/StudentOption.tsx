@@ -5,7 +5,7 @@ import { usehandelClickLogin } from '../../Hooks/useRegister';
 const StudentOption = () => {
 
   
-  const {  BackOption , RegisterClick ,educationLevelOrSubject, seteducationLevelOrSubject} = usehandelClickLogin();
+  const {  BackOption ,educationLevelOrSubject, seteducationLevelOrSubject} = usehandelClickLogin();
   
   
   return (
@@ -49,8 +49,8 @@ const StudentOption = () => {
                   <button onClick={BackOption} className='w-[178.59375px] flex justify-center items-center cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]'>
                     Back
                   </button>
-                <NavLink to="/confing">
-                    <button onClick={RegisterClick} type="button" className={`w-[178.59375px] h-[36.5625px] rounded-[8px] border border-[#525FE1]
+                <NavLink to="/register">
+                    <button disabled={!educationLevelOrSubject} type="button" className={`w-[178.59375px] h-[36.5625px] rounded-[8px] border border-[#525FE1]
                   ${educationLevelOrSubject
                     ? "bg-[#525FE1] text-white cursor-pointer"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"

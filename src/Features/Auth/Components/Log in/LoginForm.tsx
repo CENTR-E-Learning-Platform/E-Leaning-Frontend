@@ -97,6 +97,7 @@ const LoginForm = () => {
             <input
               id="remember"
               className="w-[16px] h-[16px]"
+              style={{accentColor:"#525FE1"}}
               type="checkbox"
             />
             <label

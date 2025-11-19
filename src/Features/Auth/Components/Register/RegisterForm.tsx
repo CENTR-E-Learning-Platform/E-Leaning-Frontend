@@ -6,7 +6,8 @@ import { useRegister } from "../../Hooks/useRegister";
 
 const RegisterForm = () => {
   const formik = useRegister();
-
+  
+  
   return (
     <form onSubmit={formik.handleSubmit}>
       {/* Name */}
