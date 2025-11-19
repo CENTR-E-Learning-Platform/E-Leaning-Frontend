@@ -6,9 +6,9 @@ import { useRegContext } from "../Contexts/RegContext";
 import { registerUser } from "../Services/registerAPI";
 
 export const useRegister = () => {
-  const { setUserData } = useRegContext();
+  const { setUserData , educationLevelOrSubject , role } = useRegContext();
   const navigate = useNavigate();
-
+  const {RegisterClick} = usehandelClickLogin();
   const initialValues = {
     fullName: "",
     email: "",
@@ -19,9 +19,15 @@ export const useRegister = () => {
     initialValues,
     validationSchema: registerSchema,
     onSubmit: (values) => {
+      const finalData = {
+        ...values,                 
+        role,                     
+        educationLevelOrSubject,
+      };
       console.log("Form data", values);
       setUserData(values);
-      navigate("/OptionRegister");
+      RegisterClick(finalData);
+      navigate("/confing");
     },
   });
 
@@ -39,7 +45,7 @@ const usehandelRegister = (
       }
     | any
 ) => {
-
+  
   return registerUser(formData)
     .then((res) => {
       console.log("Success :", res.data);
@@ -56,12 +62,9 @@ const usehandelRegister = (
 export const usehandelClickLogin = () => {
   const navigate = useNavigate();
 
-  const { educationLevelOrSubject , seteducationLevelOrSubject, FormRegister } =
-    useRegContext();
-  function RegisterClick() {
-    if (!educationLevelOrSubject) {
-      return;
-    }
+  const { educationLevelOrSubject , seteducationLevelOrSubject } = useRegContext();
+
+  function RegisterClick(FormRegister: object) {
     usehandelRegister(FormRegister);
   }
   function BackOption() {
@@ -91,7 +94,7 @@ export const usehandelBackRegister = () => {
   };
   function BackReg() {
     localStorage.removeItem("role");
-    navigate("/Register");
+    navigate("/Home");
   }
 
   return {

@@ -5,7 +5,7 @@ import { usehandelClickLogin } from "../../Hooks/useRegister";
 
 const TeacherOption: React.FC = () => {
   
-  const { seteducationLevelOrSubject, educationLevelOrSubject, BackOption , RegisterClick } = usehandelClickLogin();
+  const { seteducationLevelOrSubject, educationLevelOrSubject, BackOption } = usehandelClickLogin();
 
   return (
     <React.Fragment>
@@ -230,10 +230,9 @@ const TeacherOption: React.FC = () => {
                   >
                     Back
                   </button>
-                 <NavLink to="/confing">
+                 <NavLink to="/register">
                    <button
                     type="button"
-                    onClick={RegisterClick}
                     disabled={!educationLevelOrSubject}
                     className={`w-[178.59375px] h-[36.5625px] rounded-[8px] border border-[#525FE1]
                         ${
