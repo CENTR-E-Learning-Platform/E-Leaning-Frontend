@@ -1,0 +1,7 @@
+const API_BASE_URL = "https://localhost:7251";
+const INITIAL_AMOUNT_API = `${API_BASE_URL}/api/PaymobPayment/initiate`;
+const PAYMOB_API = "https://accept.paymob.com/api/acceptance/tokenization?payment_token=";
+const CHARGE_API = `${API_BASE_URL}/api/PaymobPayment/charge`;
+const MOBILE_API = `${API_BASE_URL}/api/PaymobPayment/wallet`;
+
+export {INITIAL_AMOUNT_API, PAYMOB_API, CHARGE_API, MOBILE_API};
