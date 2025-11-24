@@ -8,8 +8,18 @@ import OTP from "../Features/Auth/Components/Log in/OTP";
 import ForgetPassword from "../Features/Auth/Components/Log in/ForgetPassword";
 import SetNewPassword from "../Features/Auth/Components/Log in/SetNewPassword";
 import EmailConfig from "../Features/Auth/Components/Register/EmailConfig";
-
+import MainPayment from "../Features/Payment/Pages/MainPayment";
+import DynamicPaymentCard from "../Features/Payment/Components/Payment/DynamicPaymentCard";
+import DynamicPaymentMobileWallet from "../Features/Payment/Components/Payment/DynamicPaymentMobileWallet";
+import DynamicPaymentMobileWalletconfirm from "../Features/Payment/Components/Payment/DynamicPaymentMobileWalletconfirm";
 export const router = createBrowserRouter([
+  {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
+    {path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard/>},
+    {path: "/explore/TeacherPayment", element: <DynamicPaymentCard/>},
+    {path: "/explore/TeacherPayment/mobileWallet", element: <DynamicPaymentMobileWallet/>},
+    {path: "/explore/TeacherPayment/mobileWallet/confirm", element:  <DynamicPaymentMobileWalletconfirm/>}
+  ]
+  },
   { path: "/", element: <OptionRegister /> },
   { path: "register", element: <MainRegister /> },
   { path: "login", element: <MainLogin /> },
