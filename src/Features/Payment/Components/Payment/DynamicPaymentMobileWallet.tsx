@@ -2,40 +2,72 @@ import { useInitialAmount } from "../../Hooks/useInitialAmount";
 import { useState } from "react";
 import type { mobileData } from "../../Types/types";
 import { Link } from "react-router-dom";
+import { MobileWalletSchema } from "../../Validation/MobileWalletSchema";
 
 const DynamicPaymentMobileWallet = () => {
   const { sendWallet } = useInitialAmount();
+  const [errors, setErrors] = useState<{ mobileNumber?: string }>({});
+  const [submittedOnce, setSubmittedOnce] = useState(false);
 
   const [formData, setFormData] = useState<mobileData>({
     amount: 0,
     mobileNumber: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
+
+    let digitsOnly = value.replace(/\D/g, "");
+
+    if (digitsOnly.length > 11) {
+      digitsOnly = digitsOnly.slice(0, 11);
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [id]: value,
+      [id]: digitsOnly,
     }));
+
+    if (!submittedOnce) return;
+
+    try {
+      await MobileWalletSchema.validateAt(id, {
+        ...formData,
+        [id]: digitsOnly,
+      });
+
+      setErrors((prev) => ({ ...prev, [id]: "" }));
+    } catch (err: any) {
+      setErrors((prev) => ({ ...prev, [id]: err.message }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmittedOnce(true);
 
-    const payload = {
-      amount: 100,
-      mobileNumber: formData.mobileNumber
-    };
-
-    console.log("SENDING WALLET DATA:", payload);
-
-    await sendWallet(payload);
-
+    try {
+      await MobileWalletSchema.validate(formData, { abortEarly: false });
+      setErrors({});
+      console.log("SENDING WALLET DATA:", formData);
+      await sendWallet({
+        amount: 100,
+        mobileNumber: formData.mobileNumber,
+      });
+    } catch (err: any) {
+      if (err.inner) {
+        const newErrors: any = {};
+        err.inner.forEach((e: any) => {
+          newErrors[e.path] = e.message;
+        });
+        setErrors(newErrors);
+      }
+    }
   };
 
   return (
     <>
-      <div className="w-[600px] h-[330px] rounded-[8px] border border-gray-300 p-[30px]">
+      <div className="w-[600px] h-[355px] rounded-[8px] border border-gray-300 p-[30px]">
         <p className="font-semibold text-[18px] text-[#2A2D34] mb-[15px]">
           Choose how to pay
         </p>
@@ -67,7 +99,7 @@ const DynamicPaymentMobileWallet = () => {
         <form onSubmit={handleSubmit}>
           <div className="space-y-1">
             <label
-              htmlFor="phoneNumber"
+              htmlFor="mobileNumber"
               className="block text-[16px] font-normal text-[#2A2D34]"
             >
               Phone number
@@ -79,8 +111,11 @@ const DynamicPaymentMobileWallet = () => {
               placeholder="01116023154"
               value={formData.mobileNumber}
               onChange={handleChange}
-              className="w-full h-[52px] py-[12px] px-[18px] rounded-[8px] border border-gray-300 text-[18px] text-gray-400 focus:outline-none focus:border-[#525FE1] mb-2"
+              className="w-full h-[52px] py-[12px] px-[18px] rounded-[8px] border border-gray-300 text-[18px] text-[#2A2D34] focus:outline-none focus:border-[#525FE1] mb-2"
             />
+            {errors.mobileNumber && (
+              <p className="text-red-500 text-sm mt-1">{errors.mobileNumber}</p>
+            )}
           </div>
 
           <button
