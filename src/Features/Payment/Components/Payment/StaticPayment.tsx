@@ -1,4 +1,4 @@
-import React from "react";
+
 import { CalendarCheck2Icon, Clock, Star } from "lucide-react";
 
 const StaticPayment = () => {
