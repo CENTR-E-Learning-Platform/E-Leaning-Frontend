@@ -1,4 +1,4 @@
-import React from "react";
+
 import { CalendarCheck2Icon, Clock, Star } from "lucide-react";
 
 const StaticPayment = () => {
@@ -66,7 +66,8 @@ const StaticPayment = () => {
           </div>
         </section>
 
-        <section className="border w-[435px] h-[191.36581420898438px] border-gray-300 rounded-[8px] p-[30px]">
+        <div className="bg-emerald-100 rounded-t-[8px]">
+          <section className="border bg-white w-[435px] h-[191.36581420898438px] border-gray-300 rounded-[8px] p-[30px]">
           <p className="text-[18px] leading-[13px] tracking-[0] mb-2 font-medium text-[#2A2D34]">
             Class details
           </p>
@@ -100,11 +101,13 @@ const StaticPayment = () => {
             </div>
           </div>
         </section>
+        
         <div className="bg-emerald-100 py-[14px] px-[16px] rounded-b-[8px] mb-4">
           <p className="text-[#0A8458] text-[16px] font-medium leading-[13px] tracking-[0]">
             you can <span className="font-bold">cancel or reschedule</span>{" "}
             until 2:00 pm Oct 22
           </p>
+        </div>
         </div>
 
         <section className="border w-[435px] h-[196px] border-gray-300 rounded-[8px] p-[30px]">
