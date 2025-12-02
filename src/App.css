@@ -11,3 +11,7 @@ input::-ms-clear {
 input::-webkit-textfield-decoration-container {
   display: none !important;
 }
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
