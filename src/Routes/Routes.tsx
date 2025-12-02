@@ -12,6 +12,7 @@ import MainPayment from "../Features/Payment/Pages/MainPayment";
 import DynamicPaymentCard from "../Features/Payment/Components/Payment/DynamicPaymentCard";
 import DynamicPaymentMobileWallet from "../Features/Payment/Components/Payment/DynamicPaymentMobileWallet";
 import DynamicPaymentMobileWalletconfirm from "../Features/Payment/Components/Payment/DynamicPaymentMobileWalletconfirm";
+import Meating from "../Features/Streaming/Pages/Meeting";
 export const router = createBrowserRouter([
   {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
     {path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard/>},
@@ -31,4 +32,5 @@ export const router = createBrowserRouter([
   { path: "TeacherOption", element: <TeacherOption /> },
   { path: "StudentOption", element: <StudentOption /> },
   { path: "/confing", element: <EmailConfig /> },
+  { path: "/meating", element: <Meating /> },
 ]);
