@@ -12,6 +12,12 @@ import MainPayment from "../Features/Payment/Pages/MainPayment";
 import DynamicPaymentCard from "../Features/Payment/Components/Payment/DynamicPaymentCard";
 import DynamicPaymentMobileWallet from "../Features/Payment/Components/Payment/DynamicPaymentMobileWallet";
 import DynamicPaymentMobileWalletconfirm from "../Features/Payment/Components/Payment/DynamicPaymentMobileWalletconfirm";
+import Meeting from "../Features/Streaming/Pages/Meeting";
+import LiveRoom from "../Features/Streaming/Pages/LiveRoom";
+import CreateRoomTeacher from "../Features/Streaming/Pages/CreateRoomTeacher";
+import JoinNow from "../Features/Streaming/Pages/JoinNow";
+import ChatForm from "../Features/Streaming/Components/chat/ChatForm";
+import JoinRoomStudent from "../Features/Streaming/Pages/JoinRoomStudent";
 export const router = createBrowserRouter([
   {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
     {path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard/>},
@@ -31,4 +37,10 @@ export const router = createBrowserRouter([
   { path: "TeacherOption", element: <TeacherOption /> },
   { path: "StudentOption", element: <StudentOption /> },
   { path: "/confing", element: <EmailConfig /> },
+  // { path: "/meeting", element: <LiveRoom /> },
+  { path: "/createroom", element: <CreateRoomTeacher /> },
+  { path: "/createroom/joinnow", element: <JoinNow/> },
+  { path: "/createroom/joinnow/meeting", element: <LiveRoom/> },
+  { path: "/createroom/joinnow/meeting/chat", element: <ChatForm/> },
+  { path: "/createroom/joinStudent", element: <JoinRoomStudent/> },
 ]);
