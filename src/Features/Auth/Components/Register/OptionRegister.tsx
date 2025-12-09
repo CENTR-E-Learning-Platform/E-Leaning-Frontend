@@ -49,8 +49,8 @@ const OptionRegister: React.FC = () => {
                     <h3 className="font-medium text-[18px] text-center leading-[12px] text-[#2A2D34]">
                       Student
                     </h3>
-                    <p className="font-normal p-1.5 text-[16px] leading-[122%] text-center text-[#6D7588]">
-                      Start your learning journey
+                    <p className="font-normal p-1.5 text-[13px] leading-[122%] text-center text-[#6D7588]">
+                      Start your<br/> learning journey
                     </p>
                   </div>
 
@@ -78,8 +78,8 @@ const OptionRegister: React.FC = () => {
                     <h3 className="font-medium text-[18px] text-center leading-[12px] text-[#2A2D34]">
                       Teacher
                     </h3>
-                    <p className="font-normal p-1.5 text-[16px] leading-[122%] text-center text-[#6D7588]">
-                      Share your knowledge & earn
+                    <p className="font-normal p-1.5  text-[13px]  leading-[122%] text-center text-[#6D7588]">
+                      Share your<br/> knowledge & earn
                     </p>
                   </div>
                 </section>
