@@ -75,13 +75,15 @@ const DynamicPaymentMobileWallet = () => {
         <div className="flex mb-4 justify-between h-[77px] w-[310px] gap-[20px]">
           <Link
             to={"/explore/TeacherPayment/paymentCart"}
-            className="h-[77px] w-[145px] rounded-[4px] p-[16px] border border-gray-300 flex flex-col items-center justify-center gap-[10px]"
+            className="h-[77px] w-[145px] flex flex-col items-center justify-center rounded-[4px] p-[16px] border gap-[10px] border-gray-300"
           >
             <img
               src="../../../../../src/assets/icons/PaymentCardB.svg"
               alt="PaymentCardBlack"
             />
-            <p className="text-[16px] font-medium">Payment card</p>
+            <p className="text-[16px] w-[115px] font-medium leading-[17px] tracking-[0]">
+              Payment card
+            </p>
           </Link>
 
           <Link
@@ -92,7 +94,7 @@ const DynamicPaymentMobileWallet = () => {
               src="../../../../../src/assets/icons/MobilewalletW.svg"
               alt="Mobilewalletwhite"
             />
-            <p className="text-[16px] font-medium text-white">Mobile wallet</p>
+            <p className="text-[16px] font-medium leading-[13px] text-white tracking-[0]">Mobile wallet</p>
           </Link>
         </div>
 

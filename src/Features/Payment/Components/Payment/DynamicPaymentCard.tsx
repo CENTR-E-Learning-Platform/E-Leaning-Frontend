@@ -141,7 +141,7 @@ const DynamicPaymentCard = () => {
             src="../../../../../src/assets/icons/PaymentCardW.svg"
             alt="PaymentCardwhite"
           />
-          <p className="text-[16px] font-medium text-white leading-[13px] tracking-[0]">
+          <p className="text-[16px] w-[115px] font-medium text-white leading-[17px] tracking-[0]">
             Payment card
           </p>
         </Link>
