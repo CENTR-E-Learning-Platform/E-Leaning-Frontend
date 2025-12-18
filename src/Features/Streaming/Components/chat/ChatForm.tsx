@@ -24,9 +24,9 @@ const ChatForm = () => {
   }, [chatMessages]);
 
   return (
-    <div className="w-[400px] h-[550px] rounded-[20px] py-[24px] px-[16px] bg-[#393D44] flex flex-col">
+    <div className="w-[400px] h-[461px] mt-[7px] rounded-[20px] py-[24px] px-[15px] bg-[#393D44] flex flex-col">
       
-      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+      <div className="flex-1 overflow-y-auto custom-scrollbar pr-r">
         {chatMessages.length === 0 && (
           <p className="text-gray-400 text-center mt-10">No messages yet...</p>
         )}
@@ -37,7 +37,7 @@ const ChatForm = () => {
           return (
             <div 
               key={index} 
-              className={`mb-7 flex gap-[12px] ${isMe ? "justify-end" : "justify-start"}`}
+              className={`mb-[100px] flex gap-[12px] ${isMe ? "justify-end" : "justify-start"}`}
             >
               {!isMe && (
                 <img className="w-[40px] h-[40px] rounded-[39px] object-cover" src={teacher} alt="sender" />
@@ -81,7 +81,7 @@ const ChatForm = () => {
         
         <div ref={messagesEndRef} />
       </div>
-      <div className="w-full h-[66px] flex items-center justify-center mt-2 shrink-0">
+      <div className="w-full h-[50px] flex items-center justify-center  shrink-0">
         <div className="bg-[#454950] w-[302px] h-[48px] rounded-[42px] flex items-center px-4 gap-3">
           <img src={resource} className="w-[14px] h-[16px] cursor-pointer" alt="icon" />
           <div className="w-[1px] h-[16px] bg-[#6B7280]"></div>
