@@ -88,7 +88,7 @@ const  ParticipantsGrid = ()=>  {
             trackRef={screenShareTrack as any}
             className="w-full h-full object-contain"
           />
-          <div className="absolute top-4 left-4 bg-red-600/90 text-white px-3 py-1 rounded-full text-sm font-bold pointer-events-none">
+          <div className="absolute bottom-5 left-5 bg-[#2A2D34B2] text-white px-3 py-1 rounded-full text-sm font-bold pointer-events-none">
             Presenter: {screenShareTrack.participant.identity}
           </div>
 
