@@ -1,12 +1,9 @@
-import { useState } from "react";
 import { type ToolbarProps, type View } from 'react-big-calendar';
 import  prev from '../../../assets/icons/Icon Button.svg';
 import  nxt from '../../../assets/icons/Icon Button (1).svg';
-
+import { useCalendar } from '../Contexts/CalendarContext';
 const Toolbar = (toolbar: ToolbarProps) => {
-  const [active, setActive] = useState("all");
-  const [activeLeft , setActiveLeft] = useState("month");
-
+  const {active , setActive , activeLeft , setActiveLeft} = useCalendar();
   const goPrev = ()=> toolbar.onNavigate("PREV");
   const goNext = ()=> toolbar.onNavigate("NEXT");
   const goToView = (view : View) => toolbar.onView(view);
