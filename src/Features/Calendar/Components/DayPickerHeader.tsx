@@ -1,24 +1,27 @@
-import { useDayPicker } from 'react-day-picker';
+import { format, addMonths } from 'date-fns';
 import leftArrow from '../../../assets/icons/leftArrow.svg';
 import rightArrow from '../../../assets/icons/rightArrow.svg';
-import { format } from 'date-fns';
-const DayPickerHeader = (props:any)=> {
-    const {goToMonth ,  nextMonth, previousMonth} = useDayPicker();
-    const currentMonth = props.displayMonth || props.month || (props.calendarMonth && props.calendarMonth.date);
+
+const DayPickerHeader = ({ month, setMonth }: any) => {
   return (
-    <>
-        <div className='w-[265px] h-[28px] flex justify-between mb-[12px]'>
-            <img 
-            onClick={()=> previousMonth && goToMonth(previousMonth)}
-            className='cursor-pointer'
-            src={leftArrow} alt="" />
-            <div className='text-black  text-[15px]'>{currentMonth && format(currentMonth, 'MMMM yyyy')}</div>
-            <img 
-            onClick={()=> nextMonth && goToMonth(nextMonth)}
-            src={rightArrow} alt="" />
-        </div>
-    </>
-  )
-}
+    <div className="w-[265px] h-[28px] flex justify-between mb-[12px]">
+      <img
+        src={leftArrow}
+        className="cursor-pointer w-[28px] h-[28px]"
+        onClick={() => setMonth(addMonths(month, -1))}
+      />
+
+      <div className="text-black text-[15px] uppercase">
+        {format(month, 'MMMM yyyy')}
+      </div>
+
+      <img
+        src={rightArrow}
+        className="cursor-pointer w-[28px] h-[28px]"
+        onClick={() => setMonth(addMonths(month, 1))}
+      />
+    </div>
+  );
+};
 
 export default DayPickerHeader;
