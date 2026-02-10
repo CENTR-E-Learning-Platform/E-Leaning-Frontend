@@ -1,0 +1,109 @@
+
+.rbc-calendar {
+  font-family: 'Poppins', sans-serif;
+  background-color: #FFFFFF;
+  border-radius: 8px; 
+  border: 1px solid #E8EAED !important; 
+}
+
+.rbc-off-range-bg {
+  background-color: #eaf6ff !important;
+}
+
+.rbc-time-gutter .rbc-timeslot-group {
+  font-size: 12px !important;     
+  font-weight: 500 !important;     
+  color: #6D7588 !important;    
+  border-bottom: none !important;   
+  padding-right: 10px !important;  
+}
+
+.rbc-time-view .rbc-time-gutter {
+    border-right: none !important; 
+}
+.rbc-header {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #2A2D34 !important;       
+  padding: 12px 0 !important;     
+  border-bottom: none !important;  
+  text-transform: capitalize !important;
+  border: 1px solid #E8EAED !important;
+  min-height: 60px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.rbc-header span {
+color: #2A2D34 !important;
+}
+
+
+.rbc-time-view {
+  border: none !important;
+}
+.rbc-month-view {
+  border: none !important;
+}
+.rbc-allday-cell{
+  display: none !important;
+}
+.rbc-time-content{
+
+  border-top: none !important;
+}
+.rbc-time-slot {
+   border-bottom: none !important;
+   height: px !important;
+}
+.rbc-timeslot-group{
+  min-height: 60px !important;
+  background-color: #FFFFFF !important;
+}
+.rbc-month-row {
+  min-height: 175px !important;
+}
+.rbc-button-link {
+  font-size: 12px !important;
+  color: #6D7588 !important;
+  padding: 0px !important;
+}
+.rbc-date-cell {
+  min-width: 123px !important;
+}
+.rbc-day-bg {
+  min-width: 123px !important;
+  border:1px solid #E8EAED !important;
+}
+.rbc-event{
+  background-color: rgba(123, 36, 186, 0.2) !important;
+  border: none !important;
+   border-left: 4px solid #7B24BA !important;
+}
+.rbc-event {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+
+.rbc-event.rbc-selected {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+.rbc-event:focus {
+  outline: none !important;
+}
+
+.rbc-event-label {
+  display: none !important;
+}
+.rbc-events-container{
+  margin: 0 !important;
+}
