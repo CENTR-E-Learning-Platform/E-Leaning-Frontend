@@ -7,6 +7,8 @@ interface CalendarContext {
     setActiveLeft : React.Dispatch<React.SetStateAction<string |null>>
      date : string | null , 
     setDate : React.Dispatch<React.SetStateAction<string |null>>
+     TeacherClass : any | null , 
+    SetTeacherClass : React.Dispatch<React.SetStateAction<any |null>>
 
 }
 
@@ -15,8 +17,9 @@ export const CalendarProvider: React.FC<{ children: ReactNode } >  = ({children}
     const [active , setActive] = useState<string | null>("all");
     const [activeLeft , setActiveLeft] = useState<string | null>("month");
     const [date , setDate] = useState<string | null>("");
+    const [TeacherClass , SetTeacherClass] = useState<any |null>([]);
     return (
-        <Calendar.Provider value={{active , setActive , activeLeft , setActiveLeft , date , setDate}}>
+        <Calendar.Provider value={{active , setActive , activeLeft , setActiveLeft , date , setDate , TeacherClass , SetTeacherClass}}>
             {children}
         </Calendar.Provider>
     );
@@ -25,7 +28,7 @@ export const CalendarProvider: React.FC<{ children: ReactNode } >  = ({children}
 export const useCalendar = ():CalendarContext => {
     const ctx =  useContext(Calendar);
     if(!ctx){
-        throw new Error("useCalendar must be used within AuthProvider");
+        throw new Error("useCalendar must be used within CalendarProvider");
     }
     return ctx; 
 } 
