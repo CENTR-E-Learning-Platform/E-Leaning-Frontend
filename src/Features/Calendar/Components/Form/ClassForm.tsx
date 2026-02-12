@@ -4,7 +4,9 @@ import Description from "./Description";
 import Grad from "./Grad";
 import MaxNoOfStudent from "./MaxNoOfStudent";
 import Reminder from "./Reminder";
+import { useCreateRoom } from "../../../Streaming/Hooks/useCreateRoom";
 const ClassForm = () => {
+  const { formik } = useCreateRoom();
   return (
     <>
       <div className="w-[498px] h-[827px] bg-[#F9FBFC] rounded-[8px]  ">
@@ -19,7 +21,7 @@ const ClassForm = () => {
           </h1>
         </div>
         <div className="mt-[30px]">
-          <form action="">
+          <form action="" onSubmit={formik.handleSubmit}>
             <div className=" flex justify-center flex-col items-center ">
               <div className="flex flex-col mb-[8px] ">
                 <label
@@ -31,6 +33,9 @@ const ClassForm = () => {
                 <input
                   type="text"
                   placeholder="Add title"
+                  name="Title"
+                  onChange={formik.handleChange}
+                  value={formik.values.Title}
                   className="w-[449px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px] text-[#2A2D34] text-[16px] font-[400]"
                 />
               </div>
@@ -44,6 +49,9 @@ const ClassForm = () => {
                   </label>
                   <input
                     type="date"
+                    name="StartTime"
+                    onChange={formik.handleChange}
+                    value={formik.values.StartTime}
                     placeholder="Add title"
                     className="w-[143px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none p-[8px]  text-[15px] font-[400] me-[10px] placeholder:text-[#6D7588]"
                   />
@@ -57,6 +65,9 @@ const ClassForm = () => {
                   </label>
                   <input
                     type="text"
+                    name="Time"
+                    onChange={formik.handleChange}
+                    value={formik.values.Time}
                     placeholder="Time"
                     className="w-[143px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px] text-[#2A2D34] text-[16px] font-[400] me-[10px]"
                   />
@@ -71,6 +82,9 @@ const ClassForm = () => {
                   <input
                     type="text"
                     placeholder="Duration"
+                    name="DurationMinutes"
+                    onChange={formik.handleChange}
+                    value={formik.values.DurationMinutes}
                     className="w-[143px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px] text-[#2A2D34] text-[16px] font-[400] "
                   />
                 </div>
@@ -113,7 +127,12 @@ const ClassForm = () => {
               <Description />
             </div>
             <div className="flex justify-center gap-[9px] ">
-              <Button title="Add Class" bg="#525FE1" txt="#F9FBFC" />
+              <Button
+                title="Add Class"
+                bg="#525FE1"
+                txt="#F9FBFC"
+                meth={formik.submitForm}
+              />
               <Button title="Cancel" bg="#FFFFFF" txt="#525FE1" />
             </div>
           </form>
