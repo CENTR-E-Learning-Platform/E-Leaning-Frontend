@@ -1,10 +1,11 @@
 import alert from "../../../assets/icons/alert2.svg";
 import profile from "../../../assets/icons/profile.svg";
-import { dummyEvents } from "../Pages/MainCalendar";
+import { useCalendar } from "../Contexts/CalendarContext";
 const UpcomingEvents = () => {
+  const {TeacherClass} = useCalendar();
   return (
     <>
-      {dummyEvents.map((e) => {
+      {TeacherClass.map((e:any) => {
         return (
           <div
             className={`bg-[#7B24BA]/20  w-[265px] h-[153px] rounded-[10px] border-[1px] border-[#7B24BA]`}
@@ -24,7 +25,7 @@ const UpcomingEvents = () => {
                     />
                   </div>
                   <span className="text-[12px]  text-center text-[#6D7588]">
-                    {e.start.getHours()}pm - {e.end.getHours()}pm
+                    3:50 pm - 3:50 pm
                   </span>
                 </div>
                 <div className="flex ps-[12px] mt-[8px] ">
