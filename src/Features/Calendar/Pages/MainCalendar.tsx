@@ -16,7 +16,7 @@ import DayPickerHeader from "../Components/DayPickerHeader";
 import Upcoming from "../Components/Upcoming";
 import ClassButton from "../Components/ClassButton";
 import ClassForm from "../Components/Form/ClassForm";
-
+import { useGetAllClasses } from "../Hooks/useGetAllClasses";
 const locales = {
   "en-US": enUS,
 };
@@ -50,6 +50,7 @@ const eventPropGetter = () => {
 const MainCalendar = () => {
   const [month, setMonth] = useState(new Date());
   const [open, setOpen] = useState(false);
+  useGetAllClasses();
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -61,6 +62,7 @@ const MainCalendar = () => {
       document.body.style.overflow = "auto";
     };
   }, [open]);
+  
   return (
     <div className="bg-[#F9FBFC] flex justify-center items-center">
       {open && (
