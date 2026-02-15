@@ -78,21 +78,22 @@ const  ParticipantsGrid = ()=>  {
 
 
   if (tracks.length === 0) return <div className="text-white flex justify-center items-center h-full">Waiting...</div>;
-
+  
   if (screenShareTrack) {
     return (
+      
       <div className="w-full h-full flex flex-col gap-2 p-2 relative">
-     
+        {/* main screen  */}
         <div className="flex-1 w-full bg-black rounded-xl overflow-hidden relative border border-[#393D44]">
           <VideoTrack
             trackRef={screenShareTrack as any}
             className="w-full h-full object-contain"
           />
-          <div className="absolute top-4 left-4 bg-red-600/90 text-white px-3 py-1 rounded-full text-sm font-bold pointer-events-none">
+          <div className="absolute bottom-5 left-5 bg-[#2A2D34B2] text-white px-3 py-1 rounded-full text-sm font-bold pointer-events-none">
             Presenter: {screenShareTrack.participant.identity}
           </div>
 
-      
+         {/* screen showing when user share screen  */}
           {presenterCameraTrack && (
             <div 
               onMouseDown={handleMouseDown}
@@ -111,7 +112,7 @@ const  ParticipantsGrid = ()=>  {
             </div>
           )}
         </div>
-
+          {/* other people its mean +1 people */}
         {otherCameraTracks.length > 0 && (
           <div className="h-[120px] w-full flex gap-2 overflow-x-auto pb-1 z-10">
             {otherCameraTracks.map((track) => (
