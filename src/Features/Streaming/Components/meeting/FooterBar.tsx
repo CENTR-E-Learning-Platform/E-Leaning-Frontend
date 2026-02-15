@@ -15,16 +15,19 @@ const FooterBar = () => {
   const {stopStream} = useControlling();
   const { localParticipant } = useLocalParticipant();
   const room = useRoomContext();
-  const {mic , cameraView} = useControlContext();
+  const {mic , cameraView , setMic , setCameraView} = useControlContext();
   return (
     <>
       <div className="flex justify-center mb-[10px] mt-auto gap-4">
         <div className="flex gap-2">
           <Button
             func={() =>
+            {
               localParticipant.setMicrophoneEnabled(
                 !localParticipant.isMicrophoneEnabled
               )
+              setMic(!mic);
+            }
             }
             icons={mic || localParticipant.isMicrophoneEnabled ? microphon : microphondis}
             size="w-[14] h-[20px]"
@@ -32,9 +35,12 @@ const FooterBar = () => {
           <Button
             icons={cameraView || localParticipant.isCameraEnabled ? video : videodis}
             func={() =>
-              localParticipant.setCameraEnabled(
+            {
+                localParticipant.setCameraEnabled(
                 !localParticipant.isCameraEnabled
               )
+              setCameraView(!cameraView);
+            }
             }
             size={cameraView || localParticipant.isCameraEnabled ?"w-[18px] h-[12px]":"w-[18px] h-[20px]" }
           />
@@ -54,7 +60,7 @@ const FooterBar = () => {
         <button
           onClick={() => {
             room.disconnect();
-             stopStream(); 
+            stopStream(); 
           }}
           className=" w-[103px] h-[48px] bg-[#D24747] rounded-[8px] flex justify-center items-center cursor-pointer"
         >
