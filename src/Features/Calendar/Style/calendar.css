@@ -88,14 +88,12 @@ color: #2A2D34 !important;
   outline: none !important;
 }
 
-
 .rbc-event.rbc-selected {
   background-color: transparent !important;
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
 }
-
 
 .rbc-event:focus {
   outline: none !important;
