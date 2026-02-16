@@ -4,32 +4,36 @@ export const useControlling = () => {
   const [stream, setStream] = useState<MediaStream | null>(null);
 
   const initStream = async () => {
-    const media = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-    setStream(media);
+    try {
+      const media = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      setStream(media);
+      return media;
+    } catch (error) {
+      console.error("Error accessing media devices.", error);
+      return null;
+    }
   };
 
-  const toggleCamera = () => {
-    if (!stream) return;
-    const track = stream.getVideoTracks()[0];
+  const toggleCamera = (customStream?: MediaStream) => {
+    const s = customStream || stream;
+    if (!s) return;
+    const track = s.getVideoTracks()[0];
     if (track) track.enabled = !track.enabled;
   };
 
-  const toggleMic = () => {
-    if (!stream) return;
-    const track = stream.getAudioTracks()[0];
+  const toggleMic = (customStream?: MediaStream) => {
+    const s = customStream || stream;
+    if (!s) return;
+    const track = s.getAudioTracks()[0];
     if (track) track.enabled = !track.enabled;
   };
 
   const stopStream = () => {
     if (!stream) return;
-
-    stream.getTracks().forEach((track) => {
-      track.stop(); 
-    });
-
+    stream.getTracks().forEach((track) => track.stop());
     setStream(null);
   };
 

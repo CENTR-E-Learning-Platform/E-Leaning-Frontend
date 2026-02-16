@@ -1,41 +1,17 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { 
-  VideoTrack, 
-  useTracks, 
-  type TrackReferenceOrPlaceholder 
+  useLocalParticipant,
+  VideoTrack
 } from "@livekit/components-react";
-import { Track } from "livekit-client";
+
 import '@livekit/components-styles';
-
+import { useParticipant } from "../../Hooks/useParticipant";
+import teacher from '../../../../assets/images/mester.jpg';
 const  ParticipantsGrid = ()=>  {
-  const tracks: TrackReferenceOrPlaceholder[] = useTracks(
-    [
-      { source: Track.Source.Camera, withPlaceholder: true },
-      { source: Track.Source.ScreenShare, withPlaceholder: false },
-    ],
-    { onlySubscribed: false }
-  );
+  const {tracks , screenShareTrack , presenterCameraTrack , otherCameraTracks} = useParticipant();
+    const { localParticipant } = useLocalParticipant();
 
 
-  const screenShareTrack = useMemo(() => 
-    tracks.find(t => t.source === Track.Source.ScreenShare), 
-  [tracks]);
-
- 
-  const presenterCameraTrack = useMemo(() => {
-    if (!screenShareTrack) return undefined;
-    return tracks.find(t => 
-      t.source === Track.Source.Camera && 
-      t.participant.identity === screenShareTrack.participant.identity
-    );
-  }, [tracks, screenShareTrack]);
-
-   const otherCameraTracks = useMemo(() => 
-    tracks.filter(t => 
-      t.source === Track.Source.Camera && 
-      t.participant.identity !== screenShareTrack?.participant.identity
-    ), 
-  [tracks, screenShareTrack]);
 
   const [position, setPosition] = useState({ x: 20, y: 20 });
   const isDragging = useRef(false);
@@ -84,7 +60,7 @@ const  ParticipantsGrid = ()=>  {
       
       <div className="w-full h-full flex flex-col gap-2 p-2 relative">
         {/* main screen  */}
-        <div className="flex-1 w-full bg-black rounded-xl overflow-hidden relative border border-[#393D44]">
+        <div className="flex-1 w-full rounded-xl overflow-hidden relative border border-[#393D44]">
           <VideoTrack
             trackRef={screenShareTrack as any}
             className="w-full h-full object-contain"
@@ -137,19 +113,32 @@ const  ParticipantsGrid = ()=>  {
 
 
   return (
-    <div className="w-full h-full p-2">
-      <div className={`grid gap-2 h-full w-full ${
+    <div className="w-full h-full p-2  ">
+      <div className={`grid gap-2 h-full w-full  ${
           tracks.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
         }`}>
         {tracks.map((trackRef) => (
           <div 
              key={trackRef.participant.identity + trackRef.source} 
-             className="relative w-full h-full bg-black rounded-xl overflow-hidden border border-[#393D44]"
+             className="relative w-full h-full  rounded-xl overflow-hidden border border-[#393D44]"
           >
-            <VideoTrack
-              trackRef={trackRef as any}
-              className="w-full h-full object-cover"
-            />
+          {localParticipant.isCameraEnabled ? (
+  <VideoTrack
+    trackRef={trackRef as any}
+    className="w-full h-full object-cover "
+  />
+) : (
+  <div className="w-full h-full flex justify-center items-center">
+  <div className="w-[30%] aspect-square">
+    <img
+      src={teacher}
+      className="w-full h-full rounded-full object-cover"
+      alt=""
+    />
+  </div>
+</div>
+)}
+
              <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 rounded">
               {trackRef.participant.identity}
             </div>

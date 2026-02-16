@@ -7,15 +7,19 @@ import { useControlling } from "./useControlling";
 export const useCreateRoom = ()=> {
     const navigate = useNavigate();
     const {initStream} = useControlling();
+
     const formik = useFormik({
         initialValues,
         onSubmit: async(values)=> {
-          const params = new URLSearchParams({
-           StartTime : values.StartTime,
-           DurationMinutes : values.DurationMinutes,
-           Title : values.Title,
-           Description : values.Description 
-    });
+            let finalStartTime = new Date(`${values.StartTime}T${values.Time}`);
+         const params = new URLSearchParams({
+    Price: values.Price.toString(),
+    StartTime: finalStartTime.toISOString(), 
+    DurationMinutes: values.DurationMinutes.toString(),
+    Title: values.Title,
+    Reminder: values.Reminder ? values.Reminder.toString() : "",
+    Description: values.Description || ""
+  });
         try{
             const response =await createRoom(params);
             console.log(response.data);
