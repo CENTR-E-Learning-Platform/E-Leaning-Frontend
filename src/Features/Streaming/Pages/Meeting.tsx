@@ -8,7 +8,7 @@ import Attend from "../Components/meeting/Attend";
 import FooterBar from "../Components/meeting/FooterBar";
 import ParticipantsGrid from "../Components/meeting/ParticipantsGrid";
 import ChatForm from "../Components/chat/ChatForm";
-
+import { useParticipant } from "../Hooks/useParticipant";
 const Meeting = () => {
   const [width, setWidth] = useState(1400);
   const [isResizing, setIsResizing] = useState(false);
@@ -17,6 +17,7 @@ const Meeting = () => {
 
   const [isfull, setIsFull] = useState(false);
 
+  const {otherCameraTracks} = useParticipant();
   const startResizing = () => setIsResizing(true);
   const stopResizing = () => setIsResizing(false);
 
@@ -93,7 +94,7 @@ const Meeting = () => {
         onMouseLeave={stopResizing}
       >
         <div
-          className="relative transition-all duration-300"
+          className="relative transition-all duration-300 bg-[#393D44] rounded-2xl"
           style={{
             width: isfull ? "100%" : `${width}px`,
           }}
@@ -116,14 +117,14 @@ const Meeting = () => {
         <div 
           className={`
             rounded-[20px] mt-[7px] bg-[#393D44] flex flex-col overflow-hidden transition-all duration-500 ease-in-out
-            ${isClickattend && !isfull ? "select-none p-[20px] ms-[20px] opacity-100" : "w-0 p-0 ms-0 opacity-0"}
+            ${isClickattend && !isfull  ? "select-none p-[20px] ms-[20px] opacity-100 " : "w-0 p-0 ms-0 opacity-0"}
           `}
         >
-         
-                <StudentActions width={width} />
-                <StudentActions width={width} />
-                <StudentActions width={width} />
-                <StudentActions width={width} />
+          {otherCameraTracks.map((track)=>(
+            <div  key={track.participant.identity} >
+                <StudentActions name = {track.participant.identity.slice(0 , 11)} profileImage = {teacher} width={width} />
+            </div>
+          ))}
             
         </div>
 
