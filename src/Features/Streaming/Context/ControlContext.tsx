@@ -12,8 +12,8 @@ interface RoomContextTypes {
 const RoomCtx = createContext<RoomContextTypes | null>(null);
 
 export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cameraView, setCameraView] = useState(true);
-  const [mic, setMic] = useState(true);
+  const [cameraView, setCameraView] = useState(false);
+  const [mic, setMic] = useState(false);
   const [openStream, setOpenStream] = useState(false);
   return (
     <RoomCtx.Provider value={{ cameraView, setCameraView , mic , setMic , openStream , setOpenStream}}>
