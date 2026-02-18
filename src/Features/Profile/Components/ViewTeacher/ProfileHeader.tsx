@@ -4,16 +4,23 @@ import PlusIcon from "../../../../../src/assets/icons/PlusIcon.svg";
 import { useUploadImage } from "../../Hooks/useUploadImage";
 import { useState } from "react";
 const ProfileHeader = () => {
-  const { mutate } = useUploadImage();
+
 
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
+  const { mutate } = useUploadImage();
+  
 
   const handleFileChange = (e: any) => {
     const file = e.target.files[0];
     if (!file) return;
     setPreviewImage(URL.createObjectURL(file));
-    mutate(file);
+    mutate(file, {
+    onError: () => {
+      setPreviewImage(bg_imptyPhoto);
+    },
+  });
   };
+
   return (
     <>
       <div className="ProfileHeader">
