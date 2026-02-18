@@ -4,10 +4,12 @@ import heartIcon from "../../../../../src/assets/icons/heartIcon.svg";
 import MessageIcon from "../../../../../src/assets/icons/MessageIcon.svg";
 import ShareIcon from "../../../../../src/assets/icons/ShareIcon.svg";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
+import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
 const ProfileHeader = () => {
   const {data} = useTeacherProfile();
 
-  console.log(data?.data);
+  // console.log(data);
+
   
   return <>
     <div className="ProfileHeader">
@@ -23,13 +25,13 @@ const ProfileHeader = () => {
           <div className="flex relative justify-between items-center">
             <div className="flex justify-between gap-4">
               <img
-                className="w-[144px] h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]"
-                src={bg_Teacher}
+                className="w-[144px] object-cover h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]"
+                src={data?.data.fullPrfilePicturePath || bg_imptyPhoto}
                 alt="Teacher Profile Image"
               />
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
                 <h2 className="text-[28px] mb-4 leading-[13px] tracking-[0] font-bold">
-                  Mr. Mohamed Salama
+                  {data?.data.fullName}
                 </h2>
                 <div className="h-[29px] w-[191px] flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
                   <p className="font-semibold text-[18px] text-[#611D1D]">
@@ -70,7 +72,7 @@ const ProfileHeader = () => {
             />
             <div className="mt-4">
               <h2 className="text-[20px] font-bold leading-snug">
-                Mr. Mohamed Salama
+                {data?.data.fullName}
               </h2>
               <div className="mt-2 inline-flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[4px] rounded-[18px]">
                 <p className="font-semibold text-[14px] text-[#611D1D]">

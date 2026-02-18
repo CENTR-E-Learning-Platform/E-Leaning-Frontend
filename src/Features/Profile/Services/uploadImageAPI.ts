@@ -1,13 +1,14 @@
 import axios from "axios";
-import { UploadImage_API } from "../Utils/Apis";
+import { UPLOADIMAGE_API } from "../Utils/Apis";
 
 export const sendUploadImageData = async (file : File) =>{
 
     const formData = new FormData();
     const token = localStorage.getItem("token");
     formData.append("file", file);
+    formData.append("FileType", String(0));
     return await axios.patch(
-        UploadImage_API,
+        UPLOADIMAGE_API,
         formData  , 
         {
             headers:{
