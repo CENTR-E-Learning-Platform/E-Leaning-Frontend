@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import teacher from "../../../assets/images/mester.jpg";
 import vector from "../../../assets/icons/Vector.svg";
 import fullscreen from "../../../assets/icons/fullscreen.svg";
@@ -9,17 +9,58 @@ import FooterBar from "../Components/meeting/FooterBar";
 import ParticipantsGrid from "../Components/meeting/ParticipantsGrid";
 import ChatForm from "../Components/chat/ChatForm";
 import { useParticipant } from "../Hooks/useParticipant";
-const Meeting = () => {
-  const [width, setWidth] = useState(1400);
-  const [isResizing, setIsResizing] = useState(false);
-  const [isClickcha, setIsClickcha] = useState(false);
-  const [isClickattend, setIsClickattend] = useState(false);
+import { motion } from "framer-motion";
+import { useControlContext } from "../Context/ControlContext";
+import Leave from "../Components/meeting/Leave";
+import { useFooter } from "../Hooks/useFooter";
+import { useRoomContext } from "@livekit/components-react";
+import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
 
-  const [isfull, setIsFull] = useState(false);
+const Meeting: React.FC = () => {
+  const [width, setWidth] = useState<number>(1400);
+  const [isResizing, setIsResizing] = useState<boolean>(false);
+  const [isClickcha, setIsClickcha] = useState<boolean>(false);
+  const [isClickattend, setIsClickattend] = useState<boolean>(false);
+  const [isfull, setIsFull] = useState<boolean>(false);
+  
+  const { emoji, optionLeave } = useControlContext();
+  const { otherCameraTracks } = useParticipant();
+  const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
+  const room = useRoomContext();
 
-  const {otherCameraTracks} = useParticipant();
   const startResizing = () => setIsResizing(true);
   const stopResizing = () => setIsResizing(false);
+
+
+  useEffect(() => {
+    const handleDataReceived = (
+        payload: Uint8Array, 
+        participant?: RemoteParticipant | LocalParticipant, 
+        _kind?: any, 
+        topic?: string
+    ) => {
+      
+      if (topic !== "reactions") return;
+
+      try {
+        const strData = new TextDecoder().decode(payload);
+        const data = JSON.parse(strData);
+
+        if (data.type === 'EMOJI' && data.content) {
+          
+          AddEmoji(data.content);
+        }
+      } catch (err) {
+        console.error("Error parsing emoji data:", err);
+      }
+    };
+
+    room.on(RoomEvent.DataReceived, handleDataReceived);
+
+    return () => {
+      room.off(RoomEvent.DataReceived, handleDataReceived);
+    };
+  }, [room, AddEmoji]);
 
   const handlRenderChatAndAttend = () => {
     setIsClickattend(false);
@@ -31,10 +72,10 @@ const Meeting = () => {
     setIsClickattend(!isClickattend);
   };
 
-  const handleMouseMove = (e:any) => {
+  const handleMouseMove = (e: React.MouseEvent) => {
     if (isResizing) {
-      const newWidth = e.clientX - 10;
-      if (newWidth >= 897 && newWidth <= 1400 && isClickattend) {
+      const newWidth = e.clientX - 135;
+      if (newWidth >= 1100 && newWidth <= 1400 && isClickattend) {
         setWidth(newWidth);
       }
     }
@@ -59,18 +100,18 @@ const Meeting = () => {
       {!isfull && (
         <div className="ms-[24px] mt-[24px] flex justify-between">
           <div className="w-[281px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center p-[4px]">
-            <img src={teacher} className="w-[40px] h-[40px] rounded-full me-[13px]" alt="" />
+            <img src={teacher} className="w-[40px] h-[40px] rounded-full me-[13px]" alt="Host" />
             <h1 className="text-[16px] text-[#F9FBFC] me-[13px]">Hosted by Mr.Mohammed</h1>
           </div>
           <div className="flex me-[30px] gap-4">
             <div className="w-[187px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center cursor-pointer">
-              <img src={vector} className="w-[16px] h-[16px] ms-[20px]" alt="" />
+              <img src={vector} className="w-[16px] h-[16px] ms-[20px]" alt="Copy Link" />
               <h1 className="text-[16px] text-[#F9FBFC] me-[13px] ms-[11px]">Copy class link</h1>
             </div>
             <div
               onClick={() => {
                 handlRenderAttendAndChat();
-                setWidth(!isClickattend ? 897 : 1400);
+                setWidth(!isClickattend ? 1100 : 1400);
               }}
             >
               <Attend click={isClickattend} />
@@ -78,7 +119,7 @@ const Meeting = () => {
             <div
               onClick={() => {
                 handlRenderChatAndAttend();
-                setWidth(!isClickcha ? 897 : 1400);
+                setWidth(!isClickcha ? 896 : 1400);
               }}
             >
               <Bar click={isClickcha} />
@@ -88,13 +129,13 @@ const Meeting = () => {
       )}
 
       <div
-        className={`flex ${isfull ? "p-0 h-screen" : "ps-[30px] pe-[30px] pt-[16px] pb-[16px] h-[80vh]"} transition-all duration-300`}
+        className={`flex ${isfull ? "p-0 h-screen" : "ps-[30px] pe-[30px] pt-[16px] pb-[16px] h-[80vh]"} transition-all duration-300 relative`}
         onMouseMove={handleMouseMove}
         onMouseUp={stopResizing}
         onMouseLeave={stopResizing}
       >
         <div
-          className="relative transition-all duration-300 bg-[#393D44] rounded-2xl"
+          className="relative transition-all duration-300 bg-[#393D44] rounded-2xl overflow-hidden"
           style={{
             width: isfull ? "100%" : `${width}px`,
           }}
@@ -103,40 +144,61 @@ const Meeting = () => {
 
           <div
             onClick={toggleFullScreen}
-            className="absolute bottom-5 select-none right-5 bg-[#2A2D34B2] text-white flex items-center justify-center rounded-[8px] w-[40px] h-[40px] cursor-pointer z-50"
+            className="absolute bottom-5 select-none right-5 bg-[#2A2D34B2] text-white flex items-center justify-center rounded-[8px] w-[40px] h-[40px] cursor-pointer z-50 hover:bg-[#2A2D34]"
           >
-            <img className="W-[16px] h-[16px]" src={fullscreen} alt="" />
+            <img className="w-[16px] h-[16px]" src={fullscreen} alt="Fullscreen" />
           </div>
 
           <div
-            className="absolute top-0 right-0 w-[10px] m-1 h-full cursor-ew-resize"
+            className="absolute top-0 right-0 w-[10px] m-1 h-full cursor-ew-resize hover:bg-white/10"
             onMouseDown={startResizing}
           ></div>
         </div>
 
-        <div 
+        <div
           className={`
-            rounded-[20px] mt-[7px] bg-[#393D44] flex flex-col overflow-hidden transition-all duration-500 ease-in-out
-            ${isClickattend && !isfull  ? "select-none p-[20px] ms-[20px] opacity-100 " : "w-0 p-0 ms-0 opacity-0"}
+            rounded-[20px] bg-[#393D44] flex flex-col overflow-hidden transition-all duration-500 ease-in-out
+            ${isClickattend && !isfull ? "select-none p-[20px] ms-[20px] opacity-100" : "w-0 p-0 ms-0 opacity-0"}
           `}
         >
-          {otherCameraTracks.map((track)=>(
-            <div  key={track.participant.identity} >
-                <StudentActions name = {track.participant.identity.slice(0 , 11)} profileImage = {teacher} width={width} />
+          {otherCameraTracks.map((track) => (
+            <div key={track.participant.identity}>
+              <StudentActions name={track.participant.identity.slice(0, 11)} profileImage={teacher} width={width} />
             </div>
           ))}
-            
         </div>
 
-        <div 
+        <div className="absolute bottom-[250px] left-[520px] z-50">
+            {optionLeave ? <Leave/> : ""}
+        </div>
+
+        <div
           className={`
-             transition-all duration-500 ease-in-out overflow-hidden
-             ${isClickcha && !isfull ? " ms-4 opacity-100" : "w-0 ms-0 opacity-0"}
+            transition-all duration-500 ease-in-out overflow-hidden
+            ${isClickcha && !isfull ? " ms-4 opacity-100" : "w-0 ms-0 opacity-0"}
           `}
         >
-             {isClickcha && <ChatForm />}
+          {isClickcha && <ChatForm />}
         </div>
+
         
+        {emoji.map((item: any) => (
+          <motion.div
+            key={item.id}
+            initial={{ x: "50%", y: "80%", opacity: 0, scale: 0.5 }}
+            animate={{ 
+                x: `${50 + (Math.random() * 20 - 10)}%`, 
+                y: "-20%", 
+                opacity: [0, 1, 1, 0], 
+                scale: 1.5 
+            }}
+            transition={{ duration: 2.5, ease: "easeOut" }}
+            onAnimationComplete={() => removeEmoji(item.id)}
+            className="absolute bottom-0 left-0 w-full h-full pointer-events-none z-[9999] flex justify-center items-end"
+          >
+            <img src={getEmojiIcon(item.type)} className="w-16 h-16 drop-shadow-lg" alt="emoji" />
+          </motion.div>
+        ))}
       </div>
       {!isfull && <FooterBar />}
     </div>
