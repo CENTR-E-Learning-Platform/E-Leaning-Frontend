@@ -35,7 +35,7 @@ const Attend = ({ click }: any) => {
         </div>
       )}
       {click && (
-        <div className="w-[332px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center p-[4px] cursor-pointer justify-between ">
+        <div className="w-[228px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center p-[4px] cursor-pointer justify-between ">
           <div className="flex items-center">
             <img
               src={attend}
