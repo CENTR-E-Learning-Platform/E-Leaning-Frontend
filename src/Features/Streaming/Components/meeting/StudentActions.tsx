@@ -1,14 +1,16 @@
-import share from "../../../../assets/icons/share.svg";
-import menu from "../../../../assets/icons/menu.svg";
-import mic from "../../../../assets/icons/mic.svg";
-import video from "../../../../assets/icons/video.svg";
+import sound from "../../../../assets/icons/Group.svg";
+import menu from "../../../../assets/icons/smallmenu.svg";
+import raishand from "../../../../assets/icons/raishand.svg";
+import { useControlContext } from "../../Context/ControlContext";
+import ParticipantList from "./List/ParticipantList";
 
 const StudentActions = ({ name, profileImage, width }: any) => {
+  const {optionSmallMenu , setOptionSmallMenu} = useControlContext();
   return (
     <div
       className={
         width < 1133
-          ? `flex gap-[84px]  h-[48px] items-center  `
+          ? `flex gap-[74px]  h-[48px] items-center  `
           : `flex   items-center`
       }
     >
@@ -32,33 +34,31 @@ const StudentActions = ({ name, profileImage, width }: any) => {
             />
           )}
           {width < 1250 && (
-            <h1 className="text-[16px] text-[#F9FBFC] w-[143px]">Mohamed</h1>
+            <h1 className="text-[16px] text-[#F9FBFC] ">Mohamed</h1>
           )}
         </div>
       )}
+        
 
-      <div className="flex items-center gap-[16px]">
-        {width < 1100 && (
-          <img src={menu} alt="" className="w-[4px] h-[17px] cursor-pointer" />
-        )}
-        {width < 1030 && (
-          <img
-            src={share}
-            alt=""
-            className="w-[21px] h-[18px] cursor-pointer"
-          />
-        )}
-        {width < 1060 && (
-          <img
-            src={video}
-            alt=""
-            className="w-[18px] h-[12px] cursor-pointer"
-          />
-        )}
-        {width < 1090 && (
-          <img src={mic} alt="" className="w-[14px] h-[20px] cursor-pointer" />
-        )}
+      {width < 1115 &&(
+        
+        <div className="flex items-center gap-[10px]">
+        <div className="bg-[#454950] w-[26px] h-[26px] rounded-full flex items-center justify-center">
+          <img src={raishand} alt="" className="w-[16px] h-[16px] cursor-pointer"/>
+        </div>
+        <div className="bg-[#454950] w-[26px] h-[26px] rounded-full flex items-center justify-center">
+          <img src={sound} alt="" className="w-[14px] cursor-pointer"/>
+        </div>
+        <img 
+        onClick={()=> setOptionSmallMenu((prev) => !prev)}
+        src={menu} alt="" className="w-[4px] h-[17px] cursor-pointer" />
+         <div 
+          className="absolute top-[150px] left-[1120px] z-10 ">
+            {optionSmallMenu ? <ParticipantList/> : ""}
+          </div>
       </div>
+      
+      )}
     </div>
   );
 };
