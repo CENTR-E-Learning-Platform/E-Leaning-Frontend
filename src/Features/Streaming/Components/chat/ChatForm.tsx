@@ -24,7 +24,7 @@ const ChatForm = () => {
   }, [chatMessages]);
 
   return (
-    <div className="w-[400px] h-[461px] mt-[7px] rounded-[20px] py-[24px] px-[15px] bg-[#393D44] flex flex-col">
+    <div className="w-[400px] h-full rounded-[20px] py-[24px] px-[15px] bg-[#393D44] flex flex-col">
       
       <div className="flex-1 overflow-y-auto custom-scrollbar pr-r">
         {chatMessages.length === 0 && (
