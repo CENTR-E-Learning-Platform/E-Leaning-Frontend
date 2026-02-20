@@ -53,7 +53,7 @@ const StudentActions = ({ name, profileImage, width }: any) => {
         onClick={()=> setOptionSmallMenu((prev) => !prev)}
         src={menu} alt="" className="w-[4px] h-[17px] cursor-pointer" />
          <div 
-          className="absolute top-[150px] left-[1120px] z-10 ">
+          className="absolute top-[90px] left-[1120px] z-10 ">
             {optionSmallMenu ? <ParticipantList/> : ""}
           </div>
       </div>
