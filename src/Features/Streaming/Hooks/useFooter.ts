@@ -56,5 +56,22 @@ export const useFooter = () => {
     setEmoji((prev: any[]) => prev.filter((e) => e.id !== id));
   }, [setEmoji]);
 
-  return { AddEmoji, getEmojiIcon, removeEmoji, sendEmoji };
+  const raisHand = useCallback(() => {
+    if(!localParticipant){
+      console.warn("Local participant not connected");
+      return;
+    }
+    const payload = JSON.stringify({type:"raisHand" , content:"rais"})
+    const data = new TextEncoder().encode(payload);
+    
+    try{
+      localParticipant.publishData(data , {
+      reliable:true,
+      topic:"notifications"
+    });
+    }catch(error){
+       console.error("Failed to publish emoji:", error);
+    }
+  }, [localParticipant])
+  return { AddEmoji, getEmojiIcon, removeEmoji, sendEmoji, raisHand };
 };
