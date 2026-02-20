@@ -6,8 +6,8 @@ const MicList = () => {
   return (
     <>
        <div className="h-[97px]">
-         <ListComp width = "w-[196px]" height ="h-[48px]" icon ={mic} parg ="Select a mic" arrow ={ArrowR} visable ="" />
-         <ListComp width = "w-[196px]" height ="h-[48px]" icon ={vois} parg ="Select a speaker" arrow ={ArrowR} visable ="" />
+         <ListComp width = "w-[196px] rounded-t-[8px]" height ="h-[48px]" icon ={mic} parg ="Select a mic" arrow ={ArrowR} visable ="" />
+         <ListComp width = "w-[196px] rounded-b-[8px]" height ="h-[48px]" icon ={vois} parg ="Select a speaker" arrow ={ArrowR} visable ="" />
        </div>
     </>
   )
