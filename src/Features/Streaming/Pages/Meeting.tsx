@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, use } from "react";
 import teacher from "../../../assets/images/mester.jpg";
 import vector from "../../../assets/icons/Vector.svg";
 import fullscreen from "../../../assets/icons/fullscreen.svg";
@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { useControlContext } from "../Context/ControlContext";
 import Leave from "../Components/meeting/Leave";
 import { useFooter } from "../Hooks/useFooter";
+import { useRole } from "../Hooks/useRole";
 import { useRoomContext } from "@livekit/components-react";
 import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
 
@@ -26,6 +27,7 @@ const Meeting: React.FC = () => {
   const { emoji, optionLeave } = useControlContext();
   const { otherCameraTracks } = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
+  const {MuteParticipant} = useRole();
   const room = useRoomContext();
 
   const startResizing = () => setIsResizing(true);
@@ -40,8 +42,6 @@ const Meeting: React.FC = () => {
         topic?: string
     ) => {
       
-      if (topic !== "reactions") return;
-
       try {
         const strData = new TextDecoder().decode(payload);
         const data = JSON.parse(strData);
@@ -49,6 +49,11 @@ const Meeting: React.FC = () => {
         if (data.type === 'EMOJI' && data.content) {
           
           AddEmoji(data.content);
+        }
+
+        if(data.type === 'raisHand' && topic === "notifications"){
+          const user = participant?.name;
+          alert(user);
         }
       } catch (err) {
         console.error("Error parsing emoji data:", err);
@@ -162,8 +167,11 @@ const Meeting: React.FC = () => {
           `}
         >
           {otherCameraTracks.map((track) => (
-            <div key={track.participant.identity}>
-              <StudentActions name={track.participant.identity.slice(0, 11)} profileImage={teacher} width={width} />
+            <div 
+            key={track.participant.identity}>
+              <StudentActions 
+              func = {()=>MuteParticipant(track.participant.identity)}
+              name={track.participant.identity.slice(0, 11)} profileImage={teacher} width={width} />
             </div>
           ))}
         </div>
@@ -184,17 +192,19 @@ const Meeting: React.FC = () => {
         
         {emoji.map((item: any) => (
           <motion.div
+
             key={item.id}
-            initial={{ x: "50%", y: "80%", opacity: 0, scale: 0.5 }}
-            animate={{ 
-                x: `${50 + (Math.random() * 20 - 10)}%`, 
-                y: "-20%", 
-                opacity: [0, 1, 1, 0], 
-                scale: 1.5 
-            }}
-            transition={{ duration: 2.5, ease: "easeOut" }}
+
+            initial={{ x: 600, y: 500, opacity: 1, scale: 0.5 }}
+
+            animate={{ x: 600 + Math.random() * 100 - 50, y: -100, opacity: 0, scale: 1.5 }}
+
+            transition={{ duration: 2, ease: "easeOut" }}
+
             onAnimationComplete={() => removeEmoji(item.id)}
-            className="absolute bottom-0 left-0 w-full h-full pointer-events-none z-[9999] flex justify-center items-end"
+
+            className="absolute z-50 pointer-events-none"
+
           >
             <img src={getEmojiIcon(item.type)} className="w-16 h-16 drop-shadow-lg" alt="emoji" />
           </motion.div>
