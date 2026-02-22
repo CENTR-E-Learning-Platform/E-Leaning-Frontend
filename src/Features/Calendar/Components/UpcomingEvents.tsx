@@ -8,7 +8,7 @@ const UpcomingEvents = () => {
       {TeacherClass.map((e:any) => {
         return (
           <div
-            className={`bg-[#7B24BA]/20  w-[265px] h-[153px] rounded-[10px] border-[1px] border-[#7B24BA]`}
+            className={`bg-[#7B24BA]/20  w-[265px] h-[153px] rounded-[10px] border-[1px] border-[#7B24BA] mb-[10px]`}
           >
             <div>
               <div>
@@ -25,7 +25,7 @@ const UpcomingEvents = () => {
                     />
                   </div>
                   <span className="text-[12px]  text-center text-[#6D7588]">
-                    3:50 pm - 3:50 pm
+                    {e.startTime.split("T")[1].slice(0,5)} pm - {e.endTime.split("T")[1].slice(0,5)} pm
                   </span>
                 </div>
                 <div className="flex ps-[12px] mt-[8px] ">
