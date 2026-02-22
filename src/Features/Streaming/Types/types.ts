@@ -1,10 +1,11 @@
 const initialValues = {
-    Price:100,
-    StartTime : "",
-    Time: "",
-    DurationMinutes:"",
-    Title: "",
-    Reminder:"",
+    Price:0,
+    Title : "",
+    StartTime: "",
+    DurationMinutes:0,
+    IsRepeat: false,
+    Grade: 0,
+    Reminder:"01:00:00",
     Description:""
   };
 
