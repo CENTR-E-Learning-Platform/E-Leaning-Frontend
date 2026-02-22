@@ -1,9 +1,12 @@
 import { useRoomContext } from '@livekit/components-react';
 import warn from '../../../../assets/icons/warn.svg';
 import { useControlContext } from '../../Context/ControlContext';
+import { useNavigate } from 'react-router-dom';
 const Leave = () => {
     const {setOptionLeave} = useControlContext();
-      const room = useRoomContext();
+    const room = useRoomContext();
+    const navigate = useNavigate();
+
   return (
     <>
         <div className="w-[360px] h-[184px] bg-[#2A2D34] rounded-[8px] flex flex-col justify-center p-[24px]">
@@ -19,7 +22,10 @@ const Leave = () => {
                 onClick={()=> setOptionLeave(false)}
                 className='border-[#393D44] border-[1px] w-[148px] h-[48px] text-[#F9FBFC] rounded-[8px] cursor-pointer  hover:bg-[#454950] transition duration-300'>Cancel</button>
                 <button 
-                onClick={()=> room.disconnect()}
+                onClick={()=> {
+                    room.disconnect()
+                    navigate("/GoodBy")
+                }}
                 className='bg-[#D24747] w-[148px] h-[48px] text-[#F9FBFC] rounded-[8px] cursor-pointer'>Leave Session</button>
             </div>
         </div>
