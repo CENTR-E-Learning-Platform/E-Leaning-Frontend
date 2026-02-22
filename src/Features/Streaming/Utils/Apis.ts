@@ -1,4 +1,4 @@
 const BASE_URL = "https://localhost:7251";
-const CREATEROOM_API = `${BASE_URL}/Create%20Room`;
-
-export {CREATEROOM_API , BASE_URL}
+const CREATEROOM_API = `${BASE_URL}/api/Room/CreateRoom`;
+const CONTROL_API = `${BASE_URL}/ControlMeeting`;
+export {CREATEROOM_API , BASE_URL , CONTROL_API}
