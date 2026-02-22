@@ -7,6 +7,7 @@ import Reminder from "./Reminder";
 import { useCreateRoom } from "../../../Streaming/Hooks/useCreateRoom";
 const ClassForm = () => {
   const { formik } = useCreateRoom();
+
   return (
     <>
       <div className="w-[498px] h-[827px] bg-[#F9FBFC] rounded-[8px]  ">
@@ -48,15 +49,15 @@ const ClassForm = () => {
                     Date
                   </label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     name="StartTime"
                     onChange={formik.handleChange}
                     value={formik.values.StartTime}
                     placeholder="Add title"
-                    className="w-[143px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none p-[8px]  text-[15px] font-[400] me-[10px] placeholder:text-[#6D7588]"
+                    className="w-[290px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none p-[8px]  text-[15px] font-[400] me-[10px] placeholder:text-[#6D7588]"
                   />
                 </div>
-                <div className="flex flex-col mb-[8px] ">
+                {/* <div className="flex flex-col mb-[8px] ">
                   <label
                     htmlFor=" "
                     className="text-[16px] font-[400] text-[#2A2D34]"
@@ -66,12 +67,12 @@ const ClassForm = () => {
                   <input
                     type="text"
                     name="Time"
-                    onChange={formik.handleChange}
-                    value={formik.values.Time}
+                    // onChange={formik.handleChange}
+                    // value={formik.values.DurationMinutes}
                     placeholder="Time"
                     className="w-[143px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px] text-[#2A2D34] text-[16px] font-[400] me-[10px]"
                   />
-                </div>
+                </div> */}
                 <div className="flex flex-col mb-[8px] ">
                   <label
                     htmlFor=" "
@@ -91,6 +92,10 @@ const ClassForm = () => {
               </div>
               <div className="flex justify-start w-[449px] mt-[15px]">
                 <input
+                 checked = {formik.values.IsRepeat}
+                onChange={(e:any)=> {
+                  formik.setFieldValue("IsRepeat", e.target.checked)
+                }}
                   type="checkbox"
                   className="appearance-auto border-[1px] border-[#6D7588] bg-[#FFFFFF] w-[20px] h-[20px] rounded-[4px] cursor-pointer me-[8px]  "
                 />
@@ -107,26 +112,28 @@ const ClassForm = () => {
                 <h1>Choose grade for this class</h1>
               </div>
               <div className="flex items-center gap-[10px]">
-                <Grad title="Prep 1" />
-                <Grad title="Prep 2" />
-                <Grad title="Prep 3" />
+                <Grad title="Prep 1" change = {()=> formik.setFieldValue("Grade", 0)} checked = {formik.values.Grade === 0} />
+                <Grad title="Prep 2" change = {()=> formik.setFieldValue("Grade", 1)} checked = {formik.values.Grade === 1} />
+                <Grad title="Prep 3" change = {()=> formik.setFieldValue("Grade", 2)} checked = {formik.values.Grade === 2} />
               </div>
               <div className="flex items-center mt-[16px] gap-[10px]">
-                <Grad title="Sec 1" />
-                <Grad title="Sec 2" />
-                <Grad title="Sec 3" />
+                <Grad title="Sec 1" change = {()=> formik.setFieldValue("Grade", 3)} checked = {formik.values.Grade === 3} />
+                <Grad title="Sec 2" change = {()=> formik.setFieldValue("Grade", 4)} checked = {formik.values.Grade === 4} />
+                <Grad title="Sec 3" change = {()=> formik.setFieldValue("Grade", 5)} checked = {formik.values.Grade === 5} />
               </div>
             </div>
             <div className="flex justify-center mt-[24px]">
-              <MaxNoOfStudent />
+              <MaxNoOfStudent change = {formik.handleChange} val ={formik.values.Price}/>
             </div>
             <div className="flex justify-center mt-[24px]">
-              <Reminder />
+              <Reminder  change={formik.handleChange}
+  val={formik.values.Reminder}
+        />
             </div>
             <div className="flex justify-center mt-[24px]">
-              <Description />
+              <Description change = {formik.handleChange} val ={formik.values.Description} />
             </div>
-            <div className="flex justify-center gap-[9px] ">
+            <div className="flex justify-center gap-[9px]">
               <Button
                 title="Add Class"
                 bg="#525FE1"
