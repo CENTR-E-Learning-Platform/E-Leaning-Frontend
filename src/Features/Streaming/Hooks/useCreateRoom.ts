@@ -11,22 +11,33 @@ export const useCreateRoom = ()=> {
     const formik = useFormik({
         initialValues,
         onSubmit: async(values)=> {
-            let finalStartTime = new Date(`${values.StartTime}T${values.Time}`);
-         const params = new URLSearchParams({
-    Price: values.Price.toString(),
-    StartTime: finalStartTime.toISOString(), 
-    DurationMinutes: values.DurationMinutes.toString(),
-    Title: values.Title,
-    Reminder: values.Reminder ? values.Reminder.toString() : "",
-    Description: values.Description || ""
-  });
+        
+        const time = new Date(values.StartTime);
+        time.setHours(time.getHours() + 2);    
+        const params = {
+            Price: Number(values.Price),
+            Title: values.Title,
+            StartTime: time.toISOString(),
+            DurationMinutes: Number(values.DurationMinutes),
+            IsRepeat:values.IsRepeat,
+            ClassGrade: values.Grade,
+            Reminder: values.Reminder,
+            Description: values.Description || ""
+        };
+
         try{
+            console.log("grad" , params);
+            
             const response =await createRoom(params);
             console.log(response.data);
+            console.log("success");
+            
             localStorage.setItem("sessionName" , response.data.sessionLiveKitRoom); 
-            navigate("joinnow")
-        }catch(err){
-            alert(err);
+            navigate("/createroom/joinnow")
+        }catch(err:any){
+            console.log("Error Details:", err.response?.data);
+            console.log(err);
+            
         }
         },
         
@@ -38,7 +49,7 @@ export const useCreateRoom = ()=> {
             console.log(response.data);
             localStorage.setItem("sessionToken", response.data.token);
              navigate("meeting")
-             initStream;
+            // initStream();
         }catch(err){
             console.log(err);
             
