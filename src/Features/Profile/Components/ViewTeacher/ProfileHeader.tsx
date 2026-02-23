@@ -3,25 +3,39 @@ import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
 import PlusIcon from "../../../../../src/assets/icons/PlusIcon.svg";
 import editIcon from "../../../../../src/assets/icons/editIcon.svg"
 import { useUploadImage } from "../../Hooks/useUploadImage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileCompletion from "./ProfileCompletion";
+import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
+
 const ProfileHeader = () => {
-
-
+  const {data} = useTeacherProfile()
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
   const { mutate } = useUploadImage();
-  
-
   const handleFileChange = (e: any) => {
     const file = e.target.files[0];
     if (!file) return;
     setPreviewImage(URL.createObjectURL(file));
     mutate(file, {
-    onError: () => {
-      setPreviewImage(bg_imptyPhoto);
-    },
-  });
+      onError: () => {
+        setPreviewImage(bg_imptyPhoto);
+      },
+    });
   };
+
+  useEffect(() => {
+    if (data?.data?.fullPrfilePicturePath) {
+      const url = data.data.fullPrfilePicturePath + "?t=" + Date.now();
+      setPreviewImage(url);
+    }
+  }, [data]);
+
+  useEffect(() => {
+  return () => {
+    if (previewImage && previewImage.startsWith("blob:")) {
+      URL.revokeObjectURL(previewImage);
+    }
+  };
+}, [previewImage]);
 
   return (
     <>
@@ -40,7 +54,7 @@ const ProfileHeader = () => {
               <div className="Adding-Teacher-Profile-Image">
                 <img
                   className="w-[144px] h-[144px] absolute bottom-[-85px] rounded-full "
-                  src={previewImage || bg_imptyPhoto}
+                  src={previewImage ?? bg_imptyPhoto}
                   alt="Teacher Profile Image"
                 />
                 <img
