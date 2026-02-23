@@ -1,6 +1,5 @@
 import { useState } from "react";
 import IntroYourself from "../../../../assets/images/IntroYourself.png"
-import SaysStudent from "../../../../assets/images/SaysStudent.png"
 import EditAboutMeModal from "./EditAboutMeModal";
 
 
@@ -24,7 +23,7 @@ const AboutMe = () => {
                     <p className="text-[#6D7588] mb-8 flex justify-center items-center font-semibold text-[18px]">
                         Profiles with video get 3x more bookings
                     </p>
-                    <button onClick={() => setIsModalOpen(true)} className="font-semibold bg-[#525FE1] w-full h-[43px] flex justify-center items-center text-[16px] p-4 rounded-[8px] text-[#F9FBFC]">
+                    <button onClick={() => setIsModalOpen(true)} className="cursor-pointer font-semibold bg-[#525FE1] w-full h-[43px] flex justify-center items-center text-[16px] p-4 rounded-[8px] text-[#F9FBFC]">
                         Add Video & Profile Overview
                     </button>
                 </div>
