@@ -1,12 +1,11 @@
 import axios from "axios"
 import { BASE_URL } from "../Utils/Apis"
-export const joinRoom = async()=> {
-    const roomname = localStorage.getItem("sessionName")?.toString();
-    console.log(roomname);
+export const joinRoom = async(data:any)=> {
+   
     
     const token = localStorage.getItem("token");
-    return await axios.get(
-        `${BASE_URL}/api/Room/${roomname}/token`,
+    return await axios.post(
+        `${BASE_URL}/api/Room/token`,data,
         {
             headers: {
         Authorization: `Bearer ${token}`
