@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 
 const AboutTeacher = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const {data} = useTeacherProfile();
+
   return (
     <>
       <section className="AboutTeacher-section mb-12 w-[500px]">
@@ -13,8 +16,8 @@ const AboutTeacher = () => {
         <iframe
           width="400"
           height="219"
-          src="https://www.youtube.com/embed/npJ6OzL-zOA"
-          title="YouTube video player"
+          src={data?.data.fullIntroVideoPath}
+          title="video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           className="w-[400px] h-[219px] rounded-[4px] mb-6"
