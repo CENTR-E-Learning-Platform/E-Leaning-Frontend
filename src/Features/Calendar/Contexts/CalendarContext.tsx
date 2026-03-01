@@ -3,12 +3,14 @@ import React, { createContext , useContext, useState , type ReactNode  } from "r
 interface CalendarContext {
     active : string | null , 
     setActive : React.Dispatch<React.SetStateAction<string |null>>
-     activeLeft : string | null , 
+    activeLeft : string | null , 
     setActiveLeft : React.Dispatch<React.SetStateAction<string |null>>
-     date : string | null , 
+    date : string | null , 
     setDate : React.Dispatch<React.SetStateAction<string |null>>
-     TeacherClass : any | null , 
+    TeacherClass : any | null , 
     SetTeacherClass : React.Dispatch<React.SetStateAction<any |null>>
+    checkGrad : any | null , 
+    setCheckGrad : React.Dispatch<React.SetStateAction<any |null>>
 
 }
 
@@ -18,8 +20,9 @@ export const CalendarProvider: React.FC<{ children: ReactNode } >  = ({children}
     const [activeLeft , setActiveLeft] = useState<string | null>("month");
     const [date , setDate] = useState<string | null>("");
     const [TeacherClass , SetTeacherClass] = useState<any |null>([]);
+    const [checkGrad , setCheckGrad] = useState(false);
     return (
-        <Calendar.Provider value={{active , setActive , activeLeft , setActiveLeft , date , setDate , TeacherClass , SetTeacherClass}}>
+        <Calendar.Provider value={{active , setActive , activeLeft , setActiveLeft , date , setDate , TeacherClass , SetTeacherClass , checkGrad , setCheckGrad}}>
             {children}
         </Calendar.Provider>
     );
