@@ -6,7 +6,7 @@ import {
 
 import '@livekit/components-styles';
 import { useParticipant } from "../../Hooks/useParticipant";
-import teacher from '../../../../assets/images/mester.jpg';
+import { BASE_URL } from "../../Utils/Apis";
 const  ParticipantsGrid = ()=>  {
   const {tracks , screenShareTrack , presenterCameraTrack , otherCameraTracks} = useParticipant();
     const { localParticipant } = useLocalParticipant();
@@ -101,7 +101,7 @@ const  ParticipantsGrid = ()=>  {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-1 left-2 bg-black/60 text-white text-xs px-2 rounded">
-                  {track.participant.identity}
+                  {track.participant.name}
                 </div>
               </div>
             ))}
@@ -131,7 +131,7 @@ const  ParticipantsGrid = ()=>  {
   <div className="w-full h-full flex justify-center items-center">
   <div className="w-[30%] aspect-square">
     <img
-      src={teacher}
+      src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
       className="w-full h-full rounded-full object-cover"
       alt=""
     />
@@ -139,8 +139,8 @@ const  ParticipantsGrid = ()=>  {
 </div>
 )}
 
-             <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 rounded">
-              {trackRef.participant.identity}
+            <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 rounded">
+              {trackRef.participant.name}
             </div>
           </div>
         ))}
