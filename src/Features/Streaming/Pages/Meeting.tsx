@@ -171,7 +171,7 @@ const Meeting: React.FC = () => {
             key={track.participant.identity}>
               <StudentActions 
               func = {()=>MuteParticipant(track.participant.identity)}
-              name={track.participant.identity.slice(0, 11)} profileImage={teacher} width={width} />
+              name={track.participant.name} profileImage={track.participant.attributes["UserImage"]} width={width} />
             </div>
           ))}
         </div>
