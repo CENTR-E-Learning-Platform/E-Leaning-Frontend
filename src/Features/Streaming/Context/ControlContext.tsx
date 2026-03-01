@@ -21,6 +21,8 @@ interface RoomContextTypes {
   setEmoji: React.Dispatch<React.SetStateAction<string[]>>;
   optionLeave: boolean;
   setOptionLeave: React.Dispatch<React.SetStateAction<boolean>>;
+  join: boolean;
+  setJoin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RoomCtx = createContext<RoomContextTypes | null>(null);
@@ -35,9 +37,10 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [optionSmallMenu, setOptionSmallMenu] = useState(false);
   const [optionEmoji, setOptionEmoji] = useState(false);
   const [emoji, setEmoji] = useState<string[]>([]);
-  const [optionLeave, setOptionLeave] = useState(false)
+  const [optionLeave, setOptionLeave] = useState(false);
+  const [join, setJoin] = useState(false);
   return (
-    <RoomCtx.Provider value={{ cameraView, setCameraView , mic , setMic , openStream , setOpenStream , optionMic , setOptionMic ,optionCamera , setOptionCamera , optionMenu , setOptionMenu , optionSmallMenu , setOptionSmallMenu , optionEmoji , setOptionEmoji ,emoji ,setEmoji , optionLeave , setOptionLeave}}>
+    <RoomCtx.Provider value={{ cameraView, setCameraView , mic , setMic , openStream , setOpenStream , optionMic , setOptionMic ,optionCamera , setOptionCamera , optionMenu , setOptionMenu , optionSmallMenu , setOptionSmallMenu , optionEmoji , setOptionEmoji ,emoji ,setEmoji , optionLeave , setOptionLeave , join , setJoin}}>
       {children}
     </RoomCtx.Provider>
   );
