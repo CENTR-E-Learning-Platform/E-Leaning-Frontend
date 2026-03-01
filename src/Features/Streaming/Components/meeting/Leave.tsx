@@ -2,11 +2,12 @@ import { useRoomContext } from '@livekit/components-react';
 import warn from '../../../../assets/icons/warn.svg';
 import { useControlContext } from '../../Context/ControlContext';
 import { useNavigate } from 'react-router-dom';
+import { useControlling } from '../../Hooks/useControlling';
 const Leave = () => {
     const {setOptionLeave} = useControlContext();
     const room = useRoomContext();
     const navigate = useNavigate();
-
+    const {stopStream} = useControlling();
   return (
     <>
         <div className="w-[360px] h-[184px] bg-[#2A2D34] rounded-[8px] flex flex-col justify-center p-[24px]">
@@ -22,9 +23,16 @@ const Leave = () => {
                 onClick={()=> setOptionLeave(false)}
                 className='border-[#393D44] border-[1px] w-[148px] h-[48px] text-[#F9FBFC] rounded-[8px] cursor-pointer  hover:bg-[#454950] transition duration-300'>Cancel</button>
                 <button 
-                onClick={()=> {
-                    room.disconnect()
-                    navigate("/GoodBy")
+                onClick={async ()=> {
+                    try {
+                        await room.disconnect()
+                        localStorage.removeItem("sessionToken");
+                        setOptionLeave(false);
+                        stopStream();
+                        navigate("/GoodBy" , { replace: true })
+                    }catch(err:any){
+                        console.log(err);
+                    }
                 }}
                 className='bg-[#D24747] w-[148px] h-[48px] text-[#F9FBFC] rounded-[8px] cursor-pointer'>Leave Session</button>
             </div>
