@@ -4,10 +4,11 @@ import { createRoom } from "../Services/createRoom";
 import { joinRoom } from "../Services/joinRoom";
 import { useNavigate } from "react-router-dom";
 import { useControlling } from "./useControlling";
+import { useControlContext } from "../Context/ControlContext";
 export const useCreateRoom = ()=> {
     const navigate = useNavigate();
     const {initStream} = useControlling();
-
+    const {setJoin} = useControlContext();
     const formik = useFormik({
         initialValues,
         onSubmit: async(values)=> {
@@ -42,12 +43,15 @@ export const useCreateRoom = ()=> {
         },
         
     });
-  
     const JoinRoom = async () => {
         try{
-            const response = await joinRoom();
+            const roomname = localStorage.getItem("sessionName")?.toString();
+            const data = {roomName : roomname};
+            console.log(roomname);
+            const response = await joinRoom(data);
             console.log(response.data);
-            localStorage.setItem("sessionToken", response.data.token);
+            await localStorage.setItem("sessionToken", response.data.token);
+            setJoin(true);
              navigate("meeting")
             // initStream();
         }catch(err){
