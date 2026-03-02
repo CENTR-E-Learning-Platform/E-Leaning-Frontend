@@ -2,15 +2,16 @@ import classForm from "../../../../assets/icons/class.svg";
 import Button from "./Button";
 import Description from "./Description";
 import Grad from "./Grad";
-import MaxNoOfStudent from "./MaxNoOfStudent";
 import Reminder from "./Reminder";
 import { useCreateRoom } from "../../../Streaming/Hooks/useCreateRoom";
+import Price from "./Price";
+
 const ClassForm = () => {
   const { formik } = useCreateRoom();
 
   return (
     <>
-      <div className="w-[498px] h-[827px] bg-[#F9FBFC] rounded-[8px]  ">
+      <div className="w-[498px] h-[827px] bg-[#F9FBFC] rounded-[8px]">
         <div className="flex items-center py-[20px] border-b-[1px] border-b-[#E8EAED]">
           <img
             src={classForm}
@@ -21,14 +22,14 @@ const ClassForm = () => {
             Add new class
           </h1>
         </div>
+
         <div className="mt-[30px]">
-          <form action="" onSubmit={formik.handleSubmit}>
-            <div className=" flex justify-center flex-col items-center ">
-              <div className="flex flex-col mb-[8px] ">
-                <label
-                  htmlFor=" "
-                  className="text-[16px] font-[400] text-[#2A2D34]"
-                >
+          <form onSubmit={formik.handleSubmit}>
+            <div className="flex justify-center flex-col items-center">
+              
+              {/* Title */}
+              <div className="flex flex-col mb-[8px] w-[449px]">
+                <label className="text-[16px] font-[400] text-[#2A2D34]">
                   Title
                 </label>
                 <input
@@ -37,15 +38,24 @@ const ClassForm = () => {
                   name="Title"
                   onChange={formik.handleChange}
                   value={formik.values.Title}
-                  className="w-[449px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px] text-[#2A2D34] text-[16px] font-[400]"
+                  onBlur={formik.handleBlur}
+                  className="w-full h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px]"
                 />
+                <div className="h-[20px]">
+                  {formik.errors.Title && formik.touched.Title && (
+                    <p className="text-[#CC3363] text-[14px] font-[400]">
+                      {formik.errors.Title}
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center">
-                <div className="flex flex-col mb-[8px] ">
-                  <label
-                    htmlFor=" "
-                    className="text-[16px] font-[400] text-[#2A2D34]"
-                  >
+
+              {/* Date & Duration */}
+              <div className="flex items-start gap-[10px]">
+                
+                {/* Date */}
+                <div className="flex flex-col w-[290px]">
+                  <label className="text-[16px] font-[400] text-[#2A2D34]">
                     Date
                   </label>
                   <input
@@ -53,31 +63,22 @@ const ClassForm = () => {
                     name="StartTime"
                     onChange={formik.handleChange}
                     value={formik.values.StartTime}
-                    placeholder="Add title"
-                    className="w-[290px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none p-[8px]  text-[15px] font-[400] me-[10px] placeholder:text-[#6D7588]"
+                    onBlur={formik.handleBlur}
+                    className="w-full h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none p-[8px]"
                   />
+                  <div className="h-[20px]">
+                    {formik.errors.StartTime &&
+                      formik.touched.StartTime && (
+                        <p className="text-[#CC3363] text-[14px] font-[400]">
+                          {formik.errors.StartTime}
+                        </p>
+                      )}
+                  </div>
                 </div>
-                {/* <div className="flex flex-col mb-[8px] ">
-                  <label
-                    htmlFor=" "
-                    className="text-[16px] font-[400] text-[#2A2D34]"
-                  >
-                    Time
-                  </label>
-                  <input
-                    type="text"
-                    name="Time"
-                    // onChange={formik.handleChange}
-                    // value={formik.values.DurationMinutes}
-                    placeholder="Time"
-                    className="w-[143px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px] text-[#2A2D34] text-[16px] font-[400] me-[10px]"
-                  />
-                </div> */}
-                <div className="flex flex-col mb-[8px] ">
-                  <label
-                    htmlFor=" "
-                    className="text-[16px] font-[400] text-[#2A2D34]"
-                  >
+
+                {/* Duration */}
+                <div className="flex flex-col w-[143px]">
+                  <label className="text-[16px] font-[400] text-[#2A22D34]">
                     Duration
                   </label>
                   <input
@@ -86,54 +87,90 @@ const ClassForm = () => {
                     name="DurationMinutes"
                     onChange={formik.handleChange}
                     value={formik.values.DurationMinutes}
-                    className="w-[143px] h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px] text-[#2A2D34] text-[16px] font-[400] "
+                    onBlur={formik.handleBlur}
+                    className="w-full h-[42px] border-[2px] bg-[#FFFFFF] border-[#D1D5DB] rounded-[8px] focus:outline-none pl-[16px]"
                   />
+                  <div className="h-[20px]">
+                    {formik.errors.DurationMinutes &&
+                      formik.touched.DurationMinutes && (
+                        <p className="text-[#CC3363] text-[14px] font-[400]">
+                          {formik.errors.DurationMinutes}
+                        </p>
+                      )}
+                  </div>
                 </div>
               </div>
+
+              {/* Weekly Repeat */}
               <div className="flex justify-start w-[449px] mt-[15px]">
                 <input
-                 checked = {formik.values.IsRepeat}
-                onChange={(e:any)=> {
-                  formik.setFieldValue("IsRepeat", e.target.checked)
-                }}
+                  checked={formik.values.IsRepeat}
+                  onChange={(e: any) =>
+                    formik.setFieldValue("IsRepeat", e.target.checked)
+                  }
                   type="checkbox"
-                  className="appearance-auto border-[1px] border-[#6D7588] bg-[#FFFFFF] w-[20px] h-[20px] rounded-[4px] cursor-pointer me-[8px]  "
+                  className="appearance-auto border-[1px] border-[#6D7588] bg-[#FFFFFF] w-[20px] h-[20px] rounded-[4px] cursor-pointer me-[8px]"
                 />
-                <label
-                  htmlFor=" "
-                  className="text-[16px] font-[400] text-[#2A2D34]"
-                >
+                <label className="text-[16px] font-[400] text-[#2A2D34]">
                   Weekly repeat
                 </label>
               </div>
             </div>
+
+            {/* Grade */}
             <div className="flex items-center flex-col mt-[24px]">
-              <div className="w-[443px] text-[16x] font-semibold mb-[12px]">
+              <div className="w-[443px] text-[16px] font-semibold mb-[12px]">
                 <h1>Choose grade for this class</h1>
               </div>
+
               <div className="flex items-center gap-[10px]">
-                <Grad title="Prep 1" change = {()=> formik.setFieldValue("Grade", 0)} checked = {formik.values.Grade === 0} />
-                <Grad title="Prep 2" change = {()=> formik.setFieldValue("Grade", 1)} checked = {formik.values.Grade === 1} />
-                <Grad title="Prep 3" change = {()=> formik.setFieldValue("Grade", 2)} checked = {formik.values.Grade === 2} />
+                <Grad title="Prep 1" change={() => formik.setFieldValue("Grade", 0)} checked={formik.values.Grade === 0} />
+                <Grad title="Prep 2" change={() => formik.setFieldValue("Grade", 1)} checked={formik.values.Grade === 1} />
+                <Grad title="Prep 3" change={() => formik.setFieldValue("Grade", 2)} checked={formik.values.Grade === 2} />
               </div>
+
               <div className="flex items-center mt-[16px] gap-[10px]">
-                <Grad title="Sec 1" change = {()=> formik.setFieldValue("Grade", 3)} checked = {formik.values.Grade === 3} />
-                <Grad title="Sec 2" change = {()=> formik.setFieldValue("Grade", 4)} checked = {formik.values.Grade === 4} />
-                <Grad title="Sec 3" change = {()=> formik.setFieldValue("Grade", 5)} checked = {formik.values.Grade === 5} />
+                <Grad title="Sec 1" change={() => formik.setFieldValue("Grade", 3)} checked={formik.values.Grade === 3} />
+                <Grad title="Sec 2" change={() => formik.setFieldValue("Grade", 4)} checked={formik.values.Grade === 4} />
+                <Grad title="Sec 3" change={() => formik.setFieldValue("Grade", 5)} checked={formik.values.Grade === 5} />
               </div>
             </div>
-            <div className="flex justify-center mt-[24px]">
-              <MaxNoOfStudent change = {formik.handleChange} val ={formik.values.Price}/>
+
+            {/* Price */}
+            <div className="flex mt-[24px] flex-col items-center w-[449px] mx-auto">
+              <Price
+                change={formik.handleChange}
+                val={formik.values.Price}
+                blure={formik.handleBlur}
+              />
+              
             </div>
+            <div className="h-[20px] ms-[25px]">
+                {formik.errors.Price && formik.touched.Price && (
+                  <p className="text-[#CC3363] text-[14px] font-[400]">
+                    {formik.errors.Price}
+                  </p>
+                )}
+              </div>
+
+            {/* Reminder */}
             <div className="flex justify-center mt-[24px]">
-              <Reminder  change={formik.handleChange}
-  val={formik.values.Reminder}
-        />
+              <Reminder
+                change={formik.handleChange}
+                val={formik.values.Reminder}
+              />
             </div>
+
+            {/* Description */}
             <div className="flex justify-center mt-[24px]">
-              <Description change = {formik.handleChange} val ={formik.values.Description} />
+              <Description
+                change={formik.handleChange}
+                val={formik.values.Description}
+              />
             </div>
-            <div className="flex justify-center gap-[9px]">
+
+            {/* Buttons */}
+            <div className="flex justify-center gap-[9px] mt-[24px]">
               <Button
                 title="Add Class"
                 bg="#525FE1"
