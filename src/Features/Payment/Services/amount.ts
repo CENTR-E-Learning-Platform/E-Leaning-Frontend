@@ -5,7 +5,7 @@ export const amountServices = async(amount:number) => {
     const token = localStorage.getItem("token");
    // console.log(token);
     return await axios.post(
-         `${INITIAL_AMOUNT_API}?amount=${amount}`,
+         `${INITIAL_AMOUNT_API}?Amount=${amount}`,
          {},
       {
         headers: {
