@@ -5,12 +5,14 @@ import { joinRoom } from "../Services/joinRoom";
 import { useNavigate } from "react-router-dom";
 import { useControlling } from "./useControlling";
 import { useControlContext } from "../Context/ControlContext";
+import { ClassFormShema } from "../Validation/ClassFormSchema";
 export const useCreateRoom = ()=> {
     const navigate = useNavigate();
     const {initStream} = useControlling();
     const {setJoin} = useControlContext();
     const formik = useFormik({
         initialValues,
+        validationSchema:ClassFormShema,
         onSubmit: async(values)=> {
         
         const time = new Date(values.StartTime);
