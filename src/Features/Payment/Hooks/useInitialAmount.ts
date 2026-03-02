@@ -3,15 +3,15 @@ import { paymob } from "../Services/paymob";
 import { sendcharge } from "../Services/charge";
 import { paymobile } from "../Services/payMobile";
 export const useInitialAmount = ()=> {
-    const amount:number = 100; 
+    const Amount:number = 100; 
     const sendAmount =async () => {
         try{
-            const response = await amountServices(amount);
+            const response = await amountServices(Amount);
             //console.log("ptimary key", response)
-            localStorage.setItem("paymentKey", response.data.paymentKey);
+            await localStorage.setItem("publicKey", response.data.data.publicKey);
+            await localStorage.setItem("clientSecret", response.data.data.clientSecret);
             
-            console.log(response.data.paymentKey);
-                     
+            console.log("data of pyment -----------------?",response.data.data);
         }catch(err){
             console.log("exceptions "+ err);  
             alert(err);     
@@ -47,8 +47,8 @@ export const useInitialAmount = ()=> {
                     }
                 )
                // window.location.href = response.data.redirection_url;
-               const url = response.data.details.redirection_url;
-               window.open(url, "_blank");
+                const url = response.data.details.redirection_url;
+                window.open(url, "_blank");
                 console.log(response.data);
                 
             }catch(err){
