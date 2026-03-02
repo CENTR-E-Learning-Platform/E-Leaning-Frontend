@@ -1,8 +1,8 @@
 const initialValues = {
-    Price:0,
+    Price:20,
     Title : "",
     StartTime: "",
-    DurationMinutes:0,
+    DurationMinutes:60,
     IsRepeat: false,
     Grade: 0,
     Reminder:"01:00:00",
