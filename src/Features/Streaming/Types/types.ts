@@ -1,3 +1,4 @@
+
 const initialValues = {
     Price:20,
     Title : "",
@@ -9,4 +10,10 @@ const initialValues = {
     Description:""
   };
 
-export {initialValues}
+const ControlParticipant = {
+  roomName:"",
+  identity:"",
+  mute:false
+}
+
+export {initialValues , ControlParticipant}
