@@ -23,6 +23,8 @@ interface RoomContextTypes {
   setOptionLeave: React.Dispatch<React.SetStateAction<boolean>>;
   join: boolean;
   setJoin: React.Dispatch<React.SetStateAction<boolean>>;
+  mute: boolean;
+  setMute: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RoomCtx = createContext<RoomContextTypes | null>(null);
@@ -39,8 +41,9 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [emoji, setEmoji] = useState<string[]>([]);
   const [optionLeave, setOptionLeave] = useState(false);
   const [join, setJoin] = useState(false);
+  const [mute, setMute] = useState(false);
   return (
-    <RoomCtx.Provider value={{ cameraView, setCameraView , mic , setMic , openStream , setOpenStream , optionMic , setOptionMic ,optionCamera , setOptionCamera , optionMenu , setOptionMenu , optionSmallMenu , setOptionSmallMenu , optionEmoji , setOptionEmoji ,emoji ,setEmoji , optionLeave , setOptionLeave , join , setJoin}}>
+    <RoomCtx.Provider value={{ cameraView, setCameraView , mic , setMic , openStream , setOpenStream , optionMic , setOptionMic ,optionCamera , setOptionCamera , optionMenu , setOptionMenu , optionSmallMenu , setOptionSmallMenu , optionEmoji , setOptionEmoji ,emoji ,setEmoji , optionLeave , setOptionLeave , join , setJoin , mute , setMute}}>
       {children}
     </RoomCtx.Provider>
   );
