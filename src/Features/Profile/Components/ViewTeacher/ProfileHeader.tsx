@@ -2,25 +2,15 @@ import bg_TeacherMath from "../../../../../src/assets/images/bg_TeacherMath.png"
 import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
 import PlusIcon from "../../../../../src/assets/icons/PlusIcon.svg";
 import editIcon from "../../../../../src/assets/icons/editIcon.svg"
-import { useUploadImage } from "../../Hooks/useUploadImage";
 import { useEffect, useState } from "react";
 import ProfileCompletion from "./ProfileCompletion";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
+import EditPhotoModal from "./EditPhotoModal";
 
 const ProfileHeader = () => {
-  const {data} = useTeacherProfile()
+  const {data , refetch} = useTeacherProfile()
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
-  const { mutate } = useUploadImage();
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setPreviewImage(URL.createObjectURL(file));
-    mutate(file, {
-      onError: () => {
-        setPreviewImage(bg_imptyPhoto);
-      },
-    });
-  };
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (data?.data?.fullPrfilePicturePath) {
@@ -53,12 +43,13 @@ const ProfileHeader = () => {
             <div className="flex justify-between gap-4">
               <div className="Adding-Teacher-Profile-Image">
                 <img
-                  className="w-[144px] h-[144px] absolute bottom-[-85px] rounded-full "
+                  className="w-[144px] h-[144px] absolute bottom-[-85px] rounded-full"
                   src={previewImage ?? bg_imptyPhoto}
                   alt="Teacher Profile Image"
                 />
                 <img
-                  onClick={() => document.getElementById("fileInput")?.click()}
+                  // onClick={() => document.getElementById("fileInput")?.click()}
+                  onClick={() => setIsModalOpen(true)}
                   className="absolute bg-[#F9FBFC] w-9 h-9 -bottom-[80px] z-50 cursor-pointer left-26 p-2.5  border-2 border-[#525FE1] rounded-full"
                   src={PlusIcon}
                   alt="PlusIcon"
@@ -98,13 +89,13 @@ const ProfileHeader = () => {
 
         {/* open file from OS */}
 
-        <input
+        {/* <input
           id="fileInput"
           type="file"
           accept="image/*"
           className="hidden"
           onChange={handleFileChange}
-        />
+        /> */}
 
         {/* Responsive design  */}
 
@@ -117,7 +108,8 @@ const ProfileHeader = () => {
                   alt="Teacher Profile Image"
                 />
                 <img
-                  onClick={() => document.getElementById("fileInput")?.click()}
+                  // onClick={() => document.getElementById("fileInput")?.click()}
+                  onClick={() => setIsModalOpen(true)}
                   className="absolute bg-[#F9FBFC] w-9 h-9 -bottom-[80px] z-50 cursor-pointer left-26 p-2.5  border-2 border-[#525FE1] rounded-full"
                   src={PlusIcon}
                   alt="PlusIcon"
@@ -153,7 +145,14 @@ const ProfileHeader = () => {
             </div>
           </div>
         </div>
-        
+
+        <EditPhotoModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          previewImage={previewImage}
+          setPreviewImage={setPreviewImage}
+          refetch={refetch}
+        />
       </section>
     </>
   );
