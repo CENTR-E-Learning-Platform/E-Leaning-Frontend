@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect} from "react";
 import teacher from "../../../assets/images/mester.jpg";
 import vector from "../../../assets/icons/Vector.svg";
 import fullscreen from "../../../assets/icons/fullscreen.svg";
@@ -15,17 +15,15 @@ import Leave from "../Components/meeting/Leave";
 import { useFooter } from "../Hooks/useFooter";
 import { useRole } from "../Hooks/useRole";
 import { useRoomContext } from "@livekit/components-react";
-import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
+import { RoomEvent, RemoteParticipant, LocalParticipant  } from "livekit-client";
 
 const Meeting: React.FC = () => {
   const [width, setWidth] = useState<number>(1400);
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [isClickcha, setIsClickcha] = useState<boolean>(false);
-  const [isClickattend, setIsClickattend] = useState<boolean>(false);
-  const [isfull, setIsFull] = useState<boolean>(false);
   
-  const { emoji, optionLeave } = useControlContext();
-  const { otherCameraTracks } = useParticipant();
+  const { emoji, optionLeave  , isfull , setIsFull , isClickattend , setIsClickattend} = useControlContext();
+  const { otherCameraTracks  } = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
   const {MuteParticipant} = useRole();
   const room = useRoomContext();
@@ -132,7 +130,6 @@ const Meeting: React.FC = () => {
           </div>
         </div>
       )}
-
       <div
         className={`flex ${isfull ? "p-0 h-screen" : "ps-[30px] pe-[30px] pt-[16px] pb-[16px] h-[80vh]"} transition-all duration-300 relative`}
         onMouseMove={handleMouseMove}
@@ -140,26 +137,23 @@ const Meeting: React.FC = () => {
         onMouseLeave={stopResizing}
       >
         <div
-          className="relative transition-all duration-300 bg-[#393D44] rounded-2xl overflow-hidden"
+          className="relative transition-all duration-300  rounded-2xl overflow-hidden"
           style={{
             width: isfull ? "100%" : `${width}px`,
           }}
         >
           <ParticipantsGrid />
-
           <div
             onClick={toggleFullScreen}
             className="absolute bottom-5 select-none right-5 bg-[#2A2D34B2] text-white flex items-center justify-center rounded-[8px] w-[40px] h-[40px] cursor-pointer z-50 hover:bg-[#2A2D34]"
           >
             <img className="w-[16px] h-[16px]" src={fullscreen} alt="Fullscreen" />
           </div>
-
           <div
             className="absolute top-0 right-0 w-[10px] m-1 h-full cursor-ew-resize hover:bg-white/10"
             onMouseDown={startResizing}
           ></div>
         </div>
-
         <div
           className={`
             rounded-[20px] bg-[#393D44] flex flex-col overflow-hidden transition-all duration-500 ease-in-out
@@ -170,16 +164,15 @@ const Meeting: React.FC = () => {
             <div 
             key={track.participant.identity}>
               <StudentActions 
-              func = {()=>MuteParticipant(track.participant.identity)}
+              Partici={track.participant}
+              func = {()=>MuteParticipant(track.participant.identity , track.participant.permissions?.canPublish)}
               name={track.participant.name} profileImage={track.participant.attributes["UserImage"]} width={width} />
             </div>
           ))}
         </div>
-
         <div className="absolute bottom-[250px] left-[520px] z-50">
             {optionLeave ? <Leave/> : ""}
         </div>
-
         <div
           className={`
             transition-all duration-500 ease-in-out overflow-hidden
@@ -188,23 +181,15 @@ const Meeting: React.FC = () => {
         >
           {isClickcha && <ChatForm />}
         </div>
-
         
         {emoji.map((item: any) => (
           <motion.div
-
             key={item.id}
-
             initial={{ x: 600, y: 500, opacity: 1, scale: 0.5 }}
-
             animate={{ x: 600 + Math.random() * 100 - 50, y: -100, opacity: 0, scale: 1.5 }}
-
             transition={{ duration: 2, ease: "easeOut" }}
-
             onAnimationComplete={() => removeEmoji(item.id)}
-
             className="absolute z-50 pointer-events-none"
-
           >
             <img src={getEmojiIcon(item.type)} className="w-16 h-16 drop-shadow-lg" alt="emoji" />
           </motion.div>
