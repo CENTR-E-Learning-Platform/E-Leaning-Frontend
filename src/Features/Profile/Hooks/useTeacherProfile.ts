@@ -3,11 +3,11 @@ import { GetTeacherProfileData } from "../Services/TeacherProfileAPI";
 
 export const useTeacherProfile = () => {
 
-   const { data } = useQuery({
+   const { data  , refetch} = useQuery({
         queryKey: ["teacherProfile"],
         queryFn: GetTeacherProfileData,
         refetchOnWindowFocus: false,
     });
 
-    return {data};
+    return {data , refetch};
 }
