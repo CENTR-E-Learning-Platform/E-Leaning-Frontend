@@ -34,7 +34,6 @@ export const useCreateRoom = ()=> {
             const response =await createRoom(params);
             console.log(response.data);
             console.log("success");
-            
             localStorage.setItem("sessionName" , response.data.sessionLiveKitRoom); 
             navigate("/createroom/joinnow")
         }catch(err:any){
