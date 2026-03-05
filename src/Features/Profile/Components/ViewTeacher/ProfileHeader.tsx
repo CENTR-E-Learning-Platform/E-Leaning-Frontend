@@ -13,19 +13,24 @@ const ProfileHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (data?.data?.fullPrfilePicturePath) {
-      const url = data.data.fullPrfilePicturePath + "?t=" + Date.now();
-      setPreviewImage(url);
+    const path = data?.data?.fullPrfilePicturePath;
+    if (!path) return;
+
+    if (path === "https://localhost:7251") {
+      setPreviewImage(bg_imptyPhoto);
+      return;
     }
+
+    setPreviewImage(path + "?t=" + Date.now());
   }, [data]);
 
   useEffect(() => {
-  return () => {
-    if (previewImage && previewImage.startsWith("blob:")) {
-      URL.revokeObjectURL(previewImage);
-    }
-  };
-}, [previewImage]);
+    return () => {
+      if (previewImage && previewImage.startsWith("blob:")) {
+        URL.revokeObjectURL(previewImage);
+      }
+    };
+  }, [previewImage]);
 
   return (
     <>
@@ -48,7 +53,6 @@ const ProfileHeader = () => {
                   alt="Teacher Profile Image"
                 />
                 <img
-                  // onClick={() => document.getElementById("fileInput")?.click()}
                   onClick={() => setIsModalOpen(true)}
                   className="absolute bg-[#F9FBFC] w-9 h-9 -bottom-[80px] z-50 cursor-pointer left-26 p-2.5  border-2 border-[#525FE1] rounded-full"
                   src={PlusIcon}
@@ -60,7 +64,7 @@ const ProfileHeader = () => {
                   <div className="absolute flex justify-center items-center p-0 cursor-pointer w-9 h-9 z-50 left-81 -top-3 border-2 border-[#525FE1] rounded-full">
                     <img src={editIcon} alt="edit" />
                   </div>
-                  Mr. Mohamed Salama
+                  {data?.data?.fullName}
                 </h2>
                 <div className="h-[29px] w-[191px] relative flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
                   <div className="absolute flex justify-center items-center p-0 cursor-pointer w-9 h-9 z-50 left-50 -top-1 border-2 border-[#525FE1] rounded-full">
@@ -87,16 +91,6 @@ const ProfileHeader = () => {
           <ProfileCompletion/>
         </div>
 
-        {/* open file from OS */}
-
-        {/* <input
-          id="fileInput"
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleFileChange}
-        /> */}
-
         {/* Responsive design  */}
 
         <div className="block md:hidden px-4">
@@ -108,7 +102,6 @@ const ProfileHeader = () => {
                   alt="Teacher Profile Image"
                 />
                 <img
-                  // onClick={() => document.getElementById("fileInput")?.click()}
                   onClick={() => setIsModalOpen(true)}
                   className="absolute bg-[#F9FBFC] w-9 h-9 -bottom-[80px] z-50 cursor-pointer left-26 p-2.5  border-2 border-[#525FE1] rounded-full"
                   src={PlusIcon}
@@ -118,7 +111,7 @@ const ProfileHeader = () => {
             <div className="mt-4">
               <div className="relative inline-block">
                 <h2 className="text-[20px] font-bold leading-snug pr-10">
-                  Mr. Mohamed Salama
+                  {data?.data?.fullName}
                 </h2>
 
                 <div className="absolute top-0 right-0 flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white">
