@@ -7,10 +7,11 @@ import {
 import '@livekit/components-styles';
 import { useParticipant } from "../../Hooks/useParticipant";
 import { BASE_URL } from "../../Utils/Apis";
+import { useControlContext } from "../../Context/ControlContext";
 const  ParticipantsGrid = ()=>  {
   const {tracks , screenShareTrack , presenterCameraTrack , otherCameraTracks} = useParticipant();
     const { localParticipant } = useLocalParticipant();
-
+    const {isClickattend} = useControlContext();
 
 
   const [position, setPosition] = useState({ x: 20, y: 20 });
@@ -56,20 +57,21 @@ const  ParticipantsGrid = ()=>  {
   if (tracks.length === 0) return <div className="text-white flex justify-center items-center h-full">Waiting...</div>;
   
   if (screenShareTrack) {
+    const activeOtherTracks = otherCameraTracks.filter(
+      (track) => track.participant.isScreenShareEnabled || track.participant.isCameraEnabled
+    );
+
     return (
-      
-      <div className="w-full h-full flex flex-col gap-2 p-2 relative">
-        {/* main screen  */}
-        <div className="flex-1 w-full rounded-xl overflow-hidden relative border border-[#393D44]">
+      <div className="w-full h-full flex flex-row gap-2 p-2 relative">
+        <div className="flex-1 h-full rounded-xl overflow-hidden relative ">
           <VideoTrack
             trackRef={screenShareTrack as any}
             className="w-full h-full object-contain"
           />
-          <div className="absolute bottom-5 left-5 bg-[#2A2D34B2] text-white px-3 py-1 rounded-full text-sm font-bold pointer-events-none">
-            Presenter: {screenShareTrack.participant.identity}
+          <div className="absolute bottom-5 left-5 bg-[#2A2D34B2] text-white px-3 py-1 rounded-full text-sm font-[400] pointer-events-none">
+            {screenShareTrack.participant.name}
           </div>
 
-         {/* screen showing when user share screen  */}
           {presenterCameraTrack && (
             <div 
               onMouseDown={handleMouseDown}
@@ -88,13 +90,13 @@ const  ParticipantsGrid = ()=>  {
             </div>
           )}
         </div>
-          {/* other people its mean +1 people */}
-        {otherCameraTracks.length > 0 && (
-          <div className="h-[120px] w-full flex gap-2 overflow-x-auto pb-1 z-10">
-            {otherCameraTracks.map((track) => (
+
+        {activeOtherTracks.length > 0 && !isClickattend && (
+          <div className="w-[200px] h-full flex flex-col gap-2 overflow-y-auto z-10">
+            {activeOtherTracks.map((track) => (
               <div 
                 key={track.participant.identity} 
-                className="h-full min-w-[160px] bg-black rounded-xl overflow-hidden relative border border-[#393D44]"
+                className="w-full h-[120px] bg-black rounded-lg overflow-hidden relative border border-[#393D44]"
               >
                 <VideoTrack
                   trackRef={track as any}
@@ -118,26 +120,27 @@ const  ParticipantsGrid = ()=>  {
           tracks.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
         }`}>
         {tracks.map((trackRef) => (
+          
           <div 
-             key={trackRef.participant.identity + trackRef.source} 
-             className="relative w-full h-full  rounded-xl overflow-hidden border border-[#393D44]"
+            key={trackRef.participant.identity + trackRef.source} 
+            className="relative w-full h-full  rounded-xl overflow-hidden border border-[#393D44] bg-[#393D44]" 
           >
-          {localParticipant.isCameraEnabled ? (
-  <VideoTrack
-    trackRef={trackRef as any}
-    className="w-full h-full object-cover "
-  />
-) : (
-  <div className="w-full h-full flex justify-center items-center">
-  <div className="w-[30%] aspect-square">
-    <img
-      src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
-      className="w-full h-full rounded-full object-cover"
-      alt=""
-    />
-  </div>
-</div>
-)}
+          {trackRef.participant.isCameraEnabled ?(
+          <VideoTrack
+            trackRef={trackRef as any}
+            className="w-full h-full object-cover "
+                />
+      ) : (
+        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-[30%] aspect-square">
+          <img
+            src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
+            className="w-full h-full rounded-full object-cover"
+            alt=""
+          />
+        </div>
+    </div>
+    )}
 
             <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 rounded">
               {trackRef.participant.name}
