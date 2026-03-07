@@ -2,6 +2,7 @@ import { useState } from "react";
 import Close from "../../../../assets/icons/Close.svg";
 import VideoDropBox from "./VideoDropBox";
 import { useUploadIntroVideo } from "../../Hooks/useUploadIntroVideo";
+import { useAddBio } from "../../Hooks/useAddBio";
 
 export default function EditAboutMeModal({
   isOpen,
@@ -11,12 +12,27 @@ export default function EditAboutMeModal({
   onClose: () => void;
 }) {
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const { mutate } = useUploadIntroVideo();
+  const [bio, setBio] = useState<string>("");
+  const { mutate : uploadIntroVideoMutate } = useUploadIntroVideo();
+  const { mutate: addBioMutate } = useAddBio();
+  const handleAnyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBio(e.target.value);
+  };
   const SaveChange = () => {
-    if (videoFile) {
-      mutate(videoFile);
+
+    if (!videoFile && !bio.trim()) {
+      return;
     }
-    return;
+
+    if (videoFile) {
+      uploadIntroVideoMutate(videoFile);
+    }
+
+    if (bio.trim()){
+      console.log(`true`)
+      addBioMutate(bio);
+    }
+
   };
   if (!isOpen) return null;
   return (
@@ -54,7 +70,7 @@ export default function EditAboutMeModal({
 
               <VideoDropBox onFileSelect={setVideoFile} />
 
-              <h3 className="font-bold text-[#2A2D34] texy-[24px] mb-1">
+              <h3 className="font-bold text-[#2A2D34] text-[24px] mb-1">
                 Profile overview
               </h3>
 
@@ -74,6 +90,7 @@ export default function EditAboutMeModal({
               </label>
 
               <textarea
+              onChange={handleAnyChange}
                 className="w-full bg-white border-2 border-[#D1D5DB] rounded-lg py-3 pr-[46px] pl-[16px] text-sm text-[#6D7588] resize-none focus:outline-none"
                 rows={5}
                 placeholder={`Example: Hi, I'm [Name]. I help students master Pure Math without the headache.\n\nI specialize in turning "blurry" concepts into clear results. Whether it's Calculus or Algebra, my lessons are tailored to your specific goals.\n\nWhy work with me? ✅ 15+ years of professional teaching ✅ Focus...`}
