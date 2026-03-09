@@ -6,12 +6,13 @@ import { useEffect, useState } from "react";
 import ProfileCompletion from "./ProfileCompletion";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import EditPhotoModal from "./EditPhotoModal";
+import EditNameModal from "./EditNameModal";
 
 const ProfileHeader = () => {
   const {data , refetch} = useTeacherProfile()
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const [isEditNameOpen, setIsEditNameOpen] = useState(false);
   useEffect(() => {
     const path = data?.data?.fullPrfilePicturePath;
     if (!path) return;
@@ -61,9 +62,14 @@ const ProfileHeader = () => {
               </div>
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
                 <h2 className="text-[28px] relative mb-4 leading-[13px] tracking-[0] font-bold">
-                  <div className="absolute flex justify-center items-center p-0 cursor-pointer w-9 h-9 z-50 left-81 -top-3 border-2 border-[#525FE1] rounded-full">
-                    <img src={editIcon} alt="edit" />
-                  </div>
+                <div
+                  onClick={() => {
+                    setIsEditNameOpen(true);
+                  }}
+                  className="absolute flex justify-center items-center p-0 cursor-pointer w-9 h-9 z-50 left-81 -top-3 border-2 border-[#525FE1] rounded-full"
+                >
+                  <img src={editIcon} alt="edit" />
+                </div>
                   {data?.data?.fullName}
                 </h2>
                 <div className="h-[29px] w-[191px] relative flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
@@ -146,6 +152,10 @@ const ProfileHeader = () => {
           setPreviewImage={setPreviewImage}
           refetch={refetch}
         />
+
+        <EditNameModal
+          isOpen={isEditNameOpen}
+          onClose={() => setIsEditNameOpen(false)}/>
       </section>
     </>
   );
