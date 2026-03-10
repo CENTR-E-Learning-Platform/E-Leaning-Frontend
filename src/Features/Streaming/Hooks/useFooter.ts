@@ -56,12 +56,12 @@ export const useFooter = () => {
     setEmoji((prev: any[]) => prev.filter((e) => e.id !== id));
   }, [setEmoji]);
 
-  const raisHand = useCallback(() => {
+  const raisHand = useCallback((newstate:boolean) => {
     if(!localParticipant){
       console.warn("Local participant not connected");
       return;
     }
-    const payload = JSON.stringify({type:"raisHand" , content:"rais"})
+    const payload = JSON.stringify({type:"raisHand" , content:newstate})
     const data = new TextEncoder().encode(payload);
     
     try{
