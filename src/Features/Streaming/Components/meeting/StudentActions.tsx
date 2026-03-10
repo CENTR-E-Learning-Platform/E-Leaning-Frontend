@@ -8,7 +8,7 @@ import ParticipantList from "./List/ParticipantList";
 import { useRemoteParticipant } from "@livekit/components-react";
 import { BASE_URL } from "../../Utils/Apis";
 
-const StudentActions = ({ name, profileImage, width, func, Partici }: any) => {
+const StudentActions = ({ name, profileImage, width, func, Partici  , isRais}: any) => {
   const { checkIdentity, setCheckIdentity , setMute } = useControlContext();
   const isOpen = checkIdentity === Partici.identity;
   const remoteParticipant = useRemoteParticipant(Partici.identity);
@@ -67,9 +67,11 @@ const StudentActions = ({ name, profileImage, width, func, Partici }: any) => {
       {width < 1115 && (
         <div ref={menuContainerRef} className="flex items-center gap-[10px] relative">
           
-          <div className="bg-[#454950] w-[26px] h-[26px] rounded-full flex items-center justify-center">
+         {isRais.includes(Partici.name) && (
+           <div className="bg-[#454950] w-[26px] h-[26px] rounded-full flex items-center justify-center">
             <img src={raishand} alt="" className="w-[16px] h-[16px] cursor-pointer" />
           </div>
+         )}
           
           <div className="bg-[#454950] w-[26px] h-[26px] rounded-full flex items-center justify-center">
             <img src={!isMuted ? sound : muteIco} alt="" className="w-[14px] cursor-pointer" />
