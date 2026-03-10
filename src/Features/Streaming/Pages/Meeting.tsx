@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef} from "react";
 import teacher from "../../../assets/images/mester.jpg";
 import vector from "../../../assets/icons/Vector.svg";
 import fullscreen from "../../../assets/icons/fullscreen.svg";
@@ -8,29 +8,40 @@ import Attend from "../Components/meeting/Attend";
 import FooterBar from "../Components/meeting/FooterBar";
 import ParticipantsGrid from "../Components/meeting/ParticipantsGrid";
 import ChatForm from "../Components/chat/ChatForm";
+import handSound from '../../../assets/audio/dragon-studio-new-notification-3-398649.mp3';
 import { useParticipant } from "../Hooks/useParticipant";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useControlContext } from "../Context/ControlContext";
 import Leave from "../Components/meeting/Leave";
 import { useFooter } from "../Hooks/useFooter";
 import { useRole } from "../Hooks/useRole";
 import { useRoomContext } from "@livekit/components-react";
-import { RoomEvent, RemoteParticipant, LocalParticipant  } from "livekit-client";
+import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
+import NotifyRaiseHand from "../Components/meeting/NotifyRaiseHand";
 
 const Meeting: React.FC = () => {
   const [width, setWidth] = useState<number>(1400);
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [isClickcha, setIsClickcha] = useState<boolean>(false);
+  const [hand, setHand] = useState<boolean>(false);
+  const [rais, setRaise] = useState<any[]>([]);
   
-  const { emoji, optionLeave  , isfull , setIsFull , isClickattend , setIsClickattend} = useControlContext();
-  const { otherCameraTracks  } = useParticipant();
+  const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend} = useControlContext();
+  const { otherCameraTracks } = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
   const {MuteParticipant} = useRole();
   const room = useRoomContext();
 
   const startResizing = () => setIsResizing(true);
   const stopResizing = () => setIsResizing(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const playRaiseHandSound = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0; 
+      audioRef.current.play().catch((error) => console.warn(error));
+    }
+  };
 
   useEffect(() => {
     const handleDataReceived = (
@@ -39,22 +50,29 @@ const Meeting: React.FC = () => {
         _kind?: any, 
         topic?: string
     ) => {
-      
       try {
         const strData = new TextDecoder().decode(payload);
         const data = JSON.parse(strData);
 
         if (data.type === 'EMOJI' && data.content) {
-          
           AddEmoji(data.content);
         }
 
         if(data.type === 'raisHand' && topic === "notifications"){
           const user = participant?.name;
-          alert(user);
+          if (data.content) {
+            setHand(true);
+            setRaise((prev:any) => {
+              if(prev.includes(user)) return prev;
+              return [...prev, user];
+            });
+            playRaiseHandSound();
+          } else {
+            setRaise((prev:any) => prev.filter((name:any) => name !== user));
+          }
         }
       } catch (err) {
-        console.error("Error parsing emoji data:", err);
+        console.error(err);
       }
     };
 
@@ -142,7 +160,21 @@ const Meeting: React.FC = () => {
             width: isfull ? "100%" : `${width}px`,
           }}
         >
-          <ParticipantsGrid />
+          <ParticipantsGrid isRais={rais} />
+
+          <AnimatePresence>
+              {hand && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20, x: -10 }} 
+                  animate={{ opacity: 1, y: 0, x: 0 }}    
+                  exit={{ opacity: 0, y: 50, x: -20 }}  
+                  transition={{ duration: 0.4, ease: "easeOut" }} 
+                  className="absolute bottom-5 left-5 z-50"
+                >
+                  <NotifyRaiseHand st={setHand} names={rais} st2={setRaise} />
+                </motion.div>
+              )}
+          </AnimatePresence>
           <div
             onClick={toggleFullScreen}
             className="absolute bottom-5 select-none right-5 bg-[#2A2D34B2] text-white flex items-center justify-center rounded-[8px] w-[40px] h-[40px] cursor-pointer z-50 hover:bg-[#2A2D34]"
@@ -161,12 +193,13 @@ const Meeting: React.FC = () => {
           `}
         >
           {otherCameraTracks.map((track) => (
-            <div 
-            key={track.participant.identity}>
+            <div key={track.participant.identity}>
               <StudentActions 
               Partici={track.participant}
-              func = {()=>MuteParticipant(track.participant.identity , track.participant.permissions?.canPublish)}
-              name={track.participant.name} profileImage={track.participant.attributes["UserImage"]} width={width} />
+              func={() => MuteParticipant(track.participant.identity , track.participant.permissions?.canPublish)}
+              name={track.participant.name} profileImage={track.participant.attributes["UserImage"]} width={width}
+              isRais={rais}
+              />
             </div>
           ))}
         </div>
@@ -181,7 +214,14 @@ const Meeting: React.FC = () => {
         >
           {isClickcha && <ChatForm />}
         </div>
-        
+        {/* hand sound */}
+        <audio 
+        ref={audioRef} 
+        src={handSound} 
+        preload="auto" 
+        className="hidden"
+      />
+      {/* Emoji animation */}
         {emoji.map((item: any) => (
           <motion.div
             key={item.id}
@@ -195,7 +235,7 @@ const Meeting: React.FC = () => {
           </motion.div>
         ))}
       </div>
-      {!isfull && <FooterBar />}
+      {!isfull && <FooterBar setRais={setRaise} handsound={audioRef} />}
     </div>
   );
 };
