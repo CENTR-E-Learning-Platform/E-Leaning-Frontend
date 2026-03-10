@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { DeleteFile } from "../Services/deleteFile";
+import { DeleteFile } from "../Services/deleteFileAPI";
 
 export const useDeleteFile = () => {
 

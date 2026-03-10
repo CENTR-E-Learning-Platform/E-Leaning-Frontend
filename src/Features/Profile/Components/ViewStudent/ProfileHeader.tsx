@@ -8,7 +8,7 @@ import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
 const ProfileHeader = () => {
   const {data} = useTeacherProfile();
 
-  // console.log(data);
+  console.log(data);
 
   
   return <>
@@ -26,7 +26,7 @@ const ProfileHeader = () => {
             <div className="flex justify-between gap-4">
               <img
                 className="w-[144px] object-cover h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]"
-                src={data?.data.fullPrfilePicturePath || bg_imptyPhoto}
+                src={data?.data?.fullPrfilePicturePath =='https://localhost:7251' ? bg_imptyPhoto : data?.data?.fullPrfilePicturePath}
                 alt="Teacher Profile Image"
               />
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
@@ -35,7 +35,7 @@ const ProfileHeader = () => {
                 </h2>
                 <div className="h-[29px] w-[191px] flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
                   <p className="font-semibold text-[18px] text-[#611D1D]">
-                    Pure mathematics
+                    {data?.data?.subject || "Pure mathematics"} 
                   </p>
                 </div>
               </div>
@@ -67,7 +67,7 @@ const ProfileHeader = () => {
           <div className="flex items-center gap-3 -mt-8">
             <img
               className="w-[90px] h-[90px] rounded-full border-2 border-[#D1D5DB] flex-shrink-0"
-              src={bg_Teacher}
+              src={data?.data?.fullPrfilePicturePath =='https://localhost:7251' ? bg_imptyPhoto : data?.data?.fullPrfilePicturePath}
               alt="Teacher Profile Image"
             />
             <div className="mt-4">

@@ -29,9 +29,7 @@ const EditPhotoModal = ({
 
   
   const handleDeleteImage = ()=>{
-    
     setPreviewImage(bg_imptyPhoto);
-
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,8 +52,8 @@ const EditPhotoModal = ({
           console.error("Failed to delete image");
         },
       });
-    };
-
+    } else if (previewImage !== bg_imptyPhoto) {
+    
     if (!selectedFile) return;
     mutate(selectedFile, {
       onSuccess: () => {
@@ -64,10 +62,9 @@ const EditPhotoModal = ({
       onError: () => {
         setPreviewImage(bg_imptyPhoto);
       },
-    });
+    })};
 
     onClose();
-
   };
 
   if (!isOpen) return null;
