@@ -61,17 +61,20 @@ const ProfileHeader = () => {
                 />
               </div>
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
-                <h2 className="text-[28px] relative mb-4 leading-[13px] tracking-[0] font-bold">
-                <div
-                  onClick={() => {
-                    setIsEditNameOpen(true);
-                  }}
-                  className="absolute flex justify-center items-center p-0 cursor-pointer w-9 h-9 z-50 left-81 -top-3 border-2 border-[#525FE1] rounded-full"
-                >
-                  <img src={editIcon} alt="edit" />
+                <div className="flex items-center gap-2 mb-4">
+                  <h2 className="text-[28px] leading-[13px] tracking-[0] font-bold">
+                    {data?.data?.fullName}
+                  </h2>
+
+                  <div
+                    onClick={() => {
+                      setIsEditNameOpen(true);
+                    }}
+                    className="flex justify-center items-center cursor-pointer w-9 h-9 border-2 border-[#525FE1] rounded-full"
+                  >
+                    <img src={editIcon} alt="edit" />
+                  </div>
                 </div>
-                  {data?.data?.fullName}
-                </h2>
                 <div className="h-[29px] w-[191px] relative flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
                   <div className="absolute flex justify-center items-center p-0 cursor-pointer w-9 h-9 z-50 left-50 -top-1 border-2 border-[#525FE1] rounded-full">
                     <img src={editIcon} alt="edit" />
@@ -115,15 +118,17 @@ const ProfileHeader = () => {
                 />
               </div>
             <div className="mt-4">
-              <div className="relative inline-block">
-                <h2 className="text-[20px] font-bold leading-snug pr-10">
+
+              <div className="flex items-center gap-2">
+                <h2 className="text-[20px] font-bold leading-snug">
                   {data?.data?.fullName}
                 </h2>
 
-                <div className="absolute top-0 right-0 flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white">
+                <div onClick={() => {setIsEditNameOpen(true)}} className="flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white">
                   <img src={editIcon} alt="edit" className="w-4" />
                 </div>
               </div>
+
               <div className="relative mt-2 inline-flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[4px] rounded-[18px] pr-10">
                 <p className="font-semibold text-[14px] text-[#611D1D]">
                   Pure mathematics
@@ -155,6 +160,7 @@ const ProfileHeader = () => {
 
         <EditNameModal
           isOpen={isEditNameOpen}
+          oldName={data?.data?.fullName || ""}
           onClose={() => setIsEditNameOpen(false)}/>
       </section>
     </>
