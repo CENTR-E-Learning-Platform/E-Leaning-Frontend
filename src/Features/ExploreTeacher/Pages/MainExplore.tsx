@@ -1,7 +1,7 @@
 import { CalendarCheck2Icon, ChevronDown, Clock, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { usesearchteach } from "../../Hooks/usesearchteach";
-import { usefilterteach } from "../../Hooks/usefilterteach";
+import { usesearchteach } from "../Hooks/usesearchteach";
+import { usefilterteach } from "../Hooks/usefilterteach";
 
 const MainExplore = () => {
   const {
