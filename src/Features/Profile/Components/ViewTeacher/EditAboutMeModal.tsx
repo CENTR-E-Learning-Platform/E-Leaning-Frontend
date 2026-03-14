@@ -43,7 +43,7 @@ export default function EditAboutMeModal({
           onClick={onClose}
         >
           <div
-            className="bg-[#EDF1F7] max-h-[90vh] w-full max-w-[540px] mx-4 overflow-y-auto"
+            className="bg-[#F9FBFC] max-h-[90vh] w-full max-w-[540px] mx-4 overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center px-6 pt-6 pb-2">

@@ -8,7 +8,7 @@ import Verifications from "../Components/ViewTeacher/Verifications"
 const ViewTeacher = () => {
   return <>
 
-    <section className="ProfileStudent-section bg-[#edf1f7]">
+    <section className="ProfileStudent-section bg-[#F9FBFC]">
 
       <ProfileHeader/>
 
