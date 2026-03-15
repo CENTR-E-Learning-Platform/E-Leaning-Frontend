@@ -27,7 +27,7 @@ const Meeting: React.FC = () => {
   const [rais, setRaise] = useState<any[]>([]);
   
   const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend} = useControlContext();
-  const { otherCameraTracks } = useParticipant();
+  const { otherCameraTracks  } = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
   const {MuteParticipant} = useRole();
   const room = useRoomContext();
@@ -212,7 +212,8 @@ const Meeting: React.FC = () => {
             ${isClickcha && !isfull ? " ms-4 opacity-100" : "w-0 ms-0 opacity-0"}
           `}
         >
-          {isClickcha && <ChatForm />}
+          {/*chat  */}
+           <ChatForm />
         </div>
         {/* hand sound */}
         <audio 
