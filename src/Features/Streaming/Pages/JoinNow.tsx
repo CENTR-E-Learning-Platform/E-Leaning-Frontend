@@ -21,22 +21,28 @@ const JoinNow = () => {
   const { initStream, toggleCamera, toggleMic, stream, stopStream } = useControlling();
 
   // open stream when i vist page 
-  useEffect(() => {
+ useEffect(() => {
+    let activeStream:any = null; 
+
     const start = async () => {
       const media = await initStream();
       if (media) {
+        activeStream = media; 
         setOpenStream(true);
         setCameraView(true);
         setMic(true);
       }
     };
     start();
-     // when leaving page stop stream 
+    
+    // when leaving page stop stream 
     return () => {
-      if (stream) stopStream();
+      if (activeStream) {
+        activeStream.getTracks().forEach((track:any) => track.stop());
+      }
+      stopStream(); 
     };
-  }, []);
-
+  }, []); 
   
   const handleCameraClickCam = () => {
     if (stream) {
