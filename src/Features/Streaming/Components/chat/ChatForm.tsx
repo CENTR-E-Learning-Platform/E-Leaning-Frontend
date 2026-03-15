@@ -5,6 +5,7 @@ import teacher from '../../../../assets/images/mester.jpg';
 import { useChat, useLocalParticipant } from "@livekit/components-react";
 import { useState, useEffect, useRef } from "react";
 import { BASE_URL } from "../../Utils/Apis";
+import '../../style/customScroll.css';
 const ChatForm = () => {
   const { send, isSending, chatMessages } = useChat();
   const { localParticipant } = useLocalParticipant();
@@ -37,18 +38,18 @@ const ChatForm = () => {
               className={`mb-[100px] flex gap-[12px] ${isMe ? "justify-end" : "justify-start"}`}
             >
               {!isMe && (
-                <img className="w-[40px] h-[40px] rounded-[39px] object-cover" src={teacher} alt="sender" />
+               <img className="w-[40px] h-[40px] rounded-[39px] object-cover" src={`${BASE_URL}/${m.from?.attributes["UserImage"]}`} alt="me" />
               )}
               <div className={`w-[221px] text-white ${isMe ? "text-end" : "text-start"}`}>
-                <div className={`flex gap-[12px] w-[164px] items-center ${isMe ? "ml-auto justify-end" : ""}`}>
+                <div className={`flex gap-[12px] w-[134px] items-center ${isMe ? "ml-auto justify-end" : ""}`}>
 
-                  <p className="font-medium leading-[13px] text-[16px] truncate">
+                  <p className="font-medium leading-[13px] text-[12px] truncate">
 
                     {m.from?.name || "Unknown"}
 
                   </p>
 
-                  <p className="font-medium text-[#D1D5DB] leading-[13px] text-[10px]">
+                  <p className="font-medium text-[#D1D5DB] leading-[13px] text-[8px]">
 
                     {new Date(m.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
 
@@ -57,18 +58,19 @@ const ChatForm = () => {
                 </div>
                 <div
                   className={`
-                    mt-3 p-[16px] text-white
+                    mt-3 p-[8px] text-white
                     w-fit max-w-[200px]      
                     h-auto max-h-[200px]      
                     overflow-y-auto          
-                    break-words              
+                    break-words
+                                
                     ${isMe
-                      ? "bg-[#525FE1] rounded-br-[42px] rounded-l-[42px] ml-auto text-right"
+                      ? "bg-[#525FE1] rounded-br-[12px] rounded-l-[12px] ml-auto text-right"
                       : "bg-[#454950] rounded-[42px] text-left"
                     }
                   `}
                 >
-                  {m.message}
+                  <p className="text-[14px]">{m.message}</p>
                 </div>
               </div>
               {isMe && (
