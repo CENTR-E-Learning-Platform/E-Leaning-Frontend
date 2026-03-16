@@ -9,6 +9,7 @@ import FooterBar from "../Components/meeting/FooterBar";
 import ParticipantsGrid from "../Components/meeting/ParticipantsGrid";
 import ChatForm from "../Components/chat/ChatForm";
 import handSound from '../../../assets/audio/dragon-studio-new-notification-3-398649.mp3';
+import joinsound from '../../../assets/audio/google-meet-join-sound-effect-made-with-Voicemod.mp3';
 import { useParticipant } from "../Hooks/useParticipant";
 import { AnimatePresence, motion } from "framer-motion";
 import { useControlContext } from "../Context/ControlContext";
@@ -27,7 +28,7 @@ const Meeting: React.FC = () => {
   const [rais, setRaise] = useState<any[]>([]);
   
   const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend} = useControlContext();
-  const { otherCameraTracks  } = useParticipant();
+  const participant = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
   const {MuteParticipant} = useRole();
   const room = useRoomContext();
@@ -42,6 +43,14 @@ const Meeting: React.FC = () => {
       audioRef.current.play().catch((error) => console.warn(error));
     }
   };
+
+  const playJoinSound = () => {
+  const audio = new Audio(joinsound);
+      audio.play().catch((error) => console.warn(error));
+  };
+  useEffect(()=>{
+    playJoinSound();
+  } , [])
 
   useEffect(() => {
     const handleDataReceived = (
@@ -192,12 +201,14 @@ const Meeting: React.FC = () => {
             ${isClickattend && !isfull ? "select-none p-[20px] ms-[20px] opacity-100" : "w-0 p-0 ms-0 opacity-0"}
           `}
         >
-          {otherCameraTracks.map((track) => (
+          {participant.tracks.map((track) => (
             <div key={track.participant.identity}>
               <StudentActions 
               Partici={track.participant}
               func={() => MuteParticipant(track.participant.identity , track.participant.permissions?.canPublish)}
-              name={track.participant.name} profileImage={track.participant.attributes["UserImage"]} width={width}
+              name={track.participant.name} 
+              profileImage={track.participant.attributes["UserImage"]} 
+              width={width}
               isRais={rais}
               />
             </div>
