@@ -10,6 +10,7 @@ import { BASE_URL } from "../../Utils/Apis";
 import { useControlContext } from "../../Context/ControlContext";
 import raishand from "../../../../assets/icons/raishand.svg";
 import { motion, AnimatePresence } from "framer-motion";
+import DefaultImage from "./DefaultImage";
 
 interface ParticipantsGridProps {
   isRais: string[];
@@ -181,12 +182,19 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
             />
           ) : (
             <div className="w-full h-full flex justify-center items-center">
+              
               <div className="w-[30%] aspect-square">
-                <img
+                {
+                  trackRef.participant.attributes["UserImage"] ?
+                     <img
                   src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
                   className="w-full h-full rounded-full object-cover"
                   alt=""
-                />
+                /> :
+                  <DefaultImage character = {trackRef.participant.name?.toString()?.substring(0,2).toLocaleUpperCase()} />
+                }
+             
+              
               </div>
             </div>
           )}
