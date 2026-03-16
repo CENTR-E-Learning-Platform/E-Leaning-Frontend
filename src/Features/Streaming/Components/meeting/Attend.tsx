@@ -5,7 +5,7 @@ import attend from "../../../../assets/icons/attend.svg";
 import menu from "../../../../assets/icons/menu.svg";
 import { useParticipant } from "../../Hooks/useParticipant";
 const Attend = ({ click }: any) => {
-  const { otherCameraTracks } = useParticipant();
+  const participants = useParticipant();
   return (
     <>
       {!click && (
@@ -27,9 +27,9 @@ const Attend = ({ click }: any) => {
               alt=""
             />
           </div>
-         {otherCameraTracks.length  > 1 &&(
+         {  participants.tracks.length  > 1 &&(
            <h1 className="text-[16px] text-[#F9FBFC] ms-[8px]">
-            + {otherCameraTracks.length - 1}
+            + {participants.tracks.length - 1}
           </h1>
          )}
         </div>
@@ -43,7 +43,7 @@ const Attend = ({ click }: any) => {
               alt=""
             />
             <h1 className="text-[16px] text-[#F9FBFC] me-[13px]">
-              Participants ({otherCameraTracks.length})
+              Participants ({participants.tracks.length})
             </h1>
           </div>
           <img
