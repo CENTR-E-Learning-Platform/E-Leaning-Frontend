@@ -1,5 +1,5 @@
 import { Bell, CreditCard, ShieldCheck, User } from "lucide-react";
-import { useState } from "react";
+
 import { NavLink, Outlet } from "react-router-dom";
 
 
@@ -50,7 +50,7 @@ const MainSetting = () => {
 
                 </div>
             </div>
-            <div className="right-dynamic-setting mt-[110px]">
+            <div className="right-dynamic-setting mt-[50px]">
                 <Outlet />
             </div>
         </div>
