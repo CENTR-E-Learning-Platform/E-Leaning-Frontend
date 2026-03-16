@@ -1,11 +1,12 @@
 import resource from "../../../../assets/icons/resources.svg";
 import emoji from '../../../../assets/icons/emoj.svg';
 import sendIcon from '../../../../assets/icons/send.svg';
-import teacher from '../../../../assets/images/mester.jpg';
+import Linkify from 'react-linkify';
 import { useChat, useLocalParticipant } from "@livekit/components-react";
 import { useState, useEffect, useRef } from "react";
 import { BASE_URL } from "../../Utils/Apis";
 import '../../style/customScroll.css';
+import DefaultImage from "../meeting/DefaultImage";
 const ChatForm = () => {
   const { send, isSending, chatMessages } = useChat();
   const { localParticipant } = useLocalParticipant();
@@ -17,6 +18,18 @@ const ChatForm = () => {
     await send(message);
     setMessage("");
   };
+
+  const customLink = (href:any , text:any , key:any)=>(
+    <a 
+    href={href}
+    key={key}
+    target="_blank"
+    rel="noopener noreferrer" // for security 
+    className="underline "
+    >
+      {text}
+    </a>
+  )
   useEffect(() => {
 
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" ,});
@@ -35,10 +48,14 @@ const ChatForm = () => {
           return (
             <div
               key={index}
-              className={`mb-[100px] flex gap-[12px] ${isMe ? "justify-end" : "justify-start"}`}
+              className={`mb-[40px] flex gap-[12px] ${isMe ? "justify-end" : "justify-start"}`}
             >
               {!isMe && (
-               <img className="w-[40px] h-[40px] rounded-[39px] object-cover" src={`${BASE_URL}/${m.from?.attributes["UserImage"]}`} alt="me" />
+              m.from?.attributes["UserImage"] ? 
+               <img className="w-[40px] h-[40px] rounded-[39px] object-cover" src={`${BASE_URL}/${m.from?.attributes["UserImage"]}`} alt="me" />:
+                 <div className="w-[40px] h-[40px] me-[13px]">
+                 <DefaultImage character={m.from?.name?.toString()?.substring(0,2).toLocaleUpperCase()} />
+              </div>
               )}
               <div className={`w-[221px] text-white ${isMe ? "text-end" : "text-start"}`}>
                 <div className={`flex gap-[12px] w-[134px] items-center ${isMe ? "ml-auto justify-end" : ""}`}>
@@ -63,18 +80,26 @@ const ChatForm = () => {
                     h-auto max-h-[200px]      
                     overflow-y-auto          
                     break-words
-                                
+                              
                     ${isMe
                       ? "bg-[#525FE1] rounded-br-[12px] rounded-l-[12px] ml-auto text-right"
-                      : "bg-[#454950] rounded-[42px] text-left"
+                      : "bg-[#454950] rounded-[12px] text-left"
                     }
                   `}
                 >
-                  <p className="text-[14px]">{m.message}</p>
+                  <p className="text-[14px]">
+                    <Linkify componentDecorator = {customLink}>
+                    {m.message}
+                    </Linkify>
+                  </p>
                 </div>
               </div>
               {isMe && (
-                <img className="w-[40px] h-[40px] rounded-[39px] object-cover" src={`${BASE_URL}/${m.from?.attributes["UserImage"]}`} alt="me" />
+            m.from?.attributes["UserImage"] ? 
+               <img className="w-[40px] h-[40px] rounded-[39px] object-cover" src={`${BASE_URL}/${m.from?.attributes["UserImage"]}`} alt="me" />:
+                 <div className="w-[40px] h-[40px] me-[13px]">
+                 <DefaultImage character={m.from?.name?.toString()?.substring(0,2).toLocaleUpperCase()} />
+              </div>
               )}
             </div>
           );
