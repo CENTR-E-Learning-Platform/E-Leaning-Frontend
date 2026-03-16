@@ -7,20 +7,23 @@ import { useControlContext } from "../../Context/ControlContext";
 import ParticipantList from "./List/ParticipantList";
 import { useRemoteParticipant } from "@livekit/components-react";
 import { BASE_URL } from "../../Utils/Apis";
+import DefaultImage from "./DefaultImage";
 
 const StudentActions = ({ name, profileImage, width, func, Partici  , isRais}: any) => {
   const { checkIdentity, setCheckIdentity , setMute } = useControlContext();
   const isOpen = checkIdentity === Partici.identity;
   const remoteParticipant = useRemoteParticipant(Partici.identity);
   const isMuted = remoteParticipant ? !remoteParticipant.permissions?.canPublish : true;
-  setMute(isMuted);
+ 
+  useEffect(() => {
+    setMute(isMuted);
+  }, [isMuted, setMute]);
+  
   const menuContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isOpen && menuContainerRef.current && !menuContainerRef.current.contains(event.target as Node)) {
         setCheckIdentity(""); 
-        console.log("check" , isMuted);
-        
       }
     };
 
@@ -42,15 +45,27 @@ const StudentActions = ({ name, profileImage, width, func, Partici  , isRais}: a
           : `flex items-center`
       }
     >
-      {width > 1133 && (
+      {/* {width > 1133 && (
         <div className="flex items-center p-[4px]">
-          <img src={profileImage} className="w-[88px] h-[88px] rounded-full mb-[16px] " alt=""/>
+      {
+        profileImage ? 
+          <img src={profileImage} className="w-[88px] h-[88px] rounded-full mb-[16px] object-cover" alt=""/> :
+          <div className="w-[88px] h-[88px] mb-[16px]">
+             <DefaultImage character={name?.toString()?.substring(0,2).toLocaleUpperCase()} />
+          </div>
+      }
         </div>
-      )}
+      )} */}
 
       {width < 1133 && (
         <div className="flex items-center">
-          <img src={`${BASE_URL}/${profileImage}`} className="w-[40px] h-[40px] rounded-full me-[13px] bg-cover" alt=""/>
+          {
+            profileImage  ? 
+                <img src={`${BASE_URL}/${profileImage}`} className="w-[40px] h-[40px] rounded-full me-[13px] object-cover" alt=""/> :
+              <div className="w-[40px] h-[40px] me-[13px]">
+                 <DefaultImage character={name?.toString()?.substring(0,2).toLocaleUpperCase()} />
+              </div>
+          }
           {width < 1250 && (
             <div className="relative group flex items-center cursor-pointer">
               <h1 className="text-[16px] text-[#F9FBFC] max-w-[130px] truncate">
@@ -67,7 +82,7 @@ const StudentActions = ({ name, profileImage, width, func, Partici  , isRais}: a
       {width < 1115 && (
         <div ref={menuContainerRef} className="flex items-center gap-[10px] relative">
           
-         {isRais.includes(Partici.name) && (
+         {isRais?.includes(Partici.name) && (
            <div className="bg-[#454950] w-[26px] h-[26px] rounded-full flex items-center justify-center">
             <img src={raishand} alt="" className="w-[16px] h-[16px] cursor-pointer" />
           </div>
