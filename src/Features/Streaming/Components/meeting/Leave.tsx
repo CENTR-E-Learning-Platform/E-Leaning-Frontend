@@ -1,13 +1,21 @@
-import { useRoomContext } from '@livekit/components-react';
 import warn from '../../../../assets/icons/warn.svg';
 import { useControlContext } from '../../Context/ControlContext';
 import { useNavigate } from 'react-router-dom';
 import { useControlling } from '../../Hooks/useControlling';
+import leavesound from '../../../../assets/audio/discord-leave-call-sound-effect-(hd)-made-with-Voicemod.mp3';
+import { useRoomContext } from '@livekit/components-react';
+
 const Leave = () => {
     const {setOptionLeave} = useControlContext();
     const room = useRoomContext();
     const navigate = useNavigate();
     const {stopStream} = useControlling();
+
+    const playLeaveSound = () => {
+        const audio = new Audio(leavesound);
+        audio.play().catch((error) => console.warn(error));
+    };
+
   return (
     <>
         <div className="w-[360px] h-[184px] bg-[#2A2D34] rounded-[8px] flex flex-col justify-center p-[24px]">
@@ -22,15 +30,21 @@ const Leave = () => {
                 <button 
                 onClick={()=> setOptionLeave(false)}
                 className='border-[#393D44] border-[1px] w-[148px] h-[48px] text-[#F9FBFC] rounded-[8px] cursor-pointer  hover:bg-[#454950] transition duration-300'>Cancel</button>
+                
                 <button 
                 onClick={async ()=> {
                     try {
-                        await room.disconnect()
+                        await room.disconnect();
                         localStorage.removeItem("sessionToken");
                         setOptionLeave(false);
                         stopStream();
-                        navigate("/GoodBy" , { replace: true })
-                    }catch(err:any){
+                        playLeaveSound(); 
+                        
+                        setTimeout(() => {
+                            navigate("/GoodBy" , { replace: true });
+                        }, 500); 
+
+                    } catch(err:any){
                         console.log(err);
                     }
                 }}
@@ -38,8 +52,7 @@ const Leave = () => {
             </div>
         </div>
     </>
-    
   )
 }
 
-export default Leave
+export default Leave;
