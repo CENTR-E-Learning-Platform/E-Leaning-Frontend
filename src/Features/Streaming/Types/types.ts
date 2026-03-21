@@ -4,7 +4,7 @@ const initialValues = {
     Title : "",
     StartTime: "",
     DurationMinutes:60,
-    IsRepeat: false,
+    weeksNumber: 1,
     Grade: 0,
     Reminder:"01:00:00",
     Description:""
