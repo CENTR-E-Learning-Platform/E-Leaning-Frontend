@@ -102,19 +102,23 @@ const ClassForm = () => {
               </div>
 
               {/* Weekly Repeat */}
-              <div className="flex justify-start w-[449px] mt-[15px]">
-                <input
-                  checked={formik.values.IsRepeat}
-                  onChange={(e: any) =>
-                    formik.setFieldValue("IsRepeat", e.target.checked)
-                  }
-                  type="checkbox"
-                  className="appearance-auto border-[1px] border-[#6D7588] bg-[#FFFFFF] w-[20px] h-[20px] rounded-[4px] cursor-pointer me-[8px]"
-                />
-                <label className="text-[16px] font-[400] text-[#2A2D34]">
-                  Weekly repeat
-                </label>
-              </div>
+            <div className="flex flex-col w-[449px] mt-[15px]">
+            <label className="text-[16px] font-[400] text-[#2A2D34] mb-[6px]">
+              Repeat for weeks
+            </label>
+
+          <select
+            value={formik.values.weeksNumber}
+            onChange={(e) => formik.setFieldValue("weeksNumber", Number(e.target.value))}
+            className="border-[1px] border-[#6D7588] bg-[#FFFFFF] h-[40px] rounded-[6px] px-[10px] cursor-pointer"
+          >
+            {Array.from({ length: 26 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                Week {i + 1}
+              </option>
+            ))}
+          </select>
+        </div>
             </div>
 
             {/* Grade */}
