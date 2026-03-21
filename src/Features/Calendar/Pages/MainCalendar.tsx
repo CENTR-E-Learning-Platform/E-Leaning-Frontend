@@ -17,6 +17,8 @@ import Upcoming from "../Components/Upcoming";
 import ClassButton from "../Components/ClassButton";
 import ClassForm from "../Components/Form/ClassForm";
 import { useGetAllClasses } from "../Hooks/useGetAllClasses";
+import { useCalendar } from "../Contexts/CalendarContext";
+
 const locales = {
   "en-US": enUS,
 };
@@ -29,13 +31,6 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-export const dummyEvents = [
-  {
-    title: "Physics class",
-    start: new Date(),
-    end: new Date(new Date().setHours(new Date().getHours() + 2)),
-  },
-];
 const eventPropGetter = () => {
   return {
     style: {
@@ -47,10 +42,21 @@ const eventPropGetter = () => {
     },
   };
 };
+
 const MainCalendar = () => {
   const [month, setMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
+  
   useGetAllClasses();
+  const { TeacherClass } = useCalendar();
+
+  const formattedEvents = TeacherClass?.map((cls: any) => ({
+    ...cls,
+    start: new Date(cls.startTime),
+    end: new Date(cls.endTime),
+  })) || [];
+
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -62,7 +68,7 @@ const MainCalendar = () => {
       document.body.style.overflow = "auto";
     };
   }, [open]);
-  
+
   return (
     <div className="bg-[#F9FBFC] flex justify-center items-center">
       {open && (
@@ -83,7 +89,7 @@ const MainCalendar = () => {
         <div className="flex ">
           <Calendar
             localizer={localizer}
-            events={dummyEvents}
+            events={formattedEvents}
             startAccessor="start"
             step={60}
             timeslots={1}
@@ -94,6 +100,18 @@ const MainCalendar = () => {
               event: Event,
             }}
             eventPropGetter={eventPropGetter}
+            date={selectedDate || new Date()}
+            onNavigate={(newDate) => {
+              setSelectedDate(newDate);
+              setMonth(newDate);
+            }}
+            selectable={true}
+            onSelectSlot={(slotInfo) => {
+              if (slotInfo.start) {
+                setSelectedDate(slotInfo.start);
+                setMonth(slotInfo.start);
+              }
+            }}
           />
           <div className="w-[297px] rounded-[8px] border-[1px] border-[#E8EAED] bg-[#FFFFFF] ms-[20px] flex flex-col items-center">
             <div onClick={() => setOpen(true)}>
@@ -104,6 +122,13 @@ const MainCalendar = () => {
                 mode="single"
                 month={month}
                 onMonthChange={setMonth}
+                selected={selectedDate}
+                onSelect={(day) => {
+                  if (day) {
+                    setSelectedDate(day);
+                    setMonth(day);
+                  }
+                }}
                 showOutsideDays
                 hideNavigation
                 modifiersClassNames={{
@@ -124,7 +149,7 @@ const MainCalendar = () => {
               />
             </div>
             <div className="flex items-center justify-center">
-              <Upcoming />
+              <Upcoming selectedDate={selectedDate || new Date()} />
             </div>
           </div>
         </div>
