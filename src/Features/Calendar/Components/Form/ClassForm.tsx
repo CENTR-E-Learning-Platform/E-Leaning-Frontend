@@ -110,7 +110,7 @@ const ClassForm = () => {
           <select
             value={formik.values.weeksNumber}
             onChange={(e) => formik.setFieldValue("weeksNumber", Number(e.target.value))}
-            className="border-[1px] border-[#6D7588] bg-[#FFFFFF] h-[40px] rounded-[6px] px-[10px] cursor-pointer"
+            className="border-[1px] border-[#D1D5DB] bg-[#FFFFFF] h-[40px] rounded-[6px] px-[10px] cursor-pointer"
           >
             {Array.from({ length: 26 }, (_, i) => (
               <option key={i + 1} value={i + 1}>
