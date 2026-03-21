@@ -1,6 +1,6 @@
-import { format, addMonths } from 'date-fns';
-import leftArrow from '../../../assets/icons/leftArrow.svg';
-import rightArrow from '../../../assets/icons/rightArrow.svg';
+import { format, addMonths } from "date-fns";
+import leftArrow from "../../../assets/icons/leftArrow.svg";
+import rightArrow from "../../../assets/icons/rightArrow.svg";
 
 const DayPickerHeader = ({ month, setMonth }: any) => {
   return (
@@ -9,16 +9,18 @@ const DayPickerHeader = ({ month, setMonth }: any) => {
         src={leftArrow}
         className="cursor-pointer w-[28px] h-[28px]"
         onClick={() => setMonth(addMonths(month, -1))}
+        alt="left-arrow"
       />
 
       <div className="text-black text-[15px] uppercase">
-        {format(month, 'MMMM yyyy')}
+        {format(month, "MMMM yyyy")}
       </div>
 
       <img
         src={rightArrow}
         className="cursor-pointer w-[28px] h-[28px]"
         onClick={() => setMonth(addMonths(month, 1))}
+        alt="right-arrow"
       />
     </div>
   );
