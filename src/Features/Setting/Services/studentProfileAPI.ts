@@ -1,11 +1,11 @@
 import axios from "axios";
-import { STUDENTPROFILE_API } from "../Utils/Apis";
+import { GET_STUDENT_PROFILE_API } from "../Utils/Apis";
 
 export const GetStudentProfileData = async () =>{
 
     const token = localStorage.getItem("token");
     return await axios.get(
-        STUDENTPROFILE_API,
+        GET_STUDENT_PROFILE_API,
         {
             headers:{
                 Authorization: `Bearer ${token}`,
