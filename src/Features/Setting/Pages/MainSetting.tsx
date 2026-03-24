@@ -20,8 +20,8 @@ const MainSetting = () => {
     ];
 
   return <>
-    <section className="main-setting">
-        <div className="ml-[273px] mt-[50px] flex gap-[63px]">
+    <section className="main-setting bg-[#F9FBFC] min-h-screen w-full">
+        <div className="ml-[273px] pt-[50px] flex gap-[63px]">
             <div className="left-static-setting text-[#2A2D34]">
 
                 <h2 className="font-bold text-[32px] leading-[13px]">
