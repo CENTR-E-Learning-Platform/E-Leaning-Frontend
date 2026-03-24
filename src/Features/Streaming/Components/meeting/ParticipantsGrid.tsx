@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { 
-  useLocalParticipant,
   VideoTrack
 } from "@livekit/components-react";
 
@@ -8,9 +7,12 @@ import '@livekit/components-styles';
 import { useParticipant } from "../../Hooks/useParticipant";
 import { BASE_URL } from "../../Utils/Apis";
 import { useControlContext } from "../../Context/ControlContext";
+import microphon from "../../../../assets/icons/mic.svg";
+import microphondis from "../../../../assets/icons/mic2.svg";
 import raishand from "../../../../assets/icons/raishand.svg";
 import { motion, AnimatePresence } from "framer-motion";
 import DefaultImage from "./DefaultImage";
+import ParticipantContainer from "./ParticipantContainer";
 
 interface ParticipantsGridProps {
   isRais: string[];
@@ -18,7 +20,6 @@ interface ParticipantsGridProps {
 
 const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
   const { tracks, screenShareTrack, presenterCameraTrack, otherCameraTracks } = useParticipant();
-  const { localParticipant } = useLocalParticipant();
   const { isClickattend } = useControlContext();
 
   const [position, setPosition] = useState({ x: 20, y: 20 });
@@ -26,7 +27,7 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
   const dragStartPos = useRef({ x: 0, y: 0 });
   const elementStartPos = useRef({ x: 0, y: 0 });
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     isDragging.current = true;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     elementStartPos.current = { ...position };
@@ -60,15 +61,17 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
     };
   }, [screenShareTrack]);
 
-  const renderNameTag = (name: any, isSmall: boolean = false) => {
-    const safeName = name || ""; 
+  const renderNameTag = (participant: any, isSmall: boolean = false) => {
+    const safeName = participant?.name || ""; 
     const isHandRaised = isRais?.includes(safeName);
+    const isMicEnabled = participant?.isMicrophoneEnabled;
     
     const containerPadding = isSmall ? "px-[4px] py-[1px]" : "px-[12px] py-[6px]";
     const positionClasses = isSmall ? "bottom-[4px] left-[4px]" : "bottom-3 left-3";
     const textSize = isSmall ? "text-[10px]" : "text-[14px]";
     const circleSize = isSmall ? "w-[12px] h-[12px]" : "w-[22px] h-[22px]";
-    const iconSize = isSmall ? "w-[6px] h-[6px]" : "w-[12px] h-[12px]";
+    const handIconSize = isSmall ? "w-[6px] h-[6px]" : "w-[12px] h-[12px]";
+    const micIconSize = isSmall ? "w-[10px] h-[10px]" : "w-[16px] h-[16px]";
 
     const isLongName = safeName.length > 15;
     const displayName = isLongName ? safeName.slice(0, 15) + "..." : safeName;
@@ -76,7 +79,7 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
     return (
       <motion.div 
         layout 
-        className={`group absolute ${positionClasses} flex items-center gap-[4px] ${containerPadding} rounded-[4px] transition-colors duration-300 ease-in-out z-10 ${
+        className={`group absolute ${positionClasses} flex items-center gap-[6px] ${containerPadding} rounded-[4px] transition-colors duration-300 ease-in-out z-10 ${
           isHandRaised 
             ? "bg-[#80da88] text-[#1E1E1E] shadow-lg" 
             : "bg-black/60 text-[#F9FBFC]"
@@ -97,13 +100,21 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
               className={`flex items-center justify-center bg-[#1E1E1E] rounded-full ${circleSize}`}
             >
-              <img src={raishand} alt="" className={iconSize} />
+              <img src={raishand} alt="" className={handIconSize} />
             </motion.div>
           )}
         </AnimatePresence>
-        <span className={`${textSize} font-[500] whitespace-nowrap cursor-default`}>
-          {displayName}
-        </span>
+        
+        <div className="flex items-center gap-[6px]">
+          <span className={`${textSize} font-[500] whitespace-nowrap cursor-default`}>
+            {displayName}
+          </span>
+          <img 
+            src={isMicEnabled ? microphon : microphondis} 
+            alt={isMicEnabled ? "Mic On" : "Mic Off"} 
+            className={micIconSize} 
+          />
+        </div>
       </motion.div>
     );
   };
@@ -112,7 +123,7 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
   
   if (screenShareTrack) {
     const activeOtherTracks = otherCameraTracks.filter(
-      (track) => track.participant.isScreenShareEnabled || track.participant.isCameraEnabled
+      (track: any) => track.participant.isScreenShareEnabled || track.participant.isCameraEnabled
     );
 
     return (
@@ -123,10 +134,11 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
             className="w-full h-full object-contain"
           />
           
-          {renderNameTag(screenShareTrack.participant.name)}
+          {renderNameTag(screenShareTrack.participant)}
 
           {presenterCameraTrack && presenterCameraTrack.participant.isCameraEnabled && (
-            <div 
+            <ParticipantContainer 
+              participant={presenterCameraTrack.participant}
               onMouseDown={handleMouseDown}
               style={{ 
                 right: `${position.x}px`, 
@@ -134,30 +146,33 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
                 cursor: 'move',
                 zIndex: 50
               }}
-              className="absolute w-[200px] h-[120px] rounded-lg overflow-hidden shadow-2xl border-2 border-[#5E6570] hover:border-white transition-colors bg-black"
+              className="absolute w-[200px] h-[120px] rounded-lg overflow-hidden bg-black"
+              defaultBorder="border-2 border-[#5E6570] hover:border-white"
             >
               <VideoTrack 
                  trackRef={presenterCameraTrack as any} 
                  className="w-full h-full object-cover pointer-events-none" 
               />
-              {renderNameTag(presenterCameraTrack.participant.name, true)}
-            </div>
+              {renderNameTag(presenterCameraTrack.participant, true)}
+            </ParticipantContainer>
           )}
         </div>
 
         {activeOtherTracks.length > 0 && !isClickattend && (
           <div className="w-[200px] h-full flex flex-col gap-2 overflow-y-auto z-10">
-            {activeOtherTracks.map((track) => (
-              <div 
+            {activeOtherTracks.map((track: any) => (
+              <ParticipantContainer 
                 key={track.participant.identity} 
-                className="w-full h-[120px] bg-black rounded-lg overflow-hidden relative border border-[#393D44]"
+                participant={track.participant}
+                className="w-full h-[120px] bg-black rounded-lg overflow-hidden relative"
+                defaultBorder=""
               >
                 <VideoTrack
                   trackRef={track as any}
                   className="w-full h-full object-cover"
                 />
-                {renderNameTag(track.participant.name, true)}
-              </div>
+                {renderNameTag(track.participant, true)}
+              </ParticipantContainer>
             ))}
           </div>
         )}
@@ -170,10 +185,12 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
       <div className={`grid gap-2 h-full w-full ${
           tracks.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
         }`}>
-        {tracks.map((trackRef) => (
-          <div 
+        {tracks.map((trackRef: any) => (
+          <ParticipantContainer 
             key={trackRef.participant.identity + trackRef.source} 
-            className="relative w-full h-full rounded-xl overflow-hidden border border-[#393D44] bg-[#393D44]" 
+            participant={trackRef.participant}
+            className="relative w-full h-full rounded-xl overflow-hidden bg-[#393D44]" 
+            defaultBorder=""
           >
           {trackRef.participant.isCameraEnabled ? (
             <VideoTrack
@@ -182,28 +199,26 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
             />
           ) : (
             <div className="w-full h-full flex justify-center items-center">
-              
               <div className="w-[30%] aspect-square">
                 {
                   trackRef.participant.attributes["UserImage"] ?
-                     <img
-                  src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
-                  className="w-full h-full rounded-full object-cover"
-                  alt=""
-                /> :
-                  <DefaultImage character = {trackRef.participant.name?.toString()?.substring(0,2).toLocaleUpperCase()} />
+                  <img
+                    src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
+                    className="w-full h-full rounded-full object-cover"
+                    alt=""
+                  /> :
+                  <DefaultImage character={trackRef.participant.name?.toString()?.substring(0,2).toLocaleUpperCase()} />
                 }
-             
-              
               </div>
             </div>
           )}
 
-          {renderNameTag(trackRef.participant.name)}
-          </div>
+          {renderNameTag(trackRef.participant)}
+          </ParticipantContainer>
         ))}
       </div>
     </div>
   );
 }
+
 export default ParticipantsGrid;
