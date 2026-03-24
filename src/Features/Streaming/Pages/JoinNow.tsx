@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import tech from "../../../assets/images/mester.jpg";
-import micDis from "../../../assets/icons/mic2.svg"; 
-import micIcon from "../../../assets/icons/mic.svg"; 
+import micDis from "../../../assets/icons/mic2.svg";
+import micIcon from "../../../assets/icons/mic.svg";
 import camera from "../../../assets/icons/video.svg";
 import cameraDis from "../../../assets/icons/camera-disabled.svg";
 import settining from "../../../assets/icons/settings.svg";
@@ -20,65 +20,59 @@ const JoinNow = () => {
   const { JoinRoom } = useCreateRoom();
   const { initStream, toggleCamera, toggleMic, stream, stopStream } = useControlling();
 
-  // open stream when i vist page 
- useEffect(() => {
-    let activeStream:any = null; 
+  useEffect(() => {
+    let activeStream: any = null;
 
     const start = async () => {
       const media = await initStream();
       if (media) {
-        activeStream = media; 
+        activeStream = media;
         setOpenStream(true);
         setCameraView(true);
         setMic(true);
       }
     };
     start();
-    
-    // when leaving page stop stream 
+
     return () => {
       if (activeStream) {
-        activeStream.getTracks().forEach((track:any) => track.stop());
+        activeStream.getTracks().forEach((track: any) => track.stop());
       }
-      stopStream(); 
+      stopStream();
     };
-  }, []); 
-  
+  }, []);
+
   const handleCameraClickCam = () => {
     if (stream) {
-      toggleCamera(); 
-      setCameraView((prev) => !prev); 
+      toggleCamera();
+      setCameraView((prev) => !prev);
     }
   };
-
 
   const handleCameraClickMic = () => {
     if (stream) {
       toggleMic();
-      setMic((prev) => !prev); 
+      setMic((prev) => !prev);
     }
   };
 
-  const handleSettingsClick = () => {
-   
-  };
+  const handleSettingsClick = () => {};
 
   return (
-    <div className="bg-[#2A2D34] h-[100vh] flex justify-center items-center">
-      <div className="flex flex-col">
-        <h1 className="text-[18px] text-[#F9FBFC] mb-[32px] text-center">
+    <div className="bg-[#2A2D34] min-h-screen flex justify-center items-center px-4 sm:px-6">
+      <div className="flex flex-col w-full max-w-[450px]">
+        <h1 className="text-[16px] sm:text-[18px] text-[#F9FBFC] mb-[24px] sm:mb-[32px] text-center">
           Choose your audio and video options
         </h1>
-        
-        
-        <div className="bg-[#393D44] w-[450px] h-[300px] overflow-hidden rounded-[8px] flex justify-center items-center relative">
+
+        <div className="bg-[#393D44] w-full aspect-[4/3] sm:h-[300px] overflow-hidden rounded-[8px] flex justify-center items-center relative">
           <div className="flex flex-col items-center w-full h-full justify-center">
             {stream && cameraView ? (
               <video
                 className="w-full h-full object-cover rounded-[8px] transform scale-x-[-1]"
                 autoPlay
                 playsInline
-                muted // to remove delay     
+                muted
                 ref={(v) => {
                   if (v && stream) v.srcObject = stream;
                 }}
@@ -87,10 +81,10 @@ const JoinNow = () => {
               <>
                 <img
                   src={tech}
-                  className="rounded-full w-[120px] h-[120px] object-cover"
+                  className="rounded-full w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] object-cover"
                   alt="Avatar"
                 />
-                <h1 className="text-[13px] text-[#F9FBFC] mt-[12px]">
+                <h1 className="text-[12px] sm:text-[13px] text-[#F9FBFC] mt-[12px]">
                   Your camera is turned off
                 </h1>
               </>
@@ -98,15 +92,12 @@ const JoinNow = () => {
           </div>
         </div>
 
-        
-        <div className="w-[450px] h-[48px] flex justify-between mt-[12px]">
+        <div className="w-full h-[48px] flex justify-between mt-[12px]">
           <div className="w-[104px] bg-[#2A2D34] flex gap-[8px]">
-            
             <Button
               func={handleCameraClickMic}
-              src={mic ? micIcon : micDis} 
+              src={mic ? micIcon : micDis}
             />
-            
             <Button
               func={handleCameraClickCam}
               src={cameraView ? camera : cameraDis}
@@ -118,7 +109,7 @@ const JoinNow = () => {
         <div className="flex justify-center items-center mt-[20px]">
           <button
             onClick={JoinRoom}
-            className="w-[249px] h-[52px] bg-[#525FE1] rounded-[8px] text-[#F9FBFC] text-[18px] font-semibold cursor-pointer hover:bg-[#434db0] transition-colors"
+            className="w-full max-w-[249px] h-[52px] bg-[#525FE1] rounded-[8px] text-[#F9FBFC] text-[16px] sm:text-[18px] font-semibold cursor-pointer hover:bg-[#434db0] transition-colors"
           >
             Join now
           </button>
