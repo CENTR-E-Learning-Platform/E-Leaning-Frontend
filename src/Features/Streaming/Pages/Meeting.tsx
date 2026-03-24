@@ -16,7 +16,7 @@ import { useControlContext } from "../Context/ControlContext";
 import Leave from "../Components/meeting/Leave";
 import { useFooter } from "../Hooks/useFooter";
 import { useRole } from "../Hooks/useRole";
-import { useRoomContext } from "@livekit/components-react";
+import { useRoomContext , useLocalParticipant } from "@livekit/components-react";
 import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
 import NotifyRaiseHand from "../Components/meeting/NotifyRaiseHand";
 
@@ -30,9 +30,9 @@ const Meeting: React.FC = () => {
   const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend} = useControlContext();
   const participant = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
-  const {MuteParticipant} = useRole();
+  const {DisabledMicParticipant , MuteParticipant} = useRole();
   const room = useRoomContext();
-
+  const { localParticipant } = useLocalParticipant();
   const startResizing = () => setIsResizing(true);
   const stopResizing = () => setIsResizing(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -63,6 +63,11 @@ const Meeting: React.FC = () => {
         const strData = new TextDecoder().decode(payload);
         const data = JSON.parse(strData);
 
+        if(topic === 'control' && data.type === 'SOFT_MUTE'){
+          if (data.targetIdentity === room.localParticipant.identity) {
+            room.localParticipant.setMicrophoneEnabled(false);
+          }
+        }
         if (data.type === 'EMOJI' && data.content) {
           AddEmoji(data.content);
         }
@@ -111,19 +116,19 @@ const Meeting: React.FC = () => {
     }
   };
 
-  const toggleFullScreen = () => {
-    if (!isfull) {
-      document.documentElement.requestFullscreen().catch((err) => {
-        console.error(err);
-      });
-      setIsFull(true);
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-      setIsFull(false);
-    }
-  };
+  // const toggleFullScreen = () => {
+  //   if (!isfull) {
+  //     document.documentElement.requestFullscreen().catch((err) => {
+  //       console.error(err);
+  //     });
+  //     setIsFull(true);
+  //   } else {
+  //     if (document.exitFullscreen) {
+  //       document.exitFullscreen();
+  //     }
+  //     setIsFull(false);
+  //   }
+  // };
 
   return (
     <div className="h-screen overflow-hidden bg-[#2A2D34] flex flex-col">
@@ -134,10 +139,10 @@ const Meeting: React.FC = () => {
             <h1 className="text-[16px] text-[#F9FBFC] me-[13px]">Hosted by Mr.Mohammed</h1>
           </div>
           <div className="flex me-[30px] gap-4">
-            <div className="w-[187px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center cursor-pointer">
+            {/* <div className="w-[187px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center cursor-pointer">
               <img src={vector} className="w-[16px] h-[16px] ms-[20px]" alt="Copy Link" />
               <h1 className="text-[16px] text-[#F9FBFC] me-[13px] ms-[11px]">Copy class link</h1>
-            </div>
+            </div> */}
             <div
               onClick={() => {
                 handlRenderAttendAndChat();
@@ -171,29 +176,29 @@ const Meeting: React.FC = () => {
         >
           <ParticipantsGrid isRais={rais} />
 
-          <AnimatePresence>
-              {hand && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20, x: -10 }} 
-                  animate={{ opacity: 1, y: 0, x: 0 }}    
-                  exit={{ opacity: 0, y: 50, x: -20 }}  
-                  transition={{ duration: 0.4, ease: "easeOut" }} 
-                  className="absolute bottom-5 left-5 z-50"
-                >
-                  <NotifyRaiseHand st={setHand} names={rais} st2={setRaise} />
-                </motion.div>
-              )}
-          </AnimatePresence>
-          <div
+         <AnimatePresence>
+            {hand && rais.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, x: -10 }} 
+                animate={{ opacity: 1, y: 0, x: 0 }}    
+                exit={{ opacity: 0, y: 50, x: -20 }}  
+                transition={{ duration: 0.4, ease: "easeOut" }} 
+                className="absolute bottom-5 left-5 z-50"
+              >
+                <NotifyRaiseHand st={setHand} names={rais} st2={setRaise} />
+              </motion.div>
+            )}
+        </AnimatePresence>
+          {/* <div
             onClick={toggleFullScreen}
             className="absolute bottom-5 select-none right-5 bg-[#2A2D34B2] text-white flex items-center justify-center rounded-[8px] w-[40px] h-[40px] cursor-pointer z-50 hover:bg-[#2A2D34]"
           >
             <img className="w-[16px] h-[16px]" src={fullscreen} alt="Fullscreen" />
-          </div>
-          <div
+          </div> */}
+          {/* <div
             className="absolute top-0 right-0 w-[10px] m-1 h-full cursor-ew-resize hover:bg-white/10"
             onMouseDown={startResizing}
-          ></div>
+          ></div> */}
         </div>
         <div
           className={`
@@ -205,7 +210,8 @@ const Meeting: React.FC = () => {
             <div key={track.participant.identity}>
               <StudentActions 
               Partici={track.participant}
-              func={() => MuteParticipant(track.participant.identity , track.participant.permissions?.canPublish)}
+              disabledP ={() => DisabledMicParticipant(track.participant.identity , track.participant.permissions?.canPublish)}
+              muteP ={() => MuteParticipant(track.participant.identity)}
               name={track.participant.name} 
               profileImage={track.participant.attributes["UserImage"]} 
               width={width}
