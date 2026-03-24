@@ -122,15 +122,22 @@ const FooterBar = ({setRais , handsound}:any) => {
           />
 
             {/* Menu */}
-          <div className="absolute bottom-[80px] left-[770px] z-10 ">
-            {optionMenu ? <ControlList /> : ""}
-          </div>
-          <Button
-            func={() => setOptionMenu((prev) => !prev)}
-            icons={menu}
-            size="w-[4px] h-[17px]"
-            customStyle={optionMenu ? "bg-[#454950]" : ""}
-          />
+          {
+            localParticipant.attributes["UserRole"] === "Teacher" &&(
+              <div>
+                <div className="absolute bottom-[80px] left-[770px] z-10 ">
+                  {optionMenu ? <ControlList /> : ""}
+                </div>
+                 <Button
+                  func={() => setOptionMenu((prev) => !prev)}
+                  icons={menu}
+                  size="w-[4px] h-[17px]"
+                  customStyle={optionMenu ? "bg-[#454950]" : ""}
+                />
+              </div>
+            )
+          }
+       
         </div>
 
             {/* Leave */}
