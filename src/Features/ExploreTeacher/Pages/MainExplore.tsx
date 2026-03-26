@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { usesearchteach } from "../Hooks/usesearchteach";
 import { usefilterteach } from "../Hooks/usefilterteach";
 
+
 const MainExplore = () => {
   const {
     data: searchTeachers,
@@ -17,10 +18,6 @@ const MainExplore = () => {
     data: filterData,
     error: filterError,
     isLoading: filterIsLoading,
-    selectedLanguage,
-    setSelectedLanguage,
-    selectedDay,
-    setSelectedDay,
     startTime,
     setStartTime,
     endTime,
@@ -29,48 +26,6 @@ const MainExplore = () => {
     setStartPrice,
     endPrice,
     setEndPrice,
-    selectedRating,
-    setSelectedRating,
-    applyFilters 
-  } = usefilterteach(); // Filter Teachers
-
-  //////////////////////////////////////////////
-
-  ///////////////////////////////////// Subjects
-
-  const [expanded, setExpanded] = useState(false);
-
-  const languages = [
-    [
-      { name: "Arabic", width: "w-[92px]" },
-      { name: "English", width: "w-[97px]" },
-    ],
-    [
-      { name: "Deutsch", width: "w-[107px]" },
-      { name: "Français", width: "w-[110px]" },
-    ],
-    [
-      { name: "Español", width: "w-[104px]" },
-      { name: "Italiano", width: "w-[101px]" },
-    ],
-  ];
-
-  const subjects = [
-    { name: "Mathematics", width: "w-[153px]" },
-    { name: "Science", width: "w-[104px]" },
-    { name: "Social Science", width: "w-[170px]" },
-    [
-      { name: "Physics", width: "w-[100px]" },
-      { name: "Chemistry", width: "w-[126px]" },
-    ],
-    [
-      { name: "Biology", width: "w-[99px]" },
-      { name: "History", width: "w-[95px]" },
-    ],
-    { name: "Geography", width: "w-[135px]" },
-    { name: "Statistics", width: "w-[115px]" },
-  ];
-
   ////////////////////////// Range Price
 
   const [dragging2, setDragging2] = useState<string | null>(null);
@@ -187,12 +142,6 @@ const MainExplore = () => {
   const totalTeachers = 9;
   const totalPages = Math.ceil(totalTeachers / teachersPerPage);
 
-  ////////////////////////////////////////// Call filter function
-
-  const handleApplyFilters = () => {
-    applyFilters();
-  };
-
   ////////////////////////////////////////////////////////////////
   ////     the data of response (Search Teachers)     ////
   ////////////////////////////////////////////////////////////////
@@ -225,49 +174,6 @@ const MainExplore = () => {
       console.log(filterData.data);
     }
   }, [filterData]);
-
-  ///////////////////////////////////// function Clear All Filters
-
-  const handleClearAll = () => {
-    setSelectedDay("");
-    setSelectedLanguage("");
-    setSelectedRating(null);
-    setStartTime(8);
-    setEndTime(26);
-    setDragging(null);
-    setDragging2(null);
-    setSelectedRating(null);
-    setEndPrice(300);
-    setStartPrice(50);
-  };
-
-  // loading screen
-
-//   if(searchIsLoading){
-//       return <>
-
-//       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-//           <div className="text-center">
-
-//               <div className="relative w-24 h-24 mx-auto mb-8">
-//                   <div className="absolute inset-0 border-4 border-indigo-200 rounded-full"></div>
-//                   <div className="absolute inset-0 border-4 border-transparent border-t-indigo-600 rounded-full animate-spin"></div>
-//                   <div className="absolute inset-3 border-4 border-transparent border-t-blue-400 rounded-full animate-spin" style={{ animationDuration: '1s', animationDirection: 'reverse' }}></div>
-
-//                   <div className="absolute inset-0 flex items-center justify-center">
-//                       <div className="w-3 h-3 bg-indigo-600 rounded-full animate-pulse"></div>
-//                   </div>
-//               </div>
-//               <div className="flex justify-center gap-2 mt-6">
-//                   <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-//                   <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-//                   <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-//               </div>
-//           </div>
-//       </div>
-
-//       </>
-//   }
 
   ////////////////////////////////////////////////////////////
 
@@ -330,96 +236,7 @@ const MainExplore = () => {
 
         <div className="flex justify-between items-start gap-[30px] ">
           <div className="w-[290px] border-2 border-[#D1D5DB] p-5 rounded-[8px]">
-            <div className="Subjects mb-[22px]">
-              <p className="text-[18px] mb-[22px] text-[#2A2D34] font-semibold">
-                Subjects
-              </p>
 
-              <div className="w-[250px]">
-                <div className="space-y-2">
-                  {languages.map((row, idx) => (
-                    <div key={idx} className="flex gap-2">
-                      {row.map((lang) => {
-                        const isSelected = selectedLanguage === lang.name;
-                        return (
-                          <button
-                            onClick={() => setSelectedLanguage(lang.name)}
-                            key={lang.name}
-                            className={`${lang.width} cursor-pointer p-4 h-[45px] flex justify-center items-center text-[18px] font-medium border rounded-lg transition-colors duration-300
-                                                            ${
-                                                              isSelected
-                                                                ? "bg-[#525FE1] text-white border-[#525FE1]"
-                                                                : "bg-white text-[#2A2D34] border-gray-300 hover:bg-[#525FE1] hover:text-white"
-                                                            }`}
-                          >
-                            {lang.name}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-
-                {expanded && (
-                  <div className="mt-4 space-y-2">
-                    {subjects.map((item, idx) => (
-                      <div key={idx}>
-                        {Array.isArray(item) ? (
-                          <div className="flex gap-2">
-                            {item.map((subject) => {
-                              const isSelected =
-                                selectedLanguage === subject.name;
-                              return (
-                                <button
-                                  key={subject.name}
-                                  onClick={() =>
-                                    setSelectedLanguage(subject.name)
-                                  }
-                                  className={`${subject.width} cursor-pointer p-4 h-[45px] flex justify-center items-center text-[18px] font-medium border rounded-lg transition-colors duration-300
-                                                                    ${
-                                                                      isSelected
-                                                                        ? "bg-[#525FE1] text-white border-[#525FE1]"
-                                                                        : "bg-white text-[#2A2D34] border-gray-300 hover:bg-[#525FE1] hover:text-white"
-                                                                    }`}
-                                >
-                                  {subject.name}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        ) : (
-                          (() => {
-                            const isSelected = selectedLanguage === item.name;
-                            return (
-                              <button
-                                onClick={() => setSelectedLanguage(item.name)}
-                                className={`${item.width} cursor-pointer p-4 h-[45px] flex justify-center items-center text-[18px] font-medium border rounded-lg transition-colors duration-300
-                                                                ${
-                                                                  isSelected
-                                                                    ? "bg-[#525FE1] text-white border-[#525FE1]"
-                                                                    : "bg-white text-[#2A2D34] border-gray-300 hover:bg-[#525FE1] hover:text-white"
-                                                                }`}
-                              >
-                                {item.name}
-                              </button>
-                            );
-                          })()
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <button
-                  onClick={() => setExpanded(!expanded)}
-                  className="mt-3 text-[18px] font-medium text-[#525FE1]"
-                >
-                  {expanded ? "See less" : "See all"}
-                </button>
-              </div>
-            </div>
-
-            <div className="line w-[250px] mb-[22px] border border-[#D1D5DB]"></div>
 
             <div className="price w-[250px] mb-[22px] text-[#2A2D34]">
               <h2 className="font-semibold mb-[28px] text-[18px]">
@@ -470,286 +287,6 @@ const MainExplore = () => {
               {/* ////////////////////////// */}
             </div>
 
-            <div className="line w-[250px] mb-[22px] border border-[#D1D5DB]"></div>
-
-            <div className="Ratings mb-[22px]">
-              <h2 className="font-semibold mb-[28px] text-[18px]">Ratings</h2>
-
-              <div className="rangeRate max-w-[250px]">
-                <div className="flex items-center gap-2 mb-3">
-                  <input
-                    type="radio"
-                    name="rating"
-                    value={4.5}
-                    checked={selectedRating === 4.5}
-                    onChange={(e) => setSelectedRating(Number(e.target.value))}
-                    className="appearance-none w-5 h-5 border-2 border-gray-400 rounded-full cursor-pointer
-                                    checked:border-[6px] checked:border-[#525FE1] transition-all"
-                  />
-
-                  <span className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => {
-                      const rating = 4.5;
-                      if (star <= Math.floor(rating)) {
-                        return (
-                          <span key={star} className="text-[#FFD057]">
-                            <Star fill="#FFD057" className="w-4 h-4" />
-                          </span>
-                        );
-                      } else if (
-                        star === Math.ceil(rating) &&
-                        rating % 1 !== 0
-                      ) {
-                        return (
-                          <span key={star} className="relative inline-block">
-                            <Star className="w-4 h-4 text-[#FFD057]" />
-                            <span
-                              className="absolute top-0 left-0 overflow-hidden"
-                              style={{ width: `${(rating % 1) * 100}%` }}
-                            >
-                              <Star
-                                fill="#FFD057"
-                                className="w-4 h-4 text-[#FFD057]"
-                              />
-                            </span>
-                          </span>
-                        );
-                      } else {
-                        return (
-                          <span key={star} className="text-[#FFD057]">
-                            <Star className="w-4 h-4" />
-                          </span>
-                        );
-                      }
-                    })}
-                  </span>
-
-                  <h4 className=" font-semibold text-[16px] text-[#5A6272] ">
-                    4.5 & up <span className="font-medium"> (73) </span>
-                  </h4>
-                </div>
-
-                <div className="flex items-center gap-2 mb-3">
-                  <input
-                    type="radio"
-                    name="rating"
-                    value={4.0}
-                    checked={selectedRating === 4.0}
-                    onChange={(e) => setSelectedRating(Number(e.target.value))}
-                    className="appearance-none w-5 h-5 border-2 border-gray-400 rounded-full cursor-pointer
-                                    checked:border-[6px]  checked:border-[#525FE1] transition-all"
-                  />
-
-                  <span className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => {
-                      const rating = 4.0;
-                      if (star <= Math.floor(rating)) {
-                        return (
-                          <span key={star} className="text-[#FFD057]">
-                            <Star fill="#FFD057" className="w-4 h-4" />
-                          </span>
-                        );
-                      } else if (
-                        star === Math.ceil(rating) &&
-                        rating % 1 !== 0
-                      ) {
-                        return (
-                          <span key={star} className="relative inline-block">
-                            <Star className="w-4 h-4 text-[#FFD057]" />
-                            <span
-                              className="absolute top-0 left-0 overflow-hidden"
-                              style={{ width: `${(rating % 1) * 100}%` }}
-                            >
-                              <Star
-                                fill="#FFD057"
-                                className="w-4 h-4 text-[#FFD057]"
-                              />
-                            </span>
-                          </span>
-                        );
-                      } else {
-                        return (
-                          <span key={star} className="text-[#FFD057]">
-                            <Star className="w-4 h-4" />
-                          </span>
-                        );
-                      }
-                    })}
-                  </span>
-
-                  <h4 className=" font-semibold text-[16px] text-[#5A6272] ">
-                    4.0 & up <span className="font-medium"> (132) </span>
-                  </h4>
-                </div>
-
-                <div className="flex items-center gap-2 mb-3">
-                  <input
-                    type="radio"
-                    name="rating"
-                    value={3.5}
-                    checked={selectedRating === 3.5}
-                    onChange={(e) => setSelectedRating(Number(e.target.value))}
-                    className="appearance-none w-5 h-5 border-2 border-gray-400 rounded-full cursor-pointer
-                                    checked:border-[6px]  checked:border-[#525FE1] transition-all"
-                  />
-
-                  <span className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => {
-                      const rating = 3.5;
-                      if (star <= Math.floor(rating)) {
-                        return (
-                          <span key={star} className="text-[#FFD057]">
-                            <Star fill="#FFD057" className="w-4 h-4" />
-                          </span>
-                        );
-                      } else if (
-                        star === Math.ceil(rating) &&
-                        rating % 1 !== 0
-                      ) {
-                        return (
-                          <span key={star} className="relative inline-block">
-                            <Star className="w-4 h-4 text-[#FFD057]" />
-                            <span
-                              className="absolute top-0 left-0 overflow-hidden"
-                              style={{ width: `${(rating % 1) * 100}%` }}
-                            >
-                              <Star
-                                fill="#FFD057"
-                                className="w-4 h-4 text-[#FFD057]"
-                              />
-                            </span>
-                          </span>
-                        );
-                      } else {
-                        return (
-                          <span key={star} className="text-[#FFD057]">
-                            <Star className="w-4 h-4" />
-                          </span>
-                        );
-                      }
-                    })}
-                  </span>
-
-                  <h4 className=" font-semibold text-[16px] text-[#5A6272] ">
-                    3.5 & up <span className="font-medium"> (167) </span>
-                  </h4>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="rating"
-                    value={3.0}
-                    checked={selectedRating === 3.0}
-                    onChange={(e) => setSelectedRating(Number(e.target.value))}
-                    className="appearance-none w-5 h-5 border-2 border-gray-400 rounded-full cursor-pointer
-                                    checked:border-[6px] checked:border-[#525FE1] transition-all"
-                  />
-
-                  <span className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => {
-                      const rating = 3.0;
-                      if (star <= Math.floor(rating)) {
-                        return (
-                          <span key={star} className="text-[#FFD057]">
-                            <Star fill="#FFD057" className="w-4 h-4" />
-                          </span>
-                        );
-                      } else if (
-                        star === Math.ceil(rating) &&
-                        rating % 1 !== 0
-                      ) {
-                        return (
-                          <span key={star} className="relative inline-block">
-                            <Star className="w-4 h-4 text-[#FFD057]" />
-                            <span
-                              className="absolute top-0 left-0 overflow-hidden"
-                              style={{ width: `${(rating % 1) * 100}%` }}
-                            >
-                              <Star
-                                fill="#FFD057"
-                                className="w-4 h-4 text-[#FFD057]"
-                              />
-                            </span>
-                          </span>
-                        );
-                      } else {
-                        return (
-                          <span key={star} className="text-[#FFD057]">
-                            <Star className="w-4 h-4" />
-                          </span>
-                        );
-                      }
-                    })}
-                  </span>
-
-                  <h4 className=" font-semibold text-[16px] text-[#5A6272] ">
-                    3.0 & up <span className="font-medium"> (293) </span>
-                  </h4>
-                </div>
-              </div>
-            </div>
-
-            <div className="line w-[250px] mb-[22px] border border-[#D1D5DB]"></div>
-
-            <div className="Days w-[250px]">
-              <h2 className="font-semibold mb-[28px] text-[18px]">Days</h2>
-
-              <div className="All_Option mb-[22px]">
-                <div className="flex  items-center gap-2 mb-2">
-                  <div
-                    onClick={() => setSelectedDay("Sun")}
-                    className={`cursor-pointer border flex justify-center items-center text-[#2A2D34] hover:bg-[#525FE1] hover:text-white h-[45px] border-[#D1D5DB] w-[67px] transition-colors duration-300 p-4 rounded-[8px] ${selectedDay === "Sun" ? "bg-[#525FE1] text-white" : ""}`}
-                  >
-                    <p className="font-medium text-[18px]">Sun</p>
-                  </div>
-                  <div
-                    onClick={() => setSelectedDay("Mon")}
-                    className={`cursor-pointer border flex justify-center text-[#2A2D34] items-center h-[45px] hover:bg-[#525FE1] hover:text-white border-[#D1D5DB] w-[72px] transition-colors duration-300 p-4 rounded-[8px] ${selectedDay === "Mon" ? "bg-[#525FE1] text-white" : ""}`}
-                  >
-                    <p className="font-medium text-[18px]">Mon</p>
-                  </div>
-                  <div
-                    onClick={() => setSelectedDay("Tue")}
-                    className={`cursor-pointer border flex justify-center text-[#2A2D34] items-center h-[45px] hover:bg-[#525FE1] hover:text-white border-[#D1D5DB] w-[65px] transition-colors duration-300 p-4 rounded-[8px] ${selectedDay === "Tue" ? "bg-[#525FE1] text-white" : ""}`}
-                  >
-                    <p className="font-medium text-[18px]">Tue</p>
-                  </div>
-                </div>
-
-                <div className="flex  items-center gap-2 mb-2">
-                  <div
-                    onClick={() => setSelectedDay("Wed")}
-                    className={`cursor-pointer border flex justify-center text-[#2A2D34] items-center h-[45px] hover:bg-[#525FE1] hover:text-white border-[#D1D5DB] w-[74px] transition-colors duration-300 p-4 rounded-[8px] ${selectedDay === "Wed" ? "bg-[#525FE1] text-white" : ""}`}
-                  >
-                    <p className="font-medium text-[18px]">Wed</p>
-                  </div>
-                  <div
-                    onClick={() => setSelectedDay("Thu")}
-                    className={`cursor-pointer border flex justify-center text-[#2A2D34] items-center h-[45px] hover:bg-[#525FE1] hover:text-white border-[#D1D5DB] w-[66px] transition-colors duration-300 p-4 rounded-[8px] ${selectedDay === "Thu" ? "bg-[#525FE1] text-white" : ""}`}
-                  >
-                    <p className="font-medium text-[18px]">Thu</p>
-                  </div>
-                  <div
-                    onClick={() => setSelectedDay("Fri")}
-                    className={`cursor-pointer border flex justify-center text-[#2A2D34] items-center h-[45px] hover:bg-[#525FE1] hover:text-white border-[#D1D5DB] w-[53px] transition-colors duration-300 p-4 rounded-[8px] ${selectedDay === "Fri" ? "bg-[#525FE1] text-white" : ""}`}
-                  >
-                    <p className="font-medium text-[18px]">Fri</p>
-                  </div>
-                </div>
-
-                <div className="flex  items-center gap-2">
-                  <div
-                    onClick={() => setSelectedDay("Sat")}
-                    className={`cursor-pointer border flex justify-center text-[#2A2D34] items-center h-[45px] hover:bg-[#525FE1] hover:text-white border-[#D1D5DB] w-[62px] transition-colors duration-300 p-4 rounded-[8px] ${selectedDay === "Sat" ? "bg-[#525FE1] text-white" : ""}`}
-                  >
-                    <p className="font-medium text-[18px]">Sat</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="line w-[250px] mb-[22px] border border-[#D1D5DB]"></div>
 
             <div className="Times mb-[22px]">
               <h2 className="font-semibold mb-[28px] text-[18px]">Times</h2>
@@ -794,21 +331,7 @@ const MainExplore = () => {
                 ></div>
               </div>
             </div>
-
-            <div className="line w-[250px] mb-[22px] border border-[#D1D5DB]"></div>
-
-            <div className="buttons" onClick={handleApplyFilters}>
-              <button className="bg-[#525FE1] flex justify-center items-center cursor-pointer w-[250px] mb-4 h-[45px] text-white text-[18px] p-4 rounded-[8px] font-semibold">
-                Apply
-              </button>
-              <button
-                onClick={handleClearAll}
-                type="button"
-                className="flex justify-center items-center cursor-pointer w-[250px] h-[45px] text-[#525FE1] border-2 text-[18px] p-4 rounded-[8px] font-semibold"
-              >
-                Clear all
-              </button>
-            </div>
+            
           </div>
 
           {/* /////////////////// teachers  */}
@@ -982,11 +505,7 @@ const MainExplore = () => {
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] border-2 transition-colors
-                                ${
-                                  currentPage === 1
-                                    ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
-                                    : "border-[#525FE1] text-[#525FE1] hover:bg-[#525FE1] hover:text-white cursor-pointer"
-                                }`}
+
               >
                 <svg
                   width="24"
@@ -1016,11 +535,7 @@ const MainExplore = () => {
                       key={i}
                       onClick={() => setCurrentPage(i)}
                       className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] font-bold text-[18px] transition-colors
-                                            ${
-                                              currentPage === i
-                                                ? "bg-[#525FE1] text-white"
-                                                : "bg-white text-[#2A2D34] border-2 border-[#D1D5DB] hover:border-[#525FE1] hover:text-[#525FE1]"
-                                            }`}
+
                     >
                       {i}
                     </button>,
@@ -1044,11 +559,7 @@ const MainExplore = () => {
                 }
                 disabled={currentPage === totalPages}
                 className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] border-2 transition-colors
-                                ${
-                                  currentPage === totalPages
-                                    ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
-                                    : "border-[#525FE1] text-[#525FE1] hover:bg-[#525FE1] hover:text-white cursor-pointer"
-                                }`}
+
               >
                 <svg
                   width="24"
@@ -1068,6 +579,7 @@ const MainExplore = () => {
               </button>
             </div>
           </div>
+
         </div>
       </main>
     </>
