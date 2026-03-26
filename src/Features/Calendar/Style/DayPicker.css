@@ -1,0 +1,36 @@
+.rdp-root {
+    background-color: #FFFFFF !important;
+    width: 265px !important;
+    margin-top: 16px !important;
+     font-family: 'Poppins', sans-serif;
+}
+.rdp-month_grid {
+   min-width:  265px !important;
+}
+.rdp-weekday {
+    width: 37px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    font-size: 13px !important;
+    text-transform: uppercase !important;
+    color: #6D7588 !important;
+}
+.rdp-week {
+    margin: 8px !important;
+}
+.rdp-day{
+    min-width: 37px !important;
+    height: 28px !important;
+    padding: 0 !important;
+}
+.rdp-day_button {
+    font-size: 13px;
+    width: 37px !important;
+    height: 36px !important;
+    font-weight: 600 !important;
+    
+}
+.rdp-chevron {
+    display: none !important;
+    opacity: 0 !important;
+}

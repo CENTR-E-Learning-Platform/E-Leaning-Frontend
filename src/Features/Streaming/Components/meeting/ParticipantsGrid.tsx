@@ -1,48 +1,33 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { 
-  VideoTrack, 
-  useTracks, 
-  type TrackReferenceOrPlaceholder 
+  VideoTrack
 } from "@livekit/components-react";
-import { Track } from "livekit-client";
+
 import '@livekit/components-styles';
+import { useParticipant } from "../../Hooks/useParticipant";
+import { BASE_URL } from "../../Utils/Apis";
+import { useControlContext } from "../../Context/ControlContext";
+import microphon from "../../../../assets/icons/mic.svg";
+import microphondis from "../../../../assets/icons/mic2.svg";
+import raishand from "../../../../assets/icons/raishand.svg";
+import { motion, AnimatePresence } from "framer-motion";
+import DefaultImage from "./DefaultImage";
+import ParticipantContainer from "./ParticipantContainer";
 
-const  ParticipantsGrid = ()=>  {
-  const tracks: TrackReferenceOrPlaceholder[] = useTracks(
-    [
-      { source: Track.Source.Camera, withPlaceholder: true },
-      { source: Track.Source.ScreenShare, withPlaceholder: false },
-    ],
-    { onlySubscribed: false }
-  );
+interface ParticipantsGridProps {
+  isRais: string[];
+}
 
-
-  const screenShareTrack = useMemo(() => 
-    tracks.find(t => t.source === Track.Source.ScreenShare), 
-  [tracks]);
-
- 
-  const presenterCameraTrack = useMemo(() => {
-    if (!screenShareTrack) return undefined;
-    return tracks.find(t => 
-      t.source === Track.Source.Camera && 
-      t.participant.identity === screenShareTrack.participant.identity
-    );
-  }, [tracks, screenShareTrack]);
-
-   const otherCameraTracks = useMemo(() => 
-    tracks.filter(t => 
-      t.source === Track.Source.Camera && 
-      t.participant.identity !== screenShareTrack?.participant.identity
-    ), 
-  [tracks, screenShareTrack]);
+const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
+  const { tracks, screenShareTrack, presenterCameraTrack, otherCameraTracks } = useParticipant();
+  const { isClickattend } = useControlContext();
 
   const [position, setPosition] = useState({ x: 20, y: 20 });
-  const isDragging = useRef(false);
+  const isDragging = useRef<boolean>(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
   const elementStartPos = useRef({ x: 0, y: 0 });
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     isDragging.current = true;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     elementStartPos.current = { ...position };
@@ -76,25 +61,84 @@ const  ParticipantsGrid = ()=>  {
     };
   }, [screenShareTrack]);
 
+  const renderNameTag = (participant: any, isSmall: boolean = false) => {
+    const safeName = participant?.name || ""; 
+    const isHandRaised = isRais?.includes(safeName);
+    const isMicEnabled = participant?.isMicrophoneEnabled;
+    
+    const containerPadding = isSmall ? "px-[4px] py-[1px]" : "px-[12px] py-[6px]";
+    const positionClasses = isSmall ? "bottom-[4px] left-[4px]" : "bottom-3 left-3";
+    const textSize = isSmall ? "text-[10px]" : "text-[14px]";
+    const circleSize = isSmall ? "w-[12px] h-[12px]" : "w-[22px] h-[22px]";
+    const handIconSize = isSmall ? "w-[6px] h-[6px]" : "w-[12px] h-[12px]";
+    const micIconSize = isSmall ? "w-[10px] h-[10px]" : "w-[16px] h-[16px]";
+
+    const isLongName = safeName.length > 15;
+    const displayName = isLongName ? safeName.slice(0, 15) + "..." : safeName;
+
+    return (
+      <motion.div 
+        layout 
+        className={`group absolute ${positionClasses} flex items-center gap-[6px] ${containerPadding} rounded-[4px] transition-colors duration-300 ease-in-out z-10 ${
+          isHandRaised 
+            ? "bg-[#80da88] text-[#1E1E1E] shadow-lg" 
+            : "bg-black/60 text-[#F9FBFC]"
+        }`}
+      >
+        {isLongName && (
+          <div className="absolute bottom-full left-0 mb-1 hidden group-hover:block bg-[#2A2D34] text-[#F9FBFC] text-[12px] px-[8px] py-[4px] rounded-[4px] shadow-lg whitespace-nowrap z-50 border border-[#454950]">
+            {safeName}
+          </div>
+        )}
+
+        <AnimatePresence mode="wait">
+          {isHandRaised && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.5 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 15, scale: 0.5 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className={`flex items-center justify-center bg-[#1E1E1E] rounded-full ${circleSize}`}
+            >
+              <img src={raishand} alt="" className={handIconSize} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
+        <div className="flex items-center gap-[6px]">
+          <span className={`${textSize} font-[500] whitespace-nowrap cursor-default`}>
+            {displayName}
+          </span>
+          <img 
+            src={isMicEnabled ? microphon : microphondis} 
+            alt={isMicEnabled ? "Mic On" : "Mic Off"} 
+            className={micIconSize} 
+          />
+        </div>
+      </motion.div>
+    );
+  };
 
   if (tracks.length === 0) return <div className="text-white flex justify-center items-center h-full">Waiting...</div>;
-
+  
   if (screenShareTrack) {
+    const activeOtherTracks = otherCameraTracks.filter(
+      (track: any) => track.participant.isScreenShareEnabled || track.participant.isCameraEnabled
+    );
+
     return (
-      <div className="w-full h-full flex flex-col gap-2 p-2 relative">
-     
-        <div className="flex-1 w-full bg-black rounded-xl overflow-hidden relative border border-[#393D44]">
+      <div className="w-full h-full flex flex-row gap-2 p-2 relative">
+        <div className="flex-1 h-full rounded-xl overflow-hidden relative ">
           <VideoTrack
             trackRef={screenShareTrack as any}
             className="w-full h-full object-contain"
           />
-          <div className="absolute top-4 left-4 bg-red-600/90 text-white px-3 py-1 rounded-full text-sm font-bold pointer-events-none">
-            Presenter: {screenShareTrack.participant.identity}
-          </div>
+          
+          {renderNameTag(screenShareTrack.participant)}
 
-      
-          {presenterCameraTrack && (
-            <div 
+          {presenterCameraTrack && presenterCameraTrack.participant.isCameraEnabled && (
+            <ParticipantContainer 
+              participant={presenterCameraTrack.participant}
               onMouseDown={handleMouseDown}
               style={{ 
                 right: `${position.x}px`, 
@@ -102,31 +146,33 @@ const  ParticipantsGrid = ()=>  {
                 cursor: 'move',
                 zIndex: 50
               }}
-              className="absolute w-[200px] h-[120px] rounded-lg overflow-hidden shadow-2xl border-2 border-[#5E6570] hover:border-white transition-colors bg-black"
+              className="absolute w-[200px] h-[120px] rounded-lg overflow-hidden bg-black"
+              defaultBorder="border-2 border-[#5E6570] hover:border-white"
             >
               <VideoTrack 
                  trackRef={presenterCameraTrack as any} 
                  className="w-full h-full object-cover pointer-events-none" 
               />
-            </div>
+              {renderNameTag(presenterCameraTrack.participant, true)}
+            </ParticipantContainer>
           )}
         </div>
 
-        {otherCameraTracks.length > 0 && (
-          <div className="h-[120px] w-full flex gap-2 overflow-x-auto pb-1 z-10">
-            {otherCameraTracks.map((track) => (
-              <div 
+        {activeOtherTracks.length > 0 && !isClickattend && (
+          <div className="w-[200px] h-full flex flex-col gap-2 overflow-y-auto z-10">
+            {activeOtherTracks.map((track: any) => (
+              <ParticipantContainer 
                 key={track.participant.identity} 
-                className="h-full min-w-[160px] bg-black rounded-xl overflow-hidden relative border border-[#393D44]"
+                participant={track.participant}
+                className="w-full h-[120px] bg-black rounded-lg overflow-hidden relative"
+                defaultBorder=""
               >
                 <VideoTrack
                   trackRef={track as any}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-1 left-2 bg-black/60 text-white text-xs px-2 rounded">
-                  {track.participant.identity}
-                </div>
-              </div>
+                {renderNameTag(track.participant, true)}
+              </ParticipantContainer>
             ))}
           </div>
         )}
@@ -134,28 +180,45 @@ const  ParticipantsGrid = ()=>  {
     );
   }
 
-
   return (
     <div className="w-full h-full p-2">
       <div className={`grid gap-2 h-full w-full ${
           tracks.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
         }`}>
-        {tracks.map((trackRef) => (
-          <div 
-             key={trackRef.participant.identity + trackRef.source} 
-             className="relative w-full h-full bg-black rounded-xl overflow-hidden border border-[#393D44]"
+        {tracks.map((trackRef: any) => (
+          <ParticipantContainer 
+            key={trackRef.participant.identity + trackRef.source} 
+            participant={trackRef.participant}
+            className="relative w-full h-full rounded-xl overflow-hidden bg-[#393D44]" 
+            defaultBorder=""
           >
+          {trackRef.participant.isCameraEnabled ? (
             <VideoTrack
               trackRef={trackRef as any}
               className="w-full h-full object-cover"
             />
-             <div className="absolute bottom-2 left-2 bg-black/50 text-white px-2 rounded">
-              {trackRef.participant.identity}
+          ) : (
+            <div className="w-full h-full flex justify-center items-center">
+              <div className="w-[30%] aspect-square">
+                {
+                  trackRef.participant.attributes["UserImage"] ?
+                  <img
+                    src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
+                    className="w-full h-full rounded-full object-cover"
+                    alt=""
+                  /> :
+                  <DefaultImage character={trackRef.participant.name?.toString()?.substring(0,2).toLocaleUpperCase()} />
+                }
+              </div>
             </div>
-          </div>
+          )}
+
+          {renderNameTag(trackRef.participant)}
+          </ParticipantContainer>
         ))}
       </div>
     </div>
   );
 }
+
 export default ParticipantsGrid;

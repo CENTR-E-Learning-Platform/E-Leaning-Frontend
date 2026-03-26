@@ -2,11 +2,7 @@ import { CalendarCheck2Icon, ChevronDown, Clock, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { usesearchteach } from "../Hooks/usesearchteach";
 import { usefilterteach } from "../Hooks/usefilterteach";
-import ButtomApplyFilter from "../Components/Explore/ButtomApplyFilter";
-import DaysFilterExplore from "../Components/Explore/DaysFilterExplore";
-import RattingFilterExplore from "../Components/Explore/RattingFilterExplore";
-import SubjectFilterExplore from "../Components/Explore/SubjectFilterExplore";
-import LineBetweenFilterElements from "../Components/Explore/LineBetweenFilterElements";
+
 
 const MainExplore = () => {
   const {
@@ -30,8 +26,6 @@ const MainExplore = () => {
     setStartPrice,
     endPrice,
     setEndPrice,
-  } = usefilterteach(); // Filter Teachers
-
   ////////////////////////// Range Price
 
   const [dragging2, setDragging2] = useState<string | null>(null);
@@ -243,9 +237,6 @@ const MainExplore = () => {
         <div className="flex justify-between items-start gap-[30px] ">
           <div className="w-[290px] border-2 border-[#D1D5DB] p-5 rounded-[8px]">
 
-            <SubjectFilterExplore/>
-
-            <LineBetweenFilterElements/>
 
             <div className="price w-[250px] mb-[22px] text-[#2A2D34]">
               <h2 className="font-semibold mb-[28px] text-[18px]">
@@ -296,15 +287,6 @@ const MainExplore = () => {
               {/* ////////////////////////// */}
             </div>
 
-            <LineBetweenFilterElements/>
-
-            <RattingFilterExplore/>
-
-            <LineBetweenFilterElements/>
-
-            <DaysFilterExplore/>
-
-            <LineBetweenFilterElements/>
 
             <div className="Times mb-[22px]">
               <h2 className="font-semibold mb-[28px] text-[18px]">Times</h2>
@@ -349,10 +331,6 @@ const MainExplore = () => {
                 ></div>
               </div>
             </div>
-
-            <LineBetweenFilterElements/>
-
-            <ButtomApplyFilter setDragging={setDragging} setDragging2={setDragging2}/>
             
           </div>
 
@@ -527,11 +505,7 @@ const MainExplore = () => {
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] border-2 transition-colors
-                ${
-                  currentPage === 1
-                    ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
-                    : "border-[#525FE1] text-[#525FE1] hover:bg-[#525FE1] hover:text-white cursor-pointer"
-                }`}
+
               >
                 <svg
                   width="24"
@@ -561,11 +535,7 @@ const MainExplore = () => {
                       key={i}
                       onClick={() => setCurrentPage(i)}
                       className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] font-bold text-[18px] transition-colors
-                      ${
-                        currentPage === i
-                          ? "bg-[#525FE1] text-white"
-                          : "bg-white text-[#2A2D34] border-2 border-[#D1D5DB] hover:border-[#525FE1] hover:text-[#525FE1]"
-                      }`}
+
                     >
                       {i}
                     </button>,
@@ -589,11 +559,7 @@ const MainExplore = () => {
                 }
                 disabled={currentPage === totalPages}
                 className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] border-2 transition-colors
-                  ${
-                    currentPage === totalPages
-                      ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
-                      : "border-[#525FE1] text-[#525FE1] hover:bg-[#525FE1] hover:text-white cursor-pointer"
-                  }`}
+
               >
                 <svg
                   width="24"
