@@ -19,6 +19,7 @@ export const useLogin = () => {
         console.log(" Login successful:", res.data);
         var token = res.data.data.token;
         localStorage.setItem("token", token);
+        navigate("/explore")
         console.log(token);
       } catch (error: any) {
         const MSError = error.response?.data.errors[0] || error.message;
