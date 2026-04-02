@@ -41,7 +41,7 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
             >
               <div>
                 <div>
-                  <h1 className="text-[16px] w-fit ps-[12px] pt-[12px] mb-[10px] text-[#2A2D34] font-medium">
+                  <h1 className="text-[16px] w-full truncate px-[12px] pt-[12px] mb-[10px] text-[#2A2D34] font-medium">
                     {e.title}
                   </h1>
                   <div className="flex ps-[12px] ">
@@ -71,7 +71,8 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                   <button
                     onClick={async () => {
                       await localStorage.setItem("sessionName", e.roomName);
-                      navigator("/createroom/joinnow");
+                      //navigator("/createroom/joinnow/createroom/joinnow");
+                      window.open("/createroom/joinnow" , '_blank');
                     }}
                     className="bg-[#525FE1] ms-[12px] w-[113px] h-[41px] rounded-[8px] flex justify-center items-center text-[16px] text-[#F9FBFC] font-semibold mt-[12px] cursor-pointer hover:bg-[#404DDD] transition duration-300"
                   >
