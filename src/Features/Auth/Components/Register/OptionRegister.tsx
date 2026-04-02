@@ -3,7 +3,7 @@ import Reg_Log from "../../../../assets/images/Reg&Log.png";
 import teacher_img from "../../../../assets/images/Teacher.png";
 import student_img from "../../../../assets/images/Student.png";
 import { usehandelBackRegister } from "../../Hooks/useRegister";
-
+import logo from '../../../../assets/icons/logoE.png';
 const OptionRegister: React.FC = () => {
   const { role, setrole, handleContinue } = usehandelBackRegister();
 
@@ -11,16 +11,14 @@ const OptionRegister: React.FC = () => {
     <React.Fragment>
       <main className="w-screen h-screen max-[390px]:overflow-auto max-[390px]:min-h-screen max-[390px]:w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-          <section className="flex items-start justify-center">
+          <section className="flex items-center justify-center">
             <div>
               <header className="flex justify-center items-center">
-                <h1 className="mt-[34.453125px] font-semibold text-[32px] text-[#2A2D34]">
-                  logo
-                </h1>
+                <img src={logo} className="w-[250px] h-full" alt="" />
               </header>
 
               <article className="flex flex-col items-center justify-center">
-                <h2 className="text-[40px] mt-[117.421875px] font-bold leading-[29px] font-poppins text-[#2A2D34]">
+                <h2 className="text-[40px] mt-[50] font-bold leading-[29px] font-poppins text-[#2A2D34]">
                   Join as a
                 </h2>
 
