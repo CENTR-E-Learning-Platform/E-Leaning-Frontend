@@ -99,7 +99,7 @@ const EditPhotoModal = ({
 
             <div className="px-6 pb-6">
               <div className="flex flex-col items-center gap-6 mb-6">
-                <img className="w-[160px] h-[160px] rounded-full" src={previewImage ?? bg_imptyPhoto} alt="Empty profile photo" />
+                <img className="w-[160px] h-[160px] rounded-full object-cover" src={previewImage ?? bg_imptyPhoto} alt="Empty profile photo" />
                 <button onClick={handleDeleteImage} className="text-[16px] cursor-pointer border-2 p-4 rounded-[8px] border-[#525FE1] flex justify-center items-center gap-1 text-[#525FE1] hover:text-[#3f4bc4] transition-colors">
                   <img src={DeleteCurrentImage} alt="Delete current image" />
                   <p className="w-[171px] font-medium">
