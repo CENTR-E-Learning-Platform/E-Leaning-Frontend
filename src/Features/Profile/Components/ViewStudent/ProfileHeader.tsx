@@ -5,6 +5,7 @@ import MessageIcon from "../../../../../src/assets/icons/MessageIcon.svg";
 import ShareIcon from "../../../../../src/assets/icons/ShareIcon.svg";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
+import { BASE_URL } from "../../../Streaming/Utils/Apis";
 const ProfileHeader = () => {
   const {data} = useTeacherProfile();
 
@@ -25,8 +26,8 @@ const ProfileHeader = () => {
           <div className="flex relative justify-between items-center">
             <div className="flex justify-between gap-4">
               <img
-                className="w-[144px] object-cover h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]"
-                src={data?.data?.fullPrfilePicturePath =='https://localhost:7251' ? bg_imptyPhoto : data?.data?.fullPrfilePicturePath}
+                className="w-[144px] object-cover h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]" 
+                src={data?.data?.fullPrfilePicturePath === BASE_URL ? bg_imptyPhoto : data?.data?.fullPrfilePicturePath}
                 alt="Teacher Profile Image"
               />
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
