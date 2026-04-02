@@ -1,8 +1,15 @@
-import { CalendarCheck2Icon, ChevronDown, Clock, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { usesearchteach } from "../Hooks/usesearchteach";
 import { usefilterteach } from "../Hooks/usefilterteach";
-
+import ButtomApplyFilter from "../Components/Explore/ButtomApplyFilter";
+import DaysFilterExplore from "../Components/Explore/DaysFilterExplore";
+import RattingFilterExplore from "../Components/Explore/RattingFilterExplore";
+import SubjectFilterExplore from "../Components/Explore/SubjectFilterExplore";
+import LineBetweenFilterElements from "../Components/Explore/LineBetweenFilterElements";
+import LayerBackgroundTeacher from "../Components/Explore/LayerBackgroundTeacher";
+import LeftTeacherSide from "../Components/Explore/LeftTeacherSide";
+import Header from "../Components/Explore/Header";
 
 const MainExplore = () => {
   const {
@@ -26,7 +33,7 @@ const MainExplore = () => {
     setStartPrice,
     endPrice,
     setEndPrice,
-  ////////////////////////// Range Price
+  } = usefilterteach(); // Filter Teachers
 
   const [dragging2, setDragging2] = useState<string | null>(null);
   const slider2Ref = useRef<HTMLDivElement>(null);
@@ -180,14 +187,8 @@ const MainExplore = () => {
   return (
     <>
       <main className="w-[1200px] m-auto">
-        <div className="flex justify-between items-center mb-[30px]">
-          <h2 className="text-[#2A2D34] font-bold text-[32px]">
-            Explore teachers
-          </h2>
-          <p className="text-[#2A2D34] font-bold text-[18px]">
-            224 teachers available
-          </p>
-        </div>
+
+        <Header/>
 
         <div className="flex justify-between items-center mb-[30px]">
           <div className="flex justify-between items-center w-[342px]">
@@ -237,6 +238,9 @@ const MainExplore = () => {
         <div className="flex justify-between items-start gap-[30px] ">
           <div className="w-[290px] border-2 border-[#D1D5DB] p-5 rounded-[8px]">
 
+            <SubjectFilterExplore/>
+
+            <LineBetweenFilterElements/>
 
             <div className="price w-[250px] mb-[22px] text-[#2A2D34]">
               <h2 className="font-semibold mb-[28px] text-[18px]">
@@ -284,9 +288,17 @@ const MainExplore = () => {
                   ></div>
                 </div>
               </div>
-              {/* ////////////////////////// */}
             </div>
 
+            <LineBetweenFilterElements/>
+
+            <RattingFilterExplore/>
+
+            <LineBetweenFilterElements/>
+
+            <DaysFilterExplore/>
+
+            <LineBetweenFilterElements/>
 
             <div className="Times mb-[22px]">
               <h2 className="font-semibold mb-[28px] text-[18px]">Times</h2>
@@ -331,10 +343,13 @@ const MainExplore = () => {
                 ></div>
               </div>
             </div>
+
+            <LineBetweenFilterElements/>
+
+            <ButtomApplyFilter setDragging={setDragging} setDragging2={setDragging2}/>
             
           </div>
 
-          {/* /////////////////// teachers  */}
           <div className="teachers">
             {[...Array(teachersPerPage)].map((_, index) => {
               const teacherNumber =
@@ -429,73 +444,12 @@ const MainExplore = () => {
                       </div>
                     </div>
 
-                    <div className="LeftTeacher w-[300px] h-[266px]">
-                      <div className="w-[300px] mb-7 flex justify-between items-start">
-                        <div className="w-[131px] flex justify-between items-start gap-2">
-                          <img
-                            src="../../../../../src/assets/icons/MoneyIcon.svg"
-                            alt="MoneyIcon"
-                          />
-                          <div className="">
-                            <p className="font-bold text-[#525FE1] text-[24px]">
-                              Egp 100
-                            </p>
-                            <p className="font-medium text-[14px] text-[#2A2D34]">
-                              per session
-                            </p>
-                          </div>
-                        </div>
-                        <div className="heartImage">
-                          <img
-                            src="../../../../../src/assets/icons/heartIcon.svg"
-                            alt="heartIcon"
-                          />
-                        </div>
-                      </div>
+                    <LeftTeacherSide/>
 
-                      <div className="w-[300px] h-[95px] mb-7">
-                        <p className="font-medium text-[16px]">Select time</p>
-                        <div className="w-[300px] p-3 h-[74px] border border-[#D1D5DB] rounded-[8px] flex justify-between items-center">
-                          <div className="flex items-center h-[64px] gap-[58px]">
-                            <div className="Date&Time w-[197px]">
-                              <div className="text-[#2A2D34] flex items-center gap-[8px]">
-                                <CalendarCheck2Icon size={20} />
-                                <span className="text-[18px] font-medium">
-                                  Wed 22 oct
-                                </span>
-                              </div>
-                              <div className="text-[#2A2D34] flex items-center gap-[8px]">
-                                <Clock size={20} />
-                                <span className="text-[18px] font-medium">
-                                  2:00 pm - 4:00 pm
-                                </span>
-                              </div>
-                            </div>
-
-                            <div className="ArrowDown">
-                              <ChevronDown />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="w-[300px] h-[66px]">
-                        <p className="text-[14px] font-bold text-[#E15254]">
-                          2 seats left
-                        </p>
-                        <button className="font-semibold w-[300px] h-[45px] flex justify-center items-center text-[18px] text-[#F9FBFC] bg-[#525FE1] rounded-[8px] p-4">
-                          Reserve Session
-                        </button>
-                      </div>
-                    </div>
                   </div>
-                  <div className="layerBackGround top-[-23px] left-[-80px]  -z-10 absolute ">
-                    <img
-                      className="w-[236px] rotate-[99.81deg] h-[239]"
-                      src="../../../../../src/assets/images/BackTeacher.png"
-                      alt="BackTeacher"
-                    />
-                  </div>
+
+                  <LayerBackgroundTeacher/>
+
                 </div>
               );
             })}
@@ -505,7 +459,11 @@ const MainExplore = () => {
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] border-2 transition-colors
-
+                ${
+                  currentPage === 1
+                    ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
+                    : "border-[#525FE1] text-[#525FE1] hover:bg-[#525FE1] hover:text-white cursor-pointer"
+                }`}
               >
                 <svg
                   width="24"
@@ -535,7 +493,11 @@ const MainExplore = () => {
                       key={i}
                       onClick={() => setCurrentPage(i)}
                       className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] font-bold text-[18px] transition-colors
-
+                      ${
+                        currentPage === i
+                          ? "bg-[#525FE1] text-white"
+                          : "bg-white text-[#2A2D34] border-2 border-[#D1D5DB] hover:border-[#525FE1] hover:text-[#525FE1]"
+                      }`}
                     >
                       {i}
                     </button>,
@@ -559,7 +521,11 @@ const MainExplore = () => {
                 }
                 disabled={currentPage === totalPages}
                 className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] border-2 transition-colors
-
+                  ${
+                    currentPage === totalPages
+                      ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
+                      : "border-[#525FE1] text-[#525FE1] hover:bg-[#525FE1] hover:text-white cursor-pointer"
+                  }`}
               >
                 <svg
                   width="24"
