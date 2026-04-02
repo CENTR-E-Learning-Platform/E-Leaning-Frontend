@@ -5,9 +5,11 @@ import Grad from "./Grad";
 import Reminder from "./Reminder";
 import { useCreateRoom } from "../../../Streaming/Hooks/useCreateRoom";
 import Price from "./Price";
+import { useGetAllClasses } from "../../Hooks/useGetAllClasses";
 
-const ClassForm = () => {
+const ClassForm = ({ onClose }: { onClose?: () => void }) => {
   const { formik } = useCreateRoom();
+  const {fetchClasses} = useGetAllClasses();
 
   return (
     <>
@@ -27,7 +29,6 @@ const ClassForm = () => {
           <form onSubmit={formik.handleSubmit}>
             <div className="flex justify-center flex-col items-center">
               
-              {/* Title */}
               <div className="flex flex-col mb-[8px] w-[449px]">
                 <label className="text-[16px] font-[400] text-[#2A2D34]">
                   Title
@@ -50,10 +51,8 @@ const ClassForm = () => {
                 </div>
               </div>
 
-              {/* Date & Duration */}
               <div className="flex items-start gap-[10px]">
                 
-                {/* Date */}
                 <div className="flex flex-col w-[290px]">
                   <label className="text-[16px] font-[400] text-[#2A2D34]">
                     Date
@@ -76,7 +75,6 @@ const ClassForm = () => {
                   </div>
                 </div>
 
-                {/* Duration */}
                 <div className="flex flex-col w-[143px]">
                   <label className="text-[16px] font-[400] text-[#2A22D34]">
                     Duration
@@ -101,7 +99,6 @@ const ClassForm = () => {
                 </div>
               </div>
 
-              {/* Weekly Repeat */}
             <div className="flex flex-col w-[449px] mt-[15px]">
             <label className="text-[16px] font-[400] text-[#2A2D34] mb-[6px]">
               Repeat for weeks
@@ -121,7 +118,6 @@ const ClassForm = () => {
         </div>
             </div>
 
-            {/* Grade */}
             <div className="flex items-center flex-col mt-[24px]">
               <div className="w-[443px] text-[16px] font-semibold mb-[12px]">
                 <h1>Choose grade for this class</h1>
@@ -140,7 +136,6 @@ const ClassForm = () => {
               </div>
             </div>
 
-            {/* Price */}
             <div className="flex mt-[24px] flex-col items-center w-[449px] mx-auto">
               <Price
                 change={formik.handleChange}
@@ -157,7 +152,6 @@ const ClassForm = () => {
                 )}
               </div>
 
-            {/* Reminder */}
             <div className="flex justify-center mt-[24px]">
               <Reminder
                 change={formik.handleChange}
@@ -165,7 +159,6 @@ const ClassForm = () => {
               />
             </div>
 
-            {/* Description */}
             <div className="flex justify-center mt-[24px]">
               <Description
                 change={formik.handleChange}
@@ -173,15 +166,25 @@ const ClassForm = () => {
               />
             </div>
 
-            {/* Buttons */}
             <div className="flex justify-center gap-[9px] mt-[24px]">
               <Button
                 title="Add Class"
                 bg="#525FE1"
                 txt="#F9FBFC"
-                meth={formik.submitForm}
+                meth={async () => {
+                  await formik.submitForm();
+                  if (Object.keys(formik.errors).length === 0) {
+                    fetchClasses();
+                    onClose?.();
+                  }
+                }}
               />
-              <Button title="Cancel" bg="#FFFFFF" txt="#525FE1" />
+              <Button
+                title="Cancel"
+                bg="#FFFFFF"
+                txt="#525FE1"
+                meth={() => onClose?.()}
+              />
             </div>
           </form>
         </div>
