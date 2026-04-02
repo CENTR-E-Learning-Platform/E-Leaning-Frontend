@@ -9,8 +9,13 @@ import Button from "../Components/JoinRoom/Button";
 import { useCreateRoom } from "../Hooks/useCreateRoom";
 import { useControlling } from "../Hooks/useControlling";
 import { useControlContext } from "../Context/ControlContext";
+import { useTeacherProfile } from "../../Profile/Hooks/useTeacherProfile";
+import { BASE_URL } from "../Utils/Apis";
+import DefaultImage from "../Components/meeting/DefaultImage";
+
 
 const JoinNow = () => {
+   const {data} = useTeacherProfile();
   const {
     cameraView, setCameraView,
     mic, setMic,
@@ -79,11 +84,18 @@ const JoinNow = () => {
               ></video>
             ) : (
               <>
-                <img
-                  src={tech}
+              {
+                data?.data.fullPrfilePicturePath !== BASE_URL ?
+                  <img
+                  src={data?.data.fullPrfilePicturePath  }
                   className="rounded-full w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] object-cover"
                   alt="Avatar"
-                />
+                />:
+                <div className="w-[100px] h-[100px] rounded-full">
+                  <DefaultImage character = {data?.data.fullName.slice(0,2).toUpperCase()}/>
+                </div>
+              }
+              
                 <h1 className="text-[12px] sm:text-[13px] text-[#F9FBFC] mt-[12px]">
                   Your camera is turned off
                 </h1>
