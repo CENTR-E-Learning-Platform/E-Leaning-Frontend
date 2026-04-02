@@ -18,6 +18,12 @@ import CreateRoomTeacher from "../Features/Streaming/Pages/CreateRoomTeacher";
 import JoinNow from "../Features/Streaming/Pages/JoinNow";
 import ChatForm from "../Features/Streaming/Components/chat/ChatForm";
 import JoinRoomStudent from "../Features/Streaming/Pages/JoinRoomStudent";
+import MainCalendar from "../Features/Calendar/Pages/MainCalendar";
+import GoodBy from "../Features/Streaming/Pages/GoodBye";
+import NotifyRaiseHand from "../Features/Streaming/Components/meeting/NotifyRaiseHand";
+import MainExplore from "../Features/ExploreTeacher/Pages/MainExplore";
+import ViewTeacher from "../Features/Profile/Pages/ViewTeacher";
+import Navbar from "../Components/Navbar/Navbar";
 export const router = createBrowserRouter([
   {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
     {path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard/>},
@@ -26,21 +32,33 @@ export const router = createBrowserRouter([
     {path: "/explore/TeacherPayment/mobileWallet/confirm", element:  <DynamicPaymentMobileWalletconfirm/>}
   ]
   },
-  { path: "/", element: <OptionRegister /> },
+  { path: "/", element: <Navbar/> , children: [
+
+  { path: "OptionRegister", element: <OptionRegister /> },
+
+  // { path: "/meeting", element: <LiveRoom /> },
+ 
+  { path: "Calendar", element: <MainCalendar/> },
+  { path: "/explore", element: <MainExplore/> },
+
+  ] },
+  { path: "teacher-option", element: <TeacherOption /> },
+  { path: "student-option", element: <StudentOption /> },
+  { path: "/confing", element: <EmailConfig /> },
+  
+  { path: "/createroom", element: <CreateRoomTeacher /> },
+  { path: "/createroom/joinnow", element: <JoinNow/> },
+  { path: "/createroom/joinnow/meeting", element: <LiveRoom/> },
+  { path: "/createroom/joinnow/meeting/chat", element: <ChatForm/> },
+  { path: "/createroom/joinStudent", element: <JoinRoomStudent/> },
+    { path: "/GoodBy",  element: <GoodBy/> },
+      { path: "/auth", element: <OptionRegister /> },
   { path: "register", element: <MainRegister /> },
   { path: "login", element: <MainLogin /> },
   { path: "login/otp", element: <OTP /> },
   { path: "login/SendEmail", element: <ForgetPassword /> },
   { path: "login/SendEmail/otp", element: <OTP /> },
   { path: "login/SendEmail/otp/setNewPassword", element: <SetNewPassword /> },
-  { path: "OptionRegister", element: <OptionRegister /> },
-  { path: "TeacherOption", element: <TeacherOption /> },
-  { path: "StudentOption", element: <StudentOption /> },
-  { path: "/confing", element: <EmailConfig /> },
-  // { path: "/meeting", element: <LiveRoom /> },
-  { path: "/createroom", element: <CreateRoomTeacher /> },
-  { path: "/createroom/joinnow", element: <JoinNow/> },
-  { path: "/createroom/joinnow/meeting", element: <LiveRoom/> },
-  { path: "/createroom/joinnow/meeting/chat", element: <ChatForm/> },
-  { path: "/createroom/joinStudent", element: <JoinRoomStudent/> },
+  { path: "/profile", element: <ViewTeacher/> },
+
 ]);
