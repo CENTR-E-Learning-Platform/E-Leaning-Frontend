@@ -2,7 +2,7 @@ import React from "react";
 import Teach_page from "../../../../assets/images/TeacherPage.png";
 import { NavLink } from "react-router-dom";
 import { usehandelClickLogin } from "../../Hooks/useRegister";
-
+import logo from '../../../../assets/icons/logoE.png';
 const TeacherOption: React.FC = () => {
   
   const { seteducationLevelOrSubject, educationLevelOrSubject, BackOption } = usehandelClickLogin();
@@ -11,16 +11,14 @@ const TeacherOption: React.FC = () => {
     <React.Fragment>
       <main className="w-screen h-screen">
         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-          <section className="flex items-start justify-center">
+          <section className="flex items-center justify-center">
             <div>
               <header className="flex justify-center items-center">
-                <h1 className="mt-[34.453125px] font-semibold text-[32px] text-[#2A2D34]">
-                  logo
-                </h1>
+               <img src={logo} className="w-[250px] h-full" alt="" />
               </header>
 
               <article className="flex flex-col items-center justify-center">
-                <h2 className="text-[28px] mt-[160px] font-bold leading-[20.390625px] text-[#2A2D34]">
+                <h2 className="text-[28px] mt-[10px] font-bold leading-[20.390625px] text-[#2A2D34]">
                   What do you teach
                 </h2>
 
