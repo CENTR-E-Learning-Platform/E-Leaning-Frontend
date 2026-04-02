@@ -49,7 +49,7 @@ const ProfileHeader = () => {
             <div className="flex justify-between gap-4">
               <div className="Adding-Teacher-Profile-Image">
                 <img
-                  className="w-[144px] h-[144px] absolute bottom-[-85px] rounded-full"
+                  className="w-[144px] h-[144px] absolute bottom-[-85px] rounded-full object-cover"
                   src={previewImage ?? bg_imptyPhoto}
                   alt="Teacher Profile Image"
                 />
