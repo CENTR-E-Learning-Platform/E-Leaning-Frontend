@@ -48,9 +48,10 @@ const MainCalendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
   
-  useGetAllClasses();
+  
   const { TeacherClass } = useCalendar();
-
+  const {fetchClasses} = useGetAllClasses();
+  
   const formattedEvents = TeacherClass?.map((cls: any) => ({
     ...cls,
     start: new Date(cls.startTime),
@@ -58,6 +59,7 @@ const MainCalendar = () => {
   })) || [];
 
   useEffect(() => {
+    fetchClasses();
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
@@ -80,12 +82,12 @@ const MainCalendar = () => {
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-[12px] max-h-[90vh] overflow-y-auto"
           >
-            <ClassForm />
+            <ClassForm onClose={() => setOpen(false)} />
           </div>
         </div>
       )}
-      <div className=" mt-[40px] ">
-        <h1 className="text-[32px] font-bold mb-[30px]">Schedule</h1>
+      <div className=" mt-[10px] ">
+        <h1 className="text-[32px] font-bold mb-[10px]">Schedule</h1>
         <div className="flex ">
           <Calendar
             localizer={localizer}
