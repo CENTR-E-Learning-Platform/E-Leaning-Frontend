@@ -69,7 +69,7 @@ export const usehandelClickLogin = () => {
   }
   function BackOption() {
     localStorage.removeItem("educationLevelOrSubject");
-    navigate("/OptionRegister");
+    navigate("/auth");
   }
   return {
     seteducationLevelOrSubject,
@@ -87,9 +87,9 @@ export const usehandelBackRegister = () => {
       return;
     }
     if (role === "Teacher") {
-      navigate("/TeacherOption");
+      navigate("/teacher-option");
     } else {
-      navigate("/StudentOption");
+      navigate("/student-option");
     }
   };
   function BackReg() {
