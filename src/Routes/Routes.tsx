@@ -24,6 +24,7 @@ import NotifyRaiseHand from "../Features/Streaming/Components/meeting/NotifyRais
 import MainExplore from "../Features/ExploreTeacher/Pages/MainExplore";
 import ViewTeacher from "../Features/Profile/Pages/ViewTeacher";
 import Navbar from "../Components/Navbar/Navbar";
+import { MainContentSection } from "../Features/Home/Pages/MainContentSection";
 export const router = createBrowserRouter([
   {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
     {path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard/>},
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
  
   { path: "Calendar", element: <MainCalendar/> },
   { path: "/explore", element: <MainExplore/> },
+  { path: "/home", element: <MainContentSection/> },
 
   ] },
   { path: "teacher-option", element: <TeacherOption /> },
@@ -60,5 +62,6 @@ export const router = createBrowserRouter([
   { path: "login/SendEmail/otp", element: <OTP /> },
   { path: "login/SendEmail/otp/setNewPassword", element: <SetNewPassword /> },
   { path: "/profile", element: <ViewTeacher/> },
+  
 
 ]);
