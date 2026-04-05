@@ -86,8 +86,8 @@ const MainCalendar = () => {
           </div>
         </div>
       )}
-      <div className=" mt-[10px] ">
-        <h1 className="text-[32px] font-bold mb-[10px]">Schedule</h1>
+      <div className=" mt-[50px] ">
+        {/* <h1 className="text-[32px] font-bold mb-[10px]">Schedule</h1> */}
         <div className="flex ">
           <Calendar
             localizer={localizer}
