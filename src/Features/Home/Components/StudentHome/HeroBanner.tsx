@@ -9,35 +9,35 @@ interface HeroBannerProps {
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ date, title, subtitle }) => {
   return (
-   <div>
-     <div className="flex flex-row items-start p-[30px] pb-[4px] w-[1200px] h-[212px] bg-[linear-gradient(90deg,#525FE1_0%,#868EEA_100%)] rounded-[8px] flex-none order-0 self-stretch grow-0 z-0 relative overflow-hidden box-border">
-      <div className="flex flex-col items-start  relative h-full">
-        <div className="relative w-fit mt-[-1.00px] font-normal text-[#f9fbfc] text-sm whitespace-nowrap">
+    <div className="relative w-full overflow-visible bg-[linear-gradient(90deg,#525FE1_0%,#868EEA_100%)] rounded-[8px] min-h-[180px] sm:min-h-[200px] lg:min-h-[212px]">
+      <div className="overflow-hidden absolute inset-0 rounded-[8px]" />
+
+      <div className="flex flex-col items-start p-6 sm:p-7 lg:p-[30px] relative z-10 max-w-[65%] sm:max-w-[60%]">
+        <div className="font-normal text-[#f9fbfc] text-sm whitespace-nowrap mb-3">
           {date}
         </div>
 
-        <div className="flex flex-col items-start gap-2 relative">
-          <p className="relative w-fit mt-[-1.00px] font-semibold text-[#f9fbfc] text-[32px] whitespace-nowrap">
+        <div className="flex flex-col items-start gap-2">
+          <p className="font-semibold text-[#f9fbfc] text-xl sm:text-2xl lg:text-[32px] leading-tight m-0">
             {title}
           </p>
-          <p className="relative w-fit font-medium text-[#f9fbfc] text-base whitespace-nowrap">
+          <p className="font-medium text-[#f9fbfc] text-xs sm:text-sm lg:text-base leading-snug m-0">
             {subtitle}
           </p>
         </div>
 
-        <button className="w-[134px] h-[45px] mt-[24px] flex bg-white items-center justify-center gap-1 relative rounded-lg cursor-pointer border-none">
-          <div className="relative w-fit  font-semibold text-[#525fe1] text-[18px] whitespace-nowrap">
+        <button className="w-[120px] sm:w-[134px] h-[40px] sm:h-[45px] mt-5 sm:mt-6 flex bg-white items-center justify-center rounded-lg cursor-pointer border-none">
+          <span className="font-semibold text-[#525fe1] text-sm sm:text-[18px] whitespace-nowrap">
             Join Class
-          </div>
+          </span>
         </button>
       </div>
 
-    </div>
-     <img
-        className="absolute top-[70px] right-[100px] w-[289px] h-[289px] aspect-[]  "
+      <img
+        className="absolute -bottom-[25px] right-[6px] lg:right-[10px] w-[140px] sm:w-[210px] lg:w-[289px] h-auto object-contain pointer-events-none z-20"
         alt="Learning bro"
         src={learningBro}
       />
-   </div>
+    </div>
   );
 };
