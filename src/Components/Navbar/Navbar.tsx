@@ -2,23 +2,42 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useTeacherProfile } from '../../Features/Profile/Hooks/useTeacherProfile';
 import bg_imptyPhoto from "../../assets/images/imptyPhoto.jpg";
 import { BASE_URL } from '../../Features/Calendar/Utils/api';
-import { useEffect, useState } from 'react';
-import logo from '../../assets/icons/logoE.png';
+import { useEffect, useState, useRef } from 'react';
+import logo from '../../assets/icons/logo.svg';
 import notify from '../../../src/assets/icons/NotificationIcon.svg';
+import UserProfileDropdown from './UserProfileDropdown';
+
 const Navbar = () => {
     const { data } = useTeacherProfile();
-    console.log(data?.data);
     const [isAuth, setIsAuth] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        //localStorage.removeItem("token");
+       
         const token = localStorage.getItem("token");
         if (token) {
             setIsAuth(true);
         } else {
             setIsAuth(false);
         }
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+            
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+        
     }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setIsAuth(false);
+        setIsDropdownOpen(false);
+    };
 
     const navLinkClasses = ({ isActive }:any) => {
         const baseClasses = "relative font-medium p-2 flex gap-[8px] justify-between items-center text-[16px] leading-[24px] cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#525FE1] after:transition-all after:duration-300 hover:after:w-full";
@@ -27,10 +46,10 @@ const Navbar = () => {
     };
 
     return <>
-        <nav className="py-[20px] h-[66px] w-full border border-b-[1px] border-[#D1D5DB] px-[40px] bg-white flex justify-between items-center">
+        <nav className="py-[20px] h-[66px] w-full shadow-[0px_20px_40px_rgba(0,6,69,0.04)] border-[#D1D5DB] px-[40px] bg-white flex justify-between items-center">
             <div className="Logo">
                 <h2 className="font-extrabold text-[#2A2D34] text-[28px] leading-[17px] tracking-normal">
-                    <img src={logo} className='w-[140px] h-full' alt="" />
+                    <img src={logo} className='w-full h-full' alt="" />
                 </h2>
             </div>
 
@@ -44,10 +63,6 @@ const Navbar = () => {
                         <img src="../../../src/assets/icons/Explore.svg" className='p-[2px]' alt="ExploreTeacher" />
                         <p className='text-[16px]'>Explore Teacher</p>
                     </NavLink>
-                    <NavLink to="/mySubjects" className={navLinkClasses}>
-                        <img src="../../../src/assets/icons/Mysubjects.svg" className='p-[2px]' alt="Mysubjects" />
-                        <p className='text-[16px]'>My subjects</p>
-                    </NavLink>
                     <NavLink to="/Calendar" className={navLinkClasses}>
                         <img src="../../../src/assets/icons/Schedule.svg" className='p-[2px]' alt="Schedule" />
                         <p className='text-[16px]'>Schedule</p>
@@ -57,7 +72,6 @@ const Navbar = () => {
                         <p className='text-[16px]'>Messages</p>
                     </NavLink>
                 </ul>
-
             </div>
 
             {isAuth ?
@@ -66,14 +80,26 @@ const Navbar = () => {
                         <div className="p[13px] border-1 rounded-3xl border-[#D1D5DB] flex justify-center items-center w-[37px] h-[37px]">
                             <img src={notify} alt="NotificationIcon" />
                         </div>
-
                     </NavLink>
-                    <NavLink to={"/profile"}>
+                    
+                    <div className="relative" ref={dropdownRef}>
                         <div
-                            className="p[13px] rounded-3xl flex justify-center items-center w-[37px] h-[37px]">
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            className="p[13px] rounded-3xl flex justify-center items-center w-[37px] h-[37px] cursor-pointer">
                             <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full' src={data?.data.fullPrfilePicturePath !== BASE_URL ? data?.data.fullPrfilePicturePath : bg_imptyPhoto} alt="Profile" />
                         </div>
-                    </NavLink>
+
+                        {isDropdownOpen && (
+                            <div className="absolute right-0 top-[calc(100%+10px)] z-50">
+                                <UserProfileDropdown 
+                                    userName={data?.data?.fullName || "Ahmed Mohamed"} 
+                                    userEmail={data?.data?.email || "ahmed@email.com"}
+                                    avatarUrl={data?.data?.fullPrfilePicturePath !== BASE_URL ? data?.data?.fullPrfilePicturePath : bg_imptyPhoto}
+                                    onLogout={handleLogout} 
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div> :
                 <div className="flex items-center gap-[24px]">
                     <NavLink
@@ -88,7 +114,6 @@ const Navbar = () => {
                     >
                         Sign up
                     </NavLink>
-
                 </div>
             }
         </nav>
