@@ -20,7 +20,8 @@ const MainExplore = () => {
     setCurrentPage,
     currentPage,
     teachersPerPage,
-  } = usesearchteach(); // Search Teachers
+  } = usesearchteach();
+  
   const {
     data: filterData,
     error: filterError,
@@ -33,7 +34,7 @@ const MainExplore = () => {
     setStartPrice,
     endPrice,
     setEndPrice,
-  } = usefilterteach(); // Filter Teachers
+  } = usefilterteach();
 
   const [dragging2, setDragging2] = useState<string | null>(null);
   const slider2Ref = useRef<HTMLDivElement>(null);
@@ -82,9 +83,6 @@ const MainExplore = () => {
 
   const startPercentage2 = ((startPrice - 50) / 250) * 100;
   const endPercentage2 = ((endPrice - 50) / 250) * 100;
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-  //////////////////////////////////////// Range Time
 
   const [dragging, setDragging] = useState<string | null>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -144,14 +142,9 @@ const MainExplore = () => {
   const startPercentage = ((startTime - 8) / 18) * 100;
   const endPercentage = ((endTime - 8) / 18) * 100;
 
-  ///////////////////////////////////////// Pagination
-
   const totalTeachers = 9;
   const totalPages = Math.ceil(totalTeachers / teachersPerPage);
 
-  ////////////////////////////////////////////////////////////////
-  ////     the data of response (Search Teachers)     ////
-  ////////////////////////////////////////////////////////////////
   if (searchError && "response" in searchError) {
     console.log((searchError as any).response?.data?.message[0]);
   }
@@ -161,10 +154,6 @@ const MainExplore = () => {
       console.log(searchTeachers.data);
     }
   }, [searchTeachers]);
-
-  ////////////////////////////////////////////////////////////////
-  ///     the data of response (Filter Teachers)     ///
-  ////////////////////////////////////////////////////////////////
 
   if (filterError && "response" in filterError) {
     const message = (filterError as any).response?.data?.message;
@@ -182,28 +171,25 @@ const MainExplore = () => {
     }
   }, [filterData]);
 
-  ////////////////////////////////////////////////////////////
-
   return (
     <>
-      <main className="w-[1200px] m-auto">
-
+      <main className="w-[1140px] m-auto">
         <Header/>
 
-        <div className="flex justify-between items-center mb-[30px]">
-          <div className="flex justify-between items-center w-[342px]">
-            <div className="w-[104px] h-[61px] text-[#2A2D34] flex justify-center gap-2.5 items-center border-2 border-[#D1D5DB] py-[19px] px-[20px] rounded-[8px]">
+        <div className="flex justify-between items-center mb-[27px]">
+          <div className="flex justify-between items-center w-[325px]">
+            <div className="w-[99px] h-[55px] text-[#2A2D34] flex justify-center gap-[9px] items-center border-2 border-[#D1D5DB] py-[17px] px-[19px] rounded-[8px]">
               <img
                 src="../../../../../src/assets/icons/FilterIcon.svg"
                 alt="FilterIcon"
               />
-              <p className="text-[18px] font-medium">filter</p>
+              <p className="text-[16px] font-medium">filter</p>
             </div>
-            <div className="w-[226px] h-[61px] text-[#2A2D34] flex justify-center items-center border-2 border-[#D1D5DB] py-[19px] px-[20px] rounded-[8px]">
-              <p className="font-normal text-[16px]">
+            <div className="w-[214px] h-[55px] text-[#2A2D34] flex justify-center items-center border-2 border-[#D1D5DB] py-[17px] px-[19px] rounded-[8px]">
+              <p className="font-normal text-[14px]">
                 Sort by :{" "}
                 <select
-                  className="focus:outline-none focus:border-none font-medium text-[18px]"
+                  className="focus:outline-none focus:border-none font-medium text-[16px]"
                   name=""
                   id=""
                 >
@@ -212,10 +198,10 @@ const MainExplore = () => {
               </p>
             </div>
           </div>
-          <div className="w-[414px] h-[61px] text-[#2A2D34] flex justify-start items-center border-2 border-[#D1D5DB] py-[24px] px-[16px] rounded-[8px]">
-            <div className="flex justify-between gap-2 items-center">
+          <div className="w-[393px] h-[55px] text-[#2A2D34] flex justify-start items-center border-2 border-[#D1D5DB] py-[21px] px-[15px] rounded-[8px]">
+            <div className="flex justify-between gap-[7px] items-center">
               <img
-                className="w-[20px] h-[20px]"
+                className="w-[19px] h-[19px]"
                 src="../../../../../src/assets/icons/SearchIcon.svg"
                 alt="SearchIcon"
               />
@@ -226,7 +212,7 @@ const MainExplore = () => {
                   formik.handleChange(e);
                 }}
                 value={formik.values.SearchTeacher}
-                className="outline-none border-none w-[350px] focus:outline-none focus:border-none"
+                className="outline-none border-none w-[332px] focus:outline-none focus:border-none"
                 type="text"
                 placeholder="Search Teacher"
                 name="SearchTeacher"
@@ -235,19 +221,18 @@ const MainExplore = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-start gap-[30px] ">
-          <div className="w-[290px] border-2 border-[#D1D5DB] p-5 rounded-[8px]">
-
+        <div className="flex justify-between items-start gap-[28px]">
+          <div className="w-[275px] border-2 border-[#D1D5DB] p-[18px] rounded-[8px]">
             <SubjectFilterExplore/>
 
             <LineBetweenFilterElements/>
 
-            <div className="price w-[250px] mb-[22px] text-[#2A2D34]">
-              <h2 className="font-semibold mb-[28px] text-[18px]">
+            <div className="price w-[238px] mb-[20px] text-[#2A2D34]">
+              <h2 className="font-semibold mb-[25px] text-[16px]">
                 Price per class
               </h2>
 
-              <p className="font-bold mb-4 text-center text-[18px]">
+              <p className="font-bold mb-[14px] text-center text-[16px]">
                 EGP{startPrice}-{endPrice}
               </p>
 
@@ -255,7 +240,7 @@ const MainExplore = () => {
                 <div
                   ref={slider2Ref}
                   className="RangePrice relative flex justify-center items-center cursor-pointer"
-                  style={{ height: "28px" }}
+                  style={{ height: "25px" }}
                 >
                   <div className="absolute w-full h-1 bg-gray-300"></div>
 
@@ -268,7 +253,7 @@ const MainExplore = () => {
                   ></div>
 
                   <div
-                    className="absolute w-7 h-7 border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
+                    className="absolute w-[25px] h-[25px] border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
                     style={{
                       left: `${startPercentage2}%`,
                       transform: "translateX(-50%)",
@@ -278,7 +263,7 @@ const MainExplore = () => {
                   ></div>
 
                   <div
-                    className="absolute w-7 h-7 border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
+                    className="absolute w-[25px] h-[25px] border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
                     style={{
                       left: `${endPercentage2}%`,
                       transform: "translateX(-50%)",
@@ -300,17 +285,17 @@ const MainExplore = () => {
 
             <LineBetweenFilterElements/>
 
-            <div className="Times mb-[22px]">
-              <h2 className="font-semibold mb-[28px] text-[18px]">Times</h2>
+            <div className="Times mb-[20px]">
+              <h2 className="font-semibold mb-[25px] text-[16px]">Times</h2>
 
-              <p className="font-bold mb-4 text-center text-[18px]">
+              <p className="font-bold mb-[14px] text-center text-[16px]">
                 {formatTime(startTime)}-{formatTime(endTime)}
               </p>
 
               <div
                 ref={sliderRef}
                 className="RangeTime relative flex justify-center items-center cursor-pointer"
-                style={{ height: "28px" }}
+                style={{ height: "25px" }}
               >
                 <div className="absolute w-full h-1 bg-gray-300"></div>
 
@@ -323,7 +308,7 @@ const MainExplore = () => {
                 ></div>
 
                 <div
-                  className="absolute w-7 h-7 border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
+                  className="absolute w-[25px] h-[25px] border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
                   style={{
                     left: `${startPercentage}%`,
                     transform: "translateX(-50%)",
@@ -333,7 +318,7 @@ const MainExplore = () => {
                 ></div>
 
                 <div
-                  className="absolute w-7 h-7 border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
+                  className="absolute w-[25px] h-[25px] border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
                   style={{
                     left: `${endPercentage}%`,
                     transform: "translateX(-50%)",
@@ -359,23 +344,23 @@ const MainExplore = () => {
               return (
                 <div
                   key={teacherNumber}
-                  className="w-[880px] overflow-hidden relative h-[326px] rounded-[8px] px-[20px] py-[30px] border-2 border-[#D1D5DB] mb-[30px]"
+                  className="w-[836px] overflow-hidden relative h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px]"
                 >
-                  <div className="flex justify-between items-center gap-[60px]">
-                    <div className="RightTeacher flex justify-between items-start gap-4 w-[480px] h-[266px]">
-                      <div className="w-[120px] h-[120px] RightRightTeacher">
+                  <div className="flex justify-between items-center gap-[57px]">
+                    <div className="RightTeacher flex justify-between items-start gap-[15px] w-[456px] h-[239px]">
+                      <div className="w-[114px] h-[114px] RightRightTeacher">
                         <img
-                          className="w-full rounded-[8px] border border-[#D1D5DB]"
+                          className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
                           src="https://i.guim.co.uk/img/media/59baecefbc73d3bcf4a47b017453a27f19b55175/331_488_2481_1489/master/2481.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=d201beebc8267e2197eb367488bafd4b"
                           alt="teacher image"
                         />
                       </div>
                       <div className="LeftRightTeacher">
-                        <div className="w-[344px] mb-5 h-[90px]">
-                          <h2 className="text-[20px] mb-4 leading-[13px] tracking-[0] font-bold">
+                        <div className="w-[326px] mb-[18px] h-[81px]">
+                          <h2 className="text-[18px] mb-[14px] leading-[13px] tracking-[0] font-bold">
                             Mr. Mohamed Salama
                           </h2>
-                          <div className="flex items-center gap-2 mb-4  text-xs mt-1">
+                          <div className="flex items-center gap-2 mb-[14px] text-[11px] mt-1">
                             <div className="flex items-center gap-0.5">
                               {[1, 2, 3, 4, 5].map((star) => {
                                 const rating = 3.5;
@@ -384,7 +369,7 @@ const MainExplore = () => {
                                     <span key={star} className="text-[#FFD057]">
                                       <Star
                                         fill="#FFD057"
-                                        className="w-4 h-4"
+                                        className="w-[14px] h-[14px]"
                                       />
                                     </span>
                                   );
@@ -397,7 +382,7 @@ const MainExplore = () => {
                                       key={star}
                                       className="relative inline-block"
                                     >
-                                      <Star className="w-4 h-4 text-[#FFD057]" />
+                                      <Star className="w-[14px] h-[14px] text-[#FFD057]" />
                                       <span
                                         className="absolute top-0 left-0 overflow-hidden"
                                         style={{
@@ -406,7 +391,7 @@ const MainExplore = () => {
                                       >
                                         <Star
                                           fill="#FFD057"
-                                          className="w-4 h-4 text-[#FFD057]"
+                                          className="w-[14px] h-[14px] text-[#FFD057]"
                                         />
                                       </span>
                                     </span>
@@ -414,7 +399,7 @@ const MainExplore = () => {
                                 } else {
                                   return (
                                     <span key={star} className="text-[#FFD057]">
-                                      <Star className="w-4 h-4" />
+                                      <Star className="w-[14px] h-[14px]" />
                                     </span>
                                   );
                                 }
@@ -422,14 +407,14 @@ const MainExplore = () => {
                             </div>
                             <span className="text-gray-500">(502 reviews)</span>
                           </div>
-                          <div className="h-[29px] w-[191px] flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
-                            <p className="font-semibold text-[18px] text-[#611D1D]">
+                          <div className="h-[26px] w-[181px] flex justify-center items-center bg-[#FFDEDE] px-[9px] py-[7px] rounded-[18px]">
+                            <p className="font-semibold text-[16px] text-[#611D1D]">
                               Pure mathematics
                             </p>
                           </div>
                         </div>
-                        <div className="DetailsAboutTeacher w-[344px] h-[92px]">
-                          <p className="font-medium text-[16px] text-[#5A6272]">
+                        <div className="DetailsAboutTeacher w-[326px] h-[82px]">
+                          <p className="font-medium text-[14px] text-[#5A6272]">
                             20 years teaching | 13 years online math teacher{" "}
                             <span className="font-normal">
                               {" "}
@@ -437,7 +422,7 @@ const MainExplore = () => {
                               bla bla{" "}
                             </span>
                           </p>
-                          <p className="font-medium text-[16px] underline">
+                          <p className="font-medium text-[14px] underline cursor-pointer">
                             Learn more
                           </p>
                         </div>
@@ -454,11 +439,11 @@ const MainExplore = () => {
               );
             })}
 
-            <div className="flex justify-center items-center gap-2 mt-8 mb-12">
+            <div className="flex justify-center items-center gap-[7px] mt-[28px] mb-[43px]">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] border-2 transition-colors
+                className={`w-[43px] h-[43px] flex justify-center items-center rounded-[8px] border-2 transition-colors
                 ${
                   currentPage === 1
                     ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
@@ -466,8 +451,8 @@ const MainExplore = () => {
                 }`}
               >
                 <svg
-                  width="24"
-                  height="24"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -492,7 +477,7 @@ const MainExplore = () => {
                     <button
                       key={i}
                       onClick={() => setCurrentPage(i)}
-                      className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] font-bold text-[18px] transition-colors
+                      className={`w-[43px] h-[43px] flex justify-center items-center rounded-[8px] font-bold text-[16px] transition-colors
                       ${
                         currentPage === i
                           ? "bg-[#525FE1] text-white"
@@ -508,8 +493,8 @@ const MainExplore = () => {
               })()}
 
               {currentPage <= totalPages - 3 && (
-                <div className="w-[48px] h-[48px] flex justify-center items-center">
-                  <span className="text-[#2A2D34] font-bold text-[18px]">
+                <div className="w-[43px] h-[43px] flex justify-center items-center">
+                  <span className="text-[#2A2D34] font-bold text-[16px]">
                     ...
                   </span>
                 </div>
@@ -520,7 +505,7 @@ const MainExplore = () => {
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={currentPage === totalPages}
-                className={`w-[48px] h-[48px] flex justify-center items-center rounded-[8px] border-2 transition-colors
+                className={`w-[43px] h-[43px] flex justify-center items-center rounded-[8px] border-2 transition-colors
                   ${
                     currentPage === totalPages
                       ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
@@ -528,8 +513,8 @@ const MainExplore = () => {
                   }`}
               >
                 <svg
-                  width="24"
-                  height="24"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -545,7 +530,6 @@ const MainExplore = () => {
               </button>
             </div>
           </div>
-
         </div>
       </main>
     </>
