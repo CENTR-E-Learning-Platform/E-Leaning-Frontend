@@ -16,7 +16,7 @@ const MainSetting = () => {
         { label: "Profile",      icon: <User size={18} strokeWidth={1.6} />,       to: "/setting/profile" },
         { label: "Financial",    icon: <CreditCard size={18} strokeWidth={1.6} />, to: "/setting/financial" },
         { label: "Security",     icon: <ShieldCheck size={18} strokeWidth={1.6} />,to: "/setting/security" },
-        { label: "Notification", icon: <Bell size={18} strokeWidth={1.6} />,       to: "/setting/notification" },
+        { label: "Notification", icon: <Bell size={22} strokeWidth={1.6} />,       to: "/setting/notification" },
     ];
 
   return <>
