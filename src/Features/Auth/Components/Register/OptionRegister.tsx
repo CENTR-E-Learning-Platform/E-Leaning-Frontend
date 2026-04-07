@@ -3,7 +3,7 @@ import Reg_Log from "../../../../assets/images/Reg&Log.png";
 import teacher_img from "../../../../assets/images/Teacher.png";
 import student_img from "../../../../assets/images/Student.png";
 import { usehandelBackRegister } from "../../Hooks/useRegister";
-import logo from '../../../../assets/icons/logoE.png';
+import logo from '../../../../assets/icons/logo.svg';
 const OptionRegister: React.FC = () => {
   const { role, setrole, handleContinue } = usehandelBackRegister();
 
@@ -14,10 +14,10 @@ const OptionRegister: React.FC = () => {
           <section className="flex items-center justify-center">
             <div>
               <header className="flex justify-center items-center">
-                <img src={logo} className="w-[250px] h-full" alt="" />
+                <img src={logo} className="w-[150px] h-full" alt="" />
               </header>
 
-              <article className="flex flex-col items-center justify-center">
+              <article className="flex flex-col items-center justify-center mt-[20px]">
                 <h2 className="text-[40px] mt-[50] font-bold leading-[29px] font-poppins text-[#2A2D34]">
                   Join as a
                 </h2>

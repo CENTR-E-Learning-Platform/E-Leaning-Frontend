@@ -2,7 +2,7 @@ import React from "react";
 import Teach_page from "../../../../assets/images/TeacherPage.png";
 import { NavLink } from "react-router-dom";
 import { usehandelClickLogin } from "../../Hooks/useRegister";
-import logo from '../../../../assets/icons/logoE.png';
+import logo from '../../../../assets/icons/logo.svg';
 const TeacherOption: React.FC = () => {
   
   const { seteducationLevelOrSubject, educationLevelOrSubject, BackOption } = usehandelClickLogin();
@@ -14,10 +14,10 @@ const TeacherOption: React.FC = () => {
           <section className="flex items-center justify-center">
             <div>
               <header className="flex justify-center items-center">
-               <img src={logo} className="w-[250px] h-full" alt="" />
+               <img src={logo} className="w-[150px] h-full" alt="" />
               </header>
 
-              <article className="flex flex-col items-center justify-center">
+              <article className="flex flex-col items-center justify-center mt-[20px]" >
                 <h2 className="text-[28px] mt-[10px] font-bold leading-[20.390625px] text-[#2A2D34]">
                   What do you teach
                 </h2>
