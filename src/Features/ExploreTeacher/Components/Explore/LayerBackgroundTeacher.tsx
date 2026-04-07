@@ -1,9 +1,8 @@
-
 const LayerBackgroundTeacher = () => {
   return<>
-    <section className="layerBackGround top-[-23px] left-[-80px] -z-10 absolute ">
+    <section className="layerBackGround top-[-21px] left-[-76px] -z-10 absolute">
         <img
-            className="w-[236px] rotate-[99.81deg] h-[239]"
+            className="w-[224px] rotate-[99.81deg] h-[215px]"
             src="../../../../../src/assets/images/BackTeacher.png"
             alt="BackTeacher"
         />
