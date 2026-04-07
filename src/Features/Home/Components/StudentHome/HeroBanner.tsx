@@ -1,5 +1,5 @@
 import React from "react";
-import learningBro from "../../../assets/images/Learning-bro.png";
+import learningBro from "../../../../assets/images/Learning-bro.png";
 
 interface HeroBannerProps {
   date: string;
@@ -32,10 +32,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ date, title, subtitle })
         </button>
       </div>
 
-     
     </div>
      <img
-        className="absolute top-[70px] right-[86px] w-[289px] h-[289px] aspect-[]  "
+        className="absolute top-[70px] right-[100px] w-[289px] h-[289px] aspect-[]  "
         alt="Learning bro"
         src={learningBro}
       />
