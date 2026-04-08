@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import learningBro from "../../../../assets/images/Learning-bro.png";
+import { useStudentDashboardInfo } from "../../Hooks/useGetStudentDashboardInfo";
 
 interface HeroBannerProps {
   date: string;
@@ -8,6 +9,12 @@ interface HeroBannerProps {
 }
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ date, title, subtitle }) => {
+  
+  // const {data} = useStudentDashboardInfo();
+  // useEffect(()=>{
+  //   console.log(data);
+  // }, [])
+
   return (
     <div className="relative w-full overflow-visible bg-[linear-gradient(90deg,#525FE1_0%,#868EEA_100%)] rounded-[8px] min-h-[180px] sm:min-h-[200px] lg:min-h-[212px]">
       <div className="overflow-hidden absolute inset-0 rounded-[8px]" />
