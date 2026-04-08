@@ -27,8 +27,6 @@ const ProfileStudent = () => {
     major: "",
     grade: indexSelected,
   });
-  console.log(data);
-  // console.log(data?.data?.firstName);
 
   useEffect(() => {
     const path = data?.data?.fullProfilePiturePath;
@@ -64,7 +62,6 @@ const ProfileStudent = () => {
 
       setSelected(GRADES[data.data.grade] || GRADES[0]);
       setIndexSelected(data.data.grade || 0);
-
     }
   }, [data]);
 
@@ -73,43 +70,40 @@ const ProfileStudent = () => {
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  console.log(form);
+
   const handleSave = async () => {
-  try {
-    await studentProfileSchema.validate(form, { abortEarly: false });
+    try {
+      await studentProfileSchema.validate(form, { abortEarly: false });
 
-    setErrors({});
-    mutate(form , {
-      onError: (err: any) => {
-        console.error(err.response?.data);
-      }
-
-    }
-    );
-    
-  } catch (err: any) {
-    const validationErrors: Record<string, string> = {};
-    if (err.inner) {
-      err.inner.forEach((e: any) => {
-        validationErrors[e.path] = e.message;
+      setErrors({});
+      mutate(form, {
+        onError: (err: any) => {
+          console.error(err.response?.data);
+        },
       });
+    } catch (err: any) {
+      const validationErrors: Record<string, string> = {};
+      if (err.inner) {
+        err.inner.forEach((e: any) => {
+          validationErrors[e.path] = e.message;
+        });
+      }
+      setErrors(validationErrors);
     }
-    setErrors(validationErrors);
-  }
-};
+  };
 
   return (
     <>
       <section className="profile-student">
-        <div className="Adding-Student-Profile-Image relative mb-7">
+        <div className="Adding-Student-Profile-Image relative mb-[25px]">
           <img
-            className="w-[98px] h-[98px] rounded-full"
+            className="w-[88px] h-[88px] rounded-full  object-cover"
             src={previewImage ?? bg_imptyPhoto}
             alt="Student Profile Image"
           />
           <img
             onClick={() => setIsModalOpen(true)}
-            className="absolute w-6.5 h-6.5 bottom-0 left-18 bg-white border-2 border-[#525FE1] rounded-full p-1 cursor-pointer"
+            className="absolute w-[23px] h-[23px] bottom-0 left-[68px] bg-white border-2 border-[#525FE1] rounded-full p-[3px] cursor-pointer"
             src={PlusIcon}
             alt="PlusIcon"
           />
@@ -117,12 +111,12 @@ const ProfileStudent = () => {
 
         <div className="content-profile-student">
           <div className="flex items-center justify-center">
-            <div className="w-[544px] max-w-xl">
-              <div className="flex gap-4 mb-4">
+            <div className="w-[516px] max-w-full">
+              <div className="flex gap-[15px] mb-[14px]">
                 <div className="flex-1">
                   <label
                     htmlFor="firstName"
-                    className="block text-[16px] font-medium text-[#2A2D34] mb-2"
+                    className="block text-[15px] font-medium text-[#2A2D34] mb-[7px]"
                   >
                     First Name
                   </label>
@@ -132,18 +126,18 @@ const ProfileStudent = () => {
                     id="firstName"
                     value={form.firstName}
                     onChange={handleChange}
-                    className={`w-full border-2 rounded-[8px] px-4.5 py-3 text-gray-400 placeholder-gray-400 text-[16px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
+                    className={`w-full border-2 rounded-[8px] px-[17px] py-[11px] text-gray-400 placeholder-gray-400 text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
                       errors.firstName ? "border-red-500" : "border-[#D1D5DB]"
                     }`}
                   />
                   {errors.firstName && (
-                    <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+                    <p className="text-red-500 text-[13px] mt-1">{errors.firstName}</p>
                   )}
                 </div>
                 <div className="flex-1">
                   <label
                     htmlFor="secondName"
-                    className="block text-[16px] font-medium text-gray-700 mb-2"
+                    className="block text-[15px] font-medium text-gray-700 mb-[7px]"
                   >
                     Last Name
                   </label>
@@ -153,20 +147,20 @@ const ProfileStudent = () => {
                     id="secondName"
                     value={form.secondName}
                     onChange={handleChange}
-                    className={`w-full border-2 rounded-[8px] px-4.5 py-3 text-gray-400 placeholder-gray-400 text-[16px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
+                    className={`w-full border-2 rounded-[8px] px-[17px] py-[11px] text-gray-400 placeholder-gray-400 text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
                       errors.secondName ? "border-red-500" : "border-[#D1D5DB]"
                     }`}
                   />
                   {errors.secondName && (
-                    <p className="text-red-500 text-sm mt-1">{errors.secondName}</p>
+                    <p className="text-red-500 text-[13px] mt-1">{errors.secondName}</p>
                   )}
                 </div>
               </div>
 
-              <div className="mb-5">
+              <div className="mb-[18px]">
                 <label
                   htmlFor="email"
-                  className="block text-[16px] font-medium text-gray-700 mb-2"
+                  className="block text-[15px] font-medium text-gray-700 mb-[7px]"
                 >
                   Email
                 </label>
@@ -176,33 +170,33 @@ const ProfileStudent = () => {
                   name="email"
                   value={form.email}
                   onChange={handleChange}
-                  className={`w-full border-2 rounded-[8px] px-4.5 py-3 text-gray-400 placeholder-gray-400 text-[16px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
-                      errors.email ? "border-red-500" : "border-[#D1D5DB]"
+                  className={`w-full border-2 rounded-[8px] px-[17px] py-[11px] text-gray-400 placeholder-gray-400 text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
+                    errors.email ? "border-red-500" : "border-[#D1D5DB]"
                   }`}
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                  <p className="text-red-500 text-[13px] mt-1">{errors.email}</p>
                 )}
               </div>
 
-              <div className="mb-5">
+              <div className="mb-[18px]">
                 <label
                   htmlFor="grade"
-                  className="block text-[16px] font-medium text-gray-700 mb-2"
+                  className="block text-[15px] font-medium text-gray-700 mb-[7px]"
                 >
                   Grade
                 </label>
                 <div className="relative w-full">
                   <div
                     onClick={() => setOpen(!open)}
-                    className="w-full border-2 border-[#D1D5DB] rounded-[8px] px-4 py-3 flex justify-between items-center cursor-pointer bg-white"
+                    className="w-full border-2 border-[#D1D5DB] rounded-[8px] px-[15px] py-[11px] flex justify-between items-center cursor-pointer bg-white"
                   >
-                    <span className="text-gray-500">{selected}</span>
+                    <span className="text-gray-500 text-[15px]">{selected}</span>
 
                     <motion.svg
                       animate={{ rotate: open ? 180 : 0 }}
                       transition={{ duration: 0.3 }}
-                      className="w-4 h-4 text-gray-400"
+                      className="w-[14px] h-[14px] text-gray-400"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth={2}
@@ -239,7 +233,7 @@ const ProfileStudent = () => {
                               });
                               setOpen(false);
                             }}
-                            className="px-4 py-2 hover:bg-indigo-50 cursor-pointer text-sm"
+                            className="px-[15px] py-[7px] hover:bg-indigo-50 cursor-pointer text-[13px]"
                           >
                             {g || GRADES[form.grade]}
                           </li>
@@ -250,10 +244,10 @@ const ProfileStudent = () => {
                 </div>
               </div>
 
-              <div className="mb-5">
+              <div className="mb-[18px]">
                 <label
                   htmlFor="phoneNum"
-                  className="block text-[16px] font-medium text-gray-700 mb-2"
+                  className="block text-[15px] font-medium text-gray-700 mb-[7px]"
                 >
                   Your Phone Number
                 </label>
@@ -264,19 +258,19 @@ const ProfileStudent = () => {
                   value={form.phoneNum}
                   onChange={handleChange}
                   placeholder="012 3456 789"
-                  className={`w-full border-2 rounded-[8px] px-4.5 py-3 text-gray-400 placeholder-gray-400 text-[16px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
-                      errors.phoneNum ? "border-red-500" : "border-[#D1D5DB]"
+                  className={`w-full border-2 rounded-[8px] px-[17px] py-[11px] text-gray-400 placeholder-gray-400 text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
+                    errors.phoneNum ? "border-red-500" : "border-[#D1D5DB]"
                   }`}
                 />
                 {errors.phoneNum && (
-                  <p className="text-red-500 text-sm mt-1">{errors.phoneNum}</p>
+                  <p className="text-red-500 text-[13px] mt-1">{errors.phoneNum}</p>
                 )}
               </div>
 
-              <div className="mb-7">
+              <div className="mb-[25px]">
                 <label
                   htmlFor="ParentPhoneNumber"
-                  className="block text-[16px] font-medium text-gray-700 mb-2"
+                  className="block text-[15px] font-medium text-gray-700 mb-[7px]"
                 >
                   Parent Phone Number
                 </label>
@@ -287,12 +281,12 @@ const ProfileStudent = () => {
                   value={form.parentPhoneNumber}
                   onChange={handleChange}
                   placeholder="012 3456 789"
-                  className={`w-full border-2 rounded-[8px] px-4.5 py-3 text-gray-400 placeholder-gray-400 text-[16px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
-                      errors.parentPhoneNumber ? "border-red-500" : "border-[#D1D5DB]"
+                  className={`w-full border-2 rounded-[8px] px-[17px] py-[11px] text-gray-400 placeholder-gray-400 text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition ${
+                    errors.parentPhoneNumber ? "border-red-500" : "border-[#D1D5DB]"
                   }`}
                 />
                 {errors.parentPhoneNumber && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="text-red-500 text-[13px] mt-1">
                     {errors.parentPhoneNumber}
                   </p>
                 )}
@@ -302,7 +296,7 @@ const ProfileStudent = () => {
                 <button
                   onClick={handleSave}
                   disabled={isPending}
-                  className="bg-[#525FE1] mb-[30px] hover:bg-indigo-600 active:scale-95 text-white font-semibold text-sm px-8 py-3 rounded-[8px] transition-all duration-150 shadow-sm"
+                  className="bg-[#525FE1] mb-[27px] hover:bg-indigo-600 active:scale-95 text-white font-semibold text-[13px] px-[30px] py-[11px] rounded-[8px] transition-all duration-150 shadow-sm"
                 >
                   {isPending ? "Saving..." : "Save Changes"}
                 </button>
