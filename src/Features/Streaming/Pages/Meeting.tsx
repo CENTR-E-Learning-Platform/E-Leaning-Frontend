@@ -21,7 +21,7 @@ import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
 import NotifyRaiseHand from "../Components/meeting/NotifyRaiseHand";
 
 const Meeting: React.FC = () => {
-  const [width, setWidth] = useState<number>(1400);
+  const [width, setWidth] = useState<number>(1500);
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [isClickcha, setIsClickcha] = useState<boolean>(false);
   const [hand, setHand] = useState<boolean>(false);
