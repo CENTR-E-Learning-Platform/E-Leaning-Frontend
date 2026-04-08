@@ -1,5 +1,6 @@
 import axios from "axios";
-import { GET_STUDENT_DASHBOARD_INFO } from "../Utils/api";
+import { GET_STUDENT_DASHBOARD_INFO } from "../Utils/Api";
+
 
 export const GetStudentDashboardInfo = async () =>{
     const token = localStorage.getItem("token");
