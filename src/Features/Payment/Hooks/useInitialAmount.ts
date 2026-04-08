@@ -7,6 +7,10 @@ export const useInitialAmount = ()=> {
     const sendAmount =async () => {
         try{
             const response = await amountServices(Amount);
+            console.log(Amount);
+            
+            localStorage.removeItem("publicKey");
+            localStorage.removeItem("clientSecret");
             //console.log("ptimary key", response)
             await localStorage.setItem("publicKey", response.data.data.publicKey);
             await localStorage.setItem("clientSecret", response.data.data.clientSecret);
@@ -14,7 +18,7 @@ export const useInitialAmount = ()=> {
             console.log("data of pyment -----------------?",response.data.data);
         }catch(err){
             console.log("exceptions "+ err);  
-            alert(err);     
+            alert(err +" eeeeeee");     
         }        
     }
     
@@ -23,7 +27,7 @@ export const useInitialAmount = ()=> {
             const response = await paymob(userDetails);
             console.log(response.data);
             localStorage.setItem("masked_pan", response.data.masked_pan);
-            localStorage.setItem("tokenpayment", response.data.token);
+            localStorage.setItem("paymentMethods list", response.data.token);
         } catch(err){
             console.log("try catch", err);
         }
