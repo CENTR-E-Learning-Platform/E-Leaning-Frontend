@@ -104,7 +104,7 @@ export const MainStudentHome: React.FC = () => {
       statusLabel: "6 hr left",
       joinBg: "bg-[#525fe180]",
       titleContainerClass:
-        "flex items-center justify-center gap-2.5 relative self-stretch w-full flex-[0_0_auto]",
+        "flex items-center gap-2.5 relative self-stretch w-full flex-[0_0_auto]",
     },
   ];
 
