@@ -25,13 +25,13 @@ export const UpcomingClassItem: React.FC<Props> = ({ cls, isLast }) => {
   return (
     <div className="flex flex-col items-start p-0 gap-[20px] w-[639px]">
       
-      {/* Card Content Row */}
+      
       <div className="flex flex-row justify-between items-center w-[639px] h-[110px]">
         
-        {/* Left Side: Time & Info */}
+        
         <div className="flex flex-row items-center p-0 gap-[20px] w-[359px] h-[110px]">
           
-          {/* Time Box */}
+          
           <div className="box-border relative w-[110px] h-[110px] bg-[#FFFFFF] border-2 border-solid border-[#E8EAED] rounded-[12px]">
             <span className="absolute left-[16px] top-[38px] font-['Poppins'] font-semibold text-[36px] leading-[24px] text-[#2A2D34]">
               {cls.time}
@@ -41,7 +41,7 @@ export const UpcomingClassItem: React.FC<Props> = ({ cls, isLast }) => {
             </span>
           </div>
 
-          {/* Class Info */}
+
           <div className="flex flex-col items-start p-0 gap-[16px] w-[229px]">
             <div className="flex flex-col items-start p-0 gap-[12px] w-[229px]">
               <span className={`font-['Poppins'] font-semibold text-[18px] leading-[13px] text-[#2A2D34] w-[229px] truncate ${cls.titleContainerClass || ""}`}>
@@ -55,7 +55,7 @@ export const UpcomingClassItem: React.FC<Props> = ({ cls, isLast }) => {
               </div>
             </div>
 
-            {/* Teacher Info */}
+
             <div className="flex flex-row items-center p-0 gap-[8px]">
               <img 
                 className="w-[28px] h-[28px] rounded-full object-cover" 
@@ -69,10 +69,10 @@ export const UpcomingClassItem: React.FC<Props> = ({ cls, isLast }) => {
           </div>
         </div>
 
-        {/* Right Side: Status & Button */}
+
         <div className="flex flex-row items-center p-0 gap-[24px]">
           
-          {/* Status Indicator */}
+          
           <div className="flex flex-row justify-center items-center p-0 gap-[8px]">
             <div className={`w-[10px] h-[10px] rounded-full ${cls.statusDot}`} />
             <span className={`font-['Poppins'] font-semibold text-[16px] leading-[12px] ${cls.statusText}`}>
@@ -80,7 +80,7 @@ export const UpcomingClassItem: React.FC<Props> = ({ cls, isLast }) => {
             </span>
           </div>
 
-          {/* Join Button */}
+
           <button className={`box-border flex flex-row justify-center items-center px-[16px] py-[14px] gap-[4px] w-[123px] h-[41px] rounded-[8px] border-none cursor-pointer ${cls.joinBg}`}>
             <span className="font-['Poppins'] font-semibold text-[18px] leading-[13px] text-[#F9FBFC] m-0 p-0">
               Join class
@@ -90,7 +90,6 @@ export const UpcomingClassItem: React.FC<Props> = ({ cls, isLast }) => {
 
       </div>
 
-      {/* Divider */}
       {!isLast && (
         <div className="w-[639px] h-[0px] border-t border-solid border-[#E8EAED]" />
       )}
