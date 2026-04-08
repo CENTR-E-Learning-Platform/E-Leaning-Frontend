@@ -27,7 +27,7 @@ export const useRegister = () => {
       console.log("Form data", values);
       setUserData(values);
       RegisterClick(finalData);
-      navigate("/confing");
+      navigate("/login");
     },
   });
 
