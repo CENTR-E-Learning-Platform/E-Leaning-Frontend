@@ -115,7 +115,8 @@ const Meeting: React.FC = () => {
       }
     }
   };
-
+  const teacherName = localStorage.getItem("teacherName") || "Host";
+  const teacherProfileImagePath = localStorage.getItem("teacherProfileImagePath") || teacher;
   // const toggleFullScreen = () => {
   //   if (!isfull) {
   //     document.documentElement.requestFullscreen().catch((err) => {
@@ -134,9 +135,9 @@ const Meeting: React.FC = () => {
     <div className="h-screen overflow-hidden bg-[#2A2D34] flex flex-col">
       {!isfull && (
         <div className="ms-[24px] mt-[24px] flex justify-between">
-          <div className="w-[281px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center p-[4px]">
-            <img src={teacher} className="w-[40px] h-[40px] rounded-full me-[13px]" alt="Host" />
-            <h1 className="text-[16px] text-[#F9FBFC] me-[13px]">Hosted by Mr.Mohammed</h1>
+          <div className="w-fit pe-[10px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center p-[4px]">
+            <img src={teacherProfileImagePath} className="w-[40px] h-[40px] rounded-full me-[13px]" alt="Host" />
+            <h1 className="text-[16px] text-[#F9FBFC] me-[13px]">Mr {teacherName}</h1>
           </div>
           <div className="flex me-[30px] gap-4">
             {/* <div className="w-[187px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center cursor-pointer">
