@@ -1,20 +1,21 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useTeacherProfile } from '../../Features/Profile/Hooks/useTeacherProfile';
 import bg_imptyPhoto from "../../assets/images/imptyPhoto.jpg";
 import { BASE_URL } from '../../Features/Calendar/Utils/api';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import logo from '../../assets/icons/logo.svg';
 import notify from '../../../src/assets/icons/NotificationIcon.svg';
 import UserProfileDropdown from './UserProfileDropdown';
+import { CLoader } from '../UI/CLoader'; 
 
 const Navbar = () => {
     const { data } = useTeacherProfile();
     const [isAuth, setIsAuth] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const location = useLocation();
 
     useEffect(() => {
-       
         const token = localStorage.getItem("token");
         if (token) {
             setIsAuth(true);
@@ -26,7 +27,6 @@ const Navbar = () => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setIsDropdownOpen(false);
             }
-            
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -39,7 +39,7 @@ const Navbar = () => {
         setIsDropdownOpen(false);
     };
 
-    const navLinkClasses = ({ isActive }:any) => {
+    const navLinkClasses = ({ isActive }: any) => {
         const baseClasses = "relative font-medium p-2 flex gap-[8px] justify-between items-center text-[16px] leading-[24px] cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#525FE1] after:transition-all after:duration-300 hover:after:w-full";
         
         return `${baseClasses} ${isActive ? 'text-[#525FE1] after:w-full' : 'text-[#2A2D34] after:w-0'}`;
@@ -118,8 +118,17 @@ const Navbar = () => {
             }
         </nav>
 
-        <main>
-            <Outlet />
+        <main className="w-full">
+            <Suspense 
+            key={location.pathname}
+                fallback={
+                    <div className="flex justify-center items-center w-full h-[calc(100vh-66px)]">
+                        <CLoader size="md" label="" />
+                    </div>
+                }
+            >
+                <Outlet />
+            </Suspense>
         </main>
     </>
 }

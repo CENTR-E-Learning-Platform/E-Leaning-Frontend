@@ -3,7 +3,13 @@ import { initialValues } from "../Types/Types";
 import { addWallet } from "../Services/addWallet";
 import { walletValidationSchema } from "../Validation/walletValidationSchema";
 import { getBalance } from "../Services/getBalance";
+import { useSettingContext } from "../Context/useSettingContext";
+import { deleteWallet } from "../Services/deleteWallet";
+import { disburse } from "../Services/disburse";
+import { ca } from "date-fns/locale";
 export const useFinancial = () => {
+
+    const {setIsCreated} = useSettingContext();
     const formik = useFormik({
         initialValues,
         validationSchema: walletValidationSchema,
@@ -29,6 +35,7 @@ export const useFinancial = () => {
                 const response = await addWallet(params);
                 console.log(response.data);
                 console.log("success");
+                setIsCreated(true);
             } catch (err: any) {
                 console.log("Error Details:", err.response?.data);
                 console.log(err);
@@ -45,6 +52,25 @@ export const useFinancial = () => {
             console.log(err);
         }
     }
+
+    const DeleteWallet = async () => {
+        try {
+            await deleteWallet();
+            console.log("deleted");
+        }catch (err: any) {
+            console.log("Error Details:", err.response?.data);
+            console.log(err);
+        }
+    }
     
-    return { formik , GetBalance };
+    const Disburse = async () => {
+        try {
+            await disburse();
+            console.log("disbursed");
+        }catch (err: any) {
+            console.log("Error Details:", err.response?.data);
+            console.log(err);
+        }
+    }
+    return { formik , GetBalance , DeleteWallet , Disburse};
 };

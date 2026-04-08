@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
+import { lazy } from "react"; 
 import MainRegister from "../Features/Auth/Pages/MainRegister";
 import MainLogin from "../Features/Auth/Pages/MainLogin";
-import OptionRegister from "../Features/Auth/Components/Register/OptionRegister";
 import TeacherOption from "../Features/Auth/Components/Register/TeacherOption";
 import StudentOption from "../Features/Auth/Components/Register/StudentOption";
 import OTP from "../Features/Auth/Components/Log in/OTP";
@@ -12,19 +12,33 @@ import MainPayment from "../Features/Payment/Pages/MainPayment";
 import DynamicPaymentCard from "../Features/Payment/Components/Payment/DynamicPaymentCard";
 import DynamicPaymentMobileWallet from "../Features/Payment/Components/Payment/DynamicPaymentMobileWallet";
 import DynamicPaymentMobileWalletconfirm from "../Features/Payment/Components/Payment/DynamicPaymentMobileWalletconfirm";
-import Meeting from "../Features/Streaming/Pages/Meeting";
 import LiveRoom from "../Features/Streaming/Pages/LiveRoom";
 import CreateRoomTeacher from "../Features/Streaming/Pages/CreateRoomTeacher";
 import JoinNow from "../Features/Streaming/Pages/JoinNow";
 import ChatForm from "../Features/Streaming/Components/chat/ChatForm";
 import JoinRoomStudent from "../Features/Streaming/Pages/JoinRoomStudent";
-import MainCalendar from "../Features/Calendar/Pages/MainCalendar";
 import GoodBy from "../Features/Streaming/Pages/GoodBye";
-import NotifyRaiseHand from "../Features/Streaming/Components/meeting/NotifyRaiseHand";
-import MainExplore from "../Features/ExploreTeacher/Pages/MainExplore";
 import ViewTeacher from "../Features/Profile/Pages/ViewTeacher";
 import Navbar from "../Components/Navbar/Navbar";
-import { MainContentSection } from "../Features/Home/Pages/MainContentSection";
+import MainSetting from "../Features/Setting/Pages/MainSetting";
+import ProfileStudent from "../Features/Setting/Components/ProfileStudent/ProfileStudent";
+import MainFinancial from "../Features/Setting/Components/Financial/MainFinancial";
+import ChangePassword from "../Features/Setting/Components/Security/ChangePassword";
+import NotificationsSettings from "../Features/Setting/Components/NotificationsSetting/NotificationsSettings";
+import { CLoader } from "../Components/UI/CLoader";
+import OptionRegister from "../Features/Auth/Components/Register/OptionRegister";
+const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000) => {
+  return lazy(() =>
+    Promise.all([
+      importFunction(),
+      new Promise((resolve) => setTimeout(resolve, delay)), 
+    ]).then(([moduleExports]) => moduleExports) 
+  );
+};
+const MainCalendar = lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar"));
+const MainExplore = lazyWithDelay(() => import("../Features/ExploreTeacher/Pages/MainExplore"));
+const MainTeacherHome = lazyWithDelay(() => import("../Features/Home/Pages/MainTeacherHome"));
+
 export const router = createBrowserRouter([
   {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
     {path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard/>},
@@ -33,28 +47,32 @@ export const router = createBrowserRouter([
     {path: "/explore/TeacherPayment/mobileWallet/confirm", element:  <DynamicPaymentMobileWalletconfirm/>}
   ]
   },
+  
+
   { path: "/", element: <Navbar/> , children: [
+    { path: "OptionRegister", element: <OptionRegister /> },
+    // { path: "/meeting", element: <LiveRoom /> },
+    { path: "Calendar", element: <MainCalendar/> },
+    { path: "explore", element: <MainExplore/> },
+    { path: "home", element: <MainTeacherHome/> },
+  ] },
 
-  { path: "OptionRegister", element: <OptionRegister /> },
-
-  // { path: "/meeting", element: <LiveRoom /> },
- 
-  { path: "Calendar", element: <MainCalendar/> },
-  { path: "/explore", element: <MainExplore/> },
-  { path: "/home", element: <MainContentSection/> },
-
+  { path: "/setting", element: <MainSetting/> , children: [
+    {path: "profile", element: <ProfileStudent/>},
+    {path: "financial", element: <MainFinancial/>},
+    {path: "security", element: <ChangePassword/>},
+    {path: "notification", element: <NotificationsSettings/>},
   ] },
   { path: "teacher-option", element: <TeacherOption /> },
   { path: "student-option", element: <StudentOption /> },
   { path: "/confing", element: <EmailConfig /> },
-  
   { path: "/createroom", element: <CreateRoomTeacher /> },
   { path: "/createroom/joinnow", element: <JoinNow/> },
   { path: "/createroom/joinnow/meeting", element: <LiveRoom/> },
   { path: "/createroom/joinnow/meeting/chat", element: <ChatForm/> },
   { path: "/createroom/joinStudent", element: <JoinRoomStudent/> },
-    { path: "/GoodBy",  element: <GoodBy/> },
-      { path: "/auth", element: <OptionRegister /> },
+  { path: "/GoodBy",  element: <GoodBy/> },
+  { path: "/auth", element: <OptionRegister /> },
   { path: "register", element: <MainRegister /> },
   { path: "login", element: <MainLogin /> },
   { path: "login/otp", element: <OTP /> },
@@ -62,6 +80,5 @@ export const router = createBrowserRouter([
   { path: "login/SendEmail/otp", element: <OTP /> },
   { path: "login/SendEmail/otp/setNewPassword", element: <SetNewPassword /> },
   { path: "/profile", element: <ViewTeacher/> },
-  
-
+  { path: "/loder", element: <CLoader/> },
 ]);

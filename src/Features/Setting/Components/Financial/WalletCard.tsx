@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useFinancial } from '../../Hooks/useFinancial';
+import { useSettingContext } from '../../Context/useSettingContext';
+import { set } from 'date-fns';
 
 interface WalletCardProps {
   icon: string;
@@ -21,6 +24,23 @@ const WalletCard: React.FC<WalletCardProps> = ({
   onButtonClick,
   onOptionsClick,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const {DeleteWallet , Disburse} = useFinancial();
+  const {setIsCreated , setShowAddFlow} = useSettingContext();
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="box-border flex flex-row justify-between items-center p-4 w-full max-w-[692px] h-[82px] bg-white border border-[#E8EAED] rounded-lg font-['Poppins']">
       <div className="flex flex-row items-center gap-4">
@@ -39,24 +59,49 @@ const WalletCard: React.FC<WalletCardProps> = ({
 
       <div className="flex flex-row justify-center items-center gap-4">
         <button
-          onClick={onButtonClick}
-          className="box-border flex flex-row justify-center items-center px-4 py-[16px] gap-2 h-[45px] border-2 border-[#525FE1] rounded-lg bg-transparent cursor-pointer  "
+          onClick={()=> Disburse()}
+          className="box-border flex flex-row justify-center items-center px-4 py-[16px] gap-2 h-[45px] border-2 border-[#525FE1] rounded-lg bg-transparent cursor-pointer"
         >
-          <div className="flex items-center justify-center w-[20px] h-[18px]">
+          <div 
+          
+          className="flex items-center justify-center w-[20px] h-[18px]">
              <img src={buttonIcon} alt="" />
           </div>
           <span className="font-medium text-[15px] text-[#525FE1] leading-[13px]">
             {buttonText}
           </span>
         </button>
-        <button
-          onClick={onOptionsClick}
-          className="flex justify-center items-center bg-transparent border-none cursor-pointer p-2 hover:bg-gray-50 rounded-full transition-colors"
-        >
-         <img src={list} alt="" />
-        </button>
+        
+        <div className="relative flex items-center" ref={dropdownRef}>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex justify-center items-center bg-transparent border-none cursor-pointer p-2 hover:bg-gray-50 rounded-full transition-colors"
+          >
+           <img src={list} alt="" />
+          </button>
+
+          {isOpen && (
+            <div className="absolute right-[-45px] top-full mt-1 w-[80px] bg-white border border-[#E8EAED] rounded shadow-sm z-10 flex flex-col overflow-hidden">
+              <button
+                onClick={async () => {
+                try {
+                  await DeleteWallet(); 
+                  setIsCreated((prev) => !prev); 
+                  setShowAddFlow(false);
+                } catch (error) {
+                  console.error("Error deleting wallet:", error);
+                }
+                }}
+                className="px-4 py-2 text-center text-[14px] text-[#D24747] hover:bg-[#F9FBFC] transition-colors w-full bg-transparent border-none cursor-pointer font-['Poppins']"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
+
 export default WalletCard;
