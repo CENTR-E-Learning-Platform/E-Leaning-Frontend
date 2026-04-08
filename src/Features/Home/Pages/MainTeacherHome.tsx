@@ -10,8 +10,17 @@ import {
 import RecentMessages from "../Components/TeacherHome/RecentMessages";
 import RecentHomeworks from "../Components/TeacherHome/RecentHomeworks";
 import RecentReviews from "../Components/TeacherHome/RecentReviews";
+import { useTeacherDashboardInfo } from "../Hooks/useGetTeacherDashboardInfo";
+import { useNavigate } from "react-router-dom";
 
 const MainTeacherHome = () => {
+
+  const navigate = useNavigate();
+
+  // Call API to get the dashboard info and pass it to the components as needed
+    const {data} = useTeacherDashboardInfo();
+    console.log(data?.data?.data);
+
   const upcomingClassesData: UpcomingClassData[] = [
     {
       time: "8:30",
@@ -20,7 +29,7 @@ const MainTeacherHome = () => {
       subject: "Chemistry",
       subjectBg: "bg-[#daf3ff]",
       subjectText: "text-[#0182c2]",
-      teacherImg: "/ellipse-4.svg",
+      teacherImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&h=150&auto=format&fit=crop",
       teacherName: "Mr. Naser elbatal",
       statusDot: "bg-[#cc3363]",
       statusText: "text-[#cc3363]",
@@ -35,14 +44,14 @@ const MainTeacherHome = () => {
       subject: "Pure mathematics",
       subjectBg: "bg-[#ffdddd]",
       subjectText: "text-[#601d1d]",
-      teacherImg: "/ellipse-4-2.svg",
+      teacherImg: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=150&h=150&auto=format&fit=crop",
       teacherName: "Mr. Mohamed salama",
       statusDot: "bg-[#2db583]",
       statusText: "text-[#2db583]",
       statusLabel: "6 hr left",
       joinBg: "bg-[#525fe180]",
       titleContainerClass:
-        "flex items-center justify-center gap-2.5 relative self-stretch w-full flex-[0_0_auto]",
+        "flex items-center gap-2.5 relative self-stretch w-full flex-[0_0_auto]",
     },
   ];
   const statsData = [
@@ -55,7 +64,7 @@ const MainTeacherHome = () => {
         />
       ),
       label: "Total Classes",
-      value: "36",
+      value: (data?.data?.data?.classesCount ??"").toString(),
       labelWidth: "w-[138px]",
     },
     {
@@ -69,8 +78,8 @@ const MainTeacherHome = () => {
         </div>
       ),
       label: "Total Students",
-      value: "129",
-      labelWidth: "w-[85px]",
+      value: (data?.data?.data?.studentsCount ?? "").toString(),
+      labelWidth: "w-[166px]",
     },
     {
       icon: (
@@ -81,7 +90,7 @@ const MainTeacherHome = () => {
         />
       ),
       label: "Total Income",
-      value: "12,200 EGP",
+      value: (data?.data?.data?.totalIncome ?? "").toString(),
       labelWidth: "w-[166px]",
     },
     {
@@ -93,10 +102,9 @@ const MainTeacherHome = () => {
         />
       ),
       label: "Rating",
-      value: "4.8",
+      value: (data?.data?.data?.teacherRating ?? "").toString(),
       labelWidth: "w-[108px]",
-      iconWrapperClass:
-        "flex w-14 items-center justify-center gap-2.5 p-[15px] relative bg-[#525fe133] rounded-lg",
+     
     },
   ];
   return (
@@ -106,7 +114,7 @@ const MainTeacherHome = () => {
           <div className="flex flex-col w-[1200px] items-start gap-9 pb-10">
             <HeroBanner
               date="Nov 22, 2025"
-              subtitle={"Welcome back, Mr. Mohamed"}
+              subtitle={`Welcome back, ${data?.data?.data?.teacherName}`}
               title="you have 3 classes today"
             />
 
@@ -118,7 +126,6 @@ const MainTeacherHome = () => {
                   label={stat.label}
                   value={stat.value}
                   labelWidth={stat.labelWidth}
-                  iconWrapperClass={stat.iconWrapperClass}
                 />
               ))}
             </div>
@@ -131,7 +138,9 @@ const MainTeacherHome = () => {
                       Upcoming classes
                     </div>
                     <button className="bg-transparent border-none cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-0 relative flex-[0_0_auto] rounded-lg">
-                      <div className="relative w-fit mt-[-2.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap">
+                      <div onClick={() => {
+                        navigate("/Calendar");
+                      }} className="relative w-fit mt-[-2.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap">
                         View Schedule
                       </div>
                     </button>
