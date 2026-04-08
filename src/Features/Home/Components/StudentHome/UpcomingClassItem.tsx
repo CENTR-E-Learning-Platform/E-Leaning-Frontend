@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useUpcomingClasses } from "../../Hooks/useGetUpcomingClasses";
 
 export interface UpcomingClassData {
   time: string;
@@ -22,6 +23,9 @@ interface Props {
 }
 
 export const UpcomingClassItem: React.FC<Props> = ({ cls, isLast }) => {
+  const {data} = useUpcomingClasses();
+  console.log(data);
+  
   return (
     <div className="flex flex-col items-start p-0 gap-[20px] w-[639px]">
       <div className="flex flex-row justify-between items-center w-[639px] h-[110px]">
