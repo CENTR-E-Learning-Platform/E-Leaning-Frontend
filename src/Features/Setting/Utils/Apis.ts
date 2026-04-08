@@ -6,6 +6,8 @@ const UPLOADIMAGE_API = `${BASE_URL}/api/TeacherProfile/Add%20Image`;
 const CHANGE_PASSWORD = `${BASE_URL}/Account/change-password`
 const ADD_WALLET = `${BASE_URL}/api/TeacherPayment/Add%20Wallet`
 const BALANCE = `${BASE_URL}/api/TeacherPayment/balance`
+const DELETE_WALLET = `${BASE_URL}/api/TeacherPayment/DeleteWallet`
+const DISBURSE = `${BASE_URL}/api/TeacherPayment/disburse`
 
 export{
     GET_STUDENT_PROFILE_API,
@@ -14,6 +16,8 @@ export{
     UPLOADIMAGE_API,
     CHANGE_PASSWORD,
     ADD_WALLET,
-    BALANCE
+    BALANCE,
+    DELETE_WALLET,
+    DISBURSE
 }
 
