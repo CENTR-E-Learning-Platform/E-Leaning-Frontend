@@ -104,7 +104,7 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                       />
                     </div>
                     <span className="text-[12px] text-center text-[#6D7588]">
-                      Mr. Mohamed salama
+                     {e.teacherName}
                     </span>
                   </div>
                   <button
@@ -114,6 +114,8 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                     onClick={async () => {
                       if (!isDisabled) {
                         await localStorage.setItem("sessionName", e.roomName);
+                        await localStorage.setItem("teacherName", e.teacherName);
+                        await localStorage.setItem("teacherProfileImagePath", e.profilePicturePath);
                         window.open("/createroom/joinnow", "_blank");
                       }
                     }}
