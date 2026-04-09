@@ -10,12 +10,14 @@ export const usefilterteach = () => {
    const [startPrice, setStartPrice] = useState(50);
    const [endPrice, setEndPrice] = useState(300);
    const [selectedRating, setSelectedRating] = useState<number | null>(null);
+   const [searchTerm, setSearchTerm] = useState<string | null>(null);
    let endRating = selectedRating !== null ? selectedRating + 0.5 : null;
-
+   console.log(searchTerm);
    const { data, error, isLoading , refetch } = useQuery({
-        queryKey: ["filter" , selectedLanguage, selectedDay, startTime, endTime, startPrice, endPrice, selectedRating],
+        queryKey: ["filter" , selectedLanguage, selectedDay, startTime, endTime, startPrice, endPrice, selectedRating , searchTerm],
         queryFn: ()=>{
             return sendFilterData({
+                searchTerm: searchTerm ?? "",
                 Subject: `${selectedLanguage}`,
                 MinDateHour: `${startTime}`,
                 MaxDateHour: `${endTime}`,
@@ -36,5 +38,6 @@ export const usefilterteach = () => {
     return { data , error, isLoading , selectedLanguage , setSelectedLanguage , selectedDay, setSelectedDay  ,
         startTime, setStartTime , endTime, setEndTime , startPrice, setStartPrice , endPrice, setEndPrice , selectedRating ,
         setSelectedRating , endRating , applyFilters: refetch
+        , searchTerm, setSearchTerm
     };
 }
