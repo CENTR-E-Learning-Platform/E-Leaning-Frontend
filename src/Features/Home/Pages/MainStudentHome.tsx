@@ -16,8 +16,17 @@ import image from "../../../assets/icons/Vector (28).svg";
 import vector3 from "../../../assets/icons/mdi_human-greeting-variant.svg";
 import RecentMessages from "../Components/StudentHome/RecentMessages";
 import RecentHomeworks from "../Components/StudentHome/RecentHomeworks";
+import { useUpcomingClasses } from "../Hooks/useGetUpcomingClasses";
+import { useStudentDashboardInfo } from "../Hooks/useGetStudentDashboardInfo";
+import { useNavigate } from "react-router-dom";
 
 export const MainStudentHome: React.FC = () => {
+    const navigate = useNavigate();
+  // Call API to get the dashboard info and pass it to the components as needed
+  const { data: dataDashboard } = useStudentDashboardInfo();
+  console.log("StudentDashboardInfo hook called", dataDashboard?.data?.data);
+  const { data: dataUpcoming } = useUpcomingClasses();
+  console.log("UpcomingClasses hook called", dataUpcoming);
 
   const statsData = [
     {
@@ -29,7 +38,7 @@ export const MainStudentHome: React.FC = () => {
         />
       ),
       label: "Completed Classes",
-      value: "25",
+      value: dataDashboard?.data?.data?.completedClasses,
       labelWidth: "w-[138px]",
     },
     {
@@ -43,7 +52,7 @@ export const MainStudentHome: React.FC = () => {
         </div>
       ),
       label: "Attendance",
-      value: "90%",
+      value: `${dataDashboard?.data?.data?.attendancePercentage}%`,
       labelWidth: "w-[85px]",
     },
     {
@@ -55,7 +64,7 @@ export const MainStudentHome: React.FC = () => {
         />
       ),
       label: "Completed Homeworks",
-      value: "25",
+      value: dataDashboard?.data?.data?.completedHomeworks || "0",
       labelWidth: "w-[166px]",
     },
     {
@@ -67,46 +76,29 @@ export const MainStudentHome: React.FC = () => {
         />
       ),
       label: "Active Subjects",
-      value: "2",
+      value: dataDashboard?.data?.data?.activeSubjects,
       labelWidth: "w-[108px]",
       iconWrapperClass:
         "flex w-14 items-center justify-center gap-2.5 p-[15px] relative bg-[#525fe133] rounded-lg",
     },
   ];
 
-  const upcomingClassesData: UpcomingClassData[] = [
-    {
-      time: "8:30",
-      period: "am",
-      title: "The mole - class 3",
-      subject: "Chemistry",
+  const classes: UpcomingClassData[] =
+    dataUpcoming?.data?.data?.map((item: any) => ({
+      time: item.sessionTime,
+      period: item.period,
+      title: item.sessionTitle,
+      subject: item.subjectName,
       subjectBg: "bg-[#daf3ff]",
       subjectText: "text-[#0182c2]",
-      teacherImg: "/ellipse-4.svg",
-      teacherName: "Mr. Naser elbatal",
+      teacherImg:
+        "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=150&h=150&auto=format&fit=crop",
+      teacherName: item.teacherName || "Mr. Naser elbatal",
       statusDot: "bg-[#cc3363]",
       statusText: "text-[#cc3363]",
-      statusLabel: "2 min left",
+      statusLabel: item.status,
       joinBg: "bg-[#525fe1]",
-      titleContainerClass: "",
-    },
-    {
-      time: "2:00",
-      period: "pm",
-      title: "Differential equations - Class 5",
-      subject: "Pure mathematics",
-      subjectBg: "bg-[#ffdddd]",
-      subjectText: "text-[#601d1d]",
-      teacherImg: "/ellipse-4-2.svg",
-      teacherName: "Mr. Mohamed salama",
-      statusDot: "bg-[#2db583]",
-      statusText: "text-[#2db583]",
-      statusLabel: "6 hr left",
-      joinBg: "bg-[#525fe180]",
-      titleContainerClass:
-        "flex items-center gap-2.5 relative self-stretch w-full flex-[0_0_auto]",
-    },
-  ];
+    })) || [];
 
   const recommendedTeachersData: TeacherData[] = [
     {
@@ -165,24 +157,25 @@ export const MainStudentHome: React.FC = () => {
 
         <div className="flex items-start gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
           <div className="flex flex-col w-[687px] items-end gap-9 relative">
-            
             <div className="flex flex-col min-w-[643px] items-start gap-7 px-6 py-[30px] relative self-stretch w-full flex-[0_0_auto] bg-white rounded-lg border border-solid border-[#e8eaed]">
               <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
                 <div className="relative w-fit mt-[-1.00px] font-bold text-[#2a2d34] text-2xl tracking-[0] leading-[17px] whitespace-nowrap">
                   Upcoming classes
                 </div>
                 <button className="bg-transparent border-none cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-0 relative flex-[0_0_auto] rounded-lg">
-                  <div className="relative w-fit mt-[-2.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap">
+                  <div onClick={() => {
+                        navigate("/Calendar");
+                      }} className="relative w-fit mt-[-2.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap">
                     View Schedule
                   </div>
                 </button>
               </div>
               <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-                {upcomingClassesData.map((cls, index) => (
+                {classes.map((cls: any, index: number) => (
                   <UpcomingClassItem
-                    key={index}
+                    key={cls.id || index}
                     cls={cls}
-                    isLast={index === upcomingClassesData.length - 1}
+                    isLast={index === classes.length - 1}
                   />
                 ))}
               </div>
@@ -194,7 +187,9 @@ export const MainStudentHome: React.FC = () => {
                   Recommended Teachers
                 </div>
                 <button className="bg-transparent border-none cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-3.5 relative flex-[0_0_auto] rounded-lg">
-                  <div className="relative w-fit mt-[-1.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap">
+                  <div onClick={() => {
+                        navigate("/explore");
+                      }} className="relative w-fit mt-[-1.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap">
                     Explore More
                   </div>
                 </button>
@@ -208,11 +203,9 @@ export const MainStudentHome: React.FC = () => {
           </div>
 
           <div className="flex flex-col w-[453px] items-start gap-9 relative">
-            
-            <RecentHomeworks/>
-            
-            <RecentMessages/>
+            <RecentHomeworks />
 
+            <RecentMessages />
           </div>
         </div>
       </div>
