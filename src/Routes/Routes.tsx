@@ -55,10 +55,13 @@ export const router = createBrowserRouter([
     { path: "Calendar", element: <MainCalendar/> },
     { path: "explore", element: <MainExplore/> },
     { path: "home", element: <MainTeacherHome/> },
+    { path: "", element: <MainTeacherHome/> },
+
   ] },
 
   { path: "/setting", element: <MainSetting/> , children: [
     {path: "profile", element: <ProfileStudent/>},
+    {path: "", element: <ProfileStudent/>},
     {path: "financial", element: <MainFinancial/>},
     {path: "security", element: <ChangePassword/>},
     {path: "notification", element: <NotificationsSettings/>},
