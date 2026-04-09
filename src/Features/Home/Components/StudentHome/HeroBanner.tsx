@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import learningBro from "../../../../assets/images/Learning-bro.png";
-import { useStudentDashboardInfo } from "../../Hooks/useGetStudentDashboardInfo";
+
 
 interface HeroBannerProps {
   date: string;
