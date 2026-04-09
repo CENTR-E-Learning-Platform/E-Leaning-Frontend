@@ -104,9 +104,9 @@ const TeacherOption: React.FC = () => {
                   <div className="flex gap-2">
                     <button
                       type="button"
-                      onClick={() => seteducationLevelOrSubject("Mathematics")}
+                      onClick={() => seteducationLevelOrSubject("Math")}
                       className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Mathematics"
+                        educationLevelOrSubject === "Math"
                           ? "bg-[#525FE114] border-[#525FE1]"
                           : "border-[#DDDFE4]"
                       } 
