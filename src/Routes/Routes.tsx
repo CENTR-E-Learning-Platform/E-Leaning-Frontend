@@ -39,6 +39,8 @@ const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000)
 const MainCalendar = lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar"));
 const MainExplore = lazyWithDelay(() => import("../Features/ExploreTeacher/Pages/MainExplore"));
 const MainTeacherHome = lazyWithDelay(() => import("../Features/Home/Pages/MainTeacherHome"));
+// const MainStudentHome = lazyWithDelay(() => import("../Features/Home/Pages/MainStudentHome"));
+
 
 export const router = createBrowserRouter([
   {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
