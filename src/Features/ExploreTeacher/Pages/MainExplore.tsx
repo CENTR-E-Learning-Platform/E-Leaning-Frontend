@@ -21,7 +21,7 @@ const MainExplore = () => {
     currentPage,
     teachersPerPage,
   } = usesearchteach();
-  
+
   const {
     data: filterData,
     error: filterError,
@@ -34,7 +34,10 @@ const MainExplore = () => {
     setStartPrice,
     endPrice,
     setEndPrice,
+    setSearchTerm,
   } = usefilterteach();
+
+  console.log("Filter Data:", filterData);
 
   const [dragging2, setDragging2] = useState<string | null>(null);
   const slider2Ref = useRef<HTMLDivElement>(null);
@@ -174,7 +177,7 @@ const MainExplore = () => {
   return (
     <>
       <main className="w-[1140px] m-auto">
-        <Header/>
+        <Header />
 
         <div className="flex justify-between items-center mb-[27px]">
           <div className="flex justify-between items-center w-[325px]">
@@ -208,6 +211,7 @@ const MainExplore = () => {
               <input
                 onChange={(e) => {
                   const value = e.target.value;
+                  setSearchTerm(value);
                   if (value.startsWith(" ")) return;
                   formik.handleChange(e);
                 }}
@@ -223,9 +227,9 @@ const MainExplore = () => {
 
         <div className="flex justify-between items-start gap-[28px]">
           <div className="w-[275px] border-2 border-[#D1D5DB] p-[18px] rounded-[8px]">
-            <SubjectFilterExplore/>
+            <SubjectFilterExplore />
 
-            <LineBetweenFilterElements/>
+            <LineBetweenFilterElements />
 
             <div className="price w-[238px] mb-[20px] text-[#2A2D34]">
               <h2 className="font-semibold mb-[25px] text-[16px]">
@@ -275,15 +279,15 @@ const MainExplore = () => {
               </div>
             </div>
 
-            <LineBetweenFilterElements/>
+            <LineBetweenFilterElements />
 
-            <RattingFilterExplore/>
+            <RattingFilterExplore />
 
-            <LineBetweenFilterElements/>
+            <LineBetweenFilterElements />
 
-            <DaysFilterExplore/>
+            <DaysFilterExplore />
 
-            <LineBetweenFilterElements/>
+            <LineBetweenFilterElements />
 
             <div className="Times mb-[20px]">
               <h2 className="font-semibold mb-[25px] text-[16px]">Times</h2>
@@ -329,206 +333,215 @@ const MainExplore = () => {
               </div>
             </div>
 
-            <LineBetweenFilterElements/>
+            <LineBetweenFilterElements />
 
-            <ButtomApplyFilter setDragging={setDragging} setDragging2={setDragging2}/>
-            
+            <ButtomApplyFilter
+              setDragging={setDragging}
+              setDragging2={setDragging2}
+            />
           </div>
 
           <div className="teachers">
-            {[...Array(teachersPerPage)].map((_, index) => {
-              const teacherNumber =
-                (currentPage - 1) * teachersPerPage + index + 1;
-              if (teacherNumber > totalTeachers) return null;
-
-              return (
-                <div
-                  key={teacherNumber}
-                  className="w-[836px] overflow-hidden relative h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px]"
-                >
-                  <div className="flex justify-between items-center gap-[57px]">
-                    <div className="RightTeacher flex justify-between items-start gap-[15px] w-[456px] h-[239px]">
-                      <div className="w-[114px] h-[114px] RightRightTeacher">
-                        <img
-                          className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
-                          src="https://i.guim.co.uk/img/media/59baecefbc73d3bcf4a47b017453a27f19b55175/331_488_2481_1489/master/2481.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=d201beebc8267e2197eb367488bafd4b"
-                          alt="teacher image"
-                        />
-                      </div>
-                      <div className="LeftRightTeacher">
-                        <div className="w-[326px] mb-[18px] h-[81px]">
-                          <h2 className="text-[18px] mb-[14px] leading-[13px] tracking-[0] font-bold">
-                            Mr. Mohamed Salama
-                          </h2>
-                          <div className="flex items-center gap-2 mb-[14px] text-[11px] mt-1">
-                            <div className="flex items-center gap-0.5">
-                              {[1, 2, 3, 4, 5].map((star) => {
-                                const rating = 3.5;
-                                if (star <= Math.floor(rating)) {
-                                  return (
-                                    <span key={star} className="text-[#FFD057]">
-                                      <Star
-                                        fill="#FFD057"
-                                        className="w-[14px] h-[14px]"
-                                      />
-                                    </span>
-                                  );
-                                } else if (
-                                  star === Math.ceil(rating) &&
-                                  rating % 1 !== 0
-                                ) {
-                                  return (
-                                    <span
-                                      key={star}
-                                      className="relative inline-block"
-                                    >
-                                      <Star className="w-[14px] h-[14px] text-[#FFD057]" />
-                                      <span
-                                        className="absolute top-0 left-0 overflow-hidden"
-                                        style={{
-                                          width: `${(rating % 1) * 100}%`,
-                                        }}
-                                      >
-                                        <Star
-                                          fill="#FFD057"
-                                          className="w-[14px] h-[14px] text-[#FFD057]"
-                                        />
-                                      </span>
-                                    </span>
-                                  );
-                                } else {
-                                  return (
-                                    <span key={star} className="text-[#FFD057]">
-                                      <Star className="w-[14px] h-[14px]" />
-                                    </span>
-                                  );
-                                }
-                              })}
-                            </div>
-                            <span className="text-gray-500">(502 reviews)</span>
-                          </div>
-                          <div className="h-[26px] w-[181px] flex justify-center items-center bg-[#FFDEDE] px-[9px] py-[7px] rounded-[18px]">
-                            <p className="font-semibold text-[16px] text-[#611D1D]">
-                              Pure mathematics
-                            </p>
-                          </div>
-                        </div>
-                        <div className="DetailsAboutTeacher w-[326px] h-[82px]">
-                          <p className="font-medium text-[14px] text-[#5A6272]">
-                            20 years teaching | 13 years online math teacher{" "}
-                            <span className="font-normal">
-                              {" "}
-                              - for 20 years i was teaching with passion and bla
-                              bla bla{" "}
-                            </span>
-                          </p>
-                          <p className="font-medium text-[14px] underline cursor-pointer">
-                            Learn more
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <LeftTeacherSide/>
-
-                  </div>
-
-                  <LayerBackgroundTeacher/>
-
-                </div>
-              );
-            })}
-
-            <div className="flex justify-center items-center gap-[7px] mt-[28px] mb-[43px]">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className={`w-[43px] h-[43px] flex justify-center items-center rounded-[8px] border-2 transition-colors
-                ${
-                  currentPage === 1
-                    ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
-                    : "border-[#525FE1] text-[#525FE1] hover:bg-[#525FE1] hover:text-white cursor-pointer"
-                }`}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M15 18L9 12L15 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-
-              {(() => {
-                const pageNumbers = [];
-                const startPage = Math.floor((currentPage - 1) / 3) * 3 + 1;
-                const endPage = Math.min(startPage + 2, totalPages);
-
-                for (let i = startPage; i <= endPage; i++) {
-                  pageNumbers.push(
-                    <button
-                      key={i}
-                      onClick={() => setCurrentPage(i)}
-                      className={`w-[43px] h-[43px] flex justify-center items-center rounded-[8px] font-bold text-[16px] transition-colors
-                      ${
-                        currentPage === i
-                          ? "bg-[#525FE1] text-white"
-                          : "bg-white text-[#2A2D34] border-2 border-[#D1D5DB] hover:border-[#525FE1] hover:text-[#525FE1]"
-                      }`}
+            {formik.values.SearchTeacher
+              ? // ── Dynamic: نتايج السيرش ──
+                (searchTeachers?.data ?? []).map(
+                  (teacher: any, index: number) => (
+                    <div
+                      key={index}
+                      className="w-[836px] overflow-hidden relative h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px]"
                     >
-                      {i}
-                    </button>,
+                      <div className="flex justify-between items-center gap-[57px]">
+                        <div className="RightTeacher flex justify-between items-start gap-[15px] w-[456px] h-[239px]">
+                          <div className="w-[114px] h-[114px] RightRightTeacher">
+                            <img
+                              className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
+                              src={
+                                teacher.teacherPic ??
+                                "https://via.placeholder.com/114"
+                              }
+                              alt="teacher image"
+                            />
+                          </div>
+                          <div className="LeftRightTeacher">
+                            <div className="w-[326px] mb-[18px] h-[81px]">
+                              <h2 className="text-[18px] mb-[14px] leading-[13px] tracking-[0] font-bold">
+                                {teacher.teacherName}
+                              </h2>
+                              <div className="flex items-center gap-2 mb-[14px] text-[11px] mt-1">
+                                <div className="flex items-center gap-0.5">
+                                  {[1, 2, 3, 4, 5].map((star) => {
+                                    const rating = teacher.rating ?? 0;
+                                    if (star <= Math.floor(rating)) {
+                                      return (
+                                        <span
+                                          key={star}
+                                          className="text-[#FFD057]"
+                                        >
+                                          <Star
+                                            fill="#FFD057"
+                                            className="w-[14px] h-[14px]"
+                                          />
+                                        </span>
+                                      );
+                                    } else if (
+                                      star === Math.ceil(rating) &&
+                                      rating % 1 !== 0
+                                    ) {
+                                      return (
+                                        <span
+                                          key={star}
+                                          className="relative inline-block"
+                                        >
+                                          <Star className="w-[14px] h-[14px] text-[#FFD057]" />
+                                          <span
+                                            className="absolute top-0 left-0 overflow-hidden"
+                                            style={{
+                                              width: `${(rating % 1) * 100}%`,
+                                            }}
+                                          >
+                                            <Star
+                                              fill="#FFD057"
+                                              className="w-[14px] h-[14px] text-[#FFD057]"
+                                            />
+                                          </span>
+                                        </span>
+                                      );
+                                    } else {
+                                      return (
+                                        <span
+                                          key={star}
+                                          className="text-[#FFD057]"
+                                        >
+                                          <Star className="w-[14px] h-[14px]" />
+                                        </span>
+                                      );
+                                    }
+                                  })}
+                                </div>
+                                <span className="text-gray-500">
+                                  ({teacher.numberOfReviews} reviews)
+                                </span>
+                              </div>
+                              <div className="h-[26px] w-[181px] flex justify-center items-center bg-[#FFDEDE] px-[9px] py-[7px] rounded-[18px]">
+                                <p className="font-semibold text-[16px] text-[#611D1D]">
+                                  {teacher.subject}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <LeftTeacherSide teacher={teacher} />
+                      </div>
+                      <LayerBackgroundTeacher />
+                    </div>
+                  ),
+                )
+              : // ── Static: الكارد الثابتة ──
+                [...Array(teachersPerPage)].map((_, index) => {
+                  const teacherNumber =
+                    (currentPage - 1) * teachersPerPage + index + 1;
+                  if (teacherNumber > totalTeachers) return null;
+                  return (
+                    <div
+                      key={teacherNumber}
+                      className="w-[836px] overflow-hidden relative h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px]"
+                    >
+                      <div className="flex justify-between items-center gap-[57px]">
+                        <div className="RightTeacher flex justify-between items-start gap-[15px] w-[456px] h-[239px]">
+                          <div className="w-[114px] h-[114px] RightRightTeacher">
+                            <img
+                              className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
+                              src="https://i.guim.co.uk/img/media/59baecefbc73d3bcf4a47b017453a27f19b55175/331_488_2481_1489/master/2481.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=d201beebc8267e2197eb367488bafd4b"
+                              alt="teacher image"
+                            />
+                          </div>
+                          <div className="LeftRightTeacher">
+                            <div className="w-[326px] mb-[18px] h-[81px]">
+                              <h2 className="text-[18px] mb-[14px] leading-[13px] tracking-[0] font-bold">
+                                Mr. Mohamed Salama
+                              </h2>
+                              <div className="flex items-center gap-2 mb-[14px] text-[11px] mt-1">
+                                <div className="flex items-center gap-0.5">
+                                  {[1, 2, 3, 4, 5].map((star) => {
+                                    const rating = 3.5;
+                                    if (star <= Math.floor(rating)) {
+                                      return (
+                                        <span
+                                          key={star}
+                                          className="text-[#FFD057]"
+                                        >
+                                          <Star
+                                            fill="#FFD057"
+                                            className="w-[14px] h-[14px]"
+                                          />
+                                        </span>
+                                      );
+                                    } else if (
+                                      star === Math.ceil(rating) &&
+                                      rating % 1 !== 0
+                                    ) {
+                                      return (
+                                        <span
+                                          key={star}
+                                          className="relative inline-block"
+                                        >
+                                          <Star className="w-[14px] h-[14px] text-[#FFD057]" />
+                                          <span
+                                            className="absolute top-0 left-0 overflow-hidden"
+                                            style={{
+                                              width: `${(rating % 1) * 100}%`,
+                                            }}
+                                          >
+                                            <Star
+                                              fill="#FFD057"
+                                              className="w-[14px] h-[14px] text-[#FFD057]"
+                                            />
+                                          </span>
+                                        </span>
+                                      );
+                                    } else {
+                                      return (
+                                        <span
+                                          key={star}
+                                          className="text-[#FFD057]"
+                                        >
+                                          <Star className="w-[14px] h-[14px]" />
+                                        </span>
+                                      );
+                                    }
+                                  })}
+                                </div>
+                                <span className="text-gray-500">
+                                  (502 reviews)
+                                </span>
+                              </div>
+                              <div className="h-[26px] w-[181px] flex justify-center items-center bg-[#FFDEDE] px-[9px] py-[7px] rounded-[18px]">
+                                <p className="font-semibold text-[16px] text-[#611D1D]">
+                                  Pure mathematics
+                                </p>
+                              </div>
+                            </div>
+                            <div className="DetailsAboutTeacher w-[326px] h-[82px]">
+                              <p className="font-medium text-[14px] text-[#5A6272]">
+                                20 years teaching | 13 years online math teacher{" "}
+                                <span className="font-normal">
+                                  {" "}
+                                  - for 20 years i was teaching with passion and
+                                  bla bla bla{" "}
+                                </span>
+                              </p>
+                              <p className="font-medium text-[14px] underline cursor-pointer">
+                                Learn more
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <LeftTeacherSide teacher={{ pricePerSession: 50 }} />
+                      </div>
+                      <LayerBackgroundTeacher />
+                    </div>
                   );
-                }
-
-                return pageNumbers;
-              })()}
-
-              {currentPage <= totalPages - 3 && (
-                <div className="w-[43px] h-[43px] flex justify-center items-center">
-                  <span className="text-[#2A2D34] font-bold text-[16px]">
-                    ...
-                  </span>
-                </div>
-              )}
-
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-                className={`w-[43px] h-[43px] flex justify-center items-center rounded-[8px] border-2 transition-colors
-                  ${
-                    currentPage === totalPages
-                      ? "border-[#D1D5DB] text-[#D1D5DB] cursor-not-allowed"
-                      : "border-[#525FE1] text-[#525FE1] hover:bg-[#525FE1] hover:text-white cursor-pointer"
-                  }`}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 18L15 12L9 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
+                })}
           </div>
         </div>
       </main>
