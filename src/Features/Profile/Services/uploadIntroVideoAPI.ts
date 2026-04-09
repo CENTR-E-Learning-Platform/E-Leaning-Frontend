@@ -7,7 +7,7 @@ export const sendUploadVideoData = async (file : File) =>{
     const token = localStorage.getItem("token");
     formData.append("introVideo", file);
     formData.append("FileType", String(1));
-    return await axios.put(
+    return await axios.patch(
         UPLOAD_INTRO_VIDEO_API,
         formData  , 
         {
