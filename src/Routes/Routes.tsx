@@ -27,6 +27,7 @@ import ChangePassword from "../Features/Setting/Components/Security/ChangePasswo
 import NotificationsSettings from "../Features/Setting/Components/NotificationsSetting/NotificationsSettings";
 import { CLoader } from "../Components/UI/CLoader";
 import OptionRegister from "../Features/Auth/Components/Register/OptionRegister";
+import { MainStudentHome } from "../Features/Home/Pages/MainStudentHome";
 const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000) => {
   return lazy(() =>
     Promise.all([
@@ -54,8 +55,8 @@ export const router = createBrowserRouter([
     // { path: "/meeting", element: <LiveRoom /> },
     { path: "Calendar", element: <MainCalendar/> },
     { path: "explore", element: <MainExplore/> },
-    { path: "home", element: <MainTeacherHome/> },
-    { path: "", element: <MainTeacherHome/> },
+    { path: "home", element: <MainStudentHome/> },
+    { path: "", element: <MainStudentHome/> },
 
   ] },
 
