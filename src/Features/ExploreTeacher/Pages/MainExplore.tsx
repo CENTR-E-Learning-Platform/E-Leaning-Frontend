@@ -15,9 +15,8 @@ const MainExplore = () => {
   const {
     data: searchTeachers,
     error: searchError,
-    isLoading: searchIsLoading,
+    // isLoading: searchIsLoading,
     formik,
-    setCurrentPage,
     currentPage,
     teachersPerPage,
   } = usesearchteach();
@@ -25,7 +24,7 @@ const MainExplore = () => {
   const {
     data: filterData,
     error: filterError,
-    isLoading: filterIsLoading,
+    // isLoading: filterIsLoading,
     startTime,
     setStartTime,
     endTime,
@@ -146,7 +145,7 @@ const MainExplore = () => {
   const endPercentage = ((endTime - 8) / 18) * 100;
 
   const totalTeachers = 9;
-  const totalPages = Math.ceil(totalTeachers / teachersPerPage);
+  // const totalPages = Math.ceil(totalTeachers / teachersPerPage);
 
   if (searchError && "response" in searchError) {
     console.log((searchError as any).response?.data?.message[0]);
