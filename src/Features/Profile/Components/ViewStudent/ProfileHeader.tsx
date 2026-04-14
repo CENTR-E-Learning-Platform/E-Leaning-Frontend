@@ -1,20 +1,26 @@
 import bg_TeacherMath from "../../../../../src/assets/images/bg_TeacherMath.png";
-import bg_Teacher from "../../../../../src/assets/images/bg_Teacher.jpg";
 import heartIcon from "../../../../../src/assets/icons/heartIcon.svg";
 import MessageIcon from "../../../../../src/assets/icons/MessageIcon.svg";
 import ShareIcon from "../../../../../src/assets/icons/ShareIcon.svg";
-import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
 import { BASE_URL } from "../../../Streaming/Utils/Apis";
+import { useLocation } from "react-router-dom";
+import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
+import { useState } from "react";
+
 const ProfileHeader = () => {
-  const {data} = useTeacherProfile();
+  const location = useLocation();
+  const [love, setLoved] = useState(false);
+  const isProfilePage = location.pathname === "/profile/student";
+
+  const { data } = useTeacherProfile(isProfilePage);
 
   console.log(data);
 
-  
-  return <>
-    <div className="ProfileHeader">
-         <div className="introProfileTecher">
+  return (
+    <>
+      <div className="ProfileHeader">
+        <div className="introProfileTecher">
           <img
             className="w-full h-[150px] object-cover"
             src={bg_TeacherMath}
@@ -26,8 +32,12 @@ const ProfileHeader = () => {
           <div className="flex relative justify-between items-center">
             <div className="flex justify-between gap-4">
               <img
-                className="w-[144px] object-cover h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]" 
-                src={data?.data?.fullPrfilePicturePath === BASE_URL ? bg_imptyPhoto : data?.data?.fullPrfilePicturePath}
+                className="w-[144px] object-cover h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]"
+                src={
+                  data?.data?.fullPrfilePicturePath === BASE_URL
+                    ? bg_imptyPhoto
+                    : data?.data?.fullPrfilePicturePath
+                }
                 alt="Teacher Profile Image"
               />
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
@@ -36,7 +46,7 @@ const ProfileHeader = () => {
                 </h2>
                 <div className="h-[29px] w-[191px] flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
                   <p className="font-semibold text-[18px] text-[#611D1D]">
-                    {data?.data?.subject || "Pure mathematics"} 
+                    {data?.data?.subject || "Pure mathematics"}
                   </p>
                 </div>
               </div>
@@ -44,8 +54,9 @@ const ProfileHeader = () => {
 
             <div className="flex gap-4 absolute top-[15px] right-[-5px] justify-center items-center">
               <img
-                className="p-4 border-2 border-[#525FE1] rounded-[8px]"
-                src={heartIcon}
+                onClick={() => setLoved(!love)}
+                className="p-4 border-2 border-[#525FE1] rounded-[8px] cursor-pointer transition"
+                src={love ? MessageIcon : heartIcon}
                 alt="Heart Icon"
               />
               <div className="p-3 border-2 border-[#525FE1] flex justify-center items-center gap-2 rounded-[8px]">
@@ -68,7 +79,11 @@ const ProfileHeader = () => {
           <div className="flex items-center gap-3 -mt-8">
             <img
               className="w-[90px] h-[90px] rounded-full border-2 border-[#D1D5DB] flex-shrink-0"
-              src={data?.data?.fullPrfilePicturePath =='https://localhost:7251' ? bg_imptyPhoto : data?.data?.fullPrfilePicturePath}
+              src={
+                data?.data?.fullPrfilePicturePath == "https://localhost:7251"
+                  ? bg_imptyPhoto
+                  : data?.data?.fullPrfilePicturePath
+              }
               alt="Teacher Profile Image"
             />
             <div className="mt-4">
@@ -103,10 +118,9 @@ const ProfileHeader = () => {
             </div>
           </div>
         </div>
-    </div>
-  
-  
-  </>
-}
+      </div>
+    </>
+  );
+};
 
-export default ProfileHeader
+export default ProfileHeader;
