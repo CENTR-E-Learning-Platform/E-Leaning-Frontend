@@ -7,15 +7,44 @@ import { BASE_URL } from "../../../Streaming/Utils/Apis";
 import { useLocation } from "react-router-dom";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import { useState } from "react";
+import { useAddSubscription } from "../../Hooks/useAddsubscription";
+import { useAddUnsubscription } from "../../Hooks/useAddUnsubscription";
+
+
 
 const ProfileHeader = () => {
   const location = useLocation();
   const [love, setLoved] = useState(false);
   const isProfilePage = location.pathname === "/profile/student";
+  const { data: teacherData } = useTeacherProfile(isProfilePage);
+  const {mutate: subscriptionMutate} = useAddSubscription();
+  const {mutate: unsubscriptionMutate} = useAddUnsubscription();
+  const teacherId = teacherData?.data?.data?.teacherId;
+  
 
-  const { data } = useTeacherProfile(isProfilePage);
-
-  console.log(data);
+  const handleSubscription = () => {
+    if(!love) {
+      subscriptionMutate(teacherId, {
+        onSuccess: (data) => {
+          setLoved(true);
+          console.log(data)
+        },
+        onError: () => {
+          alert("Failed to subscribe.");
+        }
+      });
+    } else {
+      unsubscriptionMutate(teacherId, {
+        onSuccess: (data) => {
+          setLoved(false);
+          console.log(data)
+        },
+        onError: () => {
+          alert("Failed to unsubscribe.");
+        }
+      });
+    }
+  }
 
   return (
     <>
@@ -34,19 +63,19 @@ const ProfileHeader = () => {
               <img
                 className="w-[144px] object-cover h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]"
                 src={
-                  data?.data?.fullPrfilePicturePath === BASE_URL
+                  teacherData?.data?.fullPrfilePicturePath === BASE_URL
                     ? bg_imptyPhoto
-                    : data?.data?.fullPrfilePicturePath
+                    : teacherData?.data?.fullPrfilePicturePath
                 }
                 alt="Teacher Profile Image"
               />
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
                 <h2 className="text-[28px] mb-4 leading-[13px] tracking-[0] font-bold">
-                  {data?.data.fullName}
+                  {teacherData?.data.fullName}
                 </h2>
                 <div className="h-[29px] w-[191px] flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
                   <p className="font-semibold text-[18px] text-[#611D1D]">
-                    {data?.data?.subject || "Pure mathematics"}
+                    {teacherData?.data?.subject || "Pure mathematics"}
                   </p>
                 </div>
               </div>
@@ -54,7 +83,7 @@ const ProfileHeader = () => {
 
             <div className="flex gap-4 absolute top-[15px] right-[-5px] justify-center items-center">
               <img
-                onClick={() => setLoved(!love)}
+                onClick={handleSubscription}
                 className="p-4 border-2 border-[#525FE1] rounded-[8px] cursor-pointer transition"
                 src={love ? MessageIcon : heartIcon}
                 alt="Heart Icon"
@@ -80,15 +109,15 @@ const ProfileHeader = () => {
             <img
               className="w-[90px] h-[90px] rounded-full border-2 border-[#D1D5DB] flex-shrink-0"
               src={
-                data?.data?.fullPrfilePicturePath == "https://localhost:7251"
+                teacherData?.data?.fullPrfilePicturePath == "https://localhost:7251"
                   ? bg_imptyPhoto
-                  : data?.data?.fullPrfilePicturePath
+                  : teacherData?.data?.fullPrfilePicturePath
               }
               alt="Teacher Profile Image"
             />
             <div className="mt-4">
               <h2 className="text-[20px] font-bold leading-snug">
-                {data?.data.fullName}
+                {teacherData?.data.fullName}
               </h2>
               <div className="mt-2 inline-flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[4px] rounded-[18px]">
                 <p className="font-semibold text-[14px] text-[#611D1D]">
