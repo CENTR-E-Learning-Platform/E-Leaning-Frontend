@@ -9,7 +9,7 @@ import UserProfileDropdown from './UserProfileDropdown';
 import { CLoader } from '../UI/CLoader'; 
 
 const Navbar = () => {
-    const { data } = useTeacherProfile();
+    const { data } = useTeacherProfile(false);
     const [isAuth, setIsAuth] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
