@@ -69,6 +69,7 @@ const EventDetailsCard = ({ event, statusConfig }: any) => {
                 if (!isDisabled) {
                     await localStorage.setItem("sessionName", event.roomName);
                     await localStorage.setItem("teacherName", event.teacherName);
+                    await localStorage.setItem("sessionId", event.id);
                     await localStorage.setItem("teacherProfileImagePath", event.profilePicturePath);
                     window.open("/createroom/joinnow", "_blank");
                     }
