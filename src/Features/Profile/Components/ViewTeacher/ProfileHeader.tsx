@@ -7,9 +7,15 @@ import ProfileCompletion from "./ProfileCompletion";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import EditPhotoModal from "./EditPhotoModal";
 import EditNameModal from "./EditNameModal";
+import { useLocation } from "react-router-dom";
+import { BASE_URL } from "../../Utils/Apis";
 
 const ProfileHeader = () => {
-  const {data , refetch} = useTeacherProfile()
+  
+  const location = useLocation();
+  const isProfilePage = location.pathname === "/profile/teacher";
+
+  const { data , refetch } = useTeacherProfile(isProfilePage);
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditNameOpen, setIsEditNameOpen] = useState(false);
@@ -17,7 +23,7 @@ const ProfileHeader = () => {
     const path = data?.data?.fullPrfilePicturePath;
     if (!path) return;
 
-    if (path === "https://localhost:7251") {
+    if (path === BASE_URL) {
       setPreviewImage(bg_imptyPhoto);
       return;
     }
