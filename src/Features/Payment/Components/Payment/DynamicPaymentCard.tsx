@@ -9,13 +9,11 @@ const DynamicPaymentCard = () => {
 
   useEffect(() => {
     const initPayment = async () => {
-      // الانتظار حتى يتم إرسال المبلغ (وافترض أنها تحفظ البيانات في localStorage)
       await sendAmount();
       
       const testPublicKey = localStorage.getItem("publicKey");
       const testClientSecret = localStorage.getItem("clientSecret");
       
-      // تأكد من عدم تهيئة الدفع مرتين، وتأكد من وجود المفاتيح
       if (!isInitialized.current && testPublicKey && testClientSecret) {
         try {
           console.log("public id: " + testPublicKey);
@@ -25,7 +23,7 @@ const DynamicPaymentCard = () => {
             publicKey: testPublicKey,
             clientSecret: testClientSecret,
             paymentMethods: ['wallet', 'card'],
-            elementId: 'paymob-elements', // يجب أن يتطابق مع الـ id في الـ div بالأسفل
+            elementId: 'paymob-elements',
             showSaveCard: true,
             
             customStyle: {
@@ -82,7 +80,6 @@ const DynamicPaymentCard = () => {
         </Link>
       </div>
 
-      {/* الـ Container الخاص بواجهة الدفع */}
       <div id="paymob-elements" className="w-[540px] min-h-[250px] mb-4"></div>
 
       <div className="space-y-3 text-[14px] text-gray-500 mt-4 border-t pt-4">

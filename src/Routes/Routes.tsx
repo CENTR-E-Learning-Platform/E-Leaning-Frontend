@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { lazy } from "react"; 
+import { Children, lazy } from "react"; 
 import MainRegister from "../Features/Auth/Pages/MainRegister";
 import MainLogin from "../Features/Auth/Pages/MainLogin";
 import TeacherOption from "../Features/Auth/Components/Register/TeacherOption";
@@ -28,6 +28,12 @@ import NotificationsSettings from "../Features/Setting/Components/NotificationsS
 import { CLoader } from "../Components/UI/CLoader";
 import OptionRegister from "../Features/Auth/Components/Register/OptionRegister";
 import { MainStudentHome } from "../Features/Home/Pages/MainStudentHome";
+import CreateNewQuiz from "../Features/Quiz/Pages/CreateNewQuiz";
+import QuizSummaryBar from "../Features/Quiz/Components/QuizSummaryBar";
+import QuizSetting from "../Features/Quiz/Pages/QuizSetting";
+import QuizQuistions from "../Features/Quiz/Pages/QuizQuistions";
+import ResultQuiz from "../Features/Quiz/Pages/ResultQuiz";
+import StartQuizforStudent from "../Features/Quiz/Pages/StartQuizforStudent";
 const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000) => {
   return lazy(() =>
     Promise.all([
@@ -87,4 +93,10 @@ export const router = createBrowserRouter([
   { path: "login/SendEmail/otp/setNewPassword", element: <SetNewPassword /> },
   { path: "/profile", element: <ViewTeacher/> },
   { path: "/loder", element: <CLoader/> },
+  { path: "/quiz", element: <CreateNewQuiz/>  , children:[
+    {path: "/quiz/add-questions", element: <QuizQuistions/>},
+    {path: "/quiz/quizsetting", element: <QuizSetting/>},
+  ]},
+  {path: "/quiz/result", element: <ResultQuiz/>},
+  {path: "/quiz/start", element: <StartQuizforStudent/>},
 ]);

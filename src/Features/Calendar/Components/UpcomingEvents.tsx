@@ -115,6 +115,7 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                       if (!isDisabled) {
                         await localStorage.setItem("sessionName", e.roomName);
                         await localStorage.setItem("teacherName", e.teacherName);
+                        await localStorage.setItem("sessionId", e.id);
                         await localStorage.setItem("teacherProfileImagePath", e.profilePicturePath);
                         window.open("/createroom/joinnow", "_blank");
                       }

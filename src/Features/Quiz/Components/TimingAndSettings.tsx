@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useQuiz } from '../Context/QuizContext';
 import time from '../../../assets/icons/time.svg';
 import inputtime from '../../../assets/icons/inputTime.svg';
 import date from '../../../assets/icons/date.svg';
+import { useCreateQuiz } from '../Hooks/useCreateQuiz';
 
 export const TimingAndSettings: React.FC = () => {
+  const { QuizDataTime, setQuizDataTime } = useQuiz();
   const [selectedTimeLimit, setSelectedTimeLimit] = useState<string>('No time limit');
   const [selectedAttempt, setSelectedAttempt] = useState<string>('1 attempt');
-
   const timeLimits = ['No time limit', '30m', '60m', '90m', 'Custom'];
   const attempts = ['1 attempt', '2 attempts', 'Unlimited'];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setQuizDataTime((prev) => ({ ...prev, [name]: value }));
+  };
+
+
+  const handleDurationChange = (durationStr: string) => {
+    setSelectedTimeLimit(durationStr);
+    let durationValue = 0;
+    if (durationStr.includes('m')) {
+        durationValue = parseInt(durationStr.replace('m', ''));
+    }
+    setQuizDataTime((prev) => ({ ...prev, Duration: durationValue }));
+  };
 
   return (
     <div className="box-border flex flex-col items-start p-[28px] gap-[28px] w-full max-w-[1045px] bg-white border border-[#E8EAED] shadow-[0px_4px_24px_rgba(0,0,0,0.04)] rounded-lg font-['Poppins',sans-serif]">
@@ -31,7 +48,9 @@ export const TimingAndSettings: React.FC = () => {
             <div className="relative w-full">
               <input
                 type="date"
-                defaultValue="2026-04-10"
+                name="Date"
+                value={QuizDataTime?.Date || "2026-04-10"}
+                onChange={handleChange}
                 className="flex flex-row items-center pl-[15px] pr-[40px] py-[11px] w-full h-[43px] bg-[#F1F4F9] rounded-lg border-none outline-none font-normal text-[14px] leading-[22px] text-[#2A2D34] cursor-pointer  transition-colors relative z-10  [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
               />
               <div className="absolute right-[14px] top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center z-20">
@@ -47,7 +66,9 @@ export const TimingAndSettings: React.FC = () => {
             <div className="relative w-full">
               <input
                 type="time"
-                defaultValue="23:59"
+                name="Time"
+                value={QuizDataTime?.Time || "23:59"}
+                onChange={handleChange}
                 className="flex flex-row items-center pl-[15px] pr-[40px] py-[11px] w-full h-[43px] bg-[#F1F4F9] rounded-lg border-none outline-none font-normal text-[14px] leading-[22px] text-[#2A2D34] cursor-pointer  transition-colors relative z-10  [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
               />
               <div className="absolute right-[14px] top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center z-20">
@@ -65,7 +86,7 @@ export const TimingAndSettings: React.FC = () => {
             {timeLimits.map((limit) => (
               <button
                 key={limit}
-                onClick={() => setSelectedTimeLimit(limit)}
+                onClick={() => handleDurationChange(limit)}
                 className={`flex flex-row items-center justify-center px-[18px] py-[9px] h-[36px] rounded-full font-bold text-[13px] leading-[18px] cursor-pointer transition-colors ${
                   selectedTimeLimit === limit
                     ? 'bg-[#525FE1] text-white hover:bg-[#414ebd]'
