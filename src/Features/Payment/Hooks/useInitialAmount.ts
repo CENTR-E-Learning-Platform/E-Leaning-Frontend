@@ -3,7 +3,7 @@ import { paymob } from "../Services/paymob";
 import { sendcharge } from "../Services/charge";
 import { paymobile } from "../Services/payMobile";
 export const useInitialAmount = ()=> {
-    const Amount:number = 100; 
+    const Amount:number = 110; 
     const sendAmount =async () => {
         try{
             const response = await amountServices(Amount);
