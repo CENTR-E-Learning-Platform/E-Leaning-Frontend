@@ -8,13 +8,15 @@ import { LoginProvider } from "./Features/Auth/Contexts/LoginContext";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { CalendarProvider } from "./Features/Calendar/Contexts/CalendarContext";
 import { SettingProvider } from "./Features/Setting/Context/useSettingContext";
+import { QuizProvider } from "./Features/Quiz/Context/QuizContext";
 function App() {
 
   const queryClient = new QueryClient()
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <SettingProvider>
+        <QuizProvider>
+           <SettingProvider>
         <CalendarProvider>
         <LoginProvider>
           <RegProvider>
@@ -25,6 +27,8 @@ function App() {
         </LoginProvider>
         </CalendarProvider>
         </SettingProvider>
+        </QuizProvider>
+       
       </QueryClientProvider>
     </>
   );
