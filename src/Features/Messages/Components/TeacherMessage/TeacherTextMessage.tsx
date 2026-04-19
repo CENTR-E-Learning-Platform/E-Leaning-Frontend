@@ -2,7 +2,7 @@ import React from 'react';
 
 export const TeacherTextMessage: React.FC = () => {
   return (
-    <div className="flex flex-col items-end p-0 w-[430px] self-stretch">
+    <div className="flex flex-col justify-end items-end p-0 w-[730px] self-stretch">
       <div className="flex flex-row items-start p-0 gap-[15.2px] w-[391.4px] max-w-[440.04px]">
         <div className="flex flex-col items-end p-0 w-[345.8px]">
           <div className="relative flex flex-col items-start pt-[14.4px] pr-[20.5px] pb-[14.4px] pl-[15.2px] w-[345.8px] bg-[#525FE1] rounded-l-[16px] rounded-br-[16px] shadow-sm overflow-hidden">
