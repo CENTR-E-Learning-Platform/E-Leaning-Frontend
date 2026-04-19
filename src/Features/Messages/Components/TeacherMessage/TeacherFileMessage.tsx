@@ -4,7 +4,7 @@ import iconPDF from "../../../../../src/assets/icons/PDFicon.svg"
 
 export const TeacherFileMessage: React.FC = () => {
   return (
-    <div className="flex flex-col items-end p-0 w-[430px] self-stretch">
+    <div className="flex flex-col items-end p-0 w-[730px] self-stretch">
       <div className="flex flex-row items-start p-0 gap-[15.2px] w-[319.2px] max-w-[440.04px]">
         <div className="flex flex-col items-end p-0 gap-[10.8px] w-[273.6px]">
           <div className="flex flex-row items-center pt-[14.4px] pr-[20.5px] pb-[14.4px] pl-[15.2px] gap-[11.4px] w-[273.6px] h-[61.2px] bg-white border-2 border-[rgba(45,91,255,0.2)] shadow-sm rounded-[12px]">
@@ -27,7 +27,7 @@ export const TeacherFileMessage: React.FC = () => {
           </div>
           <div className="flex flex-col items-start  px-[3.8px] pb-0 w-[41.85px] h-[20.7px]">
             <span className="w-[38px] h-[13.5px] font-['Poppins'] font-light text-[10px] leading-[13.5px] text-[#434656]">
-              8:13 am
+              8:21 am
             </span>
           </div>
         </div>
