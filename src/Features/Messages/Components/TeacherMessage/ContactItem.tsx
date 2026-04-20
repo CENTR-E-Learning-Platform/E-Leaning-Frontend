@@ -1,15 +1,8 @@
 import React from "react";
 import { useGetChatConversation } from "../../Hooks/useGetChatConversation";
+import { useConverDate } from "../../Hooks/useConvertDate";
+import type { ContactProps, Conversation } from "../../Types/itemContact";
 
-interface ContactProps {
-  name: string;
-  message: string;
-  time: string;
-  avatarUrl: string;
-  isActive?: boolean;
-  isOnline?: boolean;
-  hasUnread?: boolean;
-}
 
 const ContactItem: React.FC<ContactProps> = ({
   name,
@@ -48,7 +41,7 @@ const ContactItem: React.FC<ContactProps> = ({
       <div className="flex flex-col items-start p-0 gap-[3.6px] flex-grow w-[213.7px] h-[43.2px]">
         <div className="flex flex-row justify-between items-center p-0 w-full h-[21.6px] self-stretch">
           <h3
-            className={`font-['Poppins'] text-[15.2px] leading-[21.6px] flex items-center ${
+            className={`font-['Poppins'] text-[15.2px] leading-[21.6px] flex-1 truncate ${
               isActive
                 ? "font-bold text-[#2A2D34]"
                 : "font-semibold text-[#2A2D34]"
@@ -87,76 +80,27 @@ const ContactItem: React.FC<ContactProps> = ({
 };
 
 const ContactList: React.FC = () => {
-  const {data} = useGetChatConversation();
-  console.log(data)
+  const { data } = useGetChatConversation();
+  console.log(data);
+  const formatTime = useConverDate();
+  
   return (
     <div className="flex flex-col items-start py-[14.4px] pl-[14.4px] gap-[7.2px] w-[360px] h-[744.3px] overflow-y-auto scroll-smooth">
+      {data?.data ? data?.data.map((conversation: Conversation) => {
+        return (
+          <ContactItem
+            key={conversation.id}
+            isActive
+            isOnline
+            hasUnread={conversation.unreadCount}
+            name={conversation.otherUserName}
+            message={conversation.lastMessage}
+            time={formatTime(conversation.lastMessageAt)}
+            avatarUrl={conversation.otherUserPicture ? conversation.otherUserPicture : "https://api.dicebear.com/7.x/avataaars/svg?seed=Mohamed"}
+          />
+        );
+      }) : "fghjklf,fc;,fc,"}
 
-      {data?.data.map((conversation :object , index : number)=>{
-         <ContactItem
-          isActive
-          isOnline
-          hasUnread
-          name="Mr. Mohamed Ali"
-          message="Perfect, I'll review it before clas..."
-          time="8:22 am"
-          avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Mohamed"
-        />
-      })}
-
-
-      <ContactItem
-        isActive
-        isOnline
-        hasUnread
-        name="Mr. Mohamed Ali"
-        message="Perfect, I'll review it before clas..."
-        time="8:22 am"
-        avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Mohamed"
-      />
-      <ContactItem
-        name="Mr. Karim Ahmed"
-        message="Can we reschedule tomorrow's se..."
-        time="2h"
-        avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Karim"
-      />
-
-      <ContactItem
-        name="Mr. Karim Ahmed"
-        message="Can we reschedule tomorrow's se..."
-        time="2h"
-        avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Karim"
-      />
-      <ContactItem
-        name="Mr. Karim Ahmed"
-        message="Can we reschedule tomorrow's se..."
-        time="2h"
-        avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Karim"
-      />
-      <ContactItem
-        name="Mr. Karim Ahmed"
-        message="Can we reschedule tomorrow's se..."
-        time="2h"
-        avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Karim"
-      />
-      <ContactItem
-        name="Mr. Karim Ahmed"
-        message="Can we reschedule tomorrow's se..."
-        time="2h"
-        avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Karim"
-      />
-      <ContactItem
-        name="Mr. Karim Ahmed"
-        message="Can we reschedule tomorrow's se..."
-        time="2h"
-        avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Karim"
-      />
-      <ContactItem
-        name="Mr. Karim Ahmed"
-        message="Can we reschedule tomorrow's se..."
-        time="2h"
-        avatarUrl="https://api.dicebear.com/7.x/avataaars/svg?seed=Karim"
-      />
     </div>
   );
 };
