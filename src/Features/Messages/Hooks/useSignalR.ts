@@ -24,7 +24,7 @@ type UseSignalRReturn = {
 
 export default function useSignalR(
   token: string,
-  baseUrl: string
+  BASE_URL: string
 ): UseSignalRReturn {
   const [connection, setConnection] =
     useState<signalR.HubConnection | null>(null);
@@ -36,7 +36,7 @@ export default function useSignalR(
     if (!token) return;
 
     const connect = new signalR.HubConnectionBuilder()
-      .withUrl(`${baseUrl}/hubs/chat`, {
+      .withUrl(`${BASE_URL}/hubs/chat`, {
         accessTokenFactory: () => token,
       })
       .withAutomaticReconnect()
@@ -72,7 +72,7 @@ export default function useSignalR(
     return () => {
       connect.stop();
     };
-  }, [token, baseUrl]);
+  }, [token, BASE_URL]);
 
   return { connection, messages, typingUser };
 }
