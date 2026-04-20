@@ -3,7 +3,7 @@ import { MoreVertical } from 'lucide-react';
 
 const ChatHeader: React.FC = () => {
   return (
-    <div className="relative flex flex-row justify-between items-center px-[30.4px] py-0 w-[500px] h-[72px] bg-white shadow-[0px_0.9px_1.8px_rgba(0,0,0,0.05)] font-['Poppins']">
+    <div className="relative flex flex-row justify-between items-center px-[30.4px] py-0 w-[800px] h-[72px] bg-white shadow-[0px_0.9px_1.8px_rgba(0,0,0,0.05)] font-['Poppins']">
       <div className="flex flex-row items-center p-0 gap-[15.2px] w-[185.25px] h-[36px]">
         <div className="relative flex flex-col items-start p-0 isolate w-[38px] h-[36px]">
           <div className="w-[38px] h-[36px] rounded-full overflow-hidden bg-gray-200">
