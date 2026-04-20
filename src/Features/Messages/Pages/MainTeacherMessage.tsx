@@ -1,5 +1,4 @@
 import ChatContent from "../Components/TeacherMessage/ChatContent";
-import ChatHeader from "../Components/TeacherMessage/ChatHeader";
 import ContactList from "../Components/TeacherMessage/ContactItem";
 import MessagesHeader from "../Components/TeacherMessage/MessagesHeader";
 
@@ -14,7 +13,6 @@ const MainTeacherMessage = () => {
           </div>
 
           <div className="center-content">
-            <ChatHeader/>
             <ChatContent/>
           </div>
 
