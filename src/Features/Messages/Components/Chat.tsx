@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import useSignalR from "../Hooks/useSignalR";
+import { BASE_URL } from "../Utils/Api";
+import { TypingIndicator } from "./TypingIndicator";
 
 export default function Chat() {
   const token = `${localStorage.getItem("token")}`;
-  const baseUrl = "https://localhost:7251";
-
   const isTyping = useRef<any>(null);
-  const { connection, messages, typingUser } = useSignalR(token, baseUrl);
+  const { connection, messages, typingUser } = useSignalR(token, BASE_URL);
 
   const [message, setMessage] = useState("");
   const [recipientId, setRecipientId] = useState("");
@@ -22,32 +22,29 @@ export default function Chat() {
     setMessage("");
   };
 
- 
-  
-
   const handleTyping = () => {
-  if (connection?.state !== "Connected") return;
+    if (connection?.state !== "Connected") return;
 
-  if (!isTyping.current) {
-    connection.invoke("SendTypingIndicator", {
-      RecipientId: recipientId,
-      IsTyping: true,
-    });
-    isTyping.current = true;
-  }
+    if (!isTyping.current) {
+      connection.invoke("SendTypingIndicator", {
+        RecipientId: recipientId,
+        IsTyping: true,
+      });
+      isTyping.current = true;
+    }
 
-  if (isTyping.current) {
-    clearTimeout(isTyping.current);
-  }
+    if (isTyping.current) {
+      clearTimeout(isTyping.current);
+    }
 
-  isTyping.current = setTimeout(() => {
-    connection.invoke("SendTypingIndicator", {
-      RecipientId: recipientId,
-      IsTyping: false,
-    });
-    isTyping.current = false;
-  }, 1000);
-};
+    isTyping.current = setTimeout(() => {
+      connection.invoke("SendTypingIndicator", {
+        RecipientId: recipientId,
+        IsTyping: false,
+      });
+      isTyping.current = false;
+    }, 1000);
+  };
 
   return (
     <div>
@@ -66,8 +63,12 @@ export default function Chat() {
         ))}
       </div>
 
-      {typingUser && <p>{typingUser} is typing...</p>}
+      {typingUser && <p>{typingUser} is typing </p>}
+
+      <TypingIndicator/>
+
       <label htmlFor="">jfcnjc</label>
+      
       <input
       className="w-[400px] border h-[50px]"
         value={message}
@@ -78,6 +79,10 @@ export default function Chat() {
       />
 
       <button onClick={sendMessage}>Send</button>
+
+
+
     </div>
+
   );
 }
