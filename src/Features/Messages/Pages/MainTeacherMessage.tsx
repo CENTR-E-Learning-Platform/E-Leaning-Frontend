@@ -8,7 +8,7 @@ const MainTeacherMessage = () => {
     <>
       <section className="MainTeacherMessage">
         <div className="controlTeacherMessage flex justify-start items-start bg-[#F9FBFC]">
-          <div className="left-content bg-[#F9FBFC] h-screen flex flex-col">
+          <div className="left-content bg-[#F9FBFC] h-[calc(100vh-66px)] flex flex-col">
             <MessagesHeader />
             <ContactList />
           </div>
@@ -21,6 +21,7 @@ const MainTeacherMessage = () => {
           <div className="right-content">
             
           </div>
+          
         </div>
       </section>
     </>
