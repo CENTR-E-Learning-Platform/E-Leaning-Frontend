@@ -4,7 +4,6 @@ import MessageIcon from "../../../../../src/assets/icons/MessageIcon.svg";
 import ShareIcon from "../../../../../src/assets/icons/ShareIcon.svg";
 import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
 import { BASE_URL } from "../../../Streaming/Utils/Apis";
-import { useLocation } from "react-router-dom";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import { useState } from "react";
 import { useAddSubscription } from "../../Hooks/useAddsubscription";
@@ -13,10 +12,8 @@ import { useAddUnsubscription } from "../../Hooks/useAddUnsubscription";
 
 
 const ProfileHeader = () => {
-  const location = useLocation();
   const [love, setLoved] = useState(false);
-  const isProfilePage = location.pathname === "/profile/student";
-  const { data: teacherData } = useTeacherProfile(isProfilePage);
+  const { data: teacherData } = useTeacherProfile();
   const {mutate: subscriptionMutate} = useAddSubscription();
   const {mutate: unsubscriptionMutate} = useAddUnsubscription();
   const teacherId = teacherData?.data?.data?.teacherId;
