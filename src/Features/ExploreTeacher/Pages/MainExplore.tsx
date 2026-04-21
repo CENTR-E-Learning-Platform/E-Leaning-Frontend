@@ -342,7 +342,7 @@ const MainExplore = () => {
 
           <div className="teachers">
             {formik.values.SearchTeacher
-              ? // ── Dynamic: نتايج السيرش ──
+              ?
                 (searchTeachers?.data ?? []).map(
                   (teacher: any, index: number) => (
                     <div
@@ -435,7 +435,7 @@ const MainExplore = () => {
                     </div>
                   ),
                 )
-              : // ── Static: الكارد الثابتة ──
+              :
                 [...Array(teachersPerPage)].map((_, index) => {
                   const teacherNumber =
                     (currentPage - 1) * teachersPerPage + index + 1;
