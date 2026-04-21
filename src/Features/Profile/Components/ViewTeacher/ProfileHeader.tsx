@@ -7,27 +7,22 @@ import ProfileCompletion from "./ProfileCompletion";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import EditPhotoModal from "./EditPhotoModal";
 import EditNameModal from "./EditNameModal";
-import { useLocation } from "react-router-dom";
 import { BASE_URL } from "../../Utils/Apis";
 
 const ProfileHeader = () => {
-  
-  const location = useLocation();
-  const isProfilePage = location.pathname === "/profile/teacher";
-
-  const { data , refetch } = useTeacherProfile(isProfilePage);
+  const { data , refetch } = useTeacherProfile();
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditNameOpen, setIsEditNameOpen] = useState(false);
+  console.log(data)
   useEffect(() => {
-    const path = data?.data?.fullPrfilePicturePath;
+    const path = data?.data?.data.profilePicturePath;
+    console.log("Path" ,  path)
     if (!path) return;
-
     if (path === BASE_URL) {
       setPreviewImage(bg_imptyPhoto);
       return;
     }
-
     setPreviewImage(path + "?t=" + Date.now());
   }, [data]);
 
@@ -69,7 +64,7 @@ const ProfileHeader = () => {
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
                 <div className="flex items-center gap-2 mb-4">
                   <h2 className="text-[28px] leading-[13px] tracking-[0] font-bold">
-                    {data?.data?.fullName}
+                    {data?.data?.data.fullName}
                   </h2>
 
                   <div
@@ -127,7 +122,7 @@ const ProfileHeader = () => {
 
               <div className="flex items-center gap-2">
                 <h2 className="text-[20px] font-bold leading-snug">
-                  {data?.data?.fullName}
+                  {data?.data.data?.fullName}
                 </h2>
 
                 <div onClick={() => {setIsEditNameOpen(true)}} className="flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white">
@@ -166,7 +161,7 @@ const ProfileHeader = () => {
 
         <EditNameModal
           isOpen={isEditNameOpen}
-          oldName={data?.data?.fullName || ""}
+          oldName={data?.data?.data.fullName || ""}
           onClose={() => setIsEditNameOpen(false)}/>
       </section>
     </>
