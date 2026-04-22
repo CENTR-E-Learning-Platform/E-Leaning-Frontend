@@ -11,7 +11,7 @@ import { PayoutMethodFlow } from "./PayoutMethodFlow";
 import { getBalance } from "../../Services/getBalance";
 import { AddPayoutButton } from "./AddPayoutButton";
 import { useSettingContext } from "../../Context/useSettingContext";
-
+import { roleToAuth } from "../../../../Utils/Constant";
 export const MainFinancial = () => {
   const { isCreated , showAddFlow , setShowAddFlow} = useSettingContext();
   const [balances, setBalances] = useState({
@@ -47,7 +47,9 @@ export const MainFinancial = () => {
   }, [isCreated]);
 
   return (
-    <div>
+   <div>
+    {roleToAuth?.includes("Teacher") &&(
+       <div>
       <h1 className="text-[18px] font-semibold text-[#2A2D34] mb-[20px]">
         Financial Snapshot
       </h1>
@@ -100,6 +102,8 @@ export const MainFinancial = () => {
         )}
       </div>
     </div>
+    )}
+   </div>
   );
 };
 
