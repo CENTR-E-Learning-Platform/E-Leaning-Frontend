@@ -18,7 +18,7 @@ import ClassButton from "../Components/ClassButton";
 import ClassForm from "../Components/Form/ClassForm";
 import { useGetAllClasses } from "../Hooks/useGetAllClasses";
 import { useCalendar } from "../Contexts/CalendarContext";
-
+import { roleToAuth } from "../../../Utils/Constant";
 const locales = {
   "en-US": enUS,
 };
@@ -116,9 +116,11 @@ const MainCalendar = () => {
             }}
           />
           <div className="w-[297px] rounded-[8px] border-[1px] border-[#E8EAED] bg-[#FFFFFF] ms-[20px] flex flex-col items-center">
-            <div onClick={() => setOpen(true)}>
-              <ClassButton />
-            </div>
+            {roleToAuth?.includes("Teacher") && (
+              <div onClick={() => setOpen(true)}>
+                <ClassButton />
+              </div>
+            )}
             <div className="flex justify-center items-center">
               <DayPicker
                 mode="single"
