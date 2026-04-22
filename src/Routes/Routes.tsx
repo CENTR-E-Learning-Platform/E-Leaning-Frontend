@@ -29,11 +29,12 @@ import { CLoader } from "../Components/UI/CLoader";
 import OptionRegister from "../Features/Auth/Components/Register/OptionRegister";
 import { MainStudentHome } from "../Features/Home/Pages/MainStudentHome";
 import CreateNewQuiz from "../Features/Quiz/Pages/CreateNewQuiz";
-import QuizSummaryBar from "../Features/Quiz/Components/QuizSummaryBar";
 import QuizSetting from "../Features/Quiz/Pages/QuizSetting";
 import QuizQuistions from "../Features/Quiz/Pages/QuizQuistions";
 import ResultQuiz from "../Features/Quiz/Pages/ResultQuiz";
 import StartQuizforStudent from "../Features/Quiz/Pages/StartQuizforStudent";
+import { roleToAuth } from "../Utils/Constant";
+import DashboardQuiz from "../Features/Quiz/Pages/DashboardQuiz";
 const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000) => {
   return lazy(() =>
     Promise.all([
@@ -45,6 +46,7 @@ const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000)
 const MainCalendar = lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar"));
 const MainExplore = lazyWithDelay(() => import("../Features/ExploreTeacher/Pages/MainExplore"));
 const MainTeacherHome = lazyWithDelay(() => import("../Features/Home/Pages/MainTeacherHome"));
+const MainTeacherMessage = lazyWithDelay(() => import("../Features/Messages/Pages/MainTeacherMessage"));
 // const MainStudentHome = lazyWithDelay(() => import("../Features/Home/Pages/MainStudentHome"));
 
 
@@ -65,13 +67,14 @@ export const router = createBrowserRouter([
     { path: "explore", element: <MainExplore/> },
     { path: "home", element: <MainStudentHome/> },
     { path: "", element: <MainStudentHome/> },
+    { path: "messages", element: <MainTeacherMessage/> },
 
   ] },
 
   { path: "/setting", element: <MainSetting/> , children: [
-    {path: "profile", element: <ProfileStudent/>},
+    !roleToAuth?.includes("Teacher") ? {path: "profile", element: <ProfileStudent/>}:{},
     {path: "", element: <ProfileStudent/>},
-    {path: "financial", element: <MainFinancial/>},
+    roleToAuth?.includes("Teacher") ? {path: "financial", element: <MainFinancial/>} : {},
     {path: "security", element: <ChangePassword/>},
     {path: "notification", element: <NotificationsSettings/>},
   ] },
@@ -99,4 +102,5 @@ export const router = createBrowserRouter([
   ]},
   {path: "/quiz/result", element: <ResultQuiz/>},
   {path: "/quiz/start", element: <StartQuizforStudent/>},
+  {path: "/quiz/dashboard", element: <DashboardQuiz/>},
 ]);
