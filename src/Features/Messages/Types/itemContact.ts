@@ -11,6 +11,7 @@ export interface Conversation {
   id: string;
   lastMessageAt: string ,
   otherUserName: string;
+  isOnline: boolean
   lastMessage: string;
   otherUserPicture:string
   unreadCount: number;
