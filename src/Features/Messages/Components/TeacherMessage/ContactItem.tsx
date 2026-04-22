@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useGetChatConversation } from "../../Hooks/useGetChatConversation";
-import { useConverDate } from "../../Hooks/useConvertDate";
+import { useConvertDate } from "../../Hooks/useConvertDate";
 import type { ContactProps, Conversation } from "../../Types/itemContact";
-
+import { useGetChatMessages } from "../../Hooks/useGetChatMessages";
 
 const ContactItem: React.FC<ContactProps> = ({
   name,
@@ -15,7 +15,7 @@ const ContactItem: React.FC<ContactProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-row items-center p-[14.4px] gap-[15.2px] w-[329.6px] h-[72px] rounded-[14.4px] transition-all ${
+      className={`flex flex-row items-center mb-2 p-[14.4px] gap-[15.2px] w-[329.6px] h-[72px] rounded-[14.4px] transition-all ${
         isActive
           ? "bg-white shadow-[0px_0.9px_1.8px_rgba(0,0,0,0.05)]"
           : "bg-transparent"
@@ -82,25 +82,56 @@ const ContactItem: React.FC<ContactProps> = ({
 const ContactList: React.FC = () => {
   const { data } = useGetChatConversation();
   console.log(data);
-  const formatTime = useConverDate();
-  
+  const formatTime = useConvertDate();
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+
+  const { mutate } = useGetChatMessages();
+  useEffect(() => {
+  if (!conversationId) return;
+
+  mutate({
+    conversationId,
+    pageNumber: 1,
+    pageSize: 50,
+  });
+}, [conversationId, mutate]);
+
+  const getRecipientId = (id: string) => {
+if (activeId === id) return;
+
+  setActiveId(id);
+  setConversationId(id);
+
+  localStorage.setItem("conversationId", id);
+
+  };
+
   return (
     <div className="flex flex-col items-start py-[14.4px] pl-[14.4px] gap-[7.2px] w-[360px] h-[744.3px] overflow-y-auto scroll-smooth">
-      {data?.data ? data?.data.map((conversation: Conversation) => {
-        return (
-          <ContactItem
-            key={conversation.id}
-            isActive
-            isOnline
-            hasUnread={conversation.unreadCount}
-            name={conversation.otherUserName}
-            message={conversation.lastMessage}
-            time={formatTime(conversation.lastMessageAt)}
-            avatarUrl={conversation.otherUserPicture ? conversation.otherUserPicture : "https://api.dicebear.com/7.x/avataaars/svg?seed=Mohamed"}
-          />
-        );
-      }) : "fghjklf,fc;,fc,"}
-
+      {data?.data
+        ? data?.data.map((conversation: Conversation) => {
+          console.log(conversation.lastMessageAt)
+            return (
+              <div onClick={()=>{getRecipientId(conversation.id)}} className="">
+                <ContactItem
+                  key={conversation.id}
+                  isActive={activeId === conversation.id}
+                  isOnline = {conversation.isOnline}
+                  hasUnread={conversation.unreadCount}
+                  name={conversation.otherUserName}
+                  message={conversation.lastMessage}
+                  time={formatTime(conversation.lastMessageAt)}
+                  avatarUrl={
+                    conversation.otherUserPicture
+                      ? conversation.otherUserPicture
+                      : "https://api.dicebear.com/7.x/avataaars/svg?seed=Mohamed"
+                  }
+                />
+              </div>
+            );
+          })
+        : "fghjklf,fc;,fc,"}
     </div>
   );
 };
