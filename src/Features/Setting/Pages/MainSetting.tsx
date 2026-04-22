@@ -1,17 +1,16 @@
 import { Bell, CreditCard, ShieldCheck, User } from "lucide-react";
-
+import { roleToAuth } from "../../../Utils/Constant";
 import { NavLink, Outlet } from "react-router-dom";
 
 
 const MainSetting = () => {
+   
     type NavItem = {
         label: string;
         icon: React.ReactNode;
         to: string;
     };
 
-    
- 
     const navItems: NavItem[] = [
         { label: "Profile",      icon: <User size={18} strokeWidth={1.6} />,       to: "/setting/profile" },
         { label: "Financial",    icon: <CreditCard size={18} strokeWidth={1.6} />, to: "/setting/financial" },
@@ -33,13 +32,13 @@ const MainSetting = () => {
 
                         <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gray-200 rounded-full" />
                     
-                        {navItems.map(({ label, icon, to }) => (
+                        {navItems.filter(ele =>  (roleToAuth?.includes("Teacher") ? ele.label !== "Profile" : ele.label !== "Financial")).map(({ label, icon, to }) => (
                             <NavLink
                             key={label}
                             to={to}
                              className={({ isActive }) =>
                                 `relative flex border-l-4 items-center gap-3 pl-5 pr-5 py-4 text-[16px] font-medium transition-all duration-200
-                                ${isActive ? "border-[#525FE1]" : "border-transparent hover:border-[#525FE1]"}`
+                                ${isActive  || window.location.pathname === to ? "border-[#525FE1]" : "border-transparent hover:border-[#525FE1]"}`
                             }
                             >
                             {icon}
