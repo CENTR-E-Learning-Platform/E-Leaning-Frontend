@@ -1,6 +1,6 @@
-import React from 'react';
 
-const StudentMessage: React.FC = () => {
+
+const StudentMessage = () => {
   return (
     <div className="flex flex-row items-start p-0 gap-[15.2px] w-[391.4px] max-w-[440.04px] flex-none order-1 grow-0">
         <img 
