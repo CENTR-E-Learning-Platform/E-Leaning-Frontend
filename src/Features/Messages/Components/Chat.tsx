@@ -4,8 +4,8 @@ import { BASE_URL } from "../Utils/Api";
 import { TypingIndicator } from "./TypingIndicator";
 
 export default function Chat() {
-  const token = `${localStorage.getItem("token")}`;
   const isTyping = useRef<any>(null);
+  const token = `${localStorage.getItem("token")}`;
   const { connection, messages, typingUser } = useSignalR(token, BASE_URL);
 
   const [message, setMessage] = useState("");
