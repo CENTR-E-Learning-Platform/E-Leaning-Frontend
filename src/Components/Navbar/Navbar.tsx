@@ -9,7 +9,7 @@ import UserProfileDropdown from './UserProfileDropdown';
 import { CLoader } from '../UI/CLoader'; 
 
 const Navbar = () => {
-    const { data } = useTeacherProfile(false);
+    const { data } = useTeacherProfile();
     const [isAuth, setIsAuth] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -86,15 +86,15 @@ const Navbar = () => {
                         <div
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             className="p[13px] rounded-3xl flex justify-center items-center w-[37px] h-[37px] cursor-pointer">
-                            <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full' src={data?.data.fullPrfilePicturePath !== BASE_URL ? data?.data.fullPrfilePicturePath : bg_imptyPhoto} alt="Profile" />
+                            <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full' src={data?.data.data.profilePicturePath !== BASE_URL ? data?.data.data.profilePicturePath : bg_imptyPhoto} alt="Profile" />
                         </div>
 
                         {isDropdownOpen && (
                             <div className="absolute right-0 top-[calc(100%+10px)] z-50">
                                 <UserProfileDropdown 
-                                    userName={data?.data?.fullName || "Ahmed Mohamed"} 
-                                    userEmail={data?.data?.email || "ahmed@email.com"}
-                                    avatarUrl={data?.data?.fullPrfilePicturePath !== BASE_URL ? data?.data?.fullPrfilePicturePath : bg_imptyPhoto}
+                                    userName={data?.data.data?.fullName || "Ahmed Mohamed"} 
+                                    userEmail={data?.data.data?.email || "ahmed@email.com"}
+                                    avatarUrl={data?.data.data?.profilePicturePath !== BASE_URL ? data?.data?.data.profilePicturePath : bg_imptyPhoto}
                                     onLogout={handleLogout} 
                                 />
                             </div>
