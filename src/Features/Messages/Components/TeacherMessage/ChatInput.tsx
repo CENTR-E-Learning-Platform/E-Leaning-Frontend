@@ -1,7 +1,25 @@
-import React from 'react';
 import { Paperclip, Smile, SendHorizontal } from 'lucide-react';
+import { useState } from 'react';
+import * as signalR from "@microsoft/signalr";
 
-const ChatInput: React.FC = () => {
+type Props = {
+  connection: signalR.HubConnection | null;
+};
+
+const ChatInput = ({connection} :Props ) => {
+  const [message, setMessage] = useState("");
+  const sendMessage = async () => {
+    if (!message.trim()) return;
+    if (!connection || connection.state !== "Connected") return;
+
+    await connection.invoke("SendMessage", {
+      RecipientId: "9c3ecf8c-6a4d-4ee4-9992-fa26176c9c8d",
+      Content: message,
+    });
+
+    setMessage("");
+  };
+
   return (
     <div className="absolute left-0 right-0 bottom-0 flex h-[60px] w-[100%] flex-row items-center bg-white px-[22.8px] gap-[15.2px] shadow-[0px_-4px_20px_rgba(0,19,85,0.03)]">
       
@@ -18,12 +36,18 @@ const ChatInput: React.FC = () => {
           <input
             type="text"
             placeholder="Type a message..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") sendMessage();
+            }}
             className="w-full bg-transparent font-['Poppins'] text-[14.2px] font-normal leading-[20px] text-[#6B7280] outline-none placeholder:text-[#6B7280]"
           />
+
         </div>
       </div>
 
-      <button className="relative flex h-[43.2px] w-[45.6px] flex-none items-center justify-center rounded-[15.2px] bg-[#525FE1] shadow-[0px_10px_15px_-3px_rgba(0,64,223,0.2),0px_4px_6px_-4px_rgba(0,64,223,0.2)] transition-transform active:scale-95">
+      <button onClick={sendMessage} className="relative flex h-[43.2px] w-[45.6px] flex-none items-center justify-center rounded-[15.2px] bg-[#525FE1] shadow-[0px_10px_15px_-3px_rgba(0,64,223,0.2),0px_4px_6px_-4px_rgba(0,64,223,0.2)] transition-transform active:scale-95">
         <SendHorizontal size={18} color="#FFFFFF" />
       </button>
       
