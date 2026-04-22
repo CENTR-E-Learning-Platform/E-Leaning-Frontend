@@ -24,9 +24,13 @@ export const RegProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [userData, setUserData] = useState<UserRegister | null>(
     storedUser ? JSON.parse(storedUser) : null
   );
-  const [role, setrole] = useState<string | null>(
-    storedRole ? JSON.parse(storedRole) : null
-  );
+  const [role, setrole] = useState<string | null>(() => {
+  try {
+    return storedRole ? JSON.parse(storedRole) : null;
+  } catch {
+    return storedRole; 
+  }
+});
   const [educationLevelOrSubject, seteducationLevelOrSubject] = useState<string | null>(
     storeEducationLevelOrSubject ? JSON.parse(storeEducationLevelOrSubject) : null
   );
