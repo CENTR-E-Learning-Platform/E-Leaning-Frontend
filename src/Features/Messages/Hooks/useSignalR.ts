@@ -24,7 +24,8 @@ type UseSignalRReturn = {
 
 export default function useSignalR(
   token: string,
-  BASE_URL: string
+  BASE_URL: string,
+  refetch: () => void
 ): UseSignalRReturn {
   const [connection, setConnection] =
     useState<signalR.HubConnection | null>(null);
@@ -44,6 +45,7 @@ export default function useSignalR(
 
     connect.on("ReceiveMessage", (msg: Message) => {
       setMessages((prev) => [...prev, msg]);
+       refetch();
     });
 
     connect.on("ReceiveTypingIndicator", (data: TypingIndicator) => {
