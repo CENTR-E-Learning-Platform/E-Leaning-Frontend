@@ -87,7 +87,7 @@ const JoinNow = () => {
               {
                 data?.data.fullPrfilePicturePath !== BASE_URL ?
                   <img
-                  src={data?.data.fullPrfilePicturePath  }
+                  src={data?.data.data.profilePicturePath}
                   className="rounded-full w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] object-cover"
                   alt="Avatar"
                 />:
