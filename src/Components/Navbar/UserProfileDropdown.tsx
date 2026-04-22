@@ -5,7 +5,7 @@ import walletIcon from '../../assets/icons/wallet.svg';
 import settingsIcon from '../../assets/icons/setting.svg';
 import logoutIcon from '../../assets/icons/logout.svg';
 import userAvatar from '../../assets/icons/profile.svg';
-
+import { roleToAuth } from '../../Utils/Constant';
 interface UserProfileDropdownProps {
   userName?: string;
   userEmail?: string;
@@ -20,11 +20,14 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
   onLogout,
 }) => {
   
-  const handleLogout = () => {
+  const handleLogout = (e:any) => {
     localStorage.removeItem('token');
     
     if (onLogout) {
       onLogout();
+      e.preventDefault();
+      window.location.href = "";
+
     }
   };
 
@@ -43,13 +46,19 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
       </div>
 
       <div className="flex flex-col items-center py-[8px] w-[240px]">
-        <NavLink 
+      {roleToAuth?.includes("Teacher") && (
+          <NavLink 
           to="/profile" 
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = "/profile";
+          }}
           className="flex flex-row items-center py-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#F9FAFB] transition-colors rounded-[6px] no-underline"
         >
           <img src={profileIcon} alt="Profile Icon" className="w-[13.33px] h-[13.33px]" />
           <span className="flex items-center font-medium text-[14px] leading-[20px] text-[#434656]">My Profile</span>
         </NavLink>
+      )}
 
         <NavLink 
           to="/wallet" 
@@ -60,7 +69,11 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
         </NavLink>
 
         <NavLink 
-          to="/setting" 
+          to={(roleToAuth?.includes("Teacher") ? "/setting/financial" : "/setting/profile")}
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = (roleToAuth?.includes("Teacher") ? "/setting/financial" : "/setting/profile");
+          }}
           className="flex flex-row items-center pt-[10px] pb-[14px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#F9FAFB] transition-colors rounded-[6px] no-underline"
         >
           <img src={settingsIcon} alt="Settings Icon" className="w-[16.75px] h-[16.67px]" />
@@ -71,6 +84,7 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
 
         <button
           onClick={handleLogout}
+          
           className="flex flex-row items-center pt-[14px] pb-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#FEF2F2] transition-colors rounded-[6px] mt-[4px]"
         >
           <img src={logoutIcon} alt="Logout Icon" className="w-[15px] h-[15px]" />
