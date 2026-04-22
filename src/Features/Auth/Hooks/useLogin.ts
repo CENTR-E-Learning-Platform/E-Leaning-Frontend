@@ -1,4 +1,3 @@
-// src/Features/Auth/Hooks/useLogin.ts
 import { useFormik } from "formik";
 import { loginSchema } from "../Validation/loginSchema";
 import { loginUser } from "../Services/loginAPI";
@@ -19,8 +18,11 @@ export const useLogin = () => {
         console.log(" Login successful:", res.data);
         var token = res.data.data.token;
         localStorage.setItem("token", token);
-        console.log(token);
+        const roleToAuth = res.data.data.roles[0];
+        localStorage.setItem("roleToAuth" , roleToAuth);
+        console.log(res.data.message);
         navigate("/home")
+        window.location.href = "/home";
       } catch (error: any) {
         const MSError = error.response?.data.errors[0] || error.message;
         console.error(" Login failed:", error.status);
