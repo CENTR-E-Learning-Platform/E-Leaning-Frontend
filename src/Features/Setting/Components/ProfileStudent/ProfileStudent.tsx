@@ -7,7 +7,7 @@ import EditPhotoModal from "./EditPhotoModal";
 import { useStudentProfile } from "../../Hooks/useStudentProfile";
 import { useUpdateProfileStudent } from "../../Hooks/useUpdateProfileStudent";
 import { studentProfileSchema } from "../../Validation/studentProfileSchema";
-
+import { roleToAuth } from "../../../../Utils/Constant";
 const ProfileStudent = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
@@ -17,7 +17,6 @@ const ProfileStudent = () => {
   const [indexSelected, setIndexSelected] = useState<number>(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { data } = useStudentProfile();
-
   const [form, setForm] = useState({
     firstName: "",
     secondName: "",
@@ -94,7 +93,8 @@ const ProfileStudent = () => {
 
   return (
     <>
-      <section className="profile-student">
+    {!roleToAuth?.includes("Teacher") &&(
+         <section className="profile-student">
         <div className="Adding-Student-Profile-Image relative mb-[25px]">
           <img
             className="w-[88px] h-[88px] rounded-full  object-cover"
@@ -312,6 +312,7 @@ const ProfileStudent = () => {
           setPreviewImage={setPreviewImage}
         />
       </section>
+    )}
     </>
   );
 };

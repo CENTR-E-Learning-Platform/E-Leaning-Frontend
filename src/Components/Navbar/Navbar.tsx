@@ -7,13 +7,24 @@ import logo from '../../assets/icons/logo.svg';
 import notify from '../../../src/assets/icons/NotificationIcon.svg';
 import UserProfileDropdown from './UserProfileDropdown';
 import { CLoader } from '../UI/CLoader'; 
+import { useStudentProfile } from '../../Features/Setting/Hooks/useStudentProfile'; 
+import { roleToAuth } from '../../Utils/Constant';
 
 const Navbar = () => {
-    const { data } = useTeacherProfile(false);
+    const teacherData = useTeacherProfile();
+    const studentData = useStudentProfile();
     const [isAuth, setIsAuth] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
+    
+    const isTeacher = roleToAuth?.includes("Teacher");
+    const data = isTeacher ? teacherData.data : studentData.data;
+
+    const userName = isTeacher ? data?.data?.data?.fullName : data?.data?.firstName;
+    const userEmail = isTeacher ? data?.data?.data?.email : data?.data?.email;
+    const profilePic = isTeacher ? data?.data?.data?.profilePicturePath : data?.data?.fullProfilePiturePath;
+    const avatarImage = profilePic && profilePic !== BASE_URL ? profilePic : bg_imptyPhoto;
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -22,15 +33,15 @@ const Navbar = () => {
         } else {
             setIsAuth(false);
         }
-
+        
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setIsDropdownOpen(false);
             }
         };
+        
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-        
     }, []);
 
     const handleLogout = () => {
@@ -86,15 +97,15 @@ const Navbar = () => {
                         <div
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             className="p[13px] rounded-3xl flex justify-center items-center w-[37px] h-[37px] cursor-pointer">
-                            <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full' src={data?.data.fullPrfilePicturePath !== BASE_URL ? data?.data.fullPrfilePicturePath : bg_imptyPhoto} alt="Profile" />
+                            <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full object-cover' src={avatarImage} alt="Profile" />
                         </div>
 
                         {isDropdownOpen && (
                             <div className="absolute right-0 top-[calc(100%+10px)] z-50">
                                 <UserProfileDropdown 
-                                    userName={data?.data?.fullName || "Ahmed Mohamed"} 
-                                    userEmail={data?.data?.email || "ahmed@email.com"}
-                                    avatarUrl={data?.data?.fullPrfilePicturePath !== BASE_URL ? data?.data?.fullPrfilePicturePath : bg_imptyPhoto}
+                                    userName={userName || "Ahmed Mohamed"} 
+                                    userEmail={userEmail || "ahmed@email.com"}
+                                    avatarUrl={avatarImage}
                                     onLogout={handleLogout} 
                                 />
                             </div>
