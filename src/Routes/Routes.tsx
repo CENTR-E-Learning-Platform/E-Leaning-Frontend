@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Children, lazy } from "react";
+import { Children, lazy } from "react"; 
 import MainRegister from "../Features/Auth/Pages/MainRegister";
 import MainLogin from "../Features/Auth/Pages/MainLogin";
 import TeacherOption from "../Features/Auth/Components/Register/TeacherOption";
@@ -33,94 +33,33 @@ import QuizSetting from "../Features/Quiz/Pages/QuizSetting";
 import QuizQuistions from "../Features/Quiz/Pages/QuizQuistions";
 import ResultQuiz from "../Features/Quiz/Pages/ResultQuiz";
 import StartQuizforStudent from "../Features/Quiz/Pages/StartQuizforStudent";
-<<<<<<< HEAD
-// import MainTeacherMessage from "../Features/Messages/Pages/MainTeacherMessage";
-import Chat from "../Features/Messages/Components/Chat";
-import ViewStudent from "../Features/Profile/Pages/ViewStudent";
-const lazyWithDelay = (
-  importFunction: () => Promise<any>,
-  delay: number = 2000,
-) => {
-=======
 import { roleToAuth } from "../Utils/Constant";
-import DashboardQuiz from "../Features/Quiz/Pages/DashboardQuiz";
+// import DashboardQuiz from "../Features/Quiz/Pages/DashboardQuiz";
 const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000) => {
->>>>>>> 28a268d021d72b2a5c5058ec7068d93107fbc6a8
   return lazy(() =>
     Promise.all([
       importFunction(),
-      new Promise((resolve) => setTimeout(resolve, delay)),
-    ]).then(([moduleExports]) => moduleExports),
+      new Promise((resolve) => setTimeout(resolve, delay)), 
+    ]).then(([moduleExports]) => moduleExports) 
   );
 };
-<<<<<<< HEAD
-const MainCalendar = lazyWithDelay(
-  () => import("../Features/Calendar/Pages/MainCalendar"),
-);
-const MainExplore = lazyWithDelay(
-  () => import("../Features/ExploreTeacher/Pages/MainExplore"),
-);
-const MainTeacherHome = lazyWithDelay(
-  () => import("../Features/Home/Pages/MainTeacherHome"),
-);
-=======
 const MainCalendar = lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar"));
 const MainExplore = lazyWithDelay(() => import("../Features/ExploreTeacher/Pages/MainExplore"));
 const MainTeacherHome = lazyWithDelay(() => import("../Features/Home/Pages/MainTeacherHome"));
 const MainTeacherMessage = lazyWithDelay(() => import("../Features/Messages/Pages/MainTeacherMessage"));
->>>>>>> 28a268d021d72b2a5c5058ec7068d93107fbc6a8
 // const MainStudentHome = lazyWithDelay(() => import("../Features/Home/Pages/MainStudentHome"));
-const MainTeacherMessage = lazyWithDelay(
-  () => import("../Features/Messages/Pages/MainTeacherMessage"),
-);
+
+
 export const router = createBrowserRouter([
-  {
-    path: "/explore/TeacherPayment",
-    element: <MainPayment />,
-    children: [
-      {
-        path: "/explore/TeacherPayment/paymentCart",
-        element: <DynamicPaymentCard />,
-      },
-      { path: "/explore/TeacherPayment", element: <DynamicPaymentCard /> },
-      {
-        path: "/explore/TeacherPayment/mobileWallet",
-        element: <DynamicPaymentMobileWallet />,
-      },
-      {
-        path: "/explore/TeacherPayment/mobileWallet/confirm",
-        element: <DynamicPaymentMobileWalletconfirm />,
-      },
-    ],
+  {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
+    {path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard/>},
+    {path: "/explore/TeacherPayment", element: <DynamicPaymentCard/>},
+    {path: "/explore/TeacherPayment/mobileWallet", element: <DynamicPaymentMobileWallet/>},
+    {path: "/explore/TeacherPayment/mobileWallet/confirm", element:  <DynamicPaymentMobileWalletconfirm/>}
+  ]
   },
+  
 
-<<<<<<< HEAD
-  {
-    path: "/",
-    element: <Navbar />,
-    children: [
-      { path: "OptionRegister", element: <OptionRegister /> },
-      // { path: "/meeting", element: <LiveRoom /> },
-      { path: "Calendar", element: <MainCalendar /> },
-      { path: "explore", element: <MainExplore /> },
-      { path: "home", element: <MainStudentHome /> },
-      { path: "", element: <MainStudentHome /> },
-      { path: "/messages", element: <MainTeacherMessage /> },
-    ],
-  },
-
-  {
-    path: "/setting",
-    element: <MainSetting />,
-    children: [
-      { path: "profile", element: <ProfileStudent /> },
-      { path: "", element: <ProfileStudent /> },
-      { path: "financial", element: <MainFinancial /> },
-      { path: "security", element: <ChangePassword /> },
-      { path: "notification", element: <NotificationsSettings /> },
-    ],
-  },
-=======
   { path: "/", element: <Navbar/> , children: [
     { path: "OptionRegister", element: <OptionRegister /> },
     // { path: "/meeting", element: <LiveRoom /> },
@@ -139,16 +78,15 @@ export const router = createBrowserRouter([
     {path: "security", element: <ChangePassword/>},
     {path: "notification", element: <NotificationsSettings/>},
   ] },
->>>>>>> 28a268d021d72b2a5c5058ec7068d93107fbc6a8
   { path: "teacher-option", element: <TeacherOption /> },
   { path: "student-option", element: <StudentOption /> },
   { path: "/confing", element: <EmailConfig /> },
   { path: "/createroom", element: <CreateRoomTeacher /> },
-  { path: "/createroom/joinnow", element: <JoinNow /> },
-  { path: "/createroom/joinnow/meeting", element: <LiveRoom /> },
-  { path: "/createroom/joinnow/meeting/chat", element: <ChatForm /> },
-  { path: "/createroom/joinStudent", element: <JoinRoomStudent /> },
-  { path: "/GoodBy", element: <GoodBy /> },
+  { path: "/createroom/joinnow", element: <JoinNow/> },
+  { path: "/createroom/joinnow/meeting", element: <LiveRoom/> },
+  { path: "/createroom/joinnow/meeting/chat", element: <ChatForm/> },
+  { path: "/createroom/joinStudent", element: <JoinRoomStudent/> },
+  { path: "/GoodBy",  element: <GoodBy/> },
   { path: "/auth", element: <OptionRegister /> },
   { path: "register", element: <MainRegister /> },
   { path: "login", element: <MainLogin /> },
@@ -156,26 +94,6 @@ export const router = createBrowserRouter([
   { path: "login/SendEmail", element: <ForgetPassword /> },
   { path: "login/SendEmail/otp", element: <OTP /> },
   { path: "login/SendEmail/otp/setNewPassword", element: <SetNewPassword /> },
-<<<<<<< HEAD
-  { path: "/profile", element: <ViewTeacher /> },
-  { path: "/loder", element: <CLoader /> },
-  {
-    path: "/quiz",
-    element: <CreateNewQuiz />,
-    children: [
-      { path: "/quiz/add-questions", element: <QuizQuistions /> },
-      { path: "/quiz/quizsetting", element: <QuizSetting /> },
-    ],
-  },
-  {path :"/profile/teacher" , element : <ViewTeacher/> },
-  {path :"/profile/student" , element : <ViewStudent/> },
-
-  
-  { path: "/Chat", element: <Chat /> },
-  { path: "/quiz/result", element: <ResultQuiz /> },
-  { path: "/quiz/start", element: <StartQuizforStudent /> },
-]);
-=======
   { path: "/profile", element: <ViewTeacher/> },
   { path: "/loder", element: <CLoader/> },
   { path: "/quiz", element: <CreateNewQuiz/>  , children:[
@@ -184,6 +102,5 @@ export const router = createBrowserRouter([
   ]},
   {path: "/quiz/result", element: <ResultQuiz/>},
   {path: "/quiz/start", element: <StartQuizforStudent/>},
-  {path: "/quiz/dashboard", element: <DashboardQuiz/>},
+// {path: "/quiz/dashboard", element: <DashboardQuiz/>},
 ]);
->>>>>>> 28a268d021d72b2a5c5058ec7068d93107fbc6a8
