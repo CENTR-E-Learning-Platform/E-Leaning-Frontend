@@ -12,7 +12,7 @@ interface QuestionCardProps {
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({ question, index, onEdit, onDelete }) => {
   const formatQuestionType = (type: string) => {
-    return type === 'MULTIPLE_CHOICE' ? 'MULTIPLE CHOICE' : 'TRUE/FALSE';
+    return type === 'multiplechoice' ? 'MULTIPLE CHOICE' : 'TRUE/FALSE';
   };
 
   return (
