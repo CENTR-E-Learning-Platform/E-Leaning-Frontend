@@ -1,8 +1,12 @@
+import { useConvertDate } from "../../Hooks/useConvertDate";
+
 type Message = {
   senderId: string;
   senderName: string;
   content: string;
   conversationId: number;
+  sentAt: string;
+  createdAt: string;
 };
 
 type Props = {
@@ -10,6 +14,9 @@ type Props = {
 };
 
 export const TeacherTextMessage = ({ messages }: Props) => {
+
+  const formatTime = useConvertDate();
+
   return (
     <div>
       {messages.map((msg, i) => (
@@ -25,9 +32,9 @@ export const TeacherTextMessage = ({ messages }: Props) => {
                   {msg.content}
                 </p>
               </div>
-              <div className="flex flex-col items-start pt-[7.2px] px-[3.8px] pb-0 w-[41.85px] h-[20.7px]">
-                <span className="w-[38px] h-[13.5px] font-['Poppins'] font-light text-[10px] leading-[13.5px] text-[#434656]">
-                  8:17 am
+              <div className="flex flex-col items-start pt-[7.2px] px-[3.8px] pb-0 h-[20.7px]">
+                <span className="h-[13.5px] font-['Poppins'] font-light text-[10px] leading-[13.5px] text-[#434656]">
+                  {formatTime(msg.sentAt) || formatTime(msg.createdAt)}
                 </span>
               </div>
             </div>
