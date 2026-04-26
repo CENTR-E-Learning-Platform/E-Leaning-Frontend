@@ -35,10 +35,34 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
   // Array of all messages reverse sorted
 
+  // const allMessages = [...(chatData || []), ...signalR.messages]
+  //   .filter((msg) => msg.conversationId === Number(conversationId))
+  //   .sort(
+  //     (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
+  //   );
+
   const allMessages = [...(chatData || []), ...signalR.messages]
     .filter((msg) => msg.conversationId === Number(conversationId))
+    .filter(
+      (msg, index, self) =>
+        index ===
+        self.findIndex((m) => {
+          if (msg.id && m.id) return m.id === msg.id;
+
+          return (
+            m.content === msg.content &&
+            m.senderId === msg.senderId &&
+            Math.abs(
+              new Date(m.sentAt || m.createdAt || 0).getTime() -
+                new Date(msg.sentAt || msg.createdAt || 0).getTime(),
+            ) < 1000
+          );
+        }),
+    )
     .sort(
-      (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
+      (a, b) =>
+        new Date(a.sentAt || a.createdAt || 0).getTime() -
+        new Date(b.sentAt || b.createdAt || 0).getTime(),
     );
 
   return (
