@@ -85,38 +85,63 @@ const ContactList: React.FC = () => {
   console.log(data);
   const formatTime = useConvertDate();
   const [activeId, setActiveId] = useState<string | null>(null);
-  const { setChatData , conversationId , setConversationId  , setOtherUserId , page  , setPage , hasMore , setHasMore } = useChat();
+  const {
+    setChatData,
+    conversationId,
+    setConversationId,
+    setOtherUserId,
+    page,
+    setPage,
+    setHasMore,
+  } = useChat();
   const { mutate } = useGetChatMessages();
 
-  
-
   useEffect(() => {
-  if (!conversationId) return;
-  mutate({
-    conversationId,
-    pageNumber: page,
-    pageSize: 50,
-  }, {
-    onSuccess: (res) => {
-      if (res.data.length < 50) {
-    setHasMore(false); // مفيش داتا تانى
-  }
-  if (page === 1) {
-    setChatData(res.data);
-  } else {
-    setChatData((prev: any[]) => [...res.data, ...(prev || [])]);
-  }
-    },
-  });
-}, [conversationId, page]);
+    if (!conversationId) return;
+    mutate(
+      {
+        conversationId,
+        pageNumber: page,
+        pageSize: 50,
+      },
+      {
+        onSuccess: (res) => {
+          if (res.data.length < 50) {
+            setHasMore(false);
+          }
+          if (page === 1) {
+            setChatData(res.data);
+          } else {
+            setChatData((prev: any[]) => [...res.data, ...(prev || [])]);
+          }
+        },
+      },
+    );
+  }, [conversationId, page]);
 
-  const getConversationId = (id: string , otherUserId: string) => {
-
+  const getConversationId = (id: string, otherUserId: string) => {
     if (activeId === id) return;
     setActiveId(id);
     setConversationId(id);
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const payload = token.split(".")[1];
+      const decoded = JSON.parse(atob(payload));
+
+      console.log("decoded", decoded);
+
+      const userId =
+        decoded[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        ];
+
+      localStorage.setItem("currentUserId", userId);
+    }
+
     setOtherUserId(otherUserId);
-    setPage(1); 
+    setPage(1);
     setHasMore(true);
   };
 
@@ -128,7 +153,7 @@ const ContactList: React.FC = () => {
               <div
                 key={conversation.id}
                 onClick={() => {
-                  getConversationId(conversation.id ,conversation.otherUserId );
+                  getConversationId(conversation.id, conversation.otherUserId);
                 }}
                 className=""
               >
