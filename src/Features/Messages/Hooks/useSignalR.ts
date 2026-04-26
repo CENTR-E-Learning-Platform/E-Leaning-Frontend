@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 
-
 type Message = {
   senderId: string;
   senderName: string;
   content: string;
   conversationId: number;
+  sentAt?: string | number;
 };
 
 type TypingIndicator = {
@@ -21,14 +21,14 @@ type UseSignalRReturn = {
   typingUser: string | null;
 };
 
-
 export default function useSignalR(
   token: string,
   BASE_URL: string,
-  refetch: () => void
+  refetch: () => void,
 ): UseSignalRReturn {
-  const [connection, setConnection] =
-    useState<signalR.HubConnection | null>(null);
+  const [connection, setConnection] = useState<signalR.HubConnection | null>(
+    null,
+  );
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [typingUser, setTypingUser] = useState<string | null>(null);
@@ -43,33 +43,47 @@ export default function useSignalR(
       .withAutomaticReconnect()
       .build();
 
-    connect.on("ReceiveMessage", (msg: Message) => {
-      setMessages((prev) => [...prev, msg]);
-       refetch();
-    });
+      connect.on("ReceiveMessage", (msg: Message) => {
+        setMessages((prev) => {
+          const exists = prev.some(
+            (m) =>
+              m.content === msg.content &&
+              m.senderId === msg.senderId &&
+              Math.abs(
+                new Date(m.sentAt || 0).getTime() -
+                  new Date(msg.sentAt || 0).getTime(),
+              ) < 1000,
+          );
 
-    connect.on("ReceiveTypingIndicator", (data: TypingIndicator) => {
-      if (data.isTyping) {
-        setTypingUser(data.senderName);
-      } else {
-        setTypingUser(null);
-      }
-    });
+          if (exists) return prev;
 
-    connect.on("MessageRead", (conversationId: number) => {
-      console.log("Read:", conversationId);
-    });
-
-    connect
-      .start()
-      .then(() => {
-        console.log("Connected ✅");
-      })
-      .catch((err) => {
-        console.error("Connection failed ❌", err);
+          return [...prev, msg];
+        });
+        refetch();
       });
 
-    setConnection(connect);
+      connect.on("ReceiveTypingIndicator", (data: TypingIndicator) => {
+        if (data.isTyping) {
+          setTypingUser(data.senderName);
+        } else {
+          setTypingUser(null);
+        }
+      });
+
+      connect.on("MessageRead", (conversationId: number) => {
+        console.log("Read:", conversationId);
+      });
+
+      connect
+        .start()
+        .then(() => {
+          console.log("Connected ✅");
+        })
+        .catch((err) => {
+          console.error("Connection failed ❌", err);
+        });
+
+      setConnection(connect);
 
     return () => {
       connect.stop();
