@@ -8,6 +8,7 @@ export interface ContactProps {
   hasUnread?: number;
 }
 export interface Conversation {
+  otherUserId: string;
   id: string;
   lastMessageAt: string ,
   otherUserName: string;
