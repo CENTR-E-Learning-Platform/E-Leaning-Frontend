@@ -3,49 +3,52 @@ import { useQuiz } from '../Context/QuizContext';
 
 interface QuizResultCardProps {
   quizTitle?: string;
-  date?: string;
-  time?: string;
 }
 
 export const QuizResultCard: React.FC<QuizResultCardProps> = ({
   quizTitle = "Stoichiometry Quiz",
-  date = "APR 8, 2026",
-  time = "3:45 PM",
 }) => {
   const { QuizDataTime } = useQuiz();
   
   const [finalScore, setFinalScore] = useState(0);
   const [maxPossibleScore, setMaxPossibleScore] = useState(0);
   const [feedback, setFeedback] = useState("");
+  
+  const [submitDate, setSubmitDate] = useState("");
+  const [submitTime, setSubmitTime] = useState("");
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
+    const now = new Date();
+    setSubmitDate(now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase());
+    setSubmitTime(now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }));
+
     const loadStoredData = () => {
       const storedData = localStorage.getItem("quizResult");
-      if (storedData) {
-        try {
-          const parsed = JSON.parse(storedData);
-          setFinalScore(parsed.finalScore || 0);
-          setMaxPossibleScore(parsed.maxPossibleScore || 0);
-          setFeedback(parsed.status || "");
-        } catch(e) {
-          console.error("Error parsing quiz result:", e);
+
+      try {
+        const parsed = JSON.parse(storedData ? storedData : "{}");
+        setFinalScore(parsed.finalScore || 0);
+        setMaxPossibleScore(parsed.maxPossibleScore || 0);
+        setFeedback(parsed.status || "");
+        setTitle(parsed.quizTitle || quizTitle);
+        
+        const storedDate = new Date(parsed.submissionTime);
+        setSubmitDate(storedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase());
+        setSubmitTime(storedDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }));
+        
+      } catch(e) {
+        console.error(e);
         }
-      }
+      
     };
 
-    // 1. تحميل الداتا أول ما الكومبوننت يفتح
     loadStoredData();
 
-    // 2. التفاعل مع الإيفنت اللي عملناه في فايل الـ Hook
     window.addEventListener("quizResultUpdated", loadStoredData);
-    
-    // 3. (الحل السحري) بولينج بيشيك على اللوكال ستوريدج كل نص ثانية لمدة 3 ثواني بس
-    // ده بيضمن إن لو الداتا اتأخرت ملي ثانية بسبب النت، يلقطها ويعمل أبديت من غير ريفريش
     const interval = setInterval(() => {
       loadStoredData();
     }, 500);
-
-    // توقيف البولينج بعد 3 ثواني عشان ميسحبش من أداء المتصفح
     const timeout = setTimeout(() => {
       clearInterval(interval);
     }, 3000);
@@ -70,10 +73,10 @@ export const QuizResultCard: React.FC<QuizResultCardProps> = ({
         <div className="flex flex-row justify-between items-center w-full">
           <div className="flex flex-col items-start gap-[4px]">
             <h2 className="m-0 font-semibold text-[23px] leading-[30px] text-[#2A2D34]">
-              {QuizDataTime?.Title || quizTitle}
+              {title}
             </h2>
             <span className="font-medium text-[13px] leading-[19px] tracking-[1.4px] uppercase text-[#747688]">
-              {date} • {time}
+              {submitDate} • {submitTime}
             </span>
           </div>
 
