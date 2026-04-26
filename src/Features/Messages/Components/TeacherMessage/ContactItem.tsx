@@ -3,6 +3,7 @@ import { useGetChatConversation } from "../../Hooks/useGetChatConversation";
 import { useConvertDate } from "../../Hooks/useConvertDate";
 import type { ContactProps, Conversation } from "../../Types/itemContact";
 import { useGetChatMessages } from "../../Hooks/useGetChatMessages";
+import { useChat } from "../../Contexts/ShareDataMessages";
 
 const ContactItem: React.FC<ContactProps> = ({
   name,
@@ -84,40 +85,82 @@ const ContactList: React.FC = () => {
   console.log(data);
   const formatTime = useConvertDate();
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [conversationId, setConversationId] = useState<string | null>(null);
-
-  const { mutate } = useGetChatMessages();
-  useEffect(() => {
-  if (!conversationId) return;
-
-  mutate({
+  const {
+    setChatData,
     conversationId,
-    pageNumber: 1,
-    pageSize: 50,
-  });
-}, [conversationId, mutate]);
+    setConversationId,
+    setOtherUserId,
+    page,
+    setPage,
+    setHasMore,
+  } = useChat();
+  const { mutate } = useGetChatMessages();
 
-  const getRecipientId = (id: string) => {
-if (activeId === id) return;
+  useEffect(() => {
+    if (!conversationId) return;
+    mutate(
+      {
+        conversationId,
+        pageNumber: page,
+        pageSize: 50,
+      },
+      {
+        onSuccess: (res) => {
+          if (res.data.length < 50) {
+            setHasMore(false);
+          }
+          if (page === 1) {
+            setChatData(res.data);
+          } else {
+            setChatData((prev: any[]) => [...res.data, ...(prev || [])]);
+          }
+        },
+      },
+    );
+  }, [conversationId, page]);
 
-  setActiveId(id);
-  setConversationId(id);
+  const getConversationId = (id: string, otherUserId: string) => {
+    if (activeId === id) return;
+    setActiveId(id);
+    setConversationId(id);
 
-  localStorage.setItem("conversationId", id);
+    const token = localStorage.getItem("token");
 
+    if (token) {
+      const payload = token.split(".")[1];
+      const decoded = JSON.parse(atob(payload));
+
+      console.log("decoded", decoded);
+
+      const userId =
+        decoded[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        ];
+
+      localStorage.setItem("currentUserId", userId);
+    }
+
+    setOtherUserId(otherUserId);
+    setPage(1);
+    setHasMore(true);
   };
 
   return (
     <div className="flex flex-col items-start py-[14.4px] pl-[14.4px] gap-[7.2px] w-[360px] h-[744.3px] overflow-y-auto scroll-smooth">
       {data?.data
         ? data?.data.map((conversation: Conversation) => {
-          console.log(conversation.lastMessageAt)
             return (
-              <div onClick={()=>{getRecipientId(conversation.id)}} className="">
+              <div
+                key={conversation.id}
+                onClick={() => {
+                  getConversationId(conversation.id, conversation.otherUserId);
+                }}
+                className=""
+              >
                 <ContactItem
                   key={conversation.id}
                   isActive={activeId === conversation.id}
-                  isOnline = {conversation.isOnline}
+                  isOnline={conversation.isOnline}
                   hasUnread={conversation.unreadCount}
                   name={conversation.otherUserName}
                   message={conversation.lastMessage}
