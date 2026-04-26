@@ -2,6 +2,7 @@ import { Paperclip, Smile, SendHorizontal } from "lucide-react";
 import { useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { useChat } from "../../Contexts/ShareDataMessages";
+import { useGetChatMessages } from "../../Hooks/useGetChatMessages";
 
 type Props = {
   connection: signalR.HubConnection | null;
@@ -25,15 +26,37 @@ const ChatInput = ({ connection }: Props) => {
   //   setMessage("");
   // };
 
+
+  // const { mutate } = useGetChatMessages();
+
+  // const sendMessage = async () => {
+  //   if (!message.trim()) return;
+  //   if (!connection || connection.state !== "Connected") return;
+
+  //   try {
+  //     await connection.invoke("SendMessage", {
+  //       RecipientId: otherUserId,
+  //       Content: message,
+  //     });
+  //   } catch (err) {
+  //     console.error("Send failed", err);
+  //   }
+
+  //   setMessage("");
+  // };
+
   const sendMessage = async () => {
     if (!message.trim()) return;
     if (!connection || connection.state !== "Connected") return;
 
+    const currentUserId = localStorage.getItem("currentUserId");
+    console.log(otherUserId, currentUserId);
     const tempMessage = {
-      id: Date.now(),
+      id: `temp-${Date.now()}`,
       content: message,
-      senderId: "me",
+      senderId: currentUserId,
       conversationId: Number(conversationId),
+      sentAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
 
@@ -46,6 +69,9 @@ const ChatInput = ({ connection }: Props) => {
       });
     } catch (err) {
       console.error("Send failed", err);
+      setChatData((prev: any) =>
+        (prev || []).filter((m: any) => m.id !== tempMessage.id)
+      );
     }
 
     setMessage("");
