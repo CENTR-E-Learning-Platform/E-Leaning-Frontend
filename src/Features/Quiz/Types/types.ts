@@ -4,7 +4,7 @@ export type QuizTime = {
     Date: string;
     Time: string;
     Duration: number;
-    IsAttempted: boolean;
+    Attemptes: number;
     Class?: string; 
     Questions?: Question[];
 };
