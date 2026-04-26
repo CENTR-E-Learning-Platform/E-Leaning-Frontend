@@ -53,7 +53,7 @@ export const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ onClos
       Date: prev?.Date || "",
       Time: prev?.Time || "",
       Duration: prev?.Duration || 0,
-      IsAttempted: prev?.IsAttempted || false,
+      Attemptes: prev?.Attemptes || 1,
       Questions: [...currentQuestions, newQuestion]
     }));
 
