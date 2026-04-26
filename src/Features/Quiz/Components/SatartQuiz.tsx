@@ -1,6 +1,5 @@
 // SatartQuiz.tsx
 import { useAttemptQuiz } from '../Hooks/useAttemptQuiz'
-import { NavLink } from 'react-router-dom'
 
 const SatartQuiz = ({st}:any) => {
     const {fetchQuestions} = useAttemptQuiz();
