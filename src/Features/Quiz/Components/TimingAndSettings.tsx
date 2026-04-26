@@ -3,7 +3,6 @@ import { useQuiz } from '../Context/QuizContext';
 import time from '../../../assets/icons/time.svg';
 import inputtime from '../../../assets/icons/inputTime.svg';
 import date from '../../../assets/icons/date.svg';
-import { useCreateQuiz } from '../Hooks/useCreateQuiz';
 
 export const TimingAndSettings: React.FC = () => {
   const { QuizDataTime, setQuizDataTime } = useQuiz();
@@ -16,7 +15,12 @@ export const TimingAndSettings: React.FC = () => {
     const { name, value } = e.target;
     setQuizDataTime((prev) => ({ ...prev, [name]: value }));
   };
+  console.log("attemp " , selectedAttempt);
+  
 
+  const handleAttemps = () =>{
+    setQuizDataTime((prev)=>({...prev , Attemptes : selectedAttempt === '1 attempt' ? 1 : selectedAttempt === '2 attempts' ? 2 : 10}));
+  }
 
   const handleDurationChange = (durationStr: string) => {
     setSelectedTimeLimit(durationStr);
@@ -24,6 +28,8 @@ export const TimingAndSettings: React.FC = () => {
     if (durationStr.includes('m')) {
         durationValue = parseInt(durationStr.replace('m', ''));
     }
+    console.log("dur " ,durationValue);
+    
     setQuizDataTime((prev) => ({ ...prev, Duration: durationValue }));
   };
 
@@ -107,7 +113,10 @@ export const TimingAndSettings: React.FC = () => {
              {attempts.map((attempt) => (
               <button
                 key={attempt}
-                onClick={() => setSelectedAttempt(attempt)}
+                onClick={() => 
+                  {setSelectedAttempt(attempt)
+                    handleAttemps();
+                  }}
                 className={`flex flex-row items-center justify-center px-[22px] py-[11px] h-[43px] rounded-[11px] font-bold text-[13px] leading-[18px] box-border cursor-pointer transition-colors ${
                   selectedAttempt === attempt
                     ? 'bg-[rgba(45,91,255,0.1)] border-[2px] border-[#525FE1] text-[#525FE1] hover:bg-[rgba(45,91,255,0.2)]'
