@@ -1,5 +1,5 @@
 import { Paperclip, Smile, SendHorizontal } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { useChat } from "../../Contexts/ShareDataMessages";
 
@@ -10,37 +10,75 @@ type Props = {
 const ChatInput = ({ connection }: Props) => {
   const [message, setMessage] = useState("");
   const { otherUserId, conversationId, setChatData } = useChat();
+  const isTyping = useRef<any>(null);
 
   const sendMessage = async () => {
-    if (!message.trim()) return;
-    if (!connection || connection.state !== "Connected") return;
+  if (!message.trim()) return;
+  if (!connection || connection.state !== "Connected") return;
 
-    const currentUserId = localStorage.getItem("currentUserId");
-    console.log(otherUserId, currentUserId);
-    const tempMessage = {
-      id: `temp-${Date.now()}`,
-      content: message,
-      senderId: currentUserId,
-      conversationId: Number(conversationId),
-      sentAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    };
+  const currentUserId = localStorage.getItem("currentUserId");
+  const {fullName} = JSON.parse(localStorage.getItem("userData") || "{}");
 
-    setChatData((prev: any) => [...(prev || []), tempMessage]);
+  connection.invoke("SendTypingIndicator", {
+    RecipientId: otherUserId,
+    IsTyping: false,
+  });
 
-    try {
-      await connection.invoke("SendMessage", {
+  
+  if (isTyping.current) {
+    clearTimeout(isTyping.current);
+    isTyping.current = null;
+  }
+
+  const tempMessage = {
+    id: `temp-${Date.now()}`,
+    content: message,
+    senderId: currentUserId,
+    senderName: fullName, 
+    conversationId: Number(conversationId),
+    sentAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+  };
+
+  setChatData((prev: any) => [...(prev || []), tempMessage]);
+
+  try {
+    await connection.invoke("SendMessage", {
+      RecipientId: otherUserId,
+      Content: message,
+    });
+  } catch (err) {
+    console.error("Send failed", err);
+    setChatData((prev: any) =>
+      (prev || []).filter((m: any) => m.id !== tempMessage.id),
+    );
+  }
+
+  setMessage("");
+};
+
+  const handleTyping = () => {
+    if (connection?.state !== "Connected") return;
+
+    if (!isTyping.current) {
+      connection.invoke("SendTypingIndicator", {
         RecipientId: otherUserId,
-        Content: message,
+        IsTyping: true,
       });
-    } catch (err) {
-      console.error("Send failed", err);
-      setChatData((prev: any) =>
-        (prev || []).filter((m: any) => m.id !== tempMessage.id),
-      );
+      isTyping.current = true;
     }
 
-    setMessage("");
+    if (isTyping.current) {
+      clearTimeout(isTyping.current);
+    }
+
+    isTyping.current = setTimeout(() => {
+      connection.invoke("SendTypingIndicator", {
+        RecipientId: otherUserId,
+        IsTyping: false,
+      });
+      isTyping.current = false;
+    }, 1000);
   };
 
   return (
@@ -59,7 +97,10 @@ const ChatInput = ({ connection }: Props) => {
             type="text"
             placeholder="Type a message..."
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => {
+              setMessage(e.target.value);
+              handleTyping();
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") sendMessage();
             }}
