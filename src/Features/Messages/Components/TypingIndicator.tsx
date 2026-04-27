@@ -4,7 +4,7 @@ const dots = [0, 1, 2];
 
 export function TypingIndicator() {
   return (
-    <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl w-fit bg-gray-200">
+    <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl w-fit">
       {dots.map((i) => (
         <motion.span
           key={i}
