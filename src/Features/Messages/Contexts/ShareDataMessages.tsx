@@ -14,15 +14,19 @@ type ChatContextType = {
   setPage: (page: number) => void;
   hasMore: boolean;
   setHasMore: (hasMore: boolean) => void;
+  selectedConversation: object | null;
+  setSelectedConversation: (conversation: object | null) => void;
+  signalR: any;
 };
 
 const ChatContext = createContext<ChatContextType | null>(null);
 
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [chatData, setChatData] = useState<any>(null);
+  const [chatData, setChatData] = useState<any[]>([]);
   const [otherUserId, setOtherUserId] = useState<any>(null);
   const [page, setPage] = useState(1);
+  const [selectedConversation, setSelectedConversation] = useState<object | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const token = `${localStorage.getItem("token")}`;
   const signalR = useSignalR(token, BASE_URL, () => {});
@@ -79,6 +83,9 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         setPage,
         hasMore,
         setHasMore,
+        selectedConversation,
+        setSelectedConversation,
+        signalR
       }}
     >
       {children}
