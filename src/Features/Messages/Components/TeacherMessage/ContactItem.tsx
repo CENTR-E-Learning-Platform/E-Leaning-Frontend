@@ -93,6 +93,8 @@ const ContactList: React.FC = () => {
     page,
     setPage,
     setHasMore,
+    setSelectedConversation,
+    signalR,
   } = useChat();
   const { mutate } = useGetChatMessages();
 
@@ -154,6 +156,7 @@ const ContactList: React.FC = () => {
                 key={conversation.id}
                 onClick={() => {
                   getConversationId(conversation.id, conversation.otherUserId);
+                  setSelectedConversation(conversation);
                 }}
                 className=""
               >
@@ -163,12 +166,16 @@ const ContactList: React.FC = () => {
                   isOnline={conversation.isOnline}
                   hasUnread={conversation.unreadCount}
                   name={conversation.otherUserName}
-                  message={conversation.lastMessage}
+                  message={
+                    signalR.typingUser 
+                      ? "typing..."
+                      : conversation.lastMessage
+                  }
                   time={formatTime(conversation.lastMessageAt)}
                   avatarUrl={
                     conversation.otherUserPicture
                       ? conversation.otherUserPicture
-                      : "https://api.dicebear.com/7.x/avataaars/svg?seed=Mohamed"
+                      : `https://api.dicebear.com/7.x/avataaars/svg?seed=${conversation.otherUserName}`
                   }
                 />
               </div>
