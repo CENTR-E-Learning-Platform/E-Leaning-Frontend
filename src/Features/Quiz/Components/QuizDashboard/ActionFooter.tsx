@@ -1,13 +1,16 @@
 import React from 'react';
-
+import { useCsv } from '../../Hooks/useCsv';
 const ActionFooter: React.FC = () => {
+  const {quizCsvDownload} = useCsv();
   return (
     <div className="flex flex-row justify-between items-center px-[22px] w-[760px] h-[61px] bg-[#F1F4F9] font-['Poppins',sans-serif] box-border">
       <button className="flex flex-col justify-center items-center text-[#525FE1] font-bold text-[13px] leading-[18px] bg-transparent border-none cursor-pointer p-0">
         View All Students
       </button>
       
-      <button className="flex flex-row items-center gap-[7px] text-[#434656] font-bold text-[13px] leading-[18px] bg-transparent border-none cursor-pointer p-0">
+      <button 
+      onClick={quizCsvDownload}
+      className="flex flex-row items-center gap-[7px] text-[#434656] font-bold text-[13px] leading-[18px] bg-transparent border-none cursor-pointer p-0">
         <div className="flex flex-col items-center justify-center w-[11px] h-[11px]">
           <svg 
             width="100%" 

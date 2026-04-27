@@ -11,6 +11,8 @@ interface QuizContext {
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     isPublishModel: boolean;
     setIsPublishModel: React.Dispatch<React.SetStateAction<boolean>>;
+    searchData: string;
+    setSearchData: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const defaultQuizData: QuizTime = {
@@ -19,7 +21,7 @@ const defaultQuizData: QuizTime = {
     Date: "",
     Time: "",
     Duration: 10,
-    IsAttempted: false,
+    Attemptes: 1,
     Class: "Chemistry - Prep 2 (25 students)"
 };
 
@@ -37,9 +39,10 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [secondQuizData, setSecondQuizData] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPublishModel, setIsPublishModel] = useState(false);
+    const [searchData , setSearchData] = useState("");
 
     return (
-        <Quiz.Provider value={{ QuizDataTime, setQuizDataTime, secondQuizData, setSecondQuizData, isModalOpen, setIsModalOpen, isPublishModel, setIsPublishModel }}>
+        <Quiz.Provider value={{ QuizDataTime, setQuizDataTime, secondQuizData, setSecondQuizData, isModalOpen, setIsModalOpen, isPublishModel, setIsPublishModel , searchData , setSearchData }}>
             {children}
         </Quiz.Provider>
     );

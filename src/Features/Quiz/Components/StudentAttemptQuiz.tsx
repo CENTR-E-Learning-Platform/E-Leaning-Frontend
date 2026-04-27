@@ -34,7 +34,7 @@ export const StudentAttemptQuiz: React.FC = () => {
   };
 
   const formatQuestionType = (type: string) => {
-    return type === 'MULTIPLE_CHOICE' ? 'MULTIPLE CHOICE' : 'TRUE/FALSE';
+    return type === 'multiplechoice' ? 'MULTIPLE CHOICE' : 'TRUE/FALSE';
   };
 
   const handleSubmit = async () => {
@@ -49,8 +49,11 @@ export const StudentAttemptQuiz: React.FC = () => {
           <div className="flex flex-row justify-between items-start w-full h-[22px]">
             <div className="flex flex-col items-start px-[11px] py-[3px] bg-[#F1F4F9] rounded-full">
               <span className="font-bold text-[11px] leading-[15px] tracking-[0.6px] uppercase text-[#525FE1]">
-                Q{index + 1} - {formatQuestionType(question.questionType)} ({question.questionPoints} POINTS)
+                Q{index + 1} - {formatQuestionType(question.questionType)} 
               </span>
+            </div>
+            <div className='text-[#747688] text-[13px] font-bold'>
+              {question.questionPoints} Points
             </div>
           </div>
 

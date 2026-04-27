@@ -34,7 +34,7 @@ import QuizQuistions from "../Features/Quiz/Pages/QuizQuistions";
 import ResultQuiz from "../Features/Quiz/Pages/ResultQuiz";
 import StartQuizforStudent from "../Features/Quiz/Pages/StartQuizforStudent";
 import { roleToAuth } from "../Utils/Constant";
-// import DashboardQuiz from "../Features/Quiz/Pages/DashboardQuiz";
+import DashboardQuiz from "../Features/Quiz/Pages/DashboardQuiz";
 const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000) => {
   return lazy(() =>
     Promise.all([
@@ -102,5 +102,5 @@ export const router = createBrowserRouter([
   ]},
   {path: "/quiz/result", element: <ResultQuiz/>},
   {path: "/quiz/start", element: <StartQuizforStudent/>},
-// {path: "/quiz/dashboard", element: <DashboardQuiz/>},
+{path: "/quiz/dashboard", element: <DashboardQuiz/>},
 ]);
