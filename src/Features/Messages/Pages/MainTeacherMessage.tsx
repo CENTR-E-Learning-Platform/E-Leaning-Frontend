@@ -1,6 +1,6 @@
-import ChatContent from "../Components/TeacherMessage/ChatContent";
-import ContactList from "../Components/TeacherMessage/ContactItem";
-import MessagesHeader from "../Components/TeacherMessage/MessagesHeader";
+import ChatContent from "../Components/Message/ChatContent";
+import ContactList from "../Components/Message/ContactItem";
+import MessagesHeader from "../Components/Message/MessagesHeader";
 
 const MainTeacherMessage = () => {
   return (
