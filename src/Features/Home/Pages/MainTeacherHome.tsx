@@ -6,19 +6,15 @@ import vector3 from "../../../assets/icons/mdi_human-greeting-variant.svg";
 import mdi_people from "../../../assets/icons/mdi_people.svg";
 import Dollar from "../../../assets/icons/Dollar.svg";
 import StarIcon from "../../../assets/icons/StarIcon.svg";
-
 import { roleToAuth } from "../../../Utils/Constant";
 import RecentMessages from "../Components/TeacherHome/RecentMessages";
 import RecentHomeworks from "../Components/TeacherHome/RecentHomeworks";
 import RecentReviews from "../Components/TeacherHome/RecentReviews";
 import { useTeacherDashboardInfo } from "../Hooks/useGetTeacherDashboardInfo";
-import { useNavigate } from "react-router-dom";
 import ActiveQuizzes from "../Components/TeacherHome/ActiveQuizzes";
 import UpcomingClassesCard from "../Components/TeacherHome/UpcomingClassesCard";
 
 const MainTeacherHome = () => {
-  const navigate = useNavigate();
-
   const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
 
   // Call API to get the dashboard info and pass it to the components as needed
