@@ -16,15 +16,8 @@ const RecentMessages = () => {
         "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=150&h=150&auto=format&fit=crop",
       unreadCount: 1,
     },
-    {
-      id: 2,
-      name: "Mr. Ahmed ragab",
-      lastMessage: "Hello let me know if you want any h...",
-      avatarUrl:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&h=150&auto=format&fit=crop",
-      unreadCount: 1,
-    },
   ];
+  
   return (
     <>
       <div className="flex justify-center items-center">
