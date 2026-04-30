@@ -49,6 +49,7 @@ const MainTeacherHome = lazyWithDelay(() => import("../Features/Home/Pages/MainT
 const MainTeacherMessage = lazyWithDelay(() => import("../Features/Messages/Pages/MainTeacherMessage"));
 // const MainStudentHome = lazyWithDelay(() => import("../Features/Home/Pages/MainStudentHome"));
 
+const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
 
 export const router = createBrowserRouter([
   {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
@@ -65,16 +66,16 @@ export const router = createBrowserRouter([
     // { path: "/meeting", element: <LiveRoom /> },
     { path: "Calendar", element: <MainCalendar/> },
     { path: "explore", element: <MainExplore/> },
-    { path: "home", element: <MainStudentHome/> },
-    { path: "", element: <MainStudentHome/> },
+    { path: "home", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
+    { path: "", element:  isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
     { path: "messages", element: <MainTeacherMessage/> },
 
   ] },
 
   { path: "/setting", element: <MainSetting/> , children: [
-    !roleToAuth?.includes("Teacher") ? {path: "profile", element: <ProfileStudent/>}:{},
+    !isTeacher ? {path: "profile", element: <ProfileStudent/>}:{},
     {path: "", element: <ProfileStudent/>},
-    roleToAuth?.includes("Teacher") ? {path: "financial", element: <MainFinancial/>} : {},
+    isTeacher ? {path: "financial", element: <MainFinancial/>} : {},
     {path: "security", element: <ChangePassword/>},
     {path: "notification", element: <NotificationsSettings/>},
   ] },
