@@ -19,6 +19,8 @@ import RecentHomeworks from "../Components/StudentHome/RecentHomeworks";
 import { useUpcomingClasses } from "../Hooks/useGetUpcomingClasses";
 import { useStudentDashboardInfo } from "../Hooks/useGetStudentDashboardInfo";
 import { useNavigate } from "react-router-dom";
+import UpcomingEmpty from "../Components/EmptyState/UpcomingEmpty";
+import { useRecommendedTeacher } from "../Hooks/useGetRecommendedTeacher";
 
 export const MainStudentHome: React.FC = () => {
     const navigate = useNavigate();
@@ -26,7 +28,9 @@ export const MainStudentHome: React.FC = () => {
   const { data: dataDashboard } = useStudentDashboardInfo();
   console.log("StudentDashboardInfo hook called", dataDashboard?.data?.data);
   const { data: dataUpcoming } = useUpcomingClasses();
+  const {data: dataRecommended} = useRecommendedTeacher();
   console.log("UpcomingClasses hook called", dataUpcoming);
+  console.log("RecommendedTeachers hook called", dataRecommended);
 
   const statsData = [
     {
@@ -157,7 +161,7 @@ export const MainStudentHome: React.FC = () => {
 
         <div className="flex items-start gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
           <div className="flex flex-col w-[687px] items-end gap-9 relative">
-            <div className="flex flex-col min-w-[643px] items-start gap-7 px-6 py-[30px] relative self-stretch w-full flex-[0_0_auto] bg-white rounded-lg border border-solid border-[#e8eaed]">
+            {dataUpcoming?.data?.data?.length === 0 ? <UpcomingEmpty /> : <div className="flex flex-col min-w-[643px] items-start gap-7 px-6 py-[30px] relative self-stretch w-full flex-[0_0_auto] bg-white rounded-lg border border-solid border-[#e8eaed]">
               <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
                 <div className="relative w-fit mt-[-1.00px] font-bold text-[#2a2d34] text-2xl tracking-[0] leading-[17px] whitespace-nowrap">
                   Upcoming classes
@@ -180,6 +184,8 @@ export const MainStudentHome: React.FC = () => {
                 ))}
               </div>
             </div>
+            }
+            
 
             <div className="flex flex-col items-start gap-7 relative self-stretch w-full flex-[0_0_auto]">
               <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
