@@ -1,97 +1,74 @@
-import React from "react";
+import React from 'react';
 
-export interface UpcomingClassData {
+interface ClassItemProps {
   time: string;
   period: string;
   title: string;
-  subject: string;
-  subjectBg: string;
-  subjectText: string;
-  teacherImg: string;
-  teacherName: string;
-  statusDot: string;
+  grade: string;
   statusText: string;
-  statusLabel: string;
-  joinBg: string;
-  titleContainerClass?: string;
+  statusColor: string;
+  buttonOpacity: string;
+  attendeesCount: string;
 }
 
-interface Props {
-  cls: UpcomingClassData;
-  isLast: boolean;
-}
-
-export const UpcomingClassItem: React.FC<Props> = ({ cls, isLast }) => {
+const UpcomingClassItem: React.FC<ClassItemProps> = ({
+  time,
+  period,
+  title,
+  grade,
+  statusText,
+  statusColor,
+  buttonOpacity,
+  attendeesCount,
+}) => {
   return (
-    <div className="flex flex-col items-start p-0 gap-[20px] w-[639px]">
-      <div className="flex flex-row justify-between items-center w-[639px] h-[110px]">
-        <div className="flex flex-row items-center p-0 gap-[20px] w-[359px] h-[110px]">
-          <div className="box-border relative w-[110px] h-[110px] bg-[#FFFFFF] border-2 border-solid border-[#E8EAED] rounded-[12px]">
-            <span className="absolute left-[16px] top-[38px] font-['Poppins'] font-semibold text-[36px] leading-[24px] text-[#2A2D34]">
-              {cls.time}
-            </span>
-            <span className="absolute left-[43px] top-[70px] font-['Poppins'] font-normal text-[14px] leading-[9px] text-[#2A2D34]">
-              {cls.period}
-            </span>
-          </div>
-
-          <div className="flex flex-col items-start p-0 gap-[16px] w-[229px]">
-            <div className="flex flex-col items-start p-0 gap-[12px] w-[229px]">
-              <span
-                className={`font-['Poppins'] font-semibold text-[18px] leading-[13px] text-[#2A2D34] min-w-0 h-[24px] truncate ${cls.titleContainerClass || ""}`}
-              >
-                {cls.title}
-              </span>
-
-              <div
-                className={`flex flex-row justify-center items-center px-[10px] py-[8px] gap-[10px] rounded-[18px] ${cls.subjectBg}`}
-              >
-                <span
-                  className={`font-['Poppins'] font-semibold text-[16px] leading-[13px] ${cls.subjectText}`}
-                >
-                  {cls.subject}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-row items-center p-0 gap-[8px]">
-              <img
-                className="w-[28px] h-[28px] rounded-full object-cover"
-                alt={cls.teacherName}
-                src={cls.teacherImg}
-              />
-              <span className="font-['Poppins'] font-medium text-[16px] leading-[13px] text-[#6D7588]">
-                {cls.teacherName}
-              </span>
-            </div>
-          </div>
+    <div className="flex flex-row justify-between w-full items-center h-[100px] font-['Poppins']">
+      <div className="flex flex-row items-center gap-[20px] w-[349px] h-[100px]">
+        <div className="flex flex-col justify-center items-center p-[21px_15px] w-[100px] h-[100px] bg-white border-2 border-[#E8EAED] rounded-[12px]">
+          <span className="text-[#2A2D34] font-bold text-[28px] leading-[24px]">{time}</span>
+          <span className="text-[#2A2D34] font-normal text-[14px] leading-[9px] mt-2 uppercase">{period}</span>
         </div>
 
-        <div className="flex flex-row items-center p-0 gap-[24px]">
-          <div className="flex flex-row justify-center items-center p-0 gap-[8px]">
-            <div
-              className={`w-[10px] h-[10px] rounded-full ${cls.statusDot}`}
-            />
-            <span
-              className={`font-['Poppins'] font-semibold text-[16px] leading-[12px] ${cls.statusText}`}
-            >
-              {cls.statusLabel}
-            </span>
+        <div className="flex flex-col items-start gap-[16px] w-[229px] h-[90px]">
+          <div className="flex flex-col items-start gap-[12px]">
+            <h3 className="text-[#2A2D34] font-semibold text-[18px] leading-[13px]">{title}</h3>
+            <p className="text-[#6D7588] font-medium text-[14px] leading-[13px]">{grade}</p>
           </div>
-
-          <button
-            className={`box-border flex flex-row justify-center items-center px-[16px] py-[14px] gap-[4px] w-[123px] h-[41px] rounded-[8px] border-none cursor-pointer ${cls.joinBg}`}
-          >
-            <span className="font-['Poppins'] font-semibold text-[18px] leading-[13px] text-[#F9FBFC] m-0 p-0">
-              Join class
-            </span>
-          </button>
+          
+          <div className="flex flex-row items-center p-[4px_16px_4px_4px] gap-[8px] bg-[#E8EAED] rounded-[60px] h-[36px]">
+            <div className="flex flex-row items-center">
+              <div className="w-[28px] h-[28px] rounded-full border border-[#D1D5DB] bg-gray-300 overflow-hidden">
+                <img src="https://i.pravatar.cc/150?u=1" alt="user" />
+              </div>
+              <div className="w-[28px] h-[28px] rounded-full border border-[#D1D5DB] bg-gray-400 overflow-hidden -ml-[10px]">
+                <img src="https://i.pravatar.cc/150?u=2" alt="user" />
+              </div>
+              <div className="w-[28px] h-[28px] rounded-full border border-[#D1D5DB] bg-gray-500 overflow-hidden -ml-[10px]">
+                <img src="https://i.pravatar.cc/150?u=3" alt="user" />
+              </div>
+            </div>
+            <span className="text-[#2A2D34] font-medium text-[16px] leading-[13px]">+{attendeesCount}</span>
+          </div>
         </div>
       </div>
 
-      {!isLast && (
-        <div className="w-[639px] h-[0px] border-t border-solid border-[#E8EAED]" />
-      )}
+      <div className="flex flex-row items-center gap-[24px]">
+        <div className="flex flex-row items-center gap-[8px]">
+          <div className="w-[8px] h-[8px] rounded-full" style={{ backgroundColor: statusColor }}></div>
+          <span className="font-semibold text-[14px] leading-[12px]" style={{ color: statusColor }}>
+            {statusText}
+          </span>
+        </div>
+
+        <button 
+          className="flex justify-center items-center p-[14px_16px] w-[113px] h-[39px] bg-[#525FE1] rounded-[8px] text-white font-semibold text-[16px] leading-[13px] transition-all hover:brightness-110"
+          style={{ opacity: buttonOpacity }}
+        >
+          Join class
+        </button>
+      </div>
     </div>
   );
 };
+
+export default UpcomingClassItem;
