@@ -1,5 +1,6 @@
 import React from "react";
 import learningBro from "../../../../assets/images/TeacherHome.png";
+import { useNavigate } from "react-router-dom";
 
 interface HeroBannerProps {
   date: string;
@@ -7,7 +8,13 @@ interface HeroBannerProps {
   subtitle: string;
 }
 
-export const HeroBanner: React.FC<HeroBannerProps> = ({ date, title, subtitle }) => {
+export const HeroBanner: React.FC<HeroBannerProps> = ({
+  date,
+  title,
+  subtitle,
+}) => {
+
+  const navigate = useNavigate();
 
   return (
     <div className="relative w-full overflow-visible bg-[linear-gradient(90deg,#525FE1_0%,#868EEA_100%)] rounded-[8px] min-h-[180px] sm:min-h-[200px] lg:min-h-[212px]">
@@ -27,9 +34,14 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ date, title, subtitle })
           </p>
         </div>
 
-        <button className="w-[120px] sm:w-[134px] h-[40px] sm:h-[45px] mt-5 sm:mt-6 flex bg-white items-center justify-center rounded-lg cursor-pointer border-none">
+        <button
+          onClick={() => {
+            navigate("/Calendar");
+          }}
+          className="w-[174px] sm:w-[174px] h-[40px] sm:h-[45px] mt-5 sm:mt-6 flex bg-white items-center justify-center rounded-lg cursor-pointer border-none"
+        >
           <span className="font-semibold text-[#525fe1] text-sm sm:text-[18px] whitespace-nowrap">
-            Join Class
+            View Schedule
           </span>
         </button>
       </div>
