@@ -49,7 +49,7 @@ const Loadable = (Component: any) => (props: any) => (
 const MainCalendar =( lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar")));
 const MainExplore = (lazyWithDelay(() => import("../Features/ExploreTeacher/Pages/MainExplore")));
 const MainTeacherHome = (lazyWithDelay(() => import("../Features/Home/Pages/MainTeacherHome")));
-const MainTeacherMessage = (lazyWithDelay(() => import("../Features/Messages/Pages/MainTeacherMessage")));
+const MainMessage = (lazyWithDelay(() => import("../Features/Messages/Pages/MainMessage")));
 const QuizSetting = (lazyWithDelay(() => import("../Features/Quiz/Pages/QuizSetting")));
 const CreateNewQuiz = Loadable(lazyWithDelay(() => import("../Features/Quiz/Pages/CreateNewQuiz")));
 const MainSetting = Loadable(lazyWithDelay(() => import("../Features/Setting/Pages/MainSetting")));
@@ -75,7 +75,7 @@ export const router = createBrowserRouter([
     { path: "explore", element: <MainExplore/> },
     { path: "home", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
     { path: "", element:  isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
-    { path: "messages", element: <MainTeacherMessage/> },
+    { path: "messages", element: <MainMessage/> },
 
   ] },
 
