@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 interface QuizItemProps {
   title: string;
@@ -75,9 +76,15 @@ const ActiveQuizzes: React.FC = () => {
         <h2 className="text-[#2A2D34] font-bold text-[20px] leading-[28px] flex items-center">
           Active Quizzes
         </h2>
-        <button className="flex flex-row justify-center items-center px-[16px] py-[14px] gap-[4px] w-[142px] h-[39px] bg-[#525FE1] rounded-[8px] text-[#F9FBFC] font-semibold text-[16px] leading-[13px] hover:bg-[#434dbd] transition-colors">
+        <NavLink 
+        to={"/quiz/quizsetting"}
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = "/quiz/quizsetting";
+          }}
+        className="flex flex-row cursor-pointer justify-center items-center px-[16px] py-[14px] gap-[4px] w-[142px] h-[39px] bg-[#525FE1] rounded-[8px] text-[#F9FBFC] font-semibold text-[16px] leading-[13px] hover:bg-[#434dbd] transition-colors">
           + Create New
-        </button>
+        </NavLink>
       </div>
 
       <div className="flex flex-col items-start p-0 gap-[24px] w-full">
