@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Children, lazy } from "react"; 
+import { Children, lazy, Suspense } from "react"; 
 import MainRegister from "../Features/Auth/Pages/MainRegister";
 import MainLogin from "../Features/Auth/Pages/MainLogin";
 import TeacherOption from "../Features/Auth/Components/Register/TeacherOption";
@@ -18,9 +18,7 @@ import JoinNow from "../Features/Streaming/Pages/JoinNow";
 import ChatForm from "../Features/Streaming/Components/chat/ChatForm";
 import JoinRoomStudent from "../Features/Streaming/Pages/JoinRoomStudent";
 import GoodBy from "../Features/Streaming/Pages/GoodBye";
-import ViewTeacher from "../Features/Profile/Pages/ViewTeacher";
 import Navbar from "../Components/Navbar/Navbar";
-import MainSetting from "../Features/Setting/Pages/MainSetting";
 import ProfileStudent from "../Features/Setting/Components/ProfileStudent/ProfileStudent";
 import MainFinancial from "../Features/Setting/Components/Financial/MainFinancial";
 import ChangePassword from "../Features/Setting/Components/Security/ChangePassword";
@@ -28,8 +26,6 @@ import NotificationsSettings from "../Features/Setting/Components/NotificationsS
 import { CLoader } from "../Components/UI/CLoader";
 import OptionRegister from "../Features/Auth/Components/Register/OptionRegister";
 import { MainStudentHome } from "../Features/Home/Pages/MainStudentHome";
-import CreateNewQuiz from "../Features/Quiz/Pages/CreateNewQuiz";
-import QuizSetting from "../Features/Quiz/Pages/QuizSetting";
 import QuizQuistions from "../Features/Quiz/Pages/QuizQuistions";
 import ResultQuiz from "../Features/Quiz/Pages/ResultQuiz";
 import StartQuizforStudent from "../Features/Quiz/Pages/StartQuizforStudent";
@@ -43,11 +39,22 @@ const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000)
     ]).then(([moduleExports]) => moduleExports) 
   );
 };
-const MainCalendar = lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar"));
-const MainExplore = lazyWithDelay(() => import("../Features/ExploreTeacher/Pages/MainExplore"));
-const MainTeacherHome = lazyWithDelay(() => import("../Features/Home/Pages/MainTeacherHome"));
-const MainTeacherMessage = lazyWithDelay(() => import("../Features/Messages/Pages/MainTeacherMessage"));
-// const MainStudentHome = lazyWithDelay(() => import("../Features/Home/Pages/MainStudentHome"));
+const Loadable = (Component: any) => (props: any) => (
+  <Suspense fallback={<div className="flex justify-center items-center h-screen">
+    <CLoader />
+  </div>}>
+    <Component {...props} />
+  </Suspense>
+);
+const MainCalendar =( lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar")));
+const MainExplore = (lazyWithDelay(() => import("../Features/ExploreTeacher/Pages/MainExplore")));
+const MainTeacherHome = (lazyWithDelay(() => import("../Features/Home/Pages/MainTeacherHome")));
+const MainTeacherMessage = (lazyWithDelay(() => import("../Features/Messages/Pages/MainTeacherMessage")));
+const QuizSetting = (lazyWithDelay(() => import("../Features/Quiz/Pages/QuizSetting")));
+const CreateNewQuiz = Loadable(lazyWithDelay(() => import("../Features/Quiz/Pages/CreateNewQuiz")));
+const MainSetting = Loadable(lazyWithDelay(() => import("../Features/Setting/Pages/MainSetting")));
+const ViewTeacher = Loadable(lazyWithDelay(() => import("../Features/Profile/Pages/ViewTeacher")));
+// const MainStudentHome = Loadable(lazyWithDelay(() => import("../Features/Home/Pages/MainStudentHome")));
 
 const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
 

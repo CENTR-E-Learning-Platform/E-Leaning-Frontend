@@ -2,21 +2,22 @@ import { type ToolbarProps, type View } from 'react-big-calendar';
 import prev from '../../../assets/icons/Icon Button.svg';
 import nxt from '../../../assets/icons/Icon Button (1).svg';
 import { useCalendar } from '../Contexts/CalendarContext';
-
+import { roleToAuth } from '../../../Utils/Constant';
 const Toolbar = (toolbar: ToolbarProps) => {
   const { active, setActive } = useCalendar();
   
   const goPrev = () => toolbar.onNavigate("PREV");
   const goNext = () => toolbar.onNavigate("NEXT");
   const goToView = (view: View) => toolbar.onView(view);
-  
+  const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
+
   const baseBtn = "ps-[14px] pe-[14px] pt-[5px] pb-[5px] rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out";
   const activeBtn = "bg-[#525FE1] text-[#F9FBFC]";
   const normalBtn = "text-[#6D7588]";
 
   return (
     <div className="w-[895px] h-[44px] ps-[16px] pe-[16px] flex justify-between items-center mt-[16px] mb-[22px] ">
-      <div className="w-[315px] h-[44px] text-[14px] font-[500] border-[1px] rounded-[8px] border-[#E8EAED] flex items-center justify-center gap-2">
+      <div className={` ${!isTeacher ?"w-[315px]":"w-[198px]" } h-[44px] text-[14px] font-[500] border-[1px] rounded-[8px] border-[#E8EAED] flex items-center justify-center gap-2`}>
         <button
           onClick={() => setActive("all")}
           className={`${baseBtn} ${active === "all" ? activeBtn : normalBtn}`}
@@ -31,12 +32,14 @@ const Toolbar = (toolbar: ToolbarProps) => {
           Quizes
         </button>
 
-        <button
+       {!isTeacher && (
+          <button
           onClick={() => setActive("homework")}
           className={`${baseBtn} ${active === "homework" ? activeBtn : normalBtn}`}
         >
           Homeworks
         </button>
+       )}
       </div>
 
       <div className="w-[198px] h-[28px] flex justify-center items-center">
