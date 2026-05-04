@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useGetChatConversation } from "../../Hooks/useGetChatConversation";
 import { useConvertDate } from "../../Hooks/useConvertDate";
 import type { ContactProps, Conversation } from "../../Types/itemContact";
 import { useGetChatMessages } from "../../Hooks/useGetChatMessages";
 import { useChat } from "../../Contexts/ShareDataMessages";
+import { ShareDataContactItems } from "../../Contexts/ShareDataContactItems";
 
 const ContactItem: React.FC<ContactProps> = ({
   name,
@@ -81,8 +82,11 @@ const ContactItem: React.FC<ContactProps> = ({
 };
 
 const ContactList: React.FC = () => {
+  const { setDataContactItem } = useContext(ShareDataContactItems);
   const { data } = useGetChatConversation();
   console.log(data);
+  setDataContactItem(data?.data);
+
   const formatTime = useConvertDate();
   const [activeId, setActiveId] = useState<string | null>(null);
   const {
