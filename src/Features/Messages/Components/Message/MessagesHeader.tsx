@@ -1,7 +1,9 @@
-import React from 'react';
-import { Search } from 'lucide-react';
+import React, { useContext } from "react";
+import { Search } from "lucide-react";
+import { ShareDataContactItems } from "../../Contexts/ShareDataContactItems";
 
 const MessagesHeader: React.FC = () => {
+  const { activeMessage , setActiveMessage , isTeacher } = useContext(ShareDataContactItems);
   return (
     <div className="flex flex-col items-start gap-[21.6px] pt-[21.6px] px-[22.8px] pb-[7.2px] w-[360px] h-[172px] font-['Poppins']">
       <div className="flex flex-col items-start p-0 w-[314.5px] h-[28.8px] self-stretch">
@@ -11,13 +13,38 @@ const MessagesHeader: React.FC = () => {
       </div>
 
       <div className="flex flex-row justify-center items-start p-0 gap-[14.4px] w-[314.5px] h-[30.6px] self-stretch">
-        <button className="flex flex-col justify-center items-center px-0 pt-0 pb-[10.8px] w-[149.6px] h-[30.6px] border-b-2 border-[#525FE1] flex-grow">
-          <span className="flex items-center text-center font-semibold text-[12.6px] leading-[18px] text-[#525FE1]">
-            Teachers
+        <button
+          onClick={() =>
+            setActiveMessage(`${isTeacher ? "Teachers" : "Students"}`)
+          }
+          className={`flex flex-col justify-center items-center pb-[10.8px] w-[149.6px] h-[30.6px] border-b-2 flex-grow transition-all
+      ${activeMessage === `${isTeacher ? "Teachers" : "Students"}` ? "border-[#525FE1]" : "border-transparent"}`}
+        >
+          <span
+            className={`text-[12.6px] leading-[18px]
+        ${
+          activeMessage === `${isTeacher ? "Teachers" : "Students"}`
+            ? "text-[#525FE1] font-semibold"
+            : "text-[#434656] font-medium"
+        }`}
+          >
+            {isTeacher ? "Teachers" : "Students"}
           </span>
         </button>
-        <button className="flex flex-col justify-center items-center px-0 pt-[0.9px] pb-[11.7px] w-[149.6px] h-[30.6px] flex-grow">
-          <span className="flex items-center text-center font-medium text-[12.6px] leading-[18px] text-[#434656]">
+
+        <button
+          onClick={() => setActiveMessage("Groups")}
+          className={`flex flex-col justify-center items-center pb-[10.8px] w-[149.6px] h-[30.6px] border-b-2 flex-grow transition-all
+      ${activeMessage === "Groups" ? "border-[#525FE1]" : "border-transparent"}`}
+        >
+          <span
+            className={`text-[12.6px] leading-[18px]
+        ${
+          activeMessage === "Groups"
+            ? "text-[#525FE1] font-semibold"
+            : "text-[#434656] font-medium"
+        }`}
+          >
             Groups
           </span>
         </button>
@@ -28,14 +55,14 @@ const MessagesHeader: React.FC = () => {
           <div className="flex flex-col items-start p-0 pb-[0.9px] w-[253.6px] h-[19.8px] flex-grow">
             <input
               type="text"
-              placeholder="Search Teachers..."
+              placeholder={`Search ${isTeacher ? "Teachers" : "Students"}...`}
               className="w-full h-[18.9px] bg-transparent outline-none flex items-center font-light text-[12.6px] leading-[18.9px] text-[#6B7280] placeholder:text-[#6B7280]"
             />
           </div>
         </div>
-        <Search 
-          className="absolute left-[17.1px] top-[29.55%] text-[#747688] z-10" 
-          size={16.2} 
+        <Search
+          className="absolute left-[17.1px] top-[29.55%] text-[#747688] z-10"
+          size={16.2}
         />
       </div>
     </div>
