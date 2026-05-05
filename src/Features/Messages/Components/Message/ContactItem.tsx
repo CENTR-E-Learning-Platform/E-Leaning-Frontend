@@ -82,10 +82,16 @@ const ContactItem: React.FC<ContactProps> = ({
 };
 
 const ContactList: React.FC = () => {
-  const { setDataContactItem } = useContext(ShareDataContactItems);
+  const { setDataContactItem, activeMessage, isTeacher } = useContext(
+    ShareDataContactItems,
+  );
   const { data } = useGetChatConversation();
   console.log(data);
-  setDataContactItem(data?.data);
+  useEffect(() => {
+    if (data?.data) {
+      setDataContactItem(data?.data);
+    }
+  }, [data]);
 
   const formatTime = useConvertDate();
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -152,9 +158,44 @@ const ContactList: React.FC = () => {
   };
 
   return (
+    // <div className="flex flex-col items-start py-[14.4px] pl-[14.4px] gap-[7.2px] w-[360px] h-[744.3px] overflow-y-auto scroll-smooth">
+    //   {data?.data
+    //     ? data?.data.map((conversation: Conversation) => {
+    //         return (
+    //           <div
+    //             key={conversation.id}
+    //             onClick={() => {
+    //               getConversationId(conversation.id, conversation.otherUserId);
+    //               setSelectedConversation(conversation);
+    //             }}
+    //             className=""
+    //           >
+    //             <ContactItem
+    //               key={conversation.id}
+    //               isActive={activeId === conversation.id}
+    //               isOnline={conversation.isOnline}
+    //               hasUnread={conversation.unreadCount}
+    //               name={conversation.otherUserName}
+    //               message={
+    //                 signalR.typingUser ? "typing..." : conversation.lastMessage
+    //               }
+    //               time={formatTime(conversation.lastMessageAt)}
+    //               avatarUrl={
+    //                 conversation.otherUserPicture
+    //                   ? conversation.otherUserPicture
+    //                   : `https://api.dicebear.com/7.x/avataaars/svg?seed=${conversation.otherUserName}`
+    //               }
+    //             />
+    //           </div>
+    //         );
+    //       })
+    //     : ";,fc,"}
+    // </div>
+
     <div className="flex flex-col items-start py-[14.4px] pl-[14.4px] gap-[7.2px] w-[360px] h-[744.3px] overflow-y-auto scroll-smooth">
-      {data?.data
-        ? data?.data.map((conversation: Conversation) => {
+      {activeMessage === (isTeacher ? "Teachers" : "Students") ? (
+        data?.data?.length > 0 ? (
+          data?.data?.map((conversation: Conversation) => {
             return (
               <div
                 key={conversation.id}
@@ -162,18 +203,14 @@ const ContactList: React.FC = () => {
                   getConversationId(conversation.id, conversation.otherUserId);
                   setSelectedConversation(conversation);
                 }}
-                className=""
               >
                 <ContactItem
-                  key={conversation.id}
                   isActive={activeId === conversation.id}
                   isOnline={conversation.isOnline}
                   hasUnread={conversation.unreadCount}
                   name={conversation.otherUserName}
                   message={
-                    signalR.typingUser 
-                      ? "typing..."
-                      : conversation.lastMessage
+                    signalR.typingUser ? "typing..." : conversation.lastMessage
                   }
                   time={formatTime(conversation.lastMessageAt)}
                   avatarUrl={
@@ -185,7 +222,43 @@ const ContactList: React.FC = () => {
               </div>
             );
           })
-        : "fghjklf,fc;,fc,"}
+        ) : (
+          "No Conversation"
+        )
+      ) : (
+        data?.data?.length > 0 ? (
+          data?.data?.map((conversation: Conversation) => {
+            return (
+              <div
+                key={conversation.id}
+                onClick={() => {
+                  getConversationId(conversation.id, conversation.otherUserId);
+                  setSelectedConversation(conversation);
+                }}
+              >
+                <ContactItem
+                  isActive={activeId === conversation.id}
+                  isOnline={conversation.isOnline}
+                  hasUnread={conversation.unreadCount}
+                  name={conversation.otherUserName}
+                  message={
+                    signalR.typingUser ? "typing..." : conversation.lastMessage
+                  }
+                  time={formatTime(conversation.lastMessageAt)}
+                  avatarUrl={
+                    conversation.otherUserPicture
+                      ? conversation.otherUserPicture
+                      : `https://api.dicebear.com/7.x/avataaars/svg?seed=${conversation.otherUserName}`
+                  }
+                />
+              </div>
+            );
+          })
+        ) : (
+          "No Conversation"
+        )
+      )
+    }
     </div>
   );
 };
