@@ -109,6 +109,6 @@ export const router = createBrowserRouter([
     {path: "/quiz/quizsetting", element: <QuizSetting/>},
   ]},
   {path: "/quiz/result", element: <ResultQuiz/>},
-  {path: "/quiz/start", element: <StartQuizforStudent/>},
+  {path: "/quiz/:id", element: <StartQuizforStudent/>},
 {path: "/quiz/dashboard", element: <DashboardQuiz/>},
 ]);
