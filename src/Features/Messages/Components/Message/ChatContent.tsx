@@ -11,7 +11,7 @@ const ChatContent = () => {
   const token = `${localStorage.getItem("token")}`;
   const { refetch } = useGetChatConversation();
   const signalR = useSignalR(token, BASE_URL, refetch);
-  const { allMessages, page, setPage, hasMore } = useChat();
+  const { allMessages, page, setPage, hasMore , conversationId  } = useChat();
   const chatRef = useRef<HTMLDivElement>(null);
   const prevScrollHeight = useRef(0);
   const isLoadingMore = useRef(false);
@@ -61,7 +61,7 @@ const ChatContent = () => {
           <div className="mb-6"></div>
           <TeacherTextMessage messages={allMessages} />
         </div>
-        <ChatInput connection={signalR.connection} />
+        {conversationId && <ChatInput connection={signalR.connection} />}
       </section>
     </>
   );
