@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useQuiz } from '../Context/QuizContext'; 
-import chem from '../../../assets/icons/chems.svg';
 import arrow from '../../../assets/icons/arrowList.svg';
 import ii from '../../../assets/icons/i.svg';
 import { useCreateQuiz } from '../Hooks/useCreateQuiz';
@@ -9,8 +8,9 @@ export const BasicInformationSection: React.FC = () => {
   const { QuizDataTime, setQuizDataTime } = useQuiz();
   const { GetAllClassesQuiz } = useCreateQuiz();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setQuizDataTime((prev) => ({ ...prev, [name]: value }));
+    const data = JSON.parse(e.target.value);
+    localStorage.setItem("sessionId" , data.sessionId);
+    setQuizDataTime((prev) => ({ ...prev, ["Class"]: data.subjectName  }));
   };
   
   useEffect(()=>{
@@ -18,8 +18,28 @@ export const BasicInformationSection: React.FC = () => {
   } , [GetAllClassesQuiz]);
 
   const Subjects = localStorage.getItem("classesQuizData")? JSON.parse(localStorage.getItem("classesQuizData") || "") : [];
- console.log(Subjects);
- 
+  console.log(Subjects);
+
+  const handlGrads = (grade:number)=>{
+    switch(grade){
+      case 0:
+        return "Prep 1";
+      case 1:
+        return "Prep 2";
+      case 2:
+        return "Prep 3";
+      case 3:
+        return "Sec 1";
+      case 4:
+        return "Sec 2";
+      case 5:
+        return "Sec 3";
+      case 6:
+        return "Sec 4";
+      default:
+        return "";
+    }
+  }
   return (
     <div className="box-border flex flex-col items-start p-[28px] gap-[28px] w-full max-w-[1045px] bg-white border border-[#E8EAED] shadow-[0px_4px_24px_rgba(0,0,0,0.04)] rounded-lg font-['Poppins',sans-serif]">
       
@@ -53,10 +73,10 @@ export const BasicInformationSection: React.FC = () => {
         </div>
 
         {/* Class and Subject Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[22px] w-full">
+        <div className="   w-full">
           
           {/* Select Class Field */}
-          <div className="flex flex-col items-start gap-[7px] w-full">
+          <div className="flex flex-col  gap-[7px] w-full">
             <label className="font-semibold text-[13px] leading-[18px] text-[#2A2D34]">
               Select Class
             </label>
@@ -65,11 +85,14 @@ export const BasicInformationSection: React.FC = () => {
                 name="Class"
                 value={QuizDataTime?.Class || ""}
                 onChange={handleChange}
-                className="appearance-none flex flex-row items-center px-[15px] py-[11px] w-full h-[43px] bg-[#F1F4F9] rounded-lg border-none outline-none font-normal text-[15px] leading-[22px] text-[#2A2D34] cursor-pointer pr-[38px]"
+                className="appearance-none flex flex-row items-center px-[15px] py-[11px] w-full h-[43px] bg-[#F1F4F9] rounded-lg border-none outline-none font-normal text-[15px] leading-[22px] text-[#2A2D34] cursor-pointer"
               >
                 {Subjects?.map((subject: any) => (
-                  <option value={subject.subjectName}>
-                    {subject.subjectName}
+                  <option value={JSON.stringify({
+                    subjectName : subject.subjectName,
+                    sessionId: subject.sessionId
+                  })} >
+                    {subject.subjectName} , {handlGrads(subject.grade)}
                   </option>
                 ))}
                 {/* <option value="Chemistry - Prep 2 (25 students)">Chemistry - Prep 2 (25 students)</option>
@@ -82,7 +105,7 @@ export const BasicInformationSection: React.FC = () => {
           </div>
 
           {/* Subject Field (Static Display based on your design) */}
-          <div className="flex flex-col items-start gap-[7px] w-full">
+          {/* <div className="flex flex-col items-start gap-[7px] w-full">
             <label className="font-semibold text-[13px] leading-[18px] text-[#2A2D34]">
               Subject
             </label>
@@ -92,7 +115,7 @@ export const BasicInformationSection: React.FC = () => {
                 Chemistry
               </span>
             </div>
-          </div>
+          </div> */}
 
         </div>
       </div>
