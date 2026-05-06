@@ -10,6 +10,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-day-picker/dist/style.css";
 import Toolbar from "../Components/Toolbar";
 import Event from "../Components/Event";
+import QuizEvent from "../Components/QuizEvent";
 import { useEffect, useState } from "react";
 import "../Style/DayPicker.css";
 import DayPickerHeader from "../Components/DayPickerHeader";
@@ -19,6 +20,8 @@ import ClassForm from "../Components/Form/ClassForm";
 import { useGetAllClasses } from "../Hooks/useGetAllClasses";
 import { useCalendar } from "../Contexts/CalendarContext";
 import { roleToAuth } from "../../../Utils/Constant";
+import { useGetAllQuizes } from "../Hooks/useGetAllQuizes";
+
 const locales = {
   "en-US": enUS,
 };
@@ -43,23 +46,49 @@ const eventPropGetter = () => {
   };
 };
 
+const CustomEventWrapper = (props: any) => {
+  if (props.event.type === "quiz") {
+    return <QuizEvent {...props} />;
+  }
+  return <Event {...props} />;
+};
+
 const MainCalendar = () => {
   const [month, setMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
   
+  const { Class } = useCalendar();
+  const { fetchClasses } = useGetAllClasses();
+  const { data } = useGetAllQuizes();
   
-  const { TeacherClass } = useCalendar();
-  const {fetchClasses} = useGetAllClasses();
-  
-  const formattedEvents = TeacherClass?.map((cls: any) => ({
+  const formattedClasses = Class?.map((cls: any) => ({
     ...cls,
+    type: "class",
+    title: cls.title || cls.className, 
     start: new Date(cls.startTime),
     end: new Date(cls.endTime),
   })) || [];
 
+  const formattedQuizzes = data?.data?.map((quiz: any) => {
+    const start = new Date(quiz.dueDate);
+    const end = new Date(start);
+    end.setHours(end.getHours() + 1); 
+
+    return {
+      ...quiz,
+      type: "quiz",
+      title: quiz.quizName, 
+      start: start,
+      end: end,
+    };
+  }) || [];
+
+  const formattedEvents = [...formattedClasses, ...formattedQuizzes];
+
   useEffect(() => {
     fetchClasses();
+    
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
@@ -69,7 +98,7 @@ const MainCalendar = () => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [open]);
+  }, [open, data]);
 
   return (
     <div className="bg-[#F9FBFC] flex justify-center items-center">
@@ -87,7 +116,6 @@ const MainCalendar = () => {
         </div>
       )}
       <div className=" mt-[50px] ">
-        {/* <h1 className="text-[32px] font-bold mb-[10px]">Schedule</h1> */}
         <div className="flex ">
           <Calendar
             localizer={localizer}
@@ -99,7 +127,7 @@ const MainCalendar = () => {
             style={{ width: 895 }}
             components={{
               toolbar: Toolbar,
-              event: Event,
+              event: CustomEventWrapper, 
             }}
             eventPropGetter={eventPropGetter}
             date={selectedDate || new Date()}
