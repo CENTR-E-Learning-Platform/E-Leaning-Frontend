@@ -7,8 +7,8 @@ interface CalendarContext {
     setActiveLeft : React.Dispatch<React.SetStateAction<string |null>>
     date : string | null , 
     setDate : React.Dispatch<React.SetStateAction<string |null>>
-    TeacherClass : any | null , 
-    SetTeacherClass : React.Dispatch<React.SetStateAction<any |null>>
+    Class : any | null , 
+    setClass : React.Dispatch<React.SetStateAction<any |null>>
     checkGrad : any | null , 
     setCheckGrad : React.Dispatch<React.SetStateAction<any |null>>
 
@@ -19,10 +19,10 @@ export const CalendarProvider: React.FC<{ children: ReactNode } >  = ({children}
     const [active , setActive] = useState<string | null>("all");
     const [activeLeft , setActiveLeft] = useState<string | null>("month");
     const [date , setDate] = useState<string | null>("");
-    const [TeacherClass , SetTeacherClass] = useState<any |null>([]);
+    const [Class , setClass] = useState<any |null>([]);
     const [checkGrad , setCheckGrad] = useState(false);
     return (
-        <Calendar.Provider value={{active , setActive , activeLeft , setActiveLeft , date , setDate , TeacherClass , SetTeacherClass , checkGrad , setCheckGrad}}>
+        <Calendar.Provider value={{active , setActive , activeLeft , setActiveLeft , date , setDate , Class , setClass , checkGrad , setCheckGrad}}>
             {children}
         </Calendar.Provider>
     );
