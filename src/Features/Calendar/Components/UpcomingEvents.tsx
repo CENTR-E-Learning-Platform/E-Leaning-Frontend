@@ -4,6 +4,7 @@ import profile from "../../../assets/icons/profile.svg";
 import { useCalendar } from "../Contexts/CalendarContext";
 import { useNavigate } from "react-router-dom";
 import { isSameDay } from "date-fns";
+import { useGetAllQuizes } from "../Hooks/useGetAllQuizes";
 
 const getStatusConfig = (status: number) => {
   switch (status) {
@@ -39,16 +40,39 @@ const getStatusText = (status: number) => {
 };
 
 const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
-  const { TeacherClass } = useCalendar();
+  const { Class } = useCalendar();
+  const { data } = useGetAllQuizes();
   const navigator = useNavigate();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const displayEvents = (TeacherClass || [])
-    .filter((e: any) => isSameDay(new Date(e.startTime), selectedDate))
-    .sort(
-      (a: any, b: any) =>
-        new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
-    )
+  const formattedClasses = (Class || []).map((cls: any) => ({
+    ...cls,
+    type: "class",
+    displayTitle: cls.title || cls.className,
+    displayStart: new Date(cls.startTime),
+    displayEnd: new Date(cls.endTime),
+  }));
+
+  const formattedQuizzes = (data?.data || []).map((quiz: any) => {
+    const start = new Date(quiz.dueDate);
+    const end = new Date(start);
+    end.setHours(end.getHours() + 1);
+
+    return {
+      ...quiz,
+      type: "quiz",
+      displayTitle: quiz.quizName,
+      displayStart: start,
+      displayEnd: end,
+      dueDate: new Date(quiz.dueDate)
+    };
+  });
+
+  const allEvents = [...formattedClasses, ...formattedQuizzes];
+
+  const displayEvents = allEvents
+    .filter((e: any) => isSameDay(e.displayStart, selectedDate))
+    .sort((a: any, b: any) => a.displayStart.getTime() - b.displayStart.getTime())
     .slice(0, 3);
 
   return (
@@ -57,19 +81,36 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
         <p className="text-[#6D7588] text-[14px]">No events for this day.</p>
       ) : (
         displayEvents.map((e: any, index: number) => {
-          const start = new Date(e.startTime).toLocaleTimeString([], {
+          const start = e.displayStart.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
             hour12: true,
           });
 
-          const end = new Date(e.endTime).toLocaleTimeString([], {
+          const end = e.displayEnd.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
             hour12: true,
           });
 
-          const { bg, border, isDisabled } = getStatusConfig(e.status);
+          const isQuiz = e.type === "quiz";
+          const now = new Date();
+          const isExpired = isQuiz ? now > e.dueDate : false;
+
+          let bg, border, isDisabled, hoverText;
+
+          if (isQuiz) {
+            isDisabled = isExpired;
+            bg = isExpired ? "bg-[#F3F4F6]" : "bg-[#525FE1]/20";
+            border = isExpired ? "border-[#9CA3AF]" : "border-[#525FE1]";
+            hoverText = isExpired ? "Expired" : "Available";
+          } else {
+            const config = getStatusConfig(e.status);
+            bg = config.bg;
+            border = config.border;
+            isDisabled = config.isDisabled;
+            hoverText = getStatusText(e.status);
+          }
 
           return (
             <div
@@ -81,7 +122,7 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
               <div>
                 <div>
                   <h1 className="text-[16px] w-full truncate px-[12px] pt-[12px] mb-[10px] text-[#2A2D34] font-medium transition-all duration-300">
-                    {hoveredIndex === index ? getStatusText(e.status) : e.title}
+                    {hoveredIndex === index ? hoverText : e.displayTitle}
                   </h1>
                   <div className="flex ps-[12px] ">
                     <div className="flex justify-center items-center">
@@ -104,7 +145,7 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                       />
                     </div>
                     <span className="text-[12px] text-center text-[#6D7588]">
-                     {e.teacherName}
+                      {e.teacherName || "N/A"}
                     </span>
                   </div>
                   <button
@@ -113,11 +154,15 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                     onMouseLeave={() => setHoveredIndex(null)}
                     onClick={async () => {
                       if (!isDisabled) {
-                        await localStorage.setItem("sessionName", e.roomName);
-                        await localStorage.setItem("teacherName", e.teacherName);
-                        await localStorage.setItem("sessionId", e.id);
-                        await localStorage.setItem("teacherProfileImagePath", e.profilePicturePath);
-                        window.open("/createroom/joinnow", "_blank");
+                        if (isQuiz) {
+                          console.log("Starting Quiz ID:", e.quizId);
+                        } else {
+                          await localStorage.setItem("sessionName", e.roomName);
+                          await localStorage.setItem("teacherName", e.teacherName);
+                          await localStorage.setItem("sessionId", e.id);
+                          await localStorage.setItem("teacherProfileImagePath", e.profilePicturePath);
+                          window.open("/createroom/joinnow", "_blank");
+                        }
                       }
                     }}
                     className={`ms-[12px] w-[113px] h-[41px] rounded-[8px] flex justify-center items-center text-[16px] text-[#F9FBFC] font-semibold mt-[12px] transition duration-300 
@@ -127,7 +172,7 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                           : "bg-[#525FE1] hover:bg-[#404DDD] cursor-pointer"
                       }`}
                   >
-                    Join class
+                    {isQuiz ? "Start Quiz" : "Join class"}
                   </button>
                 </div>
               </div>
