@@ -82,16 +82,11 @@ const ContactItem: React.FC<ContactProps> = ({
 };
 
 const ContactList: React.FC = () => {
-  const { setDataContactItem, activeMessage, isTeacher } = useContext(
+  const { activeMessage, isTeacher } = useContext(
     ShareDataContactItems,
   );
-  const { data } = useGetChatConversation();
-  console.log(data);
-  useEffect(() => {
-    if (data?.data) {
-      setDataContactItem(data?.data);
-    }
-  }, [data]);
+  const { data : dataGetChatConversation } = useGetChatConversation();
+  console.log(dataGetChatConversation);
 
   const formatTime = useConvertDate();
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -194,8 +189,8 @@ const ContactList: React.FC = () => {
 
     <div className="flex flex-col items-start py-[14.4px] pl-[14.4px] gap-[7.2px] w-[360px] h-[744.3px] overflow-y-auto scroll-smooth">
       {activeMessage === (isTeacher ? "Teachers" : "Students") ? (
-        data?.data?.length > 0 ? (
-          data?.data?.map((conversation: Conversation) => {
+        dataGetChatConversation?.data?.length > 0 ? (
+          dataGetChatConversation?.data?.map((conversation: Conversation) => {
             return (
               <div
                 key={conversation.id}
@@ -226,8 +221,8 @@ const ContactList: React.FC = () => {
           "No Conversation"
         )
       ) : (
-        data?.data?.length > 0 ? (
-          data?.data?.map((conversation: Conversation) => {
+        dataGetChatConversation?.data?.length > 0 ? (
+          dataGetChatConversation?.data?.map((conversation: Conversation) => {
             return (
               <div
                 key={conversation.id}
