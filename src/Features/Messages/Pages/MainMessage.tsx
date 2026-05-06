@@ -5,20 +5,29 @@ import { ShareDataContactItems } from "../Contexts/ShareDataContactItems";
 import MessagesHeader from "../Components/Message/MessagesHeader";
 import EmptyTeacher from "../Components/EmptyMessage/EmptyTeacher";
 import EmptyStudent from "../Components/EmptyMessage/EmptyStudent";
+import { useGetChatConversation } from "../Hooks/useGetChatConversation";
 const MainMessage = () => {
-  const { dataContactItem , isTeacher } = useContext(ShareDataContactItems);
+  const { isTeacher } = useContext(ShareDataContactItems);
+  // console.log(dataContactItem)
 
+  const { data : dataGetChatConversation } = useGetChatConversation();
   return (
     <>
       <section className="MainMessage">
-        {dataContactItem?.length === 0 ? (
+        {dataGetChatConversation?.data?.length === 0 ? (
+          isTeacher ? (
+            <EmptyTeacher />
+          ) : (
+            <EmptyStudent />
+          )
+        ) : (
           <div className="controlMessage flex justify-start items-start bg-[#F9FBFC]">
             <div className="left-content bg-[#F9FBFC] h-[calc(100vh-66px)] flex flex-col">
               <MessagesHeader />
               <ContactList />
             </div>
 
-            {dataContactItem?.length >= 1 ? (
+            {dataGetChatConversation?.data?.length >= 1 ? (
               <div className="center-content">
                 <ChatContent />
               </div>
@@ -28,10 +37,6 @@ const MainMessage = () => {
 
             <div className="right-content"></div>
           </div>
-        ) : isTeacher ? (
-          <EmptyTeacher />
-        ) : (
-          <EmptyStudent />
         )}
       </section>
     </>
