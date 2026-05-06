@@ -5,7 +5,7 @@ import { ATTEND_QUIZ_API } from "../Utils/Api";
 export const useAttemptQuiz = () => {
     const fetchQuestions = async () => {
         try {
-            const response = await getQuizQuestions(`${ATTEND_QUIZ_API}?sessionId=9aac5039-f3fc-4aa9-8ec6-f9481d79e38f`);
+            const response = await getQuizQuestions(`${ATTEND_QUIZ_API}?sessionId=${localStorage.getItem("sessionId")}`);
             console.log(response);
             
             localStorage.setItem("quizQuestions", JSON.stringify(response.data.questions));
