@@ -18,7 +18,7 @@ type Props = {
 export const TeacherTextMessage = ({ messages }: Props) => {
   const formatTime = useConvertDate();
   const currentUserId = localStorage.getItem("currentUserId");
-  const { signalR } = useChat();
+  const { signalR  , conversationId } = useChat();
   
   return (
     <div>
@@ -80,7 +80,7 @@ export const TeacherTextMessage = ({ messages }: Props) => {
         );
       })}
 
-      {signalR.typingUser && (
+      {signalR.typingUser && signalR.typingConversationId !== conversationId && (
         <div className="flex flex-col justify-start mb-2 items-start p-0 w-[730px] mt-5 self-stretch">
           <div className="flex flex-row items-start gap-[15.2px] max-w-[200px]">
             <img
