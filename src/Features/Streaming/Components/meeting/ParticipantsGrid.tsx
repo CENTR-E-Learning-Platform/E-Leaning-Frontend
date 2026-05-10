@@ -18,6 +18,36 @@ interface ParticipantsGridProps {
   isRais: string[];
 }
 
+const FullScreenButton = () => {
+  const toggleFullScreen = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const container = e.currentTarget.parentElement; 
+    if (!container) return;
+
+    if (!document.fullscreenElement) {
+      container.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
+  return (
+    <button
+      onClick={toggleFullScreen}
+      className="absolute bottom-3 right-3 z-[60] bg-black/50 hover:bg-black/80 text-white p-2 rounded-[6px] opacity-0 group-hover/container:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer"
+      title="Toggle Fullscreen"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+      </svg>
+    </button>
+  );
+};
+
 const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
   const { tracks, screenShareTrack, presenterCameraTrack, otherCameraTracks } = useParticipant();
   const { isClickattend } = useControlContext();
@@ -79,14 +109,14 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
     return (
       <motion.div 
         layout 
-        className={`group absolute ${positionClasses} flex items-center gap-[6px] ${containerPadding} rounded-[4px] transition-colors duration-300 ease-in-out z-10 ${
+        className={`group/name absolute ${positionClasses} flex items-center gap-[6px] ${containerPadding} rounded-[4px] transition-colors duration-300 ease-in-out z-10 ${
           isHandRaised 
             ? "bg-[#80da88] text-[#1E1E1E] shadow-lg" 
             : "bg-black/60 text-[#F9FBFC]"
         }`}
       >
         {isLongName && (
-          <div className="absolute bottom-full left-0 mb-1 hidden group-hover:block bg-[#2A2D34] text-[#F9FBFC] text-[12px] px-[8px] py-[4px] rounded-[4px] shadow-lg whitespace-nowrap z-50 border border-[#454950]">
+          <div className="absolute bottom-full left-0 mb-1 hidden group-hover/name:block bg-[#2A2D34] text-[#F9FBFC] text-[12px] px-[8px] py-[4px] rounded-[4px] shadow-lg whitespace-nowrap z-50 border border-[#454950]">
             {safeName}
           </div>
         )}
@@ -128,7 +158,8 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
 
     return (
       <div className="w-full h-full flex flex-row gap-2 p-2 relative">
-        <div className="flex-1 h-full rounded-xl overflow-hidden relative ">
+        <div className="group/container flex-1 h-full rounded-xl overflow-hidden relative bg-[#393D44]">
+          <FullScreenButton />
           <VideoTrack
             trackRef={screenShareTrack as any}
             className="w-full h-full object-contain"
@@ -146,9 +177,10 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
                 cursor: 'move',
                 zIndex: 50
               }}
-              className="absolute w-[200px] h-[120px] rounded-lg overflow-hidden bg-black"
+              className="group/container absolute w-[200px] h-[120px] rounded-lg overflow-hidden bg-black"
               defaultBorder="border-2 border-[#5E6570] hover:border-white"
             >
+              <FullScreenButton />
               <VideoTrack 
                  trackRef={presenterCameraTrack as any} 
                  className="w-full h-full object-cover pointer-events-none" 
@@ -164,9 +196,10 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
               <ParticipantContainer 
                 key={track.participant.identity} 
                 participant={track.participant}
-                className="w-full h-[120px] bg-black rounded-lg overflow-hidden relative"
+                className="group/container w-full h-[120px] bg-black rounded-lg overflow-hidden relative"
                 defaultBorder=""
               >
+                <FullScreenButton />
                 <VideoTrack
                   trackRef={track as any}
                   className="w-full h-full object-cover"
@@ -189,9 +222,11 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
           <ParticipantContainer 
             key={trackRef.participant.identity + trackRef.source} 
             participant={trackRef.participant}
-            className="relative w-full h-full rounded-xl overflow-hidden bg-[#393D44]" 
+            className="group/container relative w-full h-full rounded-xl overflow-hidden bg-[#393D44]" 
             defaultBorder=""
           >
+          <FullScreenButton />
+          
           {trackRef.participant.isCameraEnabled ? (
             <VideoTrack
               trackRef={trackRef as any}
