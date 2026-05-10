@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { quizSubmissions } from "../Services/QuizSubmissions";
-export const useQuizSubmissions = () => {
+export const useQuizSubmissions = (quizId: number) => {
 
     const { data , refetch } = useQuery({
-        queryKey: ["QuizSubmissions"],
+        queryKey: ["QuizSubmissions", quizId  ],
         queryFn: async () => {
-            return (await quizSubmissions(1,1,7))
+            return (await quizSubmissions(quizId,1,7))
         },
         staleTime: Infinity,
         gcTime: Infinity,
