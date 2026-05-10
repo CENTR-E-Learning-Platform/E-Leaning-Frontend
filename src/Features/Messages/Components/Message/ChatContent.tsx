@@ -23,7 +23,6 @@ const ChatContent = () => {
     if (!el) return;
 
     const handleScroll = () => {
-      // Use a small buffer (< 5px) instead of exact 0 to handle sub-pixel rendering issues
       if (el.scrollTop <= 5 && hasMore && !isLoadingHistory.current) {
         prevScrollHeight.current = el.scrollHeight;
         isLoadingHistory.current = true;
@@ -35,12 +34,10 @@ const ChatContent = () => {
     return () => el.removeEventListener("scroll", handleScroll);
   }, [page, setPage, hasMore]);
 
-  // Handle scroll position after DOM updates
   useEffect(() => {
     const el = chatRef.current;
     if (!el) return;
 
-    // Reset on conversation change
     if (conversationId !== prevConversationId.current) {
       el.scrollTop = el.scrollHeight;
       prevConversationId.current = conversationId;
@@ -49,14 +46,12 @@ const ChatContent = () => {
       return;
     }
 
-    // Handle new messages or loaded history
     if (allMessages.length > prevMessagesLength.current) {
       if (isLoadingHistory.current) {
-        // History was loaded, restore scroll position
         el.scrollTop = el.scrollHeight - prevScrollHeight.current;
         isLoadingHistory.current = false;
       } else {
-        // New message arrived, scroll to bottom
+        
         el.scrollTo({
           top: el.scrollHeight,
           behavior: "smooth",
@@ -64,7 +59,6 @@ const ChatContent = () => {
       }
     }
 
-    // Failsafe: if we tried to load history but there was no more
     if (isLoadingHistory.current && !hasMore) {
       isLoadingHistory.current = false;
     }
@@ -84,7 +78,7 @@ const ChatContent = () => {
           <div className="mb-6"></div>
           <TeacherTextMessage messages={allMessages} />
         </div>
-        {<ChatInput connection={signalR.connection} />}
+        {conversationId && <ChatInput connection={signalR.connection} />}
       </section>
     </>
   );
