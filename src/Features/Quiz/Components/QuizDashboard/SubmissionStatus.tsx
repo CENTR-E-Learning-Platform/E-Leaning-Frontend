@@ -2,13 +2,18 @@ import correctSign from '../../../../assets/icons/correctSign.svg';
 import listCircle from '../../../../assets/icons/listCircle.svg';
 import digram from '../../../../assets/icons/analyticsDigram.svg';
 import { useQuizStatus } from '../../Hooks/useQuizStatus'; 
+import { useParams } from 'react-router-dom';
 
 const SubmissionStatus = () => {
-  const { data } = useQuizStatus();
-
+  const {quizId} = useParams();
+  const { data } = useQuizStatus(Number(quizId));
   const submitted = Number(data?.data?.numberOfSubmittedStudents );
-  const total = Number(data?.data?.totalNumberOfStudents );
-  const pending = Number(data?.data?.numberOfPendingStudents );
+  let total = Number(data?.data?.totalNumberOfStudents );
+
+  if(submitted > total) {
+    total = submitted;
+  }
+  const pending = Number(data?.data?.numberOfPendingStudents ) <= 0 ? 0 : Number(data?.data?.numberOfPendingStudents );
   
   const percentage = total > 0 ? Math.round((submitted / total) * 100) : 0;
 
