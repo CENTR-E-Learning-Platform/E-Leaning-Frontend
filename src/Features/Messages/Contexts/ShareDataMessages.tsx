@@ -31,20 +31,6 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const token = `${localStorage.getItem("token")}`;
   const signalR = useSignalR(token, BASE_URL, () => {});
 
-  // Array of all messages normal sorted
-
-  // const allMessages = [...(chatData || []), ...signalR.messages]
-  // .filter((msg) => msg.conversationId === Number(conversationId))
-  // .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-
-  // Array of all messages reverse sorted
-
-  // const allMessages = [...(chatData || []), ...signalR.messages]
-  //   .filter((msg) => msg.conversationId === Number(conversationId))
-  //   .sort(
-  //     (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
-  //   );
-
   const filteredSignalRMessages = signalR.messages.filter(
     (msg: any) => String(msg.conversationId) === String(conversationId)
   );
