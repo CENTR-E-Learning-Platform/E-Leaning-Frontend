@@ -1,12 +1,14 @@
 import { useQuizSubmissions } from '../../Hooks/useQuizSubmissions';
 import { useQuizSearch } from '../../Hooks/useQuizSearch';
 import { useQuiz } from '../../Context/QuizContext';
+import { useParams } from 'react-router-dom';
 
 const StudentRow = () => {
   const { searchData } = useQuiz();
-  const quizSubmissions = useQuizSubmissions();
+  const {quizId} = useParams();
+  const quizSubmissions = useQuizSubmissions(Number(quizId));
 
-  const quizSearch = useQuizSearch(searchData); 
+  const quizSearch = useQuizSearch(searchData , Number(quizId)); 
   
   const submissions = searchData.trim() !== "" ? quizSearch.data?.data : quizSubmissions.data?.data;
 
