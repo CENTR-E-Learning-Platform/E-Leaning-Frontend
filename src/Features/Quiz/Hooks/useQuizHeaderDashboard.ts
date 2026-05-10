@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getBasicInfo } from "../Services/getBasicInfo"
-export const useQuizHeaderDashboard = () => {
+export const useQuizHeaderDashboard = (quizId: number) => {
     
     const { data , refetch } = useQuery({
-    queryKey: ["QuizHeaderData"],
+    queryKey: ["QuizHeaderData", quizId],
     queryFn: async() =>{
-        return (await getBasicInfo(1)).data;
+        return (await getBasicInfo(quizId)).data;
     },
     staleTime: Infinity,
     gcTime: Infinity,
