@@ -45,8 +45,11 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   //     (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
   //   );
 
-  const allMessages = [...(chatData || []), ...signalR.messages]
-    .filter((msg) => msg.conversationId === Number(conversationId))
+  const filteredSignalRMessages = signalR.messages.filter(
+    (msg: any) => String(msg.conversationId) === String(conversationId)
+  );
+
+  const allMessages = [...(chatData || []), ...filteredSignalRMessages]
     .filter(
       (msg, index, self) =>
         index ===
