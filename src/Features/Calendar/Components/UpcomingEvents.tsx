@@ -5,6 +5,8 @@ import { useCalendar } from "../Contexts/CalendarContext";
 import { useNavigate } from "react-router-dom";
 import { isSameDay } from "date-fns";
 import { useGetAllQuizes } from "../Hooks/useGetAllQuizes";
+import { roleToAuth } from "../../../Utils/Constant";
+import { useAttemptQuiz } from "../../Quiz/Hooks/useAttemptQuiz";
 
 const getStatusConfig = (status: number) => {
   switch (status) {
@@ -40,6 +42,8 @@ const getStatusText = (status: number) => {
 };
 
 const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
+  const isTeacher = roleToAuth?.includes("Teacher");
+  const { fetchQuestions } = useAttemptQuiz();
   const { Class } = useCalendar();
   const { data } = useGetAllQuizes();
   const navigator = useNavigate();
@@ -96,14 +100,15 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
           const isQuiz = e.type === "quiz";
           const now = new Date();
           const isExpired = isQuiz ? now > e.dueDate : false;
+          const isButtonDisabled = isExpired && !isTeacher;
 
           let bg, border, isDisabled, hoverText;
 
           if (isQuiz) {
-            isDisabled = isExpired;
-            bg = isExpired ? "bg-[#F3F4F6]" : "bg-[#525FE1]/20";
-            border = isExpired ? "border-[#9CA3AF]" : "border-[#525FE1]";
-            hoverText = isExpired ? "Expired" : "Available";
+            isDisabled = isButtonDisabled;
+            bg = isButtonDisabled ? "bg-[#F3F4F6]" : "bg-[#10B981]/20";
+            border = isButtonDisabled ? "border-[#9CA3AF]" : "border-[#10B981]";
+            hoverText = isButtonDisabled ? "Expired" : "Available";
           } else {
             const config = getStatusConfig(e.status);
             bg = config.bg;
@@ -155,7 +160,16 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                     onClick={async () => {
                       if (!isDisabled) {
                         if (isQuiz) {
-                          console.log("Starting Quiz ID:", e.quizId);
+                          if (isTeacher) {
+                            await localStorage.setItem("quizId", e.quizId);
+                            navigator(`/quiz/dashboard/${e.quizId}`);
+                          } else {
+                            if (!isExpired) {
+                              await fetchQuestions();
+                              await localStorage.setItem("sessionId", e.sessionId);
+                              window.open(`/quiz/${e.quizId}`, "_blank");
+                            }
+                          }
                         } else {
                           await localStorage.setItem("sessionName", e.roomName);
                           await localStorage.setItem("teacherName", e.teacherName);
@@ -169,10 +183,10 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
                       ${
                         isDisabled
                           ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-[#525FE1] hover:bg-[#404DDD] cursor-pointer"
+                          : isQuiz ? "bg-[#10B981] hover:bg-[#059669] cursor-pointer" : "bg-[#525FE1] hover:bg-[#404DDD] cursor-pointer"
                       }`}
                   >
-                    {isQuiz ? "Start Quiz" : "Join class"}
+                    {isQuiz ? (isTeacher ? "Details" : "Start Quiz") : "Join class"}
                   </button>
                 </div>
               </div>
