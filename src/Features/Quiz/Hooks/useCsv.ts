@@ -1,9 +1,9 @@
 import { quizCsv } from "../Services/quizCsv"
 
-export const useCsv = () => {
+export const useCsv = (quizId: number) => {
     const quizCsvDownload = async () => {
         try {
-            const response = await quizCsv(1);
+            const response = await quizCsv(quizId);
             const data = response?.data || response;
             
             const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
