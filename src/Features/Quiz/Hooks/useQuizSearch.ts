@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { quizSearch } from "../Services/quizSearch";
 
-export const useQuizSearch = (studentName: string) => {
+export const useQuizSearch = (studentName: string , quizId: number) => {
     const { data, refetch, isLoading } = useQuery({
-        queryKey: ["QuizSearch", studentName],
+        queryKey: ["QuizSearch", studentName, quizId],
         queryFn: async () => {
-            return await quizSearch(1, studentName);
+            return await quizSearch(quizId , studentName);
         },
         staleTime: Infinity,
         gcTime: Infinity,
