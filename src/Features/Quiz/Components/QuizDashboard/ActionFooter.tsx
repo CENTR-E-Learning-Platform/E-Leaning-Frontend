@@ -1,7 +1,9 @@
 import React from 'react';
 import { useCsv } from '../../Hooks/useCsv';
+import { useParams } from 'react-router-dom';
 const ActionFooter: React.FC = () => {
-  const {quizCsvDownload} = useCsv();
+  const {quizId} = useParams();
+  const {quizCsvDownload} = useCsv(Number(quizId));
   return (
     <div className="flex flex-row justify-between items-center px-[22px] w-[760px] h-[61px] bg-[#F1F4F9] font-['Poppins',sans-serif] box-border">
       <button className="flex flex-col justify-center items-center text-[#525FE1] font-bold text-[13px] leading-[18px] bg-transparent border-none cursor-pointer p-0">
