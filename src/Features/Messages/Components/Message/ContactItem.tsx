@@ -17,17 +17,15 @@ const ContactItem: React.FC<ContactProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-row items-center mb-2 p-[14.4px] gap-[15.2px] w-[329.6px] h-[72px] rounded-[14.4px] transition-all ${
-        isActive
+      className={`flex flex-row items-center mb-2 p-[14.4px] gap-[15.2px] w-[329.6px] h-[72px] rounded-[14.4px] transition-all ${isActive
           ? "bg-white shadow-[0px_0.9px_1.8px_rgba(0,0,0,0.05)]"
           : "bg-transparent"
-      }`}
+        }`}
     >
       <div className="relative flex flex-col items-start p-0 isolate w-[45.6px] h-[43.2px]">
         <div
-          className={`w-[45.6px] h-[43.2px] rounded-full overflow-hidden bg-gray-200 ${
-            isActive ? "border-[1.8px] border-[#525FE1]" : ""
-          }`}
+          className={`w-[45.6px] h-[43.2px] rounded-full overflow-hidden bg-gray-200 ${isActive ? "border-[1.8px] border-[#525FE1]" : ""
+            }`}
         >
           <img
             src={avatarUrl}
@@ -43,31 +41,28 @@ const ContactItem: React.FC<ContactProps> = ({
       <div className="flex flex-col items-start p-0 gap-[3.6px] flex-grow w-[213.7px] h-[43.2px]">
         <div className="flex flex-row justify-between items-center p-0 w-full h-[21.6px] self-stretch">
           <h3
-            className={`font-['Poppins'] text-[15.2px] leading-[21.6px] flex-1 truncate ${
-              isActive
+            className={`font-['Poppins'] text-[15.2px] leading-[21.6px] flex-1 truncate ${isActive
                 ? "font-bold text-[#2A2D34]"
                 : "font-semibold text-[#2A2D34]"
-            }`}
+              }`}
           >
             {name}
           </h3>
           <span
-            className={`font-['Poppins'] text-[9.5px] leading-[13.5px] flex items-center ${
-              isActive
+            className={`font-['Poppins'] text-[9.5px] leading-[13.5px] flex items-center ${isActive
                 ? "font-semibold text-[#525FE1]"
                 : "font-light text-[#434656]"
-            }`}
+              }`}
           >
             {time}
           </span>
         </div>
         <div className="flex flex-col items-start p-0 w-full h-[18px] self-stretch">
           <p
-            className={`font-['Poppins'] text-[13.3px] leading-[18px] flex items-center truncate w-full ${
-              isActive
+            className={`font-['Poppins'] text-[13.3px] leading-[18px] flex items-center truncate w-full ${isActive
                 ? "font-medium text-[#525FE1]"
                 : "font-normal text-[#434656]"
-            }`}
+              }`}
           >
             {message}
           </p>
@@ -85,7 +80,7 @@ const ContactList: React.FC = () => {
   const { activeMessage, isTeacher } = useContext(
     ShareDataContactItems,
   );
-  const { data : dataGetChatConversation } = useGetChatConversation();
+  const { data: dataGetChatConversation } = useGetChatConversation();
   console.log(dataGetChatConversation);
 
   const formatTime = useConvertDate();
@@ -126,7 +121,7 @@ const ContactList: React.FC = () => {
     );
   }, [conversationId, page]);
 
-  const getConversationId = (id: string, otherUserId: string) => {
+  const getConversationId = (id: any, otherUserId: string) => {
     if (activeId === id) return;
     setActiveId(id);
     setConversationId(id);
@@ -141,7 +136,7 @@ const ContactList: React.FC = () => {
 
       const userId =
         decoded[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
         ];
 
       localStorage.setItem("currentUserId", userId);
@@ -253,7 +248,7 @@ const ContactList: React.FC = () => {
           "No Conversation"
         )
       )
-    }
+      }
     </div>
   );
 };
