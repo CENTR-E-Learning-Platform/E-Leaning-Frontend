@@ -12,9 +12,17 @@ export interface Conversation {
   id: string;
   lastMessageAt: string ,
   otherUserName: string;
-  isOnline: boolean
   lastMessage: string;
   otherUserPicture:string
+  isOnline: boolean
   unreadCount: number;
 }
-
+export interface ConversationGroup {
+  id: string;
+  groupPicture:string
+  lastMessage: string;
+  lastMessageAt: string ,
+  teacherName: string;
+  teacherId: string;
+  name: string
+}
