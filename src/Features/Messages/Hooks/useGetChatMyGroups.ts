@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getChatMyGroups } from "../Services/getChatMyGroups";
 
 export const useGetChatMyGroups = () => {
-  const { data, refetch } = useQuery({
+  const { data, refetch :refetchChatMyGroups } = useQuery({
     queryKey: ["GetChatMyGroup"],
     queryFn: getChatMyGroups,
     refetchOnWindowFocus: true,
@@ -11,5 +11,5 @@ export const useGetChatMyGroups = () => {
     staleTime: 30000
   });
 
-  return { data, refetch };
+  return { data, refetchChatMyGroups };
 };
