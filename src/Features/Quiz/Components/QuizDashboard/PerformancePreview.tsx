@@ -1,8 +1,10 @@
 import React from 'react';
 import { useQuizStatus } from '../../Hooks/useQuizStatus';
+import { useParams } from 'react-router-dom';
 
 const PerformancePreview: React.FC = () => {
-  const { data } = useQuizStatus();
+  const {quizId} = useParams();
+  const { data } = useQuizStatus(Number(quizId)); 
 
   const classAvg = Number(data?.data?.classAvg );
   const totalPoints =100;

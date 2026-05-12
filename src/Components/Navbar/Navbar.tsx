@@ -70,10 +70,12 @@ const Navbar = () => {
                         <img src="../../../src/assets/icons/HomeIcon.svg" className='p-[2px]' alt="HomeIcon" />
                         <p className='text-[16px]'>Home</p>
                     </NavLink>
-                    <NavLink to="/explore" className={navLinkClasses}>
+                    {!isTeacher && (
+                        <NavLink to="/explore" className={navLinkClasses}>
                         <img src="../../../src/assets/icons/Explore.svg" className='p-[2px]' alt="ExploreTeacher" />
                         <p className='text-[16px]'>Explore Teacher</p>
                     </NavLink>
+                    )}
                     <NavLink to="/Calendar" className={navLinkClasses}>
                         <img src="../../../src/assets/icons/Schedule.svg" className='p-[2px]' alt="Schedule" />
                         <p className='text-[16px]'>Schedule</p>

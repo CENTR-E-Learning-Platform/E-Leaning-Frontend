@@ -58,7 +58,7 @@ const MainCalendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
   
-  const { Class } = useCalendar();
+  const { Class, active } = useCalendar();
   const { fetchClasses } = useGetAllClasses();
   const { data } = useGetAllQuizes();
   
@@ -84,7 +84,13 @@ const MainCalendar = () => {
     };
   }) || [];
 
-  const formattedEvents = [...formattedClasses, ...formattedQuizzes];
+  const allEvents = [...formattedClasses, ...formattedQuizzes];
+
+  const formattedEvents = allEvents.filter((event) => {
+    if (active === "quiz") return event.type === "quiz";
+    if (active === "homework") return event.type === "homework";
+    return true;
+  });
 
   useEffect(() => {
     fetchClasses();

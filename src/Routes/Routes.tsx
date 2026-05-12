@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
     { path: "OptionRegister", element: <OptionRegister /> },
     // { path: "/meeting", element: <LiveRoom /> },
     { path: "Calendar", element: <MainCalendar/> },
-    { path: "explore", element: <MainExplore/> },
+    !isTeacher ? { path: "explore", element: <MainExplore /> } : {},
     { path: "home", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
     { path: "", element:  isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
     { path: "messages", element: <MainMessage/> },
@@ -109,6 +109,6 @@ export const router = createBrowserRouter([
     {path: "/quiz/quizsetting", element: <QuizSetting/>},
   ]},
   {path: "/quiz/result", element: <ResultQuiz/>},
-  {path: "/quiz/:id", element: <StartQuizforStudent/>},
-{path: "/quiz/dashboard", element: <DashboardQuiz/>},
+  {path: "/quiz/:quizId", element: <StartQuizforStudent/>},
+{path: "/quiz/dashboard/:quizId", element: <DashboardQuiz/>},
 ]);

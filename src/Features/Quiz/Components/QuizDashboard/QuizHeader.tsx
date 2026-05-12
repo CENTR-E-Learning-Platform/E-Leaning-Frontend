@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { use, useEffect } from 'react';
 import { useQuizHeaderDashboard } from '../../Hooks/useQuizHeaderDashboard';
 import { format } from 'date-fns';
+import { useParams } from 'react-router-dom';
+
 
 export const QuizHeader: React.FC = () => {
-  const { data } = useQuizHeaderDashboard();
+  const {quizId} = useParams();
+  const { data } = useQuizHeaderDashboard(Number(quizId));
   
   useEffect(() => {
     console.log(data?.data);

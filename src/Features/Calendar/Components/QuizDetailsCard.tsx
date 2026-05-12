@@ -1,22 +1,27 @@
 import alert from "../../../assets/icons/alert2.svg";
 import { format } from "date-fns";
 import { useAttemptQuiz } from "../../Quiz/Hooks/useAttemptQuiz";
+import { roleToAuth } from "../../../Utils/Constant";
+import { useNavigate } from "react-router-dom";
 
 const QuizDetailsCard = ({ event }: any) => {
-  const {fetchQuestions} = useAttemptQuiz();
+  const { fetchQuestions } = useAttemptQuiz();
+  const navigator = useNavigate();
   const start = event.start ? new Date(event.start) : new Date();
   const dueDate = new Date(event.dueDate);
   const now = new Date();
+  const isTeacher = roleToAuth?.includes("Teacher");
 
   const isExpired = now > dueDate;
   const isTime = now >= start && now <= dueDate;
+  const isButtonDisabled = isExpired && !isTeacher;
 
   const formattedDate = format(dueDate, "MMMM d");
   const endTimeStr = format(dueDate, "h:mm a");
 
   let statusText = "Upcoming";
-  let statusColor = "text-[#F59E0B]";
-  let dotColor = "bg-[#F59E0B]";
+  let statusColor = "text-[#10B981]";
+  let dotColor = "bg-[#10B981]";
 
   if (isExpired) {
     statusText = "Expired";
@@ -30,7 +35,7 @@ const QuizDetailsCard = ({ event }: any) => {
 
   return (
     <div
-      className="bg-[#FFFFFF] rounded-[8px] border border-[#E5E7EB] p-[20px] shadow-lg flex flex-col justify-between cursor-default"
+      className="bg-[#F0FDF4] rounded-[8px] border border-[#DCFCE7] p-[20px] shadow-lg flex flex-col justify-between cursor-default"
       style={{ gap: "32px", width: "390px" }}
     >
       <div className="flex flex-col gap-[12px]">
@@ -56,26 +61,29 @@ const QuizDetailsCard = ({ event }: any) => {
       </div>
 
       <div className="flex flex-col gap-[20px]">
-        <div className="w-full h-[1px] bg-[#E5E7EB]"></div>
+        <div className="w-full h-[1px] bg-[#DCFCE7]"></div>
 
         <div className="flex justify-between items-center w-full">
           <div className="flex items-center gap-[12px]">
             <button
-              onClick={() => {
-                if (!isExpired) {
-                    fetchQuestions();
-                    localStorage.setItem("sessionId", event.sessionId);
-                    window.open(`/quiz/${event.quizId}`, "_blank");
+              onClick={async () => {
+                if (isTeacher) {
+                  await localStorage.setItem("quizId", event.quizId);
+                  navigator(`/quiz/dashboard/${event.quizId}`);
+                } else if (!isExpired) {
+                  await fetchQuestions();
+                  await localStorage.setItem("sessionId", event.sessionId);
+                  window.open(`/quiz/${event.quizId}`, "_blank");
                 }
               }}
-              disabled={isExpired}
+              disabled={isButtonDisabled}
               className={`px-[20px] py-[8px] rounded-[6px] text-[14px] font-semibold transition-all duration-300 ${
-                isExpired
+                isButtonDisabled
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-[#525FE1] text-white hover:bg-[#404DDD] cursor-pointer"
+                  : "bg-[#10B981] text-white hover:bg-[#059669] cursor-pointer"
               }`}
             >
-              Start Quiz
+              {isTeacher ? "Details" : "Start Quiz"}
             </button>
           </div>
 
