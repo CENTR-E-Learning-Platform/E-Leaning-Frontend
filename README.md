@@ -29,6 +29,13 @@ E-Learning Frontend is a comprehensive web application built for an online learn
   - Room creation and joining functionality
   - Chat integration during sessions
 
+- **Messaging & Groups**
+   - Real-time messaging between students and teachers
+   - Subject-based group chats for each course
+   - Teachers can create and manage groups for their students
+   - Group discussions and announcements
+   - Chat support during live sessions
+    
 - **Payment Integration**
   - Secure payment processing via Paymob
   - Support for cards and mobile wallets
