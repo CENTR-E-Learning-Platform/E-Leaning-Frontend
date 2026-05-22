@@ -43,6 +43,11 @@ E-Learning Frontend is a comprehensive web application built for an online learn
 - **Profile & Settings**
   - User profile management
   - Account settings, security, and notifications
+ 
+- **Explore Teachers Page**
+  - Advanced filtering by subjects, price, ratings, and availability
+  - Teacher profile discovery with reviews, experience details, and pricing
+  - Instant class scheduling and booking with real-time seat tracking
 
 - **Responsive Design**
   - Mobile-friendly interface using Tailwind CSS
