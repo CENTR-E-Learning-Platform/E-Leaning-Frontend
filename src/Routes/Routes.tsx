@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Children, lazy, Suspense } from "react"; 
+import { Children, lazy, Suspense } from "react";
 import MainRegister from "../Features/Auth/Pages/MainRegister";
 import MainLogin from "../Features/Auth/Pages/MainLogin";
 import TeacherOption from "../Features/Auth/Components/Register/TeacherOption";
@@ -35,8 +35,8 @@ const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000)
   return lazy(() =>
     Promise.all([
       importFunction(),
-      new Promise((resolve) => setTimeout(resolve, delay)), 
-    ]).then(([moduleExports]) => moduleExports) 
+      new Promise((resolve) => setTimeout(resolve, delay)),
+    ]).then(([moduleExports]) => moduleExports)
   );
 };
 const Loadable = (Component: any) => (props: any) => (
@@ -46,7 +46,7 @@ const Loadable = (Component: any) => (props: any) => (
     <Component {...props} />
   </Suspense>
 );
-const MainCalendar =( lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar")));
+const MainCalendar = (lazyWithDelay(() => import("../Features/Calendar/Pages/MainCalendar")));
 const MainExplore = (lazyWithDelay(() => import("../Features/ExploreTeacher/Pages/MainExplore")));
 const MainTeacherHome = (lazyWithDelay(() => import("../Features/Home/Pages/MainTeacherHome")));
 const MainMessage = (lazyWithDelay(() => import("../Features/Messages/Pages/MainMessage")));
@@ -59,42 +59,47 @@ const ViewTeacher = Loadable(lazyWithDelay(() => import("../Features/Profile/Pag
 const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
 
 export const router = createBrowserRouter([
-  {path: "/explore/TeacherPayment", element: <MainPayment /> , children: [
-    {path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard/>},
-    {path: "/explore/TeacherPayment", element: <DynamicPaymentCard/>},
-    {path: "/explore/TeacherPayment/mobileWallet", element: <DynamicPaymentMobileWallet/>},
-    {path: "/explore/TeacherPayment/mobileWallet/confirm", element:  <DynamicPaymentMobileWalletconfirm/>}
-  ]
+  {
+    path: "/explore/TeacherPayment", element: <MainPayment />, children: [
+      { path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard /> },
+      { path: "/explore/TeacherPayment", element: <DynamicPaymentCard /> },
+      { path: "/explore/TeacherPayment/mobileWallet", element: <DynamicPaymentMobileWallet /> },
+      { path: "/explore/TeacherPayment/mobileWallet/confirm", element: <DynamicPaymentMobileWalletconfirm /> }
+    ]
   },
-  
 
-  { path: "/", element: <Navbar/> , children: [
-    { path: "OptionRegister", element: <OptionRegister /> },
-    // { path: "/meeting", element: <LiveRoom /> },
-    { path: "Calendar", element: <MainCalendar/> },
-    !isTeacher ? { path: "explore", element: <MainExplore /> } : {},
-    { path: "home", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
-    { path: "", element:  isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
-    { path: "messages", element: <MainMessage/> },
 
-  ] },
+  {
+    path: "/", element: <Navbar />, children: [
+      { path: "OptionRegister", element: <OptionRegister /> },
+      // { path: "/meeting", element: <LiveRoom /> },
+      { path: "Calendar", element: <MainCalendar /> },
+      !isTeacher ? { path: "explore", element: <MainExplore /> } : {},
+      { path: "home", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
+      { path: "", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
+      { path: "messages", element: <MainMessage /> },
 
-  { path: "/setting", element: <MainSetting/> , children: [
-    !isTeacher ? {path: "profile", element: <ProfileStudent/>}:{},
-    {path: "", element: <ProfileStudent/>},
-    isTeacher ? {path: "financial", element: <MainFinancial/>} : {},
-    {path: "security", element: <ChangePassword/>},
-    {path: "notification", element: <NotificationsSettings/>},
-  ] },
+    ]
+  },
+
+  {
+    path: "/setting", element: <MainSetting />, children: [
+      !isTeacher ? { path: "profile", element: <ProfileStudent /> } : {},
+      { path: "", element: <ProfileStudent /> },
+      isTeacher ? { path: "financial", element: <MainFinancial /> } : {},
+      { path: "security", element: <ChangePassword /> },
+      { path: "notification", element: <NotificationsSettings /> },
+    ]
+  },
   { path: "teacher-option", element: <TeacherOption /> },
   { path: "student-option", element: <StudentOption /> },
   { path: "/confing", element: <EmailConfig /> },
   { path: "/createroom", element: <CreateRoomTeacher /> },
-  { path: "/createroom/joinnow", element: <JoinNow/> },
-  { path: "/createroom/joinnow/meeting", element: <LiveRoom/> },
-  { path: "/createroom/joinnow/meeting/chat", element: <ChatForm/> },
-  { path: "/createroom/joinStudent", element: <JoinRoomStudent/> },
-  { path: "/GoodBy",  element: <GoodBy/> },
+  { path: "/createroom/joinnow", element: <JoinNow /> },
+  { path: "/createroom/joinnow/meeting", element: <LiveRoom /> },
+  { path: "/createroom/joinnow/meeting/chat", element: <ChatForm /> },
+  { path: "/createroom/joinStudent", element: <JoinRoomStudent /> },
+  { path: "/GoodBy", element: <GoodBy /> },
   { path: "/auth", element: <OptionRegister /> },
   { path: "register", element: <MainRegister /> },
   { path: "login", element: <MainLogin /> },
@@ -102,13 +107,15 @@ export const router = createBrowserRouter([
   { path: "login/SendEmail", element: <ForgetPassword /> },
   { path: "login/SendEmail/otp", element: <OTP /> },
   { path: "login/SendEmail/otp/setNewPassword", element: <SetNewPassword /> },
-  { path: "/profile", element: <ViewTeacher/> },
-  { path: "/loder", element: <CLoader/> },
-  { path: "/quiz", element: <CreateNewQuiz/>  , children:[
-    {path: "/quiz/add-questions", element: <QuizQuistions/>},
-    {path: "/quiz/quizsetting", element: <QuizSetting/>},
-  ]},
-  {path: "/quiz/result", element: <ResultQuiz/>},
-  {path: "/quiz/:quizId", element: <StartQuizforStudent/>},
-{path: "/quiz/dashboard/:quizId", element: <DashboardQuiz/>},
+  { path: "/profile", element: <ViewTeacher /> },
+  { path: "/loder", element: <CLoader /> },
+  {
+    path: "/quiz", element: <CreateNewQuiz />, children: [
+      { path: "/quiz/add-questions", element: <QuizQuistions /> },
+      { path: "/quiz/quizsetting", element: <QuizSetting /> },
+    ]
+  },
+  { path: "/quiz/result", element: <ResultQuiz /> },
+  { path: "/quiz/:quizId", element: <StartQuizforStudent /> },
+  { path: "/quiz/dashboard/:quizId", element: <DashboardQuiz /> },
 ]);
