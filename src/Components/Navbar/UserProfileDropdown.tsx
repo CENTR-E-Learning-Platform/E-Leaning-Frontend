@@ -19,10 +19,10 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
   avatarUrl = userAvatar,
   onLogout,
 }) => {
-  
-  const handleLogout = (e:any) => {
+
+  const handleLogout = (e: any) => {
     localStorage.removeItem('token');
-    
+
     if (onLogout) {
       onLogout();
       e.preventDefault();
@@ -34,11 +34,11 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
   return (
     <div className="box-border flex flex-col items-start p-[8px] w-[256px] bg-white border border-[#E8EAED] shadow-[0px_20px_40px_rgba(0,19,85,0.12)] rounded-[12px] font-['Poppins']">
       <div className="box-border flex flex-row justify-between items-center p-[12px] w-[240px] h-[60px] border border-[#E8EAED] drop-shadow-[0px_2px_12px_rgba(0,0,0,0.04)] rounded-[8px]">
-        <div className="flex flex-col items-start w-[130px]">
-          <h2 className="flex items-center m-0 font-bold text-[14px] leading-[20px] text-[#2A2D34]">
+        <div className="flex flex-col items-start w-[130px] ">
+          <h2 className="flex items-center m-0 font-semibold text-[14px] leading-[20px] text-[#2A2D34] truncate">
             {userName}
           </h2>
-          <span className="flex items-center font-normal text-[12px] leading-[16px] text-[#434656]">
+          <span className="flex items-center font-normal text-[12px] leading-[16px] text-[#434656] truncate">
             {userEmail}
           </span>
         </div>
@@ -46,29 +46,29 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
       </div>
 
       <div className="flex flex-col items-center py-[8px] w-[240px]">
-      {roleToAuth?.includes("Teacher") && (
-          <NavLink 
-          to="/profile" 
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.href = "/profile";
-          }}
-          className="flex flex-row items-center py-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#F9FAFB] transition-colors rounded-[6px] no-underline"
-        >
-          <img src={profileIcon} alt="Profile Icon" className="w-[13.33px] h-[13.33px]" />
-          <span className="flex items-center font-medium text-[14px] leading-[20px] text-[#434656]">My Profile</span>
-        </NavLink>
-      )}
+        {roleToAuth?.includes("Teacher") && (
+          <NavLink
+            to="/profile"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/profile";
+            }}
+            className="flex flex-row items-center py-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#F9FAFB] transition-colors rounded-[6px] no-underline"
+          >
+            <img src={profileIcon} alt="Profile Icon" className="w-[13.33px] h-[13.33px]" />
+            <span className="flex items-center font-medium text-[14px] leading-[20px] text-[#434656]">My Profile</span>
+          </NavLink>
+        )}
 
-        <NavLink 
-          to="/wallet" 
+        <NavLink
+          to="/wallet"
           className="flex flex-row items-center py-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#F9FAFB] transition-colors rounded-[6px] no-underline"
         >
           <img src={walletIcon} alt="Wallet Icon" className="w-[16px] h-[15px] object-contain" />
           <span className="flex items-center font-medium text-[14px] leading-[20px] text-[#434656]">Wallet</span>
         </NavLink>
 
-        <NavLink 
+        <NavLink
           to={(roleToAuth?.includes("Teacher") ? "/setting/financial" : "/setting/profile")}
           onClick={(e) => {
             e.preventDefault();
@@ -84,7 +84,7 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
 
         <button
           onClick={handleLogout}
-          
+
           className="flex flex-row items-center pt-[14px] pb-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#FEF2F2] transition-colors rounded-[6px] mt-[4px]"
         >
           <img src={logoutIcon} alt="Logout Icon" className="w-[15px] h-[15px]" />
