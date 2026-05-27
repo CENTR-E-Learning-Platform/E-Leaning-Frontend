@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import teacher from "../../../assets/images/mester.jpg";
 import vector from "../../../assets/icons/Vector.svg";
 import fullscreen from "../../../assets/icons/fullscreen.svg";
@@ -16,7 +16,7 @@ import { useControlContext } from "../Context/ControlContext";
 import Leave from "../Components/meeting/Leave";
 import { useFooter } from "../Hooks/useFooter";
 import { useRole } from "../Hooks/useRole";
-import { useRoomContext , useLocalParticipant } from "@livekit/components-react";
+import { useRoomContext, useLocalParticipant } from "@livekit/components-react";
 import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
 import NotifyRaiseHand from "../Components/meeting/NotifyRaiseHand";
 
@@ -26,11 +26,11 @@ const Meeting: React.FC = () => {
   const [isClickcha, setIsClickcha] = useState<boolean>(false);
   const [hand, setHand] = useState<boolean>(false);
   const [rais, setRaise] = useState<any[]>([]);
-  
-  const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend} = useControlContext();
+
+  const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend } = useControlContext();
   const participant = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
-  const {DisabledMicParticipant , MuteParticipant} = useRole();
+  const { DisabledMicParticipant, MuteParticipant } = useRole();
   const room = useRoomContext();
   const { localParticipant } = useLocalParticipant();
   const startResizing = () => setIsResizing(true);
@@ -39,31 +39,31 @@ const Meeting: React.FC = () => {
 
   const playRaiseHandSound = () => {
     if (audioRef.current) {
-      audioRef.current.currentTime = 0; 
+      audioRef.current.currentTime = 0;
       audioRef.current.play().catch((error) => console.warn(error));
     }
   };
 
   const playJoinSound = () => {
-  const audio = new Audio(joinsound);
-      audio.play().catch((error) => console.warn(error));
+    const audio = new Audio(joinsound);
+    audio.play().catch((error) => console.warn(error));
   };
-  useEffect(()=>{
+  useEffect(() => {
     playJoinSound();
-  } , [])
+  }, [])
 
   useEffect(() => {
     const handleDataReceived = (
-        payload: Uint8Array, 
-        participant?: RemoteParticipant | LocalParticipant, 
-        _kind?: any, 
-        topic?: string
+      payload: Uint8Array,
+      participant?: RemoteParticipant | LocalParticipant,
+      _kind?: any,
+      topic?: string
     ) => {
       try {
         const strData = new TextDecoder().decode(payload);
         const data = JSON.parse(strData);
 
-        if(topic === 'control' && data.type === 'SOFT_MUTE'){
+        if (topic === 'control' && data.type === 'SOFT_MUTE') {
           if (data.targetIdentity === room.localParticipant.identity) {
             room.localParticipant.setMicrophoneEnabled(false);
           }
@@ -72,17 +72,17 @@ const Meeting: React.FC = () => {
           AddEmoji(data.content);
         }
 
-        if(data.type === 'raisHand' && topic === "notifications"){
+        if (data.type === 'raisHand' && topic === "notifications") {
           const user = participant?.name;
           if (data.content) {
             setHand(true);
-            setRaise((prev:any) => {
-              if(prev.includes(user)) return prev;
+            setRaise((prev: any) => {
+              if (prev.includes(user)) return prev;
               return [...prev, user];
             });
             playRaiseHandSound();
           } else {
-            setRaise((prev:any) => prev.filter((name:any) => name !== user));
+            setRaise((prev: any) => prev.filter((name: any) => name !== user));
           }
         }
       } catch (err) {
@@ -177,19 +177,19 @@ const Meeting: React.FC = () => {
         >
           <ParticipantsGrid isRais={rais} />
 
-         <AnimatePresence>
+          <AnimatePresence>
             {hand && rais.length > 0 && (
               <motion.div
-                initial={{ opacity: 0, y: 20, x: -10 }} 
-                animate={{ opacity: 1, y: 0, x: 0 }}    
-                exit={{ opacity: 0, y: 50, x: -20 }}  
-                transition={{ duration: 0.4, ease: "easeOut" }} 
+                initial={{ opacity: 0, y: 20, x: -10 }}
+                animate={{ opacity: 1, y: 0, x: 0 }}
+                exit={{ opacity: 0, y: 50, x: -20 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
                 className="absolute bottom-5 left-5 z-50"
               >
                 <NotifyRaiseHand st={setHand} names={rais} st2={setRaise} />
               </motion.div>
             )}
-        </AnimatePresence>
+          </AnimatePresence>
           {/* <div
             onClick={toggleFullScreen}
             className="absolute bottom-5 select-none right-5 bg-[#2A2D34B2] text-white flex items-center justify-center rounded-[8px] w-[40px] h-[40px] cursor-pointer z-50 hover:bg-[#2A2D34]"
@@ -209,20 +209,20 @@ const Meeting: React.FC = () => {
         >
           {participant.tracks.map((track) => (
             <div key={track.participant.identity}>
-              <StudentActions 
-              Partici={track.participant}
-              disabledP ={() => DisabledMicParticipant(track.participant.identity , track.participant.permissions?.canPublish)}
-              muteP ={() => MuteParticipant(track.participant.identity)}
-              name={track.participant.name} 
-              profileImage={track.participant.attributes["UserImage"]} 
-              width={width}
-              isRais={rais}
+              <StudentActions
+                Partici={track.participant}
+                disabledP={() => DisabledMicParticipant(track.participant.identity, track.participant.permissions?.canPublish)}
+                muteP={() => MuteParticipant(track.participant.identity)}
+                name={track.participant.name}
+                profileImage={track.participant.attributes["UserImage"]}
+                width={width}
+                isRais={rais}
               />
             </div>
           ))}
         </div>
         <div className="absolute bottom-[250px] left-[520px] z-50">
-            {optionLeave ? <Leave/> : ""}
+          {optionLeave ? <Leave /> : ""}
         </div>
         <div
           className={`
@@ -231,28 +231,49 @@ const Meeting: React.FC = () => {
           `}
         >
           {/*chat  */}
-           <ChatForm />
+          <ChatForm />
         </div>
         {/* hand sound */}
-        <audio 
-        ref={audioRef} 
-        src={handSound} 
-        preload="auto" 
-        className="hidden"
-      />
-      {/* Emoji animation */}
-        {emoji.map((item: any) => (
-          <motion.div
-            key={item.id}
-            initial={{ x: 600, y: 500, opacity: 1, scale: 0.5 }}
-            animate={{ x: 600 + Math.random() * 100 - 50, y: -100, opacity: 0, scale: 1.5 }}
-            transition={{ duration: 2, ease: "easeOut" }}
-            onAnimationComplete={() => removeEmoji(item.id)}
-            className="absolute z-50 pointer-events-none"
-          >
-            <img src={getEmojiIcon(item.type)} className="w-16 h-16 drop-shadow-lg" alt="emoji" />
-          </motion.div>
-        ))}
+        <audio
+          ref={audioRef}
+          src={handSound}
+          preload="auto"
+          className="hidden"
+        />
+        {/* Emoji animation */}
+        {emoji.map((item: any) => {
+          const spawnX = 480 + Math.random() * 200;
+          const swayAmount = (Math.random() - 0.5) * 120;
+          const duration = 2.2 + Math.random() * 1.2;
+          return (
+            <motion.div
+              key={item.id}
+              className="absolute z-50 pointer-events-none"
+              style={{ left: spawnX, bottom: 90 }}
+              initial={{ y: 0, opacity: 1, scale: 0 }}
+              animate={{
+                y: [-0, -80, -200, -380, -520],
+                x: [0, swayAmount * 0.3, swayAmount * 0.6, swayAmount * 0.9, swayAmount],
+                opacity: [1, 1, 1, 0.6, 0],
+                scale: [0, 1.4, 1.1, 0.9, 0.6],
+              }}
+              transition={{
+                duration,
+                ease: "easeOut",
+                times: [0, 0.15, 0.45, 0.75, 1],
+              }}
+              onAnimationComplete={() => removeEmoji(item.id)}
+            >
+              <motion.img
+                src={getEmojiIcon(item.type)}
+                className="w-14 h-14 drop-shadow-xl"
+                alt="emoji"
+                animate={{ rotate: [0, -8, 8, -5, 5, 0] }}
+                transition={{ duration: 1.2, ease: "easeInOut", repeat: Infinity }}
+              />
+            </motion.div>
+          );
+        })}
       </div>
       {!isfull && <FooterBar setRais={setRaise} handsound={audioRef} />}
     </div>
