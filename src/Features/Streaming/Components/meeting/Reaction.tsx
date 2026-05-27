@@ -25,13 +25,13 @@ const Reaction: React.FC = () => {
     ];
 
     return (
-        <div className="w-[212px] h-[34px] bg-[#454950] rounded-[61px] flex justify-center items-center gap-[8px]">
+        <div className="absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 z-[9999] w-[212px] h-[44px] bg-[linear-gradient(145deg,#2e3240,#23262e)] border-[1px] border-[rgba(255,255,255,0.08)] rounded-[61px] shadow-[0_16px_40px_rgba(0,0,0,0.45),0_0_0_1px_rgba(82,95,225,0.15)] flex justify-center items-center gap-2">
             {reactions.map((reaction) => (
                 <img 
                     key={reaction.type}
                     onClick={() => sendEmoji(reaction.type)}
                     src={reaction.icon} 
-                    className='cursor-pointer hover:scale-125 transition-transform w-6 h-6' // أضفت حجم ثابت للصورة
+                    className='cursor-pointer hover:scale-125 transition-transform w-6 h-6'
                     alt={reaction.type} 
                 />
             ))}
