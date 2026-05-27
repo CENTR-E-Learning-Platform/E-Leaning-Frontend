@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { 
+import {
   VideoTrack
 } from "@livekit/components-react";
 
@@ -21,7 +21,7 @@ interface ParticipantsGridProps {
 const FullScreenButton = () => {
   const toggleFullScreen = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const container = e.currentTarget.parentElement; 
+    const container = e.currentTarget.parentElement;
     if (!container) return;
 
     if (!document.fullscreenElement) {
@@ -61,16 +61,16 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
     isDragging.current = true;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     elementStartPos.current = { ...position };
-    e.preventDefault(); 
+    e.preventDefault();
   };
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging.current) return;
-   
-      const dx = dragStartPos.current.x - e.clientX; 
-      const dy = dragStartPos.current.y - e.clientY; 
-      
+
+      const dx = dragStartPos.current.x - e.clientX;
+      const dy = dragStartPos.current.y - e.clientY;
+
       setPosition({
         x: elementStartPos.current.x + dx,
         y: elementStartPos.current.y + dy
@@ -92,10 +92,10 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
   }, [screenShareTrack]);
 
   const renderNameTag = (participant: any, isSmall: boolean = false) => {
-    const safeName = participant?.name || ""; 
+    const safeName = participant?.name || "";
     const isHandRaised = isRais?.includes(safeName);
     const isMicEnabled = participant?.isMicrophoneEnabled;
-    
+
     const containerPadding = isSmall ? "px-[4px] py-[1px]" : "px-[12px] py-[6px]";
     const positionClasses = isSmall ? "bottom-[4px] left-[4px]" : "bottom-3 left-3";
     const textSize = isSmall ? "text-[10px]" : "text-[14px]";
@@ -107,13 +107,12 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
     const displayName = isLongName ? safeName.slice(0, 15) + "..." : safeName;
 
     return (
-      <motion.div 
-        layout 
-        className={`group/name absolute ${positionClasses} flex items-center gap-[6px] ${containerPadding} rounded-[4px] transition-colors duration-300 ease-in-out z-10 ${
-          isHandRaised 
-            ? "bg-[#80da88] text-[#1E1E1E] shadow-lg" 
+      <motion.div
+        layout
+        className={`group/name absolute ${positionClasses} flex items-center gap-[6px] ${containerPadding} rounded-[4px] transition-colors duration-300 ease-in-out z-10 ${isHandRaised
+            ? "bg-[#80da88] text-[#1E1E1E] shadow-lg"
             : "bg-black/60 text-[#F9FBFC]"
-        }`}
+          }`}
       >
         {isLongName && (
           <div className="absolute bottom-full left-0 mb-1 hidden group-hover/name:block bg-[#2A2D34] text-[#F9FBFC] text-[12px] px-[8px] py-[4px] rounded-[4px] shadow-lg whitespace-nowrap z-50 border border-[#454950]">
@@ -134,15 +133,15 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
             </motion.div>
           )}
         </AnimatePresence>
-        
+
         <div className="flex items-center gap-[6px]">
           <span className={`${textSize} font-[500] whitespace-nowrap cursor-default`}>
             {displayName}
           </span>
-          <img 
-            src={isMicEnabled ? microphon : microphondis} 
-            alt={isMicEnabled ? "Mic On" : "Mic Off"} 
-            className={micIconSize} 
+          <img
+            src={isMicEnabled ? microphon : microphondis}
+            alt={isMicEnabled ? "Mic On" : "Mic Off"}
+            className={micIconSize}
           />
         </div>
       </motion.div>
@@ -150,7 +149,7 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
   };
 
   if (tracks.length === 0) return <div className="text-white flex justify-center items-center h-full">Waiting...</div>;
-  
+
   if (screenShareTrack) {
     const activeOtherTracks = otherCameraTracks.filter(
       (track: any) => track.participant.isScreenShareEnabled || track.participant.isCameraEnabled
@@ -164,15 +163,15 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
             trackRef={screenShareTrack as any}
             className="w-full h-full object-contain"
           />
-          
+
           {renderNameTag(screenShareTrack.participant)}
 
           {presenterCameraTrack && presenterCameraTrack.participant.isCameraEnabled && (
-            <ParticipantContainer 
+            <ParticipantContainer
               participant={presenterCameraTrack.participant}
               onMouseDown={handleMouseDown}
-              style={{ 
-                right: `${position.x}px`, 
+              style={{
+                right: `${position.x}px`,
                 bottom: `${position.y}px`,
                 cursor: 'move',
                 zIndex: 50
@@ -181,9 +180,9 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
               defaultBorder="border-2 border-[#5E6570] hover:border-white"
             >
               <FullScreenButton />
-              <VideoTrack 
-                 trackRef={presenterCameraTrack as any} 
-                 className="w-full h-full object-cover pointer-events-none" 
+              <VideoTrack
+                trackRef={presenterCameraTrack as any}
+                className="w-full h-full object-cover pointer-events-none"
               />
               {renderNameTag(presenterCameraTrack.participant, true)}
             </ParticipantContainer>
@@ -193,8 +192,8 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
         {activeOtherTracks.length > 0 && !isClickattend && (
           <div className="w-[200px] h-full flex flex-col gap-2 overflow-y-auto z-10">
             {activeOtherTracks.map((track: any) => (
-              <ParticipantContainer 
-                key={track.participant.identity} 
+              <ParticipantContainer
+                key={track.participant.identity}
                 participant={track.participant}
                 className="group/container w-full h-[120px] bg-black rounded-lg overflow-hidden relative"
                 defaultBorder=""
@@ -215,40 +214,39 @@ const ParticipantsGrid: React.FC<ParticipantsGridProps> = ({ isRais = [] }) => {
 
   return (
     <div className="w-full h-full p-2">
-      <div className={`grid gap-2 h-full w-full ${
-          tracks.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
+      <div className={`grid gap-2 h-full w-full ${tracks.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
         }`}>
         {tracks.map((trackRef: any) => (
-          <ParticipantContainer 
-            key={trackRef.participant.identity + trackRef.source} 
+          <ParticipantContainer
+            key={trackRef.participant.identity + trackRef.source}
             participant={trackRef.participant}
-            className="group/container relative w-full h-full rounded-xl overflow-hidden bg-[#393D44]" 
+            className="group/container relative w-full h-full rounded-xl overflow-hidden bg-[#393D44]"
             defaultBorder=""
           >
-          <FullScreenButton />
-          
-          {trackRef.participant.isCameraEnabled ? (
-            <VideoTrack
-              trackRef={trackRef as any}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex justify-center items-center">
-              <div className="w-[30%] aspect-square">
-                {
-                  trackRef.participant.attributes["UserImage"] ?
-                  <img
-                    src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
-                    className="w-full h-full rounded-full object-cover"
-                    alt=""
-                  /> :
-                  <DefaultImage character={trackRef.participant.name?.toString()?.substring(0,2).toLocaleUpperCase()} />
-                }
-              </div>
-            </div>
-          )}
+            <FullScreenButton />
 
-          {renderNameTag(trackRef.participant)}
+            {trackRef.participant.isCameraEnabled ? (
+              <VideoTrack
+                trackRef={trackRef as any}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex justify-center items-center">
+                <div className="w-[30%] aspect-square">
+                  {
+                    trackRef.participant.attributes["UserImage"] ?
+                      <img
+                        src={`${BASE_URL}/${trackRef.participant.attributes["UserImage"]}`}
+                        className="w-full h-full rounded-full object-cover"
+                        alt=""
+                      /> :
+                      <DefaultImage character={trackRef.participant.name?.toString()?.substring(0, 2).toLocaleUpperCase()} />
+                  }
+                </div>
+              </div>
+            )}
+
+            {renderNameTag(trackRef.participant)}
           </ParticipantContainer>
         ))}
       </div>
