@@ -1,50 +1,84 @@
 import { useRoomContext } from "@livekit/components-react";
 import { ControlParticipant } from "../Types/types";
 import { Role } from "../Services/Role";
-import { useControlContext } from "../Context/ControlContext";
-import { useLocalParticipant } from "@livekit/components-react";
+
 export const useRole = () => {
     const room = useRoomContext();
-    const { localParticipant } = useLocalParticipant();
-    //  const room = useRoomContext();
-    //  const {setMic , setCameraView , setMute} = useControlContext();
-    const DisabledMicParticipant = async (identity: any, isCurrentlyMicEnabled: any) => {
+
+    const broadcast = (payload: object, topic: string) => {
+        const encoder = new TextEncoder();
+        room.localParticipant.publishData(
+            encoder.encode(JSON.stringify(payload)),
+            { reliable: true, topic }
+        ).catch(console.error);
+    };
+
+    const MuteParticipant = async (identity: string, isMicOn: boolean) => {
         try {
-            const roomName = localStorage.getItem("sessionName")?.toString();
-            ControlParticipant.identity = identity;
-            ControlParticipant.roomName = roomName ? roomName : "";
-            ControlParticipant.allowMic = isCurrentlyMicEnabled;
-            ControlParticipant.allowCamera = false;
-            ControlParticipant.allowScreenShare = false;
-            console.log(ControlParticipant);
-            //  setCameraView(false);
-            //  setMic(false);
-            //    setMute((prev) => !prev);
-            const res = await Role(ControlParticipant);
-            console.log(res.data);
-        } catch (err: any) {
-            console.log("errors", err);
-        }
-
-    }
-
-
-    const MuteParticipant = async (identity: string) => {
-        try {
-            const payload = JSON.stringify({
-                type: 'SOFT_MUTE',
-                targetIdentity: identity
-            });
-            const encoder = new TextEncoder();
-
-            await room.localParticipant.publishData(encoder.encode(payload), {
-                reliable: true,
-                topic: "control"
-            });
+            broadcast(
+                { type: isMicOn ? 'SOFT_MUTE' : 'SOFT_UNMUTE', targetIdentity: identity },
+                "control"
+            );
         } catch (error) {
             console.error(error);
         }
     };
-    return { DisabledMicParticipant, MuteParticipant }
-}
 
+    const ToggleCameraParticipant = async (identity: string, isCamEnabled: boolean, allowMic: boolean) => {
+        try {
+            const roomName = localStorage.getItem("sessionName") ?? "";
+            const newCamAllowed = !isCamEnabled;
+            ControlParticipant.identity = identity;
+            ControlParticipant.roomName = roomName;
+            ControlParticipant.allowMic = allowMic;
+            ControlParticipant.allowCamera = newCamAllowed;
+            ControlParticipant.allowScreenShare = false;
+            const res = await Role(ControlParticipant);
+            console.log(res.data);
+            broadcast(
+                { type: 'CAMERA_PERMISSION', targetIdentity: identity, enabled: newCamAllowed },
+                "control"
+            );
+        } catch (err: any) {
+            console.log("errors", err);
+        }
+    };
+
+    const ToggleScreenShareParticipant = async (identity: string, isShareEnabled: boolean, allowMic: boolean) => {
+        try {
+            const roomName = localStorage.getItem("sessionName") ?? "";
+            const newShareAllowed = !isShareEnabled;
+            ControlParticipant.identity = identity;
+            ControlParticipant.roomName = roomName;
+            ControlParticipant.allowMic = allowMic;
+            ControlParticipant.allowCamera = false;
+            ControlParticipant.allowScreenShare = newShareAllowed;
+            const res = await Role(ControlParticipant);
+            console.log(res.data);
+            broadcast(
+                { type: 'SCREENSHARE_PERMISSION', targetIdentity: identity, enabled: newShareAllowed },
+                "control"
+            );
+        } catch (err: any) {
+            console.log("errors", err);
+        }
+    };
+
+    const LowerHandParticipant = async (participantName: string) => {
+        try {
+            broadcast(
+                { type: 'raisHand', targetName: participantName, content: false },
+                "notifications"
+            );
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    return {
+        MuteParticipant,
+        ToggleCameraParticipant,
+        ToggleScreenShareParticipant,
+        LowerHandParticipant
+    };
+};
