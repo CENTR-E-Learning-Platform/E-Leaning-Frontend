@@ -1,4 +1,4 @@
-import React, { createContext , useContext, useState , type ReactNode  } from "react"
+import React, { createContext, useContext, useState, type ReactNode } from "react"
 
 interface RoomContextTypes {
   cameraView: boolean;
@@ -17,7 +17,7 @@ interface RoomContextTypes {
   setOptionMenu: React.Dispatch<React.SetStateAction<boolean>>;
   optionEmoji: boolean;
   setOptionEmoji: React.Dispatch<React.SetStateAction<boolean>>;
-  emoji: string [];
+  emoji: string[];
   setEmoji: React.Dispatch<React.SetStateAction<string[]>>;
   optionLeave: boolean;
   setOptionLeave: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,6 +29,10 @@ interface RoomContextTypes {
   setIsFull: React.Dispatch<React.SetStateAction<boolean>>;
   isClickattend: boolean;
   setIsClickattend: React.Dispatch<React.SetStateAction<boolean>>;
+  cameraPermitted: boolean;
+  setCameraPermitted: React.Dispatch<React.SetStateAction<boolean>>;
+  screensharePermitted: boolean;
+  setScreensharePermitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RoomCtx = createContext<RoomContextTypes | null>(null);
@@ -48,8 +52,28 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [mute, setMute] = useState(false);
   const [isfull, setIsFull] = useState(false);
   const [isClickattend, setIsClickattend] = useState(false);
+  const [cameraPermitted, setCameraPermitted] = useState(false);
+  const [screensharePermitted, setScreensharePermitted] = useState(false);
+
   return (
-    <RoomCtx.Provider value={{ cameraView, setCameraView , mic , setMic , openStream , setOpenStream , optionMic , setOptionMic ,optionCamera , setOptionCamera , optionMenu , setOptionMenu , checkIdentity , setCheckIdentity , optionEmoji , setOptionEmoji ,emoji ,setEmoji , optionLeave , setOptionLeave , join , setJoin , mute , setMute , isfull , setIsFull , isClickattend , setIsClickattend}}>
+    <RoomCtx.Provider value={{
+      cameraView, setCameraView,
+      mic, setMic,
+      openStream, setOpenStream,
+      optionMic, setOptionMic,
+      optionCamera, setOptionCamera,
+      optionMenu, setOptionMenu,
+      checkIdentity, setCheckIdentity,
+      optionEmoji, setOptionEmoji,
+      emoji, setEmoji,
+      optionLeave, setOptionLeave,
+      join, setJoin,
+      mute, setMute,
+      isfull, setIsFull,
+      isClickattend, setIsClickattend,
+      cameraPermitted, setCameraPermitted,
+      screensharePermitted, setScreensharePermitted,
+    }}>
       {children}
     </RoomCtx.Provider>
   );
@@ -60,5 +84,5 @@ export const useControlContext = (): RoomContextTypes => {
   if (!ctx) {
     throw new Error("RoomContext must be used within RoomProvider");
   }
-  return ctx; 
+  return ctx;
 };
