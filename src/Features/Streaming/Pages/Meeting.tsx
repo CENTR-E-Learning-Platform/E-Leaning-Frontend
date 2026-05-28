@@ -27,10 +27,10 @@ const Meeting: React.FC = () => {
   const [hand, setHand] = useState<boolean>(false);
   const [rais, setRaise] = useState<any[]>([]);
 
-  const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend } = useControlContext();
+  const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend, setCameraPermitted, setScreensharePermitted } = useControlContext();
   const participant = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
-  const { DisabledMicParticipant, MuteParticipant } = useRole();
+  const { MuteParticipant, ToggleCameraParticipant, ToggleScreenShareParticipant, LowerHandParticipant } = useRole();
   const room = useRoomContext();
   const { localParticipant } = useLocalParticipant();
   const startResizing = () => setIsResizing(true);
@@ -68,13 +68,30 @@ const Meeting: React.FC = () => {
             room.localParticipant.setMicrophoneEnabled(false);
           }
         }
+        if (topic === 'control' && data.type === 'SOFT_UNMUTE') {
+          if (data.targetIdentity === room.localParticipant.identity) {
+            room.localParticipant.setMicrophoneEnabled(true);
+          }
+        }
+        if (topic === 'control' && data.type === 'CAMERA_PERMISSION') {
+          if (data.targetIdentity === room.localParticipant.identity) {
+            setCameraPermitted(!!data.enabled);
+            if (!data.enabled) room.localParticipant.setCameraEnabled(false);
+          }
+        }
+        if (topic === 'control' && data.type === 'SCREENSHARE_PERMISSION') {
+          if (data.targetIdentity === room.localParticipant.identity) {
+            setScreensharePermitted(!!data.enabled);
+            if (!data.enabled) room.localParticipant.setScreenShareEnabled(false);
+          }
+        }
         if (data.type === 'EMOJI' && data.content) {
           AddEmoji(data.content);
         }
 
         if (data.type === 'raisHand' && topic === "notifications") {
-          const user = participant?.name;
           if (data.content) {
+            const user = participant?.name;
             setHand(true);
             setRaise((prev: any) => {
               if (prev.includes(user)) return prev;
@@ -82,7 +99,8 @@ const Meeting: React.FC = () => {
             });
             playRaiseHandSound();
           } else {
-            setRaise((prev: any) => prev.filter((name: any) => name !== user));
+            const target = data.targetName ?? participant?.name;
+            setRaise((prev: any) => prev.filter((name: any) => name !== target));
           }
         }
       } catch (err) {
@@ -117,19 +135,6 @@ const Meeting: React.FC = () => {
   };
   const teacherName = localStorage.getItem("teacherName") || "Host";
   const teacherProfileImagePath = localStorage.getItem("teacherProfileImagePath") || teacher;
-  // const toggleFullScreen = () => {
-  //   if (!isfull) {
-  //     document.documentElement.requestFullscreen().catch((err) => {
-  //       console.error(err);
-  //     });
-  //     setIsFull(true);
-  //   } else {
-  //     if (document.exitFullscreen) {
-  //       document.exitFullscreen();
-  //     }
-  //     setIsFull(false);
-  //   }
-  // };
 
   return (
     <div className="h-screen overflow-hidden bg-[#2A2D34] flex flex-col">
@@ -190,16 +195,6 @@ const Meeting: React.FC = () => {
               </motion.div>
             )}
           </AnimatePresence>
-          {/* <div
-            onClick={toggleFullScreen}
-            className="absolute bottom-5 select-none right-5 bg-[#2A2D34B2] text-white flex items-center justify-center rounded-[8px] w-[40px] h-[40px] cursor-pointer z-50 hover:bg-[#2A2D34]"
-          >
-            <img className="w-[16px] h-[16px]" src={fullscreen} alt="Fullscreen" />
-          </div> */}
-          {/* <div
-            className="absolute top-0 right-0 w-[10px] m-1 h-full cursor-ew-resize hover:bg-white/10"
-            onMouseDown={startResizing}
-          ></div> */}
         </div>
         <div
           className={`
@@ -211,8 +206,13 @@ const Meeting: React.FC = () => {
             <div key={track.participant.identity}>
               <StudentActions
                 Partici={track.participant}
-                disabledP={() => DisabledMicParticipant(track.participant.identity, track.participant.permissions?.canPublish)}
-                muteP={() => MuteParticipant(track.participant.identity)}
+                muteToggleP={(isMicOn) => MuteParticipant(track.participant.identity, isMicOn)}
+                cameraToggleP={(isCamOn, allowMic) => ToggleCameraParticipant(track.participant.identity, isCamOn, allowMic)}
+                shareToggleP={(isShareOn, allowMic) => ToggleScreenShareParticipant(track.participant.identity, isShareOn, allowMic)}
+                lowerHandP={() => {
+                  LowerHandParticipant(track.participant.name ?? "");
+                  setRaise((prev: any) => prev.filter((name: any) => name !== track.participant.name));
+                }}
                 name={track.participant.name}
                 profileImage={track.participant.attributes["UserImage"]}
                 width={width}
@@ -230,17 +230,14 @@ const Meeting: React.FC = () => {
             ${isClickcha && !isfull ? " ms-4 opacity-100" : "w-0 ms-0 opacity-0"}
           `}
         >
-          {/*chat  */}
           <ChatForm />
         </div>
-        {/* hand sound */}
         <audio
           ref={audioRef}
           src={handSound}
           preload="auto"
           className="hidden"
         />
-        {/* Emoji animation */}
         {emoji.map((item: any) => {
           const spawnX = 480 + Math.random() * 200;
           const swayAmount = (Math.random() - 0.5) * 120;
