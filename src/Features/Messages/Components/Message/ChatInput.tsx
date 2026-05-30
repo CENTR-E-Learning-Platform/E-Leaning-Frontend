@@ -10,7 +10,8 @@ type Props = {
 const ChatInput = ({ connection }: Props) => {
   const [message, setMessage] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
-  const { otherUserId, conversationId, setChatData } = useChat();
+  const { otherUserId, conversationId, setChatData, selectedConversation } = useChat();
+  const isGroup = selectedConversation && ('teacherId' in selectedConversation || 'name' in selectedConversation);
   const isTyping = useRef<any>(null);
   const sendMessage = async () => {
     if (!message.trim()) return;
@@ -19,10 +20,17 @@ const ChatInput = ({ connection }: Props) => {
     const currentUserId = localStorage.getItem("currentUserId");
     const { fullName } = JSON.parse(localStorage.getItem("userData") || "{}");
 
-    connection.invoke("SendTypingIndicator", {
-      RecipientId: otherUserId,
-      IsTyping: false,
-    });
+    if (isGroup) {
+      connection.invoke("SendGroupTypingIndicator", {
+        GroupChatId: conversationId,
+        IsTyping: false,
+      });
+    } else {
+      connection.invoke("SendTypingIndicator", {
+        RecipientId: otherUserId,
+        IsTyping: false,
+      });
+    }
 
     if (isTyping.current) {
       clearTimeout(isTyping.current);
@@ -34,7 +42,7 @@ const ChatInput = ({ connection }: Props) => {
       content: message,
       senderId: currentUserId,
       senderName: fullName,
-      conversationId: Number(conversationId),
+      conversationId: conversationId,
       sentAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
@@ -42,10 +50,17 @@ const ChatInput = ({ connection }: Props) => {
     setChatData((prev: any) => [...(prev || []), tempMessage]);
 
     try {
-      await connection.invoke("SendMessage", {
-        RecipientId: otherUserId,
-        Content: message,
-      });
+      if (isGroup) {
+        await connection.invoke("SendGroupMessage", {
+          GroupChatId: conversationId,
+          Content: message,
+        });
+      } else {
+        await connection.invoke("SendMessage", {
+          RecipientId: otherUserId,
+          Content: message,
+        });
+      }
     } catch (err) {
       console.error("Send failed", err);
       setChatData((prev: any) =>
@@ -60,10 +75,17 @@ const ChatInput = ({ connection }: Props) => {
     if (connection?.state !== "Connected") return;
 
     if (!isTyping.current) {
-      connection.invoke("SendTypingIndicator", {
-        RecipientId: otherUserId,
-        IsTyping: true,
-      });
+      if (isGroup) {
+        connection.invoke("SendGroupTypingIndicator", {
+          GroupChatId: conversationId,
+          IsTyping: true,
+        });
+      } else {
+        connection.invoke("SendTypingIndicator", {
+          RecipientId: otherUserId,
+          IsTyping: true,
+        });
+      }
       isTyping.current = true;
     }
 
@@ -72,10 +94,17 @@ const ChatInput = ({ connection }: Props) => {
     }
 
     isTyping.current = setTimeout(() => {
-      connection.invoke("SendTypingIndicator", {
-        RecipientId: otherUserId,
-        IsTyping: false,
-      });
+      if (isGroup) {
+        connection.invoke("SendGroupTypingIndicator", {
+          GroupChatId: conversationId,
+          IsTyping: false,
+        });
+      } else {
+        connection.invoke("SendTypingIndicator", {
+          RecipientId: otherUserId,
+          IsTyping: false,
+        });
+      }
       isTyping.current = false;
     }, 1000);
   };
