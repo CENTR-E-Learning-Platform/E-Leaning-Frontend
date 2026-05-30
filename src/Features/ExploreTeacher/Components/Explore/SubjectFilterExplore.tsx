@@ -24,7 +24,7 @@ const SubjectFilterExplore = ({ selectedLanguage, setSelectedLanguage }: Subject
     ];
 
     const subjects = [
-        { name: "Mathematics", width: "w-[145px]" },
+        { name: "Math", width: "w-[145px]" },
         { name: "Science", width: "w-[99px]" },
         { name: "Social Science", width: "w-[162px]" },
         [

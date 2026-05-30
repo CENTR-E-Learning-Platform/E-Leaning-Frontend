@@ -3,14 +3,14 @@ import { sendFilterData } from "../Services/filterAPI";
 import { useState } from "react";
 
 export const usefilterteach = () => {
-    const [selectedLanguage, setSelectedLanguage] = useState<string | null>("");
-    const [selectedDay, setSelectedDay] = useState<string | null>("");
+    const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+    const [selectedDay, setSelectedDay] = useState<string>("");
     const [startTime, setStartTime] = useState(8);
     const [endTime, setEndTime] = useState(26);
     const [startPrice, setStartPrice] = useState(50);
     const [endPrice, setEndPrice] = useState(300);
-    const [selectedRating, setSelectedRating] = useState<number | null>(null);
-    const [searchTerm, setSearchTerm] = useState<string | null>(null);
+    const [selectedRating, setSelectedRating] = useState<number>(0);
+    const [searchTerm, setSearchTerm] = useState<string>("");
     const [pageNum, setPageNum] = useState<number>(1);
     let endRating = selectedRating !== null ? selectedRating + 0.5 : null;
 
@@ -62,7 +62,7 @@ export const usefilterteach = () => {
                 MinRate: selectedRating !== null ? Number(selectedRating) : undefined,
                 MaxRate: endRating !== null ? Number(endRating) : undefined,
                 pageNumber: pageNum,
-                pageSize: 50,
+                pageSize: 3,
             };
             console.log("Filter params being sent:", filterParams);
             return sendFilterData(filterParams)
