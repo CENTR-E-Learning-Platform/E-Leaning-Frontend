@@ -1,8 +1,11 @@
 import { Star } from "lucide-react";
-import { usefilterteach } from "../../Hooks/usefilterteach";
 
-const RattingFilterExplore = () => {
-    const { selectedRating , setSelectedRating } = usefilterteach(); 
+interface RattingFilterExploreProps {
+  selectedRating: number | null;
+  setSelectedRating: (value: number | null) => void;
+}
+
+const RattingFilterExplore = ({ selectedRating, setSelectedRating }: RattingFilterExploreProps) => {
   return <>
     <section className="Ratings">
         <div className="mb-[20px]">
