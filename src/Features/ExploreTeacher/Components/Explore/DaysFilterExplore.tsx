@@ -1,7 +1,9 @@
-import { usefilterteach } from "../../Hooks/usefilterteach";
+interface DaysFilterExploreProps {
+  selectedDay: string | null;
+  setSelectedDay: (value: string | null) => void;
+}
 
-const DaysFilterExplore = () => {
-  const { selectedDay , setSelectedDay } = usefilterteach(); 
+const DaysFilterExplore = ({ selectedDay, setSelectedDay }: DaysFilterExploreProps) => {
 
   return <>
     <section>
