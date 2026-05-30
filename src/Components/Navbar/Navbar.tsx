@@ -6,8 +6,8 @@ import { useEffect, useState, useRef, Suspense } from 'react';
 import logo from '../../assets/icons/logo.svg';
 import notify from '../../../src/assets/icons/NotificationIcon.svg';
 import UserProfileDropdown from './UserProfileDropdown';
-import { CLoader } from '../UI/CLoader'; 
-import { useStudentProfile } from '../../Features/Setting/Hooks/useStudentProfile'; 
+import { CLoader } from '../UI/CLoader';
+import { useStudentProfile } from '../../Features/Setting/Hooks/useStudentProfile';
 import { roleToAuth } from '../../Utils/Constant';
 
 const Navbar = () => {
@@ -17,7 +17,7 @@ const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
-    
+
     const isTeacher = roleToAuth?.includes("Teacher");
     const data = isTeacher ? teacherData.data : studentData.data;
 
@@ -33,13 +33,13 @@ const Navbar = () => {
         } else {
             setIsAuth(false);
         }
-        
+
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setIsDropdownOpen(false);
             }
         };
-        
+
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
@@ -52,17 +52,19 @@ const Navbar = () => {
 
     const navLinkClasses = ({ isActive }: any) => {
         const baseClasses = "relative font-medium p-2 flex gap-[8px] justify-between items-center text-[16px] leading-[24px] cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[#525FE1] after:transition-all after:duration-300 hover:after:w-full";
-        
+
         return `${baseClasses} ${isActive ? 'text-[#525FE1] after:w-full' : 'text-[#2A2D34] after:w-0'}`;
     };
 
     return <>
         <nav className="py-[20px] h-[66px] w-full shadow-[0px_20px_40px_rgba(0,6,69,0.04)] border-[#D1D5DB] px-[40px] bg-white flex justify-between items-center">
-            <div className="Logo">
+            <NavLink
+                to="/landing"
+                className="Logo">
                 <h2 className="font-extrabold text-[#2A2D34] text-[28px] leading-[17px] tracking-normal">
                     <img src={logo} className='w-full h-full' alt="" />
                 </h2>
-            </div>
+            </NavLink>
 
             <div className="">
                 <ul className="flex gap-[16px]">
@@ -72,9 +74,9 @@ const Navbar = () => {
                     </NavLink>
                     {!isTeacher && (
                         <NavLink to="/explore" className={navLinkClasses}>
-                        <img src="../../../src/assets/icons/Explore.svg" className='p-[2px]' alt="ExploreTeacher" />
-                        <p className='text-[16px]'>Explore Teacher</p>
-                    </NavLink>
+                            <img src="../../../src/assets/icons/Explore.svg" className='p-[2px]' alt="ExploreTeacher" />
+                            <p className='text-[16px]'>Explore Teacher</p>
+                        </NavLink>
                     )}
                     <NavLink to="/Calendar" className={navLinkClasses}>
                         <img src="../../../src/assets/icons/Schedule.svg" className='p-[2px]' alt="Schedule" />
@@ -94,7 +96,7 @@ const Navbar = () => {
                             <img src={notify} alt="NotificationIcon" />
                         </div>
                     </NavLink>
-                    
+
                     <div className="relative" ref={dropdownRef}>
                         <div
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -104,11 +106,11 @@ const Navbar = () => {
 
                         {isDropdownOpen && (
                             <div className="absolute right-0 top-[calc(100%+10px)] z-50">
-                                <UserProfileDropdown 
-                                    userName={userName || "Ahmed Mohamed"} 
+                                <UserProfileDropdown
+                                    userName={userName || "Ahmed Mohamed"}
                                     userEmail={userEmail || "ahmed@email.com"}
                                     avatarUrl={avatarImage}
-                                    onLogout={handleLogout} 
+                                    onLogout={handleLogout}
                                 />
                             </div>
                         )}
@@ -132,8 +134,8 @@ const Navbar = () => {
         </nav>
 
         <main className="w-full">
-            <Suspense 
-            key={location.pathname}
+            <Suspense
+                key={location.pathname}
                 fallback={
                     <div className="flex justify-center items-center w-full h-[calc(100vh-66px)]">
                         <CLoader size="md" label="" />
