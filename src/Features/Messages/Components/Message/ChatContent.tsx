@@ -78,7 +78,7 @@ const ChatContent = () => {
           <div className="mb-6"></div>
           <TeacherTextMessage messages={allMessages} />
         </div>
-        {conversationId && <ChatInput connection={signalR.connection} />}
+        { <ChatInput connection={signalR.connection} />}
       </section>
     </>
   );
