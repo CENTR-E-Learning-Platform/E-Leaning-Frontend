@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useGetChatConversation } from "../../Hooks/useGetChatConversation";
 import { useConvertDate } from "../../Hooks/useConvertDate";
-import type { ContactProps, Conversation } from "../../Types/itemContact";
+import type { ContactProps, Conversation, ConversationGroup } from "../../Types/itemContact";
 import { useGetChatMessages } from "../../Hooks/useGetChatMessages";
+import { useGetChatGroupMessages } from "../../Hooks/useGetChatGroupMessages";
 import { useChat } from "../../Contexts/ShareDataMessages";
 import { ShareDataContactItems } from "../../Contexts/ShareDataContactItems";
+import { useGetChatMyGroups } from "../../Hooks/useGetChatMyGroups";
 
 const ContactItem: React.FC<ContactProps> = ({
   name,
@@ -82,6 +84,8 @@ const ContactList: React.FC = () => {
   );
   const { data: dataGetChatConversation } = useGetChatConversation();
   console.log(dataGetChatConversation);
+  const {data : dataGetChatMyGroups  } = useGetChatMyGroups();
+  console.log(dataGetChatMyGroups?.data)
 
   const formatTime = useConvertDate();
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -97,29 +101,57 @@ const ContactList: React.FC = () => {
     signalR,
   } = useChat();
   const { mutate } = useGetChatMessages();
+  const { mutate: mutateGroup } = useGetChatGroupMessages();
 
   useEffect(() => {
     if (!conversationId) return;
-    mutate(
-      {
-        conversationId,
-        pageNumber: page,
-        pageSize: 50,
-      },
-      {
-        onSuccess: (res) => {
-          if (res.data.length < 50) {
-            setHasMore(false);
-          }
-          if (page === 1) {
-            setChatData(res.data);
-          } else {
-            setChatData((prev: any[]) => [...res.data, ...(prev || [])]);
-          }
+
+    const isGroupChat = activeMessage !== (isTeacher ? "Teachers" : "Students");
+
+    if (isGroupChat) {
+      mutateGroup(
+        {
+          groupId: conversationId,
+          pageNumber: page,
+          pageSize: 50,
         },
-      },
-    );
-  }, [conversationId, page]);
+        {
+          onSuccess: (res) => {
+            const messages = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+            if (messages.length < 50) {
+              setHasMore(false);
+            }
+            if (page === 1) {
+              setChatData(messages);
+            } else {
+              setChatData((prev: any[]) => [...messages, ...(prev || [])]);
+            }
+          },
+        }
+      );
+    } else {
+      mutate(
+        {
+          conversationId,
+          pageNumber: page,
+          pageSize: 50,
+        },
+        {
+          onSuccess: (res) => {
+            const messages = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+            if (messages.length < 50) {
+              setHasMore(false);
+            }
+            if (page === 1) {
+              setChatData(messages);
+            } else {
+              setChatData((prev: any[]) => [...messages, ...(prev || [])]);
+            }
+          },
+        },
+      );
+    }
+  }, [conversationId, page, activeMessage, isTeacher]);
 
   const getConversationId = (id: any, otherUserId: string) => {
     if (activeId === id) return;
@@ -132,7 +164,7 @@ const ContactList: React.FC = () => {
       const payload = token.split(".")[1];
       const decoded = JSON.parse(atob(payload));
 
-      console.log("decoded", decoded);
+      // console.log("decoded", decoded);
 
       const userId =
         decoded[
@@ -216,29 +248,27 @@ const ContactList: React.FC = () => {
           "No Conversation"
         )
       ) : (
-        dataGetChatConversation?.data?.length > 0 ? (
-          dataGetChatConversation?.data?.map((conversation: Conversation) => {
+        dataGetChatMyGroups?.data?.length > 0 ? (
+          dataGetChatMyGroups?.data?.map((conversation: ConversationGroup) => {
             return (
               <div
                 key={conversation.id}
                 onClick={() => {
-                  getConversationId(conversation.id, conversation.otherUserId);
+                  getConversationId(conversation.id , "");
                   setSelectedConversation(conversation);
                 }}
               >
                 <ContactItem
                   isActive={activeId === conversation.id}
-                  isOnline={conversation.isOnline}
-                  hasUnread={conversation.unreadCount}
-                  name={conversation.otherUserName}
+                  name={conversation.name}
                   message={
                     signalR.typingUser ? "typing..." : conversation.lastMessage
                   }
                   time={formatTime(conversation.lastMessageAt)}
                   avatarUrl={
-                    conversation.otherUserPicture
-                      ? conversation.otherUserPicture
-                      : `https://api.dicebear.com/7.x/avataaars/svg?seed=${conversation.otherUserName}`
+                    conversation.groupPicture
+                      ? conversation.groupPicture
+                      : `https://api.dicebear.com/7.x/avataaars/svg?seed=${conversation.name}`
                   }
                 />
               </div>
