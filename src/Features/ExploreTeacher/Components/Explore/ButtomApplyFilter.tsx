@@ -1,27 +1,37 @@
-import { usefilterteach } from "../../Hooks/usefilterteach";
+import React from "react";
+
+interface ButtomApplyFilterProps {
+  setDragging: (value: null) => void;
+  setDragging2: (value: null) => void;
+  setSelectedLanguage: (value: string | null) => void;
+  setSelectedDay: (value: string | null) => void;
+  setStartTime: (value: number) => void;
+  setEndTime: (value: number) => void;
+  setStartPrice: (value: number) => void;
+  setEndPrice: (value: number) => void;
+  setSelectedRating: (value: number | null) => void;
+  applyFilters: () => void;
+}
 
 const ButtomApplyFilter = ({
   setDragging,
   setDragging2,
-}: {
-  setDragging: (value: null) => void;
-  setDragging2: (value: null) => void;
-}) => {
-  const {
-    setSelectedLanguage,
-    setSelectedDay,
-    setStartTime,
-    setEndTime,
-    setStartPrice,
-    setEndPrice,
-    setSelectedRating,
-    applyFilters,
-  } = usefilterteach();
-  const handleApplyFilters = () => {
+  setSelectedLanguage,
+  setSelectedDay,
+  setStartTime,
+  setEndTime,
+  setStartPrice,
+  setEndPrice,
+  setSelectedRating,
+  applyFilters,
+}: ButtomApplyFilterProps) => {
+  const handleApplyFilters = (e: React.MouseEvent) => {
+    e.stopPropagation();
     applyFilters();
   };
 
-  const handleClearAll = () => {
+  const handleClearAll = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setSelectedDay("");
     setSelectedLanguage("");
     setSelectedRating(null);
@@ -29,15 +39,17 @@ const ButtomApplyFilter = ({
     setEndTime(26);
     setDragging(null);
     setDragging2(null);
-    setSelectedRating(null);
     setEndPrice(300);
     setStartPrice(50);
   };
 
   return (
     <>
-      <div className="buttons" onClick={handleApplyFilters}>
-        <button className="bg-[#525FE1] flex justify-center items-center cursor-pointer w-[238px] mb-[14px] h-[40px] text-white text-[16px] p-[14px] rounded-[8px] font-semibold">
+      <div className="buttons">
+        <button
+          onClick={handleApplyFilters}
+          className="bg-[#525FE1] flex justify-center items-center cursor-pointer w-[238px] mb-[14px] h-[40px] text-white text-[16px] p-[14px] rounded-[8px] font-semibold"
+        >
           Apply
         </button>
 
