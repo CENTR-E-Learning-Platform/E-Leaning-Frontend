@@ -53,10 +53,14 @@ interface Conversation {
   otherUserName?: string;
   otherUserPicture?: string;
   isOnline?: boolean;
+  name?: string;
+  groupPicture?: string;
+  teacherId?: string;
 }
 
 const ChatHeader: React.FC = () => {
   const { selectedConversation } = useChat() as { selectedConversation: Conversation | undefined };
+  const isGroup = selectedConversation && ('teacherId' in selectedConversation || 'name' in selectedConversation);
 
   return (
     <div className="relative flex flex-row justify-between items-center px-[30.4px] py-0 w-[800px] h-[72px] bg-white shadow-[0px_0.9px_1.8px_rgba(0,0,0,0.05)] font-['Poppins']">
@@ -67,14 +71,16 @@ const ChatHeader: React.FC = () => {
           <div className="w-[38px] h-[36px] rounded-full overflow-hidden bg-gray-200">
             <img
               src={
-                selectedConversation?.otherUserPicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedConversation?.otherUserName || "default"}`
+                isGroup
+                  ? (selectedConversation?.groupPicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedConversation?.name || "group"}`)
+                  : (selectedConversation?.otherUserPicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedConversation?.otherUserName || "default"}`)
               }
               alt="Avatar"
               className="w-full h-full object-cover"
             />
           </div>
 
-          {selectedConversation?.isOnline && (
+          {!isGroup && selectedConversation?.isOnline && (
             <div className="box-border absolute w-[13.3px] h-[12.6px] -right-[3.8px] -bottom-[3.6px] bg-[#22C55E] border-[1.8px] border-white rounded-full z-10" />
           )}
         </div>
@@ -84,13 +90,13 @@ const ChatHeader: React.FC = () => {
 
           <div className="flex flex-col items-start p-0 self-stretch w-[132.05px] h-[18px]">
             <h2 className="flex items-center w-full h-full font-bold text-[15.2px] leading-[18px] text-[#2A2D34]">
-              {selectedConversation?.otherUserName || "Select a chat"}
+              {isGroup ? (selectedConversation?.name || "Group chat") : (selectedConversation?.otherUserName || "Select a chat")}
             </h2>
           </div>
 
           <div className="flex flex-col items-start p-0 self-stretch w-[132.05px] h-[13.5px]">
-            <span className={`flex items-center font-semibold text-[9.5px] leading-[13.5px] tracking-[0.475px] uppercase ${selectedConversation?.isOnline ? "text-[#16A34A]" : "text-[#9CA3AF]"} `}>
-              {selectedConversation?.isOnline ? "Online Now" : "Offline"}
+            <span className={`flex items-center font-semibold text-[9.5px] leading-[13.5px] tracking-[0.475px] uppercase ${isGroup ? "text-[#525FE1]" : (selectedConversation?.isOnline ? "text-[#16A34A]" : "text-[#9CA3AF]")} `}>
+              {isGroup ? "Group" : (selectedConversation?.isOnline ? "Online Now" : "Offline")}
             </span>
           </div>
 
