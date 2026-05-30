@@ -31,9 +31,13 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const token = `${localStorage.getItem("token")}`;
   const signalR = useSignalR(token, BASE_URL, () => {});
 
-  const filteredSignalRMessages = signalR.messages.filter(
-    (msg: any) => String(msg.conversationId) === String(conversationId)
-  );
+  const isGroup = selectedConversation && ('teacherId' in selectedConversation || 'name' in selectedConversation);
+
+  const filteredSignalRMessages = isGroup
+    ? ((signalR.groupMessages as any)[conversationId as any] || [])
+    : signalR.messages.filter(
+        (msg: any) => String(msg.conversationId) === String(conversationId)
+      );
 
   const allMessages = [...(chatData || []), ...filteredSignalRMessages]
     .filter(
