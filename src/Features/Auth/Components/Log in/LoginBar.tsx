@@ -7,7 +7,7 @@ const Bar = ({title}:any) => {
             <h1 className="font-bold text-[28px] text-[#2A2D34] mb-[16px]">
               {title}!
             </h1>
-            <nav className="
+            {/* <nav className="
             flex bg-[#FFFFFF] border-[1px] border-[#6D7588] rounded-[4px] w-[379px] h-[37px] p-[2px]">
               <NavLink
                 className="w-[50%] flex justify-center items-center bg-[#DCDFF9] rounded-[4px] text-[12px] font-bold text-[#525FE1] cursor-pointer"
@@ -21,7 +21,7 @@ const Bar = ({title}:any) => {
               >
                 Sign up
               </NavLink>
-            </nav>
+            </nav> */}
           </header>
   );
 }
