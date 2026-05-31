@@ -3,9 +3,17 @@ import Teach_page from "../../../../assets/images/TeacherPage.png";
 import { NavLink } from "react-router-dom";
 import { usehandelClickLogin } from "../../Hooks/useRegister";
 import logo from '../../../../assets/icons/logo.svg';
+import { useRegContext } from "../../Contexts/RegContext";
+import { useGoogle } from "../../Hooks/useGoogle";
+import { useFacebook } from "../../Hooks/useFacebook";
+import google_icon from "../../../../assets/icons/material-icon-theme_google.png";
+import facebook_icon from "../../../../assets/icons/logos_facebook.png";
+
 const TeacherOption: React.FC = () => {
-  
   const { seteducationLevelOrSubject, educationLevelOrSubject, BackOption } = usehandelClickLogin();
+  const { socialProvider } = useRegContext();
+  const loginWithGoogle = useGoogle();
+  const loginWithFacebook = useFacebook();
 
   return (
     <React.Fragment>
@@ -14,210 +22,39 @@ const TeacherOption: React.FC = () => {
           <section className="flex items-center justify-center">
             <div>
               <header className="flex justify-center items-center">
-               <img src={logo} className="w-[150px] h-full" alt="" />
+                <img src={logo} className="w-[150px] h-full" alt="" />
               </header>
 
-              <article className="flex flex-col items-center justify-center mt-[20px]" >
+              <article className="flex flex-col items-center justify-center mt-[20px]">
                 <h2 className="text-[28px] mt-[10px] font-bold leading-[20.390625px] text-[#2A2D34]">
                   What do you teach
                 </h2>
 
                 <section className="h-auto mt-[30px] w-[379.6875px] mb-[20px] flex flex-col items-center justify-between gap-2">
                   <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Arabic")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Arabic"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Arabic
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("English")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "English"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      English
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Deutsch")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Deutsch"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Deutsch
-                    </button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Arabic")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Arabic" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Arabic</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("English")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "English" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>English</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Deutsch")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Deutsch" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Deutsch</button>
                   </div>
-
                   <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Français")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Français"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Français
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Español")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Español"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Español
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Italiano")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Italiano"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Italiano
-                    </button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Français")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Français" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Français</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Español")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Español" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Español</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Italiano")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Italiano" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Italiano</button>
                   </div>
-
                   <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Math")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Math"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Mathematics
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Science")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Science"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Science
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        seteducationLevelOrSubject("Social Science")
-                      }
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Social Science"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Social Science
-                    </button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Math")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Math" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Mathematics</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Science")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Science" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Science</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Social Science")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Social Science" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Social Science</button>
                   </div>
-
                   <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Physics")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Physics"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Physics
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Chemistry")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Chemistry"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Chemistry
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Biology")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Biology"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Biology
-                    </button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Physics")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Physics" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Physics</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Chemistry")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Chemistry" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Chemistry</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Biology")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Biology" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Biology</button>
                   </div>
-
                   <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("History")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "History"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      History
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Geography")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Geography"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Geography
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => seteducationLevelOrSubject("Statistics")}
-                      className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${
-                        educationLevelOrSubject === "Statistics"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
-                      } 
-                              hover:border-[#525FE1] `}
-                    >
-                      Statistics
-                    </button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("History")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "History" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>History</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Geography")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Geography" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Geography</button>
+                    <button type="button" onClick={() => seteducationLevelOrSubject("Statistics")} className={`w-[120.9375px] border-2 cursor-pointer shadow-[0px_6px_12px_0px_#00000024] rounded-lg h-[36.5625px] ${educationLevelOrSubject === "Statistics" ? "bg-[#525FE114] border-[#525FE1]" : "border-[#DDDFE4]"} hover:border-[#525FE1]`}>Statistics</button>
                   </div>
                 </section>
 
@@ -228,37 +65,38 @@ const TeacherOption: React.FC = () => {
                   >
                     Back
                   </button>
-                 <NavLink to="/register">
-                   <button
-                    type="button"
-                    disabled={!educationLevelOrSubject}
-                    className={`w-[178.59375px] h-[36.5625px] rounded-[8px] border border-[#525FE1]
-                        ${
-                          educationLevelOrSubject
-                            ? "bg-[#525FE1] text-white cursor-pointer"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }`}
-                  >
-                    continue
-                  </button>
-                 </NavLink>
+
+                  {socialProvider ? (
+                    <button
+                      type="button"
+                      disabled={!educationLevelOrSubject}
+                      onClick={() => socialProvider === "Google" ? loginWithGoogle() : loginWithFacebook()}
+                      className={`w-[178.59375px] h-[36.5625px] flex items-center justify-center gap-2 rounded-[8px] border border-[#525FE1] ${educationLevelOrSubject ? "bg-[#525FE1] text-white cursor-pointer" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+                    >
+                      <img className="w-[16px]" src={socialProvider === "Google" ? google_icon : facebook_icon} alt={socialProvider} />
+
+                    </button>
+                  ) : (
+                    <NavLink to="/register">
+                      <button
+                        type="button"
+                        disabled={!educationLevelOrSubject}
+                        className={`w-[178.59375px] h-[36.5625px] rounded-[8px] border border-[#525FE1] ${educationLevelOrSubject ? "bg-[#525FE1] text-white cursor-pointer" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+                      >
+                        continue
+                      </button>
+                    </NavLink>
+                  )}
                 </div>
               </article>
             </div>
           </section>
 
           <aside
-            style={{
-              background:
-                "linear-gradient(to bottom, #CBCFF6 10%, #525FE1 90%)",
-            }}
+            style={{ background: "linear-gradient(to bottom, #CBCFF6 10%, #525FE1 90%)" }}
             className="flex h-full items-center justify-center"
           >
-            <img
-              className="h-[450px] w-[450px]"
-              src={Teach_page}
-              alt="Illustration of teacher page"
-            />
+            <img className="h-[450px] w-[450px]" src={Teach_page} alt="Illustration of teacher page" />
           </aside>
         </div>
       </main>
