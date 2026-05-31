@@ -16,7 +16,7 @@ import image from "../../../assets/icons/Vector (28).svg";
 import vector3 from "../../../assets/icons/mdi_human-greeting-variant.svg";
 import RecentMessages from "../Components/StudentHome/RecentMessages";
 import RecentHomeworks from "../Components/StudentHome/RecentHomeworks";
-import { useUpcomingClasses } from "../Hooks/useGetUpcomingClasses";
+import { useUpcomingClassesForStudent } from "../Hooks/useGetUpcomingClassesForStudent";
 import { useStudentDashboardInfo } from "../Hooks/useGetStudentDashboardInfo";
 import { useNavigate } from "react-router-dom";
 import UpcomingEmpty from "../Components/EmptyState/UpcomingEmpty";
@@ -27,9 +27,9 @@ export const MainStudentHome: React.FC = () => {
   // Call API to get the dashboard info and pass it to the components as needed
   const { data: dataDashboard } = useStudentDashboardInfo();
   console.log("StudentDashboardInfo hook called", dataDashboard?.data?.data);
-  const { data: dataUpcoming } = useUpcomingClasses();
+  const { data: dataUpcoming } = useUpcomingClassesForStudent();
   const {data: dataRecommended} = useRecommendedTeacher();
-  console.log("UpcomingClasses hook called", dataUpcoming);
+  console.log("UpcomingClasses Student hook called", dataUpcoming);
   console.log("RecommendedTeachers hook called", dataRecommended);
 
   const statsData = [
