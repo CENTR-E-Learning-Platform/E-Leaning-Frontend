@@ -4,7 +4,7 @@ import QuizHeaderAttempt from '../Components/QuizHeaderAttempt';
 import { useAttemptQuiz } from '../Hooks/useAttemptQuiz';
 const StartQuizforStudent = () => {
   const [isWarningVisible, setIsWarningVisible] = useState(false);
-  const {fetchQuestions} = useAttemptQuiz();
+  const { fetchQuestions } = useAttemptQuiz();
   useEffect(() => {
     const handleFullscreenChange = () => {
 
@@ -14,7 +14,7 @@ const StartQuizforStudent = () => {
     };
     fetchQuestions();
     document.addEventListener('fullscreenchange', handleFullscreenChange);
-    
+
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
@@ -42,7 +42,7 @@ const StartQuizforStudent = () => {
               <p className="text-gray-700 mb-6">
                 You exited fullscreen mode. Please return to fullscreen to continue your quiz.
               </p>
-              <button 
+              <button
                 onClick={returnToQuiz}
                 className="px-6 py-3 bg-[#0040DF] text-white font-bold rounded-lg transition-colors hover:bg-blue-700"
               >
