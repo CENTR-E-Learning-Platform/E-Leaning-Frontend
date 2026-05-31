@@ -3,16 +3,20 @@ import image from "../../../assets/images/Online learning-amico 1.png";
 import RegisterForm from "../Components/Register/RegisterForm";
 import FacebookButton from "../Components/Shared/FacebookButton";
 import RegisterBar from "../Components/Register/RegisterBar";
+import logo from "../../../assets/icons/logo.svg";
 
 const MainRegister = () => {
   return (
     <main className="h-[100vh] flex w-full">
       <section className="w-[50%] flex justify-center bg-[#F9FBFC]">
         <div className="flex flex-col items-center justify-center">
+          <header className="flex justify-center items-center mb-[3px]">
+            <img src={logo} className="w-[150px] h-full" alt="" />
+          </header>
           <RegisterBar title="Create New Account" />
-          <div className="mt-[12px]">
+          <div >
             <RegisterForm />
-            <FacebookButton />
+            {/* <FacebookButton /> */}
           </div>
         </div>
       </section>
