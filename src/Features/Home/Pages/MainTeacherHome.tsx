@@ -13,13 +13,17 @@ import RecentReviews from "../Components/TeacherHome/RecentReviews";
 import { useTeacherDashboardInfo } from "../Hooks/useGetTeacherDashboardInfo";
 import ActiveQuizzes from "../Components/TeacherHome/ActiveQuizzes";
 import UpcomingClassesCard from "../Components/TeacherHome/UpcomingClassesCard";
+import { useUpcomingClassesForTeacher } from "../Hooks/useGetUpcomingCalssesForTeacher";
 
 const MainTeacherHome = () => {
   const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
 
   // Call API to get the dashboard info and pass it to the components as needed
-  const { data } = useTeacherDashboardInfo();
-  console.log(data?.data?.data);
+  const { data : dataTeacherDashboardInfo } = useTeacherDashboardInfo();
+  const {data: upcomingClassesDataTeacher} = useUpcomingClassesForTeacher();
+  console.log("TeacherDashboardInfo hook called", dataTeacherDashboardInfo?.data?.data);
+  console.log("upcomingClassesDataTeacher hook called", upcomingClassesDataTeacher?.data?.data);
+
 
 
   const statsData = [
@@ -32,7 +36,7 @@ const MainTeacherHome = () => {
         />
       ),
       label: "Total Classes",
-      value: (data?.data?.data?.classesCount ?? "").toString(),
+      value: (dataTeacherDashboardInfo?.data?.data?.classesCount ?? "").toString(),
       labelWidth: "w-[138px]",
     },
     {
@@ -46,7 +50,7 @@ const MainTeacherHome = () => {
         </div>
       ),
       label: "Total Students",
-      value: (data?.data?.data?.studentsCount ?? "").toString(),
+      value: (dataTeacherDashboardInfo?.data?.data?.studentsCount ?? "").toString(),
       labelWidth: "w-[166px]",
     },
     {
@@ -58,7 +62,7 @@ const MainTeacherHome = () => {
         />
       ),
       label: "Total Income",
-      value: (data?.data?.data?.totalIncome ?? "").toString(),
+      value: (dataTeacherDashboardInfo?.data?.data?.totalIncome ?? "").toString(),
       labelWidth: "w-[166px]",
     },
     {
@@ -72,7 +76,7 @@ const MainTeacherHome = () => {
         />
       ),
       label: "Rating",
-      value: (data?.data?.data?.teacherRating ?? "").toString(),
+      value: (dataTeacherDashboardInfo?.data?.data?.teacherRating ?? "").toString(),
       labelWidth: "w-[108px]",
     },
   ];
@@ -83,8 +87,8 @@ const MainTeacherHome = () => {
           <div className="flex flex-col w-[1200px] items-start gap-9 pb-10">
             <HeroBanner
               date="Nov 22, 2025"
-              subtitle={`Welcome back, ${data?.data?.data?.teacherName}`}
-              title={`you have ${data?.data?.data?.classesCount} classes today`}
+              subtitle={`Welcome back, ${dataTeacherDashboardInfo?.data?.data?.teacherName}`}
+              title={`you have ${dataTeacherDashboardInfo?.data?.data?.classesCount} classes today`}
             />
 
             <div className="grid grid-cols-4 grid-rows-[repeat(1,fit-content(100%))] h-fit gap-[18px_12px] w-full">
