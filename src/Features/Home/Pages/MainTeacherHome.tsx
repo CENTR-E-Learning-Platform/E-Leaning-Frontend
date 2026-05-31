@@ -1,4 +1,4 @@
-import { StatCard } from "../Components/StudentHome/StatCard";
+﻿import { StatCard } from "../Components/StudentHome/StatCard";
 import { HeroBanner } from "../Components/TeacherHome/HeroBanner";
 import solid_book from "../../../assets/icons/fa6-solid_book.svg";
 import rightIcon from "../../../assets/icons/Vector (28).svg";
@@ -19,12 +19,18 @@ const MainTeacherHome = () => {
   const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
 
   // Call API to get the dashboard info and pass it to the components as needed
-  const { data : dataTeacherDashboardInfo } = useTeacherDashboardInfo();
-  const {data: upcomingClassesDataTeacher} = useUpcomingClassesForTeacher();
-  console.log("TeacherDashboardInfo hook called", dataTeacherDashboardInfo?.data?.data);
-  console.log("upcomingClassesDataTeacher hook called", upcomingClassesDataTeacher?.data?.data);
+  const { data: dataTeacherDashboardInfo } = useTeacherDashboardInfo();
+  const { data: upcomingClassesDataTeacher } = useUpcomingClassesForTeacher();
+  const upcomingClasses =
+    upcomingClassesDataTeacher?.data?.data ??
+    upcomingClassesDataTeacher?.data ??
+    [];
 
-
+  console.log(
+    "TeacherDashboardInfo hook called",
+    dataTeacherDashboardInfo?.data?.data,
+  );
+  console.log("upcomingClassesDataTeacher hook called", upcomingClasses);
 
   const statsData = [
     {
@@ -36,7 +42,9 @@ const MainTeacherHome = () => {
         />
       ),
       label: "Total Classes",
-      value: (dataTeacherDashboardInfo?.data?.data?.classesCount ?? "").toString(),
+      value: (
+        dataTeacherDashboardInfo?.data?.data?.classesCount ?? ""
+      ).toString(),
       labelWidth: "w-[138px]",
     },
     {
@@ -50,7 +58,9 @@ const MainTeacherHome = () => {
         </div>
       ),
       label: "Total Students",
-      value: (dataTeacherDashboardInfo?.data?.data?.studentsCount ?? "").toString(),
+      value: (
+        dataTeacherDashboardInfo?.data?.data?.studentsCount ?? ""
+      ).toString(),
       labelWidth: "w-[166px]",
     },
     {
@@ -62,7 +72,9 @@ const MainTeacherHome = () => {
         />
       ),
       label: "Total Income",
-      value: (dataTeacherDashboardInfo?.data?.data?.totalIncome ?? "").toString(),
+      value: (
+        dataTeacherDashboardInfo?.data?.data?.totalIncome ?? ""
+      ).toString(),
       labelWidth: "w-[166px]",
     },
     {
@@ -70,13 +82,13 @@ const MainTeacherHome = () => {
         <img
           className="relative w-[26px] h-[26px] aspect-[1]"
           alt="Vector"
-          // src={solid_book}
-          
           src={isTeacher ? StarIcon : solid_book}
         />
       ),
       label: "Rating",
-      value: (dataTeacherDashboardInfo?.data?.data?.teacherRating ?? "").toString(),
+      value: (
+        dataTeacherDashboardInfo?.data?.data?.teacherRating ?? ""
+      ).toString(),
       labelWidth: "w-[108px]",
     },
   ];
@@ -105,14 +117,14 @@ const MainTeacherHome = () => {
 
             <div className="flex items-start gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
               <div className="flex flex-col w-[687px] items-end gap-9 relative">
-                  <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-                    <UpcomingClassesCard />
-                  </div>
+                <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                  <UpcomingClassesCard upcomingClasses={upcomingClasses} />
+                </div>
                 <RecentReviews />
               </div>
               <div className="flex flex-col w-[453px] items-start gap-9 relative">
                 <RecentHomeworks />
-                <ActiveQuizzes/>
+                <ActiveQuizzes />
                 <RecentMessages />
               </div>
             </div>
