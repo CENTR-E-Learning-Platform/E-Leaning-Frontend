@@ -10,21 +10,22 @@ import LineBetweenFilterElements from "../Components/Explore/LineBetweenFilterEl
 import LayerBackgroundTeacher from "../Components/Explore/LayerBackgroundTeacher";
 import LeftTeacherSide from "../Components/Explore/LeftTeacherSide";
 import Header from "../Components/Explore/Header";
+import { extractTeachersList } from "../Utils/extractTeachers";
+import { BASE_URL } from "../../Streaming/Utils/Apis";
 
 const MainExplore = () => {
   const {
     data: searchTeachers,
     error: searchError,
-    // isLoading: searchIsLoading,
+    isLoading: searchIsLoading,
     formik,
-    currentPage,
-    teachersPerPage,
   } = usesearchteach();
 
   const {
     data: filterData,
     error: filterError,
-    // isLoading: filterIsLoading,
+    isLoading: filterIsLoading,
+    isFetching: filterIsFetching,
     selectedLanguage,
     setSelectedLanguage,
     selectedDay,
@@ -40,8 +41,11 @@ const MainExplore = () => {
     selectedRating,
     setSelectedRating,
     applyFilters,
+    clearFilters,
     setSearchTerm,
   } = usefilterteach();
+
+  const [resultsSource, setResultsSource] = useState<"filter" | "search">("filter");
 
   console.log("Filter Data:", filterData);
 
@@ -151,8 +155,20 @@ const MainExplore = () => {
   const startPercentage = ((startTime - 8) / 18) * 100;
   const endPercentage = ((endTime - 8) / 18) * 100;
 
-  const totalTeachers = 9;
-  // const totalPages = Math.ceil(totalTeachers / teachersPerPage);
+  const isSearching = formik.values.SearchTeacher.trim() !== "";
+  const showFilterResults = resultsSource === "filter" || !isSearching;
+  const activeResponse = showFilterResults ? filterData : searchTeachers;
+  const teachersList = extractTeachersList(activeResponse);
+  const isLoadingTeachers = showFilterResults
+    ? filterIsLoading || filterIsFetching
+    : searchIsLoading;
+
+  const handleApplyFilters = () => {
+    setResultsSource("filter");
+    formik.setFieldValue("SearchTeacher", "");
+    setSearchTerm("");
+    applyFilters();
+  };
 
   if (searchError && "response" in searchError) {
     console.log((searchError as any).response?.data?.message[0]);
@@ -220,6 +236,9 @@ const MainExplore = () => {
                   setSearchTerm(value);
                   if (value.startsWith(" ")) return;
                   formik.handleChange(e);
+                  if (value.trim()) {
+                    setResultsSource("search");
+                  }
                 }}
                 value={formik.values.SearchTeacher}
                 className="outline-none border-none w-[332px] focus:outline-none focus:border-none"
@@ -235,7 +254,11 @@ const MainExplore = () => {
           <div className="w-[275px] border-2 border-[#D1D5DB] p-[18px] rounded-[8px]">
             <SubjectFilterExplore
               selectedLanguage={selectedLanguage}
-              setSelectedLanguage={setSelectedLanguage}
+              setSelectedLanguage={(value) => {
+                if (value !== null) {
+                  setSelectedLanguage(value);
+                }
+              }}
             />
 
             <LineBetweenFilterElements />
@@ -299,7 +322,7 @@ const MainExplore = () => {
 
             <DaysFilterExplore
               selectedDay={selectedDay}
-              setSelectedDay={setSelectedDay}
+              setSelectedDay={setSelectedDay as unknown as (value: string | null) => void}
             />
 
             <LineBetweenFilterElements />
@@ -353,51 +376,43 @@ const MainExplore = () => {
             <ButtomApplyFilter
               setDragging={setDragging}
               setDragging2={setDragging2}
-              setSelectedLanguage={setSelectedLanguage}
-              setSelectedDay={setSelectedDay}
               setStartTime={setStartTime}
               setEndTime={setEndTime}
               setStartPrice={setStartPrice}
               setEndPrice={setEndPrice}
-              setSelectedRating={setSelectedRating}
-              applyFilters={applyFilters}
+              applyFilters={handleApplyFilters}
+              clearFilters={() => {
+                setResultsSource("filter");
+                formik.setFieldValue("SearchTeacher", "");
+                clearFilters();
+              }}
             />
           </div>
 
           <div className="teachers">
-            {formik.values.SearchTeacher || filterData?.data
-              ? (() => {
-                const raw = formik.values.SearchTeacher
-                  ? searchTeachers?.data
-                  : filterData?.data;
-
-                // The API returns { data: [...], message: "..." } inside the Axios response
-                // So raw is the API body, and raw.data is the actual teachers array
-                const teachersList = Array.isArray(raw)
-                  ? raw
-                  : Array.isArray(raw?.data)
-                    ? raw.data
-                    : [];
-
-                if (teachersList.length === 0) {
-                  return (
-                    <div className="w-[836px] flex flex-col justify-center items-center py-16 px-6 border-2 border-dashed border-gray-300 rounded-[8px] bg-white text-gray-500">
-                      <img
-                        src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
-                        alt="No Results"
-                        className="w-[80px] h-[80px] mb-4 opacity-60"
-                      />
-                      <h3 className="text-[18px] font-bold text-[#2A2D34] mb-1">No Teachers Found</h3>
-                      <p className="text-[14px] text-gray-400 text-center max-w-[320px]">
-                        We couldn't find any teachers matching your criteria. Try adjusting your filters or search terms.
-                      </p>
-                    </div>
-                  );
-                }
-
-                return teachersList.map((teacher: any, index: number) => (
+            {isLoadingTeachers ? (
+              [...Array(3)].map((_, index) => (
+                <div
+                  key={index}
+                  className="w-[836px] h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px] bg-gray-100 animate-pulse"
+                />
+              ))
+            ) : teachersList.length === 0 ? (
+              <div className="w-[836px] flex flex-col justify-center items-center py-16 px-6 border-2 border-dashed border-gray-300 rounded-[8px] bg-white text-gray-500">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
+                  alt="No Results"
+                  className="w-[80px] h-[80px] mb-4 opacity-60"
+                />
+                <h3 className="text-[18px] font-bold text-[#2A2D34] mb-1">No Teachers Found</h3>
+                <p className="text-[14px] text-gray-400 text-center max-w-[320px]">
+                  We couldn't find any teachers matching your criteria. Try adjusting your filters or search terms.
+                </p>
+              </div>
+            ) : (
+              teachersList.map((teacher: any, index: number) => (
                   <div
-                    key={index}
+                    key={teacher.teacherId ?? teacher.id ?? `${teacher.teacherName}-${index}`}
                     className="w-[836px] overflow-hidden relative h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px]"
                   >
                     <div className="flex justify-between items-center gap-[57px]">
@@ -406,8 +421,7 @@ const MainExplore = () => {
                           <img
                             className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
                             src={
-                              teacher.teacherPic ??
-                              "https://via.placeholder.com/114"
+                              teacher.teacherPic ? `${BASE_URL}${teacher.teacherPic}` : "https://via.placeholder.com/114"
                             }
                             alt="teacher image"
                           />
@@ -480,14 +494,10 @@ const MainExplore = () => {
                           </div>
                           <div className="DetailsAboutTeacher w-[326px] h-[82px] mt-2">
                             <p className="font-medium text-[14px] text-[#5A6272]">
-                              {teacher.yearsOfExperience ?? 20} years teaching | {teacher.onlineYears ?? 13} years online teacher{" "}
-                              <span className="font-normal">
-                                {" "}
-                                - {teacher.bio ?? teacher.teacherBio ?? teacher.description ?? "Passionate educator committed to inspiring students."}
-                              </span>
+                              {teacher.bio}
                             </p>
-                            <p className="font-medium text-[14px] underline cursor-pointer">
-                              Learn more
+                            <p className="font-medium text-[14px] w-fit underline cursor-pointer">
+                              {teacher.bio ? "Learn more" : ""}
                             </p>
                           </div>
                         </div>
@@ -496,114 +506,8 @@ const MainExplore = () => {
                     </div>
                     <LayerBackgroundTeacher />
                   </div>
-                ));
-              })()
-              :
-              [...Array(teachersPerPage)].map((_, index) => {
-                const teacherNumber =
-                  (currentPage - 1) * teachersPerPage + index + 1;
-                if (teacherNumber > totalTeachers) return null;
-                return (
-                  <div
-                    key={teacherNumber}
-                    className="w-[836px] overflow-hidden relative h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px]"
-                  >
-                    <div className="flex justify-between items-center gap-[57px]">
-                      <div className="RightTeacher flex justify-between items-start gap-[15px] w-[456px] h-[239px]">
-                        <div className="w-[114px] h-[114px] RightRightTeacher">
-                          <img
-                            className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
-                            src="https://i.guim.co.uk/img/media/59baecefbc73d3bcf4a47b017453a27f19b55175/331_488_2481_1489/master/2481.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=d201beebc8267e2197eb367488bafd4b"
-                            alt="teacher image"
-                          />
-                        </div>
-                        <div className="LeftRightTeacher">
-                          <div className="w-[326px] mb-[18px] h-[81px]">
-                            <h2 className="text-[18px] mb-[14px] leading-[13px] tracking-[0] font-bold">
-                              Mr. Mohamed Salama
-                            </h2>
-                            <div className="flex items-center gap-2 mb-[14px] text-[11px] mt-1">
-                              <div className="flex items-center gap-0.5">
-                                {[1, 2, 3, 4, 5].map((star) => {
-                                  const rating = 3.5;
-                                  if (star <= Math.floor(rating)) {
-                                    return (
-                                      <span
-                                        key={star}
-                                        className="text-[#FFD057]"
-                                      >
-                                        <Star
-                                          fill="#FFD057"
-                                          className="w-[14px] h-[14px]"
-                                        />
-                                      </span>
-                                    );
-                                  } else if (
-                                    star === Math.ceil(rating) &&
-                                    rating % 1 !== 0
-                                  ) {
-                                    return (
-                                      <span
-                                        key={star}
-                                        className="relative inline-block"
-                                      >
-                                        <Star className="w-[14px] h-[14px] text-[#FFD057]" />
-                                        <span
-                                          className="absolute top-0 left-0 overflow-hidden"
-                                          style={{
-                                            width: `${(rating % 1) * 100}%`,
-                                          }}
-                                        >
-                                          <Star
-                                            fill="#FFD057"
-                                            className="w-[14px] h-[14px] text-[#FFD057]"
-                                          />
-                                        </span>
-                                      </span>
-                                    );
-                                  } else {
-                                    return (
-                                      <span
-                                        key={star}
-                                        className="text-[#FFD057]"
-                                      >
-                                        <Star className="w-[14px] h-[14px]" />
-                                      </span>
-                                    );
-                                  }
-                                })}
-                              </div>
-                              <span className="text-gray-500">
-                                (502 reviews)
-                              </span>
-                            </div>
-                            <div className="h-[26px] w-[181px] flex justify-center items-center bg-[#FFDEDE] px-[9px] py-[7px] rounded-[18px]">
-                              <p className="font-semibold text-[16px] text-[#611D1D]">
-                                Pure mathematics
-                              </p>
-                            </div>
-                          </div>
-                          <div className="DetailsAboutTeacher w-[326px] h-[82px]">
-                            <p className="font-medium text-[14px] text-[#5A6272]">
-                              20 years teaching | 13 years online math teacher{" "}
-                              <span className="font-normal">
-                                {" "}
-                                - for 20 years i was teaching with passion and
-                                bla bla bla{" "}
-                              </span>
-                            </p>
-                            <p className="font-medium text-[14px] underline cursor-pointer">
-                              Learn more
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <LeftTeacherSide teacher={{ pricePerSession: 50 }} />
-                    </div>
-                    <LayerBackgroundTeacher />
-                  </div>
-                );
-              })}
+                ))
+            )}
           </div>
         </div>
       </main>
