@@ -3,27 +3,23 @@ import React from "react";
 interface ButtomApplyFilterProps {
   setDragging: (value: null) => void;
   setDragging2: (value: null) => void;
-  setSelectedLanguage: (value: string | null) => void;
-  setSelectedDay: (value: string | null) => void;
   setStartTime: (value: number) => void;
   setEndTime: (value: number) => void;
   setStartPrice: (value: number) => void;
   setEndPrice: (value: number) => void;
-  setSelectedRating: (value: number | null) => void;
   applyFilters: () => void;
+  clearFilters: () => void;
 }
 
 const ButtomApplyFilter = ({
   setDragging,
   setDragging2,
-  setSelectedLanguage,
-  setSelectedDay,
   setStartTime,
   setEndTime,
   setStartPrice,
   setEndPrice,
-  setSelectedRating,
   applyFilters,
+  clearFilters,
 }: ButtomApplyFilterProps) => {
   const handleApplyFilters = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -32,15 +28,13 @@ const ButtomApplyFilter = ({
 
   const handleClearAll = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setSelectedDay("");
-    setSelectedLanguage("");
-    setSelectedRating(null);
     setStartTime(8);
     setEndTime(26);
     setDragging(null);
     setDragging2(null);
     setEndPrice(300);
     setStartPrice(50);
+    clearFilters();
   };
 
   return (
