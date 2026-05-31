@@ -6,7 +6,7 @@ const RegisterBar = ({title}:any) => {
             <h1 className="font-bold text-[28px] text-[#2A2D34] mb-[16px]">
               {title}
             </h1>
-            <nav className="flex bg-[#FFFFFF] border border-[#6D7588] rounded-[4px] w-[379px] h-[37px] p-[2px]">
+            {/* <nav className="flex bg-[#FFFFFF] border border-[#6D7588] rounded-[4px] w-[379px] h-[37px] p-[2px]">
               <NavLink
                 to={"/login"}
                 className="w-[50%] flex justify-center items-center text-[12px] font-bold text-[#2A2D34]"
@@ -19,7 +19,7 @@ const RegisterBar = ({title}:any) => {
               >
                 Sign up
               </NavLink>
-            </nav>
+            </nav> */}
           </header>
 
   )
