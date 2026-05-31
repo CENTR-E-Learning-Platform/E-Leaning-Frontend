@@ -5,15 +5,25 @@ import GoogleButton from "../Shared/GoogleButton";
 import FacebookButton from "../Shared/FacebookButton";
 import { useLogin } from "../../Hooks/useLogin";
 import { useSendEmail } from "../../Hooks/useforgetpasswordAndSendemail";
+import { useRegContext } from "../../Contexts/RegContext";
+import { useNavigate } from "react-router-dom";
+
 const LoginForm = () => {
   const [openEye, setOpenEye] = useState(false);
   const formik = useLogin();
-  const {ClickSendEmail} = useSendEmail();
+  const { ClickSendEmail } = useSendEmail();
+  const { setSocialProvider } = useRegContext();
+  const navigate = useNavigate();
+
+  const handleSocialLogin = (provider: "Google" | "Facebook") => {
+    setSocialProvider(provider);
+    navigate("/auth");
+  };
+
   return (
     <>
       <section className="mt-[12px]">
         <form onSubmit={formik.handleSubmit}>
-          {/* Email */}
           <div className="flex flex-col relative">
             <label
               htmlFor="email"
@@ -24,13 +34,12 @@ const LoginForm = () => {
             <input
               id="email"
               name="email"
-              className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${
-              formik.touched.email && formik.errors.email
-                ? "border-red-600"
-                : formik.touched.email && formik.errors.email
-                ? "border-[#525FE1]"
-                : "border-[#6D7588]"
-              }`}
+              className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${formik.touched.email && formik.errors.email
+                  ? "border-red-600"
+                  : formik.touched.email && formik.errors.email
+                    ? "border-[#525FE1]"
+                    : "border-[#6D7588]"
+                }`}
               type="email"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -43,7 +52,6 @@ const LoginForm = () => {
             )}
           </div>
 
-          {/* Password */}
           <div className="flex flex-col relative mt-[5px]">
             <label
               htmlFor="password"
@@ -61,13 +69,12 @@ const LoginForm = () => {
             <input
               id="password"
               name="password"
-              className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${
-              formik.touched.password && formik.errors.password
-                ? "border-red-600"
-                : formik.touched.password && formik.errors.password
-                ? "border-[#525FE1]"
-                : "border-[#6D7588]"
-              }`}
+              className={`w-[379px] h-[36px] rounded-[4px] pl-[35px] pr-5 border-[1px] focus:outline-none ${formik.touched.password && formik.errors.password
+                  ? "border-red-600"
+                  : formik.touched.password && formik.errors.password
+                    ? "border-[#525FE1]"
+                    : "border-[#6D7588]"
+                }`}
               type={openEye ? "text" : "password"}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -93,7 +100,7 @@ const LoginForm = () => {
           </div>
 
           {/* Remember me */}
-          <div className="mt-[8px] items-center flex">
+          {/* <div className="mt-[8px] items-center flex">
             <input
               id="remember"
               className="w-[16px] h-[16px]"
@@ -106,7 +113,7 @@ const LoginForm = () => {
             >
               Remember me
             </label>
-          </div>
+          </div> */}
 
           {/* Submit */}
           <button
@@ -118,18 +125,30 @@ const LoginForm = () => {
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center w-[375px] mt-[13px]">
           <div className="flex-grow border-t border-[#6D7588]"></div>
           <span className="px-3 text-[#2A2D34] text-[14px]">Or</span>
           <div className="flex-grow border-t border-[#6D7588]"></div>
         </div>
 
-        {/* Social Logins */}
-        <GoogleButton />
-        <FacebookButton/>
+        <GoogleButton onBeforeNavigate={() => handleSocialLogin("Google")} />
+        <FacebookButton onBeforeNavigate={() => handleSocialLogin("Facebook")} />
+
+        <div className="flex justify-center items-center mt-[12px] w-[379px]">
+          <p className="text-[13px] text-[#2A2D34] text-center">
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={() => { setSocialProvider(null); navigate("/auth"); }}
+              className="text-[#525FE1] font-semibold hover:underline bg-transparent border-none cursor-pointer p-0"
+            >
+              Sign up
+            </button>
+          </p>
+        </div>
       </section>
     </>
   );
 };
 export default LoginForm;
+
