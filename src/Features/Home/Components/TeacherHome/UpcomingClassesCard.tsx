@@ -1,9 +1,27 @@
 import React from "react";
 import UpcomingClassItem from "./UpcomingClassItem";
 import { useNavigate } from "react-router-dom";
+import UpcomingEmpty from "../EmptyState/UpcomingEmpty";
 
-const UpcomingClassesCard: React.FC = () => {
+interface TeacherClass {
+  additionalAttendeesCount?: number;
+  attendeeProfilePictures?: string[];
+  level?: string;
+  roomName?: string;
+  startTime?: string;
+  title?: string;
+}
+
+interface UpcomingClassesCardProps {
+  upcomingClasses?: TeacherClass[];
+}
+
+const UpcomingClassesCard: React.FC<UpcomingClassesCardProps> = ({
+  upcomingClasses,
+}) => {
   const navigate = useNavigate();
+  const classes = upcomingClasses ?? [];
+
   return (
     <div className="box-border flex flex-col items-start gap-[28px] w-[687px] max-w-[687px] min-w-[643px] h-auto bg-white border border-[#E8EAED] shadow-[0px_4px_24px_rgba(0,0,0,0.04)] rounded-[8px] font-['Poppins']">
       <div className="flex flex-col items-start p-[24px] gap-[24px] w-full h-auto">
@@ -22,29 +40,21 @@ const UpcomingClassesCard: React.FC = () => {
         </div>
 
         <div className="flex flex-col items-start gap-[20px] w-full">
-          <UpcomingClassItem
-            time="8:30"
-            period="am"
-            title="The mole - class 3"
-            grade="Prep 2"
-            statusText="2 min left"
-            statusColor="#CC3363"
-            buttonOpacity="1"
-            attendeesCount="11"
-          />
-
-          <div className="w-full h-0 border border-[#E8EAED]"></div>
-
-          <UpcomingClassItem
-            time="3:30"
-            period="pm"
-            title="The atom - class 4"
-            grade="Prep 3"
-            statusText="7 hr left"
-            statusColor="#2DB584"
-            buttonOpacity="0.5"
-            attendeesCount="5"
-          />
+          {classes.length === 0 ? (
+           <UpcomingEmpty/>
+          ) : (
+            classes.map((cls, index) => (
+              <React.Fragment key={`${cls.roomName ?? cls.title}-${index}`}>
+                <UpcomingClassItem
+                  cls={cls}
+                  isLast={index === classes.length - 1}
+                />
+                {index !== classes.length - 1 && (
+                  <div className="w-full h-0 border border-[#E8EAED]"></div>
+                )}
+              </React.Fragment>
+            ))
+          )}
         </div>
       </div>
     </div>
