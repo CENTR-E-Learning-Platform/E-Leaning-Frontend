@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import time from '../../../assets/icons/alert.svg';
 export const QuizHeaderAttempt: React.FC = () => {
   const data = JSON.parse(localStorage.getItem("attemptData") || "null");
-  
+
   const totalSeconds = data?.timeLimitInMinutes ? data.timeLimitInMinutes * 60 : 0;
   const [timeLeft, setTimeLeft] = useState<number>(totalSeconds);
 
@@ -24,11 +24,11 @@ export const QuizHeaderAttempt: React.FC = () => {
   const formatDueDate = (dateStr: string) => {
     if (!dateStr) return "";
     const date = new Date(dateStr);
-    return date.toLocaleString('en-US', { 
-      weekday: 'long', 
-      hour: 'numeric', 
-      minute: 'numeric', 
-      hour12: true 
+    return date.toLocaleString('en-US', {
+      weekday: 'long',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
     });
   };
 
@@ -37,7 +37,7 @@ export const QuizHeaderAttempt: React.FC = () => {
   return (
     <div className="box-border flex flex-row justify-between items-center px-[23px] py-[14px] w-[1045px] max-w-[1045px] h-[68px] bg-white/80 border border-[#E8EAED] shadow-[0px_1px_2px_rgba(0,0,0,0.05)] backdrop-blur-[12px] rounded-[7px]">
       <div className="flex flex-row items-center gap-[15px]">
-       
+
         <div className="flex flex-col items-start">
           <h1 className="m-0 font-['Manrope',sans-serif] font-bold text-[16px] leading-[25px] text-[#181C20]">
             {data?.quizTitle}
@@ -49,7 +49,7 @@ export const QuizHeaderAttempt: React.FC = () => {
       </div>
 
       <div className={`flex flex-row items-center py-[7px] px-[15px] gap-[7px] rounded-full transition-colors duration-300 ${isDanger ? 'bg-[#FFDAD6]' : 'bg-[#DCFCE7]'}`}>
-       <img src={time} className='w-[10px] h-[11px]' alt="" />
+        <img src={time} className='w-[10px] h-[11px]' alt="" />
         <span className={`font-['Manrope',sans-serif] font-bold text-[13px] leading-[18px] ${isDanger ? 'text-[#BA1A1A]' : 'text-[#166534]'}`}>
           {formatTime(timeLeft)}
         </span>
