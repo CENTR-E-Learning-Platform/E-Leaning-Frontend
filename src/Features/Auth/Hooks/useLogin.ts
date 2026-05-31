@@ -19,14 +19,13 @@ export const useLogin = () => {
         var token = res.data.data.token;
         localStorage.setItem("token", token);
         const roleToAuth = res.data.data.roles[0];
-        localStorage.setItem("roleToAuth" , roleToAuth);
+        localStorage.setItem("roleToAuth", roleToAuth);
         console.log(res.data.message);
-        navigate("/home")
-        window.location.href = "/home";
+        window.location.href = "http://localhost:5173/home";
       } catch (error: any) {
         const MSError = error.response?.data.errors[0] || error.message;
         console.error(" Login failed:", error.status);
-        if (MSError === "OTP verification required. Check your email." ||  error.status === 403) {
+        if (MSError === "OTP verification required. Check your email." || error.status === 403) {
           localStorage.setItem("emailForOTP", values.email);
           navigate("/login/otp");
         } else {
