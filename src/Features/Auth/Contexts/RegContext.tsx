@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import type {FormRegisterType , UserRegister  } from '../Types/user';
 
-
 interface AuthContextType {
   userData: UserRegister | null;
   setUserData: React.Dispatch<React.SetStateAction<UserRegister | null>>;
@@ -9,6 +8,8 @@ interface AuthContextType {
   setrole: React.Dispatch<React.SetStateAction<string | null>>;
   educationLevelOrSubject: string | null;
   seteducationLevelOrSubject: React.Dispatch<React.SetStateAction<string | null>>;
+  socialProvider: string | null;
+  setSocialProvider: React.Dispatch<React.SetStateAction<string | null>>;
   FormRegister?: FormRegisterType;
 }
 
@@ -20,22 +21,23 @@ export const RegProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const storedRole = localStorage.getItem("role");
   const storeEducationLevelOrSubject = localStorage.getItem("educationLevelOrSubject");
 
-
   const [userData, setUserData] = useState<UserRegister | null>(
     storedUser ? JSON.parse(storedUser) : null
   );
   const [role, setrole] = useState<string | null>(() => {
-  try {
-    return storedRole ? JSON.parse(storedRole) : null;
-  } catch {
-    return storedRole; 
-  }
-});
+    try {
+      return storedRole ? JSON.parse(storedRole) : null;
+    } catch {
+      return storedRole;
+    }
+  });
   const [educationLevelOrSubject, seteducationLevelOrSubject] = useState<string | null>(
     storeEducationLevelOrSubject ? JSON.parse(storeEducationLevelOrSubject) : null
   );
+  const [socialProvider, setSocialProvider] = useState<string | null>(
+    localStorage.getItem("socialProvider")
+  );
 
-  
   useEffect(() => {
     if (userData) {
       localStorage.setItem("userData", JSON.stringify(userData));
@@ -52,7 +54,7 @@ export const RegProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   }, [role]);
 
-   useEffect(() => {
+  useEffect(() => {
     if (educationLevelOrSubject) {
       localStorage.setItem("educationLevelOrSubject", JSON.stringify(educationLevelOrSubject));
     } else {
@@ -60,14 +62,22 @@ export const RegProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   }, [educationLevelOrSubject]);
 
-  const FormRegister = { ...(userData ?? {}), ...(role ? { role } : {}) , ...(educationLevelOrSubject ? { educationLevelOrSubject } : {}) };
+  useEffect(() => {
+    if (socialProvider) {
+      localStorage.setItem("socialProvider", socialProvider);
+    } else {
+      localStorage.removeItem("socialProvider");
+    }
+  }, [socialProvider]);
+
+  const FormRegister = { ...(userData ?? {}), ...(role ? { role } : {}), ...(educationLevelOrSubject ? { educationLevelOrSubject } : {}) };
+
   return (
-    <AuthContext.Provider value={{ userData, setUserData, setrole, role , educationLevelOrSubject, seteducationLevelOrSubject , FormRegister }}>
+    <AuthContext.Provider value={{ userData, setUserData, setrole, role, educationLevelOrSubject, seteducationLevelOrSubject, socialProvider, setSocialProvider, FormRegister }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useRegContext = (): AuthContextType => {
