@@ -88,49 +88,32 @@ const Navbar = () => {
                     </NavLink>
                 </ul>
             </div>
-
-            {isAuth ?
-                <div className="flex gap-[8px]">
-                    <NavLink to="/notification" className="">
-                        <div className="p[13px] border-1 rounded-3xl border-[#D1D5DB] flex justify-center items-center w-[37px] h-[37px]">
-                            <img src={notify} alt="NotificationIcon" />
-                        </div>
-                    </NavLink>
-
-                    <div className="relative" ref={dropdownRef}>
-                        <div
-                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                            className="p[13px] rounded-3xl flex justify-center items-center w-[37px] h-[37px] cursor-pointer">
-                            <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full object-cover' src={avatarImage} alt="Profile" />
-                        </div>
-
-                        {isDropdownOpen && (
-                            <div className="absolute right-0 top-[calc(100%+10px)] z-50">
-                                <UserProfileDropdown
-                                    userName={userName || "Ahmed Mohamed"}
-                                    userEmail={userEmail || "ahmed@email.com"}
-                                    avatarUrl={avatarImage}
-                                    onLogout={handleLogout}
-                                />
-                            </div>
-                        )}
+            <div className="flex gap-[8px]">
+                <NavLink to="/notification" className="">
+                    <div className="p[13px] border-1 rounded-3xl border-[#D1D5DB] flex justify-center items-center w-[37px] h-[37px]">
+                        <img src={notify} alt="NotificationIcon" />
                     </div>
-                </div> :
-                <div className="flex items-center gap-[24px]">
-                    <NavLink
-                        to="/login"
-                        className="text-[16px] font-bold text-[#2A2D34] hover:text-[#525FE1] transition-colors duration-300"
-                    >
-                        Log in
-                    </NavLink>
-                    <NavLink
-                        to="/auth"
-                        className="px-[24px] py-[10px] bg-[#525FE1] text-white text-[16px] font-semibold rounded-full shadow-sm hover:bg-[#404DDD] hover:shadow-md hover:-translate-y-[2px] transition-all duration-300"
-                    >
-                        Sign up
-                    </NavLink>
+                </NavLink>
+
+                <div className="relative" ref={dropdownRef}>
+                    <div
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="p[13px] rounded-3xl flex justify-center items-center w-[37px] h-[37px] cursor-pointer">
+                        <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full object-cover' src={avatarImage} alt="Profile" />
+                    </div>
+
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 top-[calc(100%+10px)] z-50">
+                            <UserProfileDropdown
+                                userName={userName || "Ahmed Mohamed"}
+                                userEmail={userEmail || "ahmed@email.com"}
+                                avatarUrl={avatarImage}
+                                onLogout={handleLogout}
+                            />
+                        </div>
+                    )}
                 </div>
-            }
+            </div>
         </nav>
 
         <main className="w-full">
