@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Reg_Log from "../../../../assets/images/Reg&Log.png";
 import teacher_img from "../../../../assets/images/Teacher.png";
 import student_img from "../../../../assets/images/Student.png";
 import { usehandelBackRegister } from "../../Hooks/useRegister";
 import logo from '../../../../assets/icons/logo.svg';
+import { useNavigate } from "react-router-dom";
+import { useRegContext } from "../../Contexts/RegContext";
+
 const OptionRegister: React.FC = () => {
   const { role, setrole, handleContinue } = usehandelBackRegister();
+  const { setSocialProvider, seteducationLevelOrSubject } = useRegContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setrole(null);
+    seteducationLevelOrSubject(null);
+  }, []);
+
+  const handleBack = () => {
+    setSocialProvider(null);
+    navigate("/login");
+  };
 
   return (
     <React.Fragment>
@@ -18,9 +33,9 @@ const OptionRegister: React.FC = () => {
               </header>
 
               <article className="flex flex-col items-center justify-center mt-[20px]">
-                <h2 className="text-[40px] mt-[50] font-bold leading-[29px] font-poppins text-[#2A2D34]">
+                {/* <h2 className="text-[40px] mt-[50] font-bold leading-[29px] font-poppins text-[#2A2D34]">
                   Join as a
-                </h2>
+                </h2> */}
 
                 <section className="h-[251.015625px] mt-[10px] w-[379.6875px] mb-[10px] flex items-center gap-6 justify-center max-[390px]:flex-col max-[390px]:h-auto max-[390px]:w-full">
                   <div
@@ -31,10 +46,9 @@ const OptionRegister: React.FC = () => {
                       border-2
                       cursor-pointer
                       transition-all duration-400
-                      ${
-                        role === "Student"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
+                      ${role === "Student"
+                        ? "bg-[#525FE114] border-[#525FE1]"
+                        : "border-[#DDDFE4]"
                       } 
                       hover:border-[#525FE1]
                     `}
@@ -48,7 +62,7 @@ const OptionRegister: React.FC = () => {
                       Student
                     </h3>
                     <p className="font-normal p-1.5 text-[13px] leading-[122%] text-center text-[#6D7588]">
-                      Start your<br/> learning journey
+                      Start your<br /> learning journey
                     </p>
                   </div>
 
@@ -60,10 +74,9 @@ const OptionRegister: React.FC = () => {
                       border-2 
                       cursor-pointer
                       transition-all duration-400
-                      ${
-                        role === "Teacher"
-                          ? "bg-[#525FE114] border-[#525FE1]"
-                          : "border-[#DDDFE4]"
+                      ${role === "Teacher"
+                        ? "bg-[#525FE114] border-[#525FE1]"
+                        : "border-[#DDDFE4]"
                       } 
                       hover:border-[#525FE1]
                     `}
@@ -77,14 +90,14 @@ const OptionRegister: React.FC = () => {
                       Teacher
                     </h3>
                     <p className="font-normal p-1.5  text-[13px]  leading-[122%] text-center text-[#6D7588]">
-                      Share your<br/> knowledge & earn
+                      Share your<br /> knowledge & earn
                     </p>
                   </div>
                 </section>
 
                 <div className="flex max-[390px]:flex-col-reverse sm:flex-row items-center gap-3 justify-center mt-6 mb-3">
                   <button
-                    // onClick={BackReg}
+                    onClick={handleBack}
                     className="w-[178.59375px] flex justify-center items-center cursor-pointer h-[36.5625px] text-[#525FE1] border border-[#525FE1] rounded-[8px]"
                   >
                     Back
@@ -93,15 +106,26 @@ const OptionRegister: React.FC = () => {
                     onClick={handleContinue}
                     disabled={!role}
                     className={`w-[178.59375px] h-[36.5625px] flex justify-center items-center rounded-[8px] border transition-all duration-300
-                      ${
-                        role
-                          ? "bg-[#525FE1] text-white border-[#525FE1] cursor-pointer"
-                          : "bg-gray-300 text-gray-500 border-[#525FE1] cursor-not-allowed"
+                      ${role
+                        ? "bg-[#525FE1] text-white border-[#525FE1] cursor-pointer"
+                        : "bg-gray-300 text-gray-500 border-[#525FE1] cursor-not-allowed"
                       }
                     `}
                   >
                     Continue
                   </button>
+                </div>
+                <div className="flex justify-center items-center mt-2">
+                  <p className="text-[13px] text-[#2A2D34] text-center">
+                    Already have an account?{" "}
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="text-[#525FE1] font-semibold hover:underline bg-transparent border-none cursor-pointer p-0"
+                    >
+                      Log in
+                    </button>
+                  </p>
                 </div>
               </article>
             </div>
