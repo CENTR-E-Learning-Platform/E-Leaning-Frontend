@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Children, lazy, Suspense } from "react";
+import LandingPage from "../Features/LandingPage/Pages/LandingPage";
 import MainRegister from "../Features/Auth/Pages/MainRegister";
 import MainLogin from "../Features/Auth/Pages/MainLogin";
 import TeacherOption from "../Features/Auth/Components/Register/TeacherOption";
@@ -57,8 +58,11 @@ const ViewTeacher = Loadable(lazyWithDelay(() => import("../Features/Profile/Pag
 // const MainStudentHome = Loadable(lazyWithDelay(() => import("../Features/Home/Pages/MainStudentHome")));
 
 const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
+const isAuthenticated = !!localStorage.getItem("token");
 
 export const router = createBrowserRouter([
+  { path: "/landing", element: <LandingPage /> },
+
   {
     path: "/explore/TeacherPayment", element: <MainPayment />, children: [
       { path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard /> },
@@ -70,7 +74,7 @@ export const router = createBrowserRouter([
 
 
   {
-    path: "/", element: <Navbar />, children: [
+    path: "/", element: isAuthenticated ? <Navbar /> : <LandingPage />, children: isAuthenticated ? [
       { path: "OptionRegister", element: <OptionRegister /> },
       // { path: "/meeting", element: <LiveRoom /> },
       { path: "Calendar", element: <MainCalendar /> },
@@ -78,8 +82,7 @@ export const router = createBrowserRouter([
       { path: "home", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
       { path: "", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
       { path: "messages", element: <MainMessage /> },
-
-    ]
+    ] : [],
   },
 
   {
