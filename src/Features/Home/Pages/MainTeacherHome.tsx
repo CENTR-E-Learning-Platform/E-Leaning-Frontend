@@ -14,6 +14,7 @@ import { useTeacherDashboardInfo } from "../Hooks/useGetTeacherDashboardInfo";
 import ActiveQuizzes from "../Components/TeacherHome/ActiveQuizzes";
 import UpcomingClassesCard from "../Components/TeacherHome/UpcomingClassesCard";
 import { useUpcomingClassesForTeacher } from "../Hooks/useGetUpcomingCalssesForTeacher";
+import { useGetQuizzesTeacher } from "../Hooks/useGetQuizzesTeacher";
 
 const MainTeacherHome = () => {
   const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
@@ -21,6 +22,7 @@ const MainTeacherHome = () => {
   // Call API to get the dashboard info and pass it to the components as needed
   const { data: dataTeacherDashboardInfo } = useTeacherDashboardInfo();
   const { data: upcomingClassesDataTeacher } = useUpcomingClassesForTeacher();
+  const { data: quizzesDataTeacher } = useGetQuizzesTeacher();
   const upcomingClasses =
     upcomingClassesDataTeacher?.data?.data ??
     upcomingClassesDataTeacher?.data ??
@@ -31,6 +33,7 @@ const MainTeacherHome = () => {
     dataTeacherDashboardInfo?.data?.data,
   );
   console.log("upcomingClassesDataTeacher hook called", upcomingClasses);
+  console.log("quizzesDataTeacher hook called", quizzesDataTeacher?.data?.data);
 
   const statsData = [
     {
@@ -124,7 +127,7 @@ const MainTeacherHome = () => {
               </div>
               <div className="flex flex-col w-[453px] items-start gap-9 relative">
                 <RecentHomeworks />
-                <ActiveQuizzes />
+                <ActiveQuizzes quizzes={quizzesDataTeacher?.data?.data ?? []} />
                 <RecentMessages />
               </div>
             </div>
