@@ -8,10 +8,8 @@ const ForgetPassword = () => {
 
   return (
     <main className="h-[100vh] flex w-full">
-      {/* Left Section (Form) */}
       <section className="w-[50%] flex justify-center bg-[#F9FBFC]">
         <article className="flex flex-col items-center justify-center">
-          {/* Header */}
           <header className="flex flex-col justify-center items-center mb-[11px]">
             <h1 className="font-bold text-[28px] text-[#2A2D34]">
               Forget password?
@@ -21,10 +19,8 @@ const ForgetPassword = () => {
             </p>
           </header>
 
-          {/* Form */}
           <section className="mt-[12px]">
             <form onSubmit={formik.handleSubmit}>
-              {/* Email Input */}
               <div className="flex flex-col relative">
                 <label
                   htmlFor="email"
@@ -56,7 +52,6 @@ const ForgetPassword = () => {
                 )}
               </div>
 
-              {/* Reset Button */}
               <button
                 className="font-semibold text-[#F9FBFC] cursor-pointer text-[14px] w-[379px] h-[36px] bg-[#525FE1] rounded-[4px] mt-[13px]"
                 type="submit"
@@ -65,9 +60,9 @@ const ForgetPassword = () => {
               </button>
             </form>
 
-            {/* Back to login */}
             <button
               type="button"
+              onClick={() => window.location.href = "/login"}
               className="cursor-pointer flex justify-center items-center mt-[9px] text-[#2A2D34] w-[379px] h-[36px] border-[#6D7588] border-[1px] rounded-[4px]"
             >
               <img
@@ -83,7 +78,6 @@ const ForgetPassword = () => {
         </article>
       </section>
 
-      {/* Right Section (Illustration) */}
       <aside
         style={{
           background: "linear-gradient(to bottom, #CBCFF6 10%, #525FE1 90%)",
