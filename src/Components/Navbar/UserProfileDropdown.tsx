@@ -60,13 +60,19 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
           </NavLink>
         )}
 
-        <NavLink
-          to="/wallet"
-          className="flex flex-row items-center py-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#F9FAFB] transition-colors rounded-[6px] no-underline"
-        >
-          <img src={walletIcon} alt="Wallet Icon" className="w-[16px] h-[15px] object-contain" />
-          <span className="flex items-center font-medium text-[14px] leading-[20px] text-[#434656]">Wallet</span>
-        </NavLink>
+        {!roleToAuth?.includes("Teacher") && (
+          <NavLink
+            to="/payment"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/payment";
+            }}
+            className="flex flex-row items-center py-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#F9FAFB] transition-colors rounded-[6px] no-underline"
+          >
+            <img src={walletIcon} alt="Wallet Icon" className="w-[16px] h-[15px] object-contain" />
+            <span className="flex items-center font-medium text-[14px] leading-[20px] text-[#434656]">Payment</span>
+          </NavLink>
+        )}
 
         <NavLink
           to={(roleToAuth?.includes("Teacher") ? "/setting/financial" : "/setting/profile")}
