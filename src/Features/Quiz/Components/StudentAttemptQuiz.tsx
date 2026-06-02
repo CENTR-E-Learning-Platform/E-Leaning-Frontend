@@ -26,6 +26,18 @@ export const StudentAttemptQuiz: React.FC = () => {
     setQuestions(parsed);
   }, []);
 
+  useEffect(() => {
+    const handleForceSubmit = async () => {
+      try {
+        await submit(selectedAnswers);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    window.addEventListener('forceSubmitQuiz', handleForceSubmit);
+    return () => window.removeEventListener('forceSubmitQuiz', handleForceSubmit);
+  }, [selectedAnswers, submit]);
+
   const handleOptionSelect = (questionId: number, optionId: number) => {
     setSelectedAnswers(prev => ({
       ...prev,
