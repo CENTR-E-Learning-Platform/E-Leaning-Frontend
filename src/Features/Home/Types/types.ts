@@ -24,3 +24,25 @@ export interface TeacherClass {
   startTime?: string;
   title?: string;
 }
+export interface UpcomingEmptyProps {
+  buttonLabel?: string;
+  navigatePath?: string;
+}
+export interface QuizDashboardStudent {
+  title: string;
+  subject: string;
+  dueDate: string;
+  quizId: number;
+  sessionId: string;
+}
+
+export interface TeacherData {
+  img: string;
+  name: string;
+  subject: string;
+  rating: string;
+  reviews: string;
+  price: string;
+  starIcon: string;
+  lineIcon: string;
+}
