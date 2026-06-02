@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import 'paymob-pixel'; 
+import 'paymob-pixel';
 import { useInitialAmount } from "../../Hooks/useInitialAmount";
 
 const DynamicPaymentCard = () => {
@@ -10,22 +10,22 @@ const DynamicPaymentCard = () => {
   useEffect(() => {
     const initPayment = async () => {
       await sendAmount();
-      
+
       const testPublicKey = localStorage.getItem("publicKey");
       const testClientSecret = localStorage.getItem("clientSecret");
-      
+
       if (!isInitialized.current && testPublicKey && testClientSecret) {
         try {
           console.log("public id: " + testPublicKey);
           console.log("client secret: " + testClientSecret);
-          
+
           const pixel = new (window as any).Pixel({
             publicKey: testPublicKey,
             clientSecret: testClientSecret,
             paymentMethods: ['wallet', 'card'],
             elementId: 'paymob-elements',
             showSaveCard: true,
-            
+
             customStyle: {
               Color_Primary: '#525FE1',
               Color_Text: '#2A2D34',
@@ -70,7 +70,7 @@ const DynamicPaymentCard = () => {
           </p>
         </div>
         <Link
-          to={"/explore/TeacherPayment/mobileWallet"}
+          to={"/payment/mobileWallet"}
           className="h-[77px] w-[145px] flex flex-col items-center justify-center rounded-[4px] p-[16px] border gap-[10px] border-gray-300"
         >
           <img src="/src/assets/icons/MobilewalletB.svg" alt="Wallet" />
