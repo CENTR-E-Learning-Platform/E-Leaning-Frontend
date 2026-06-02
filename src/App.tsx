@@ -11,6 +11,7 @@ import { SettingProvider } from "./Features/Setting/Context/useSettingContext";
 import { QuizProvider } from "./Features/Quiz/Context/QuizContext";
 import { ChatProvider } from "./Features/Messages/Contexts/ShareDataMessages";
 import { DataContactItemsProvider } from "./Features/Messages/Contexts/ShareDataContactItems";
+import { NotificationProvider } from "./Features/Notification/Contexts/NotificationContext";
 function App() {
   const queryClient = new QueryClient();
   return (
@@ -24,7 +25,9 @@ function App() {
                   <LoginProvider>
                     <RegProvider>
                       <RoomProvider>
-                        <RouterProvider router={router} />
+                        <NotificationProvider>
+                          <RouterProvider router={router} />
+                        </NotificationProvider>
                       </RoomProvider>
                     </RegProvider>
                   </LoginProvider>
