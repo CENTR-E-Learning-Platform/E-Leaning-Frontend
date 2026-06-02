@@ -36,6 +36,26 @@ export interface QuizDashboardStudent {
   sessionId: string;
 }
 
+export interface ReviewCardProps {
+  name: string;
+  date: string;
+  comment: string;
+  avatarUrl: string;
+  rating: number;
+}
+
+export interface DashboardReview {
+  studentName: string;
+  reviewText: string;
+  rating: number;
+  reviewDate: string;
+  reviewProfilePicture: string;
+}
+
+export interface RecentReviewsProps {
+  reviews?: DashboardReview[];
+}
+
 export interface TeacherData {
   img: string;
   name: string;
