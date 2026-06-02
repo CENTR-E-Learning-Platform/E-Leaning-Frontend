@@ -1,6 +1,10 @@
 import axios from 'axios';
-import { SEND_EMAIL } from '../Utils/api';
+import { RESEND_EMAIL_API } from '../Utils/api';
 
-export const SendEmail = async (data :any) => {
-    return axios.post(SEND_EMAIL , data);
+export const SendEmail = async (data: any) => {
+    return axios.post(RESEND_EMAIL_API,
+        {
+            email: data,
+            type: 0,
+        });
 }
