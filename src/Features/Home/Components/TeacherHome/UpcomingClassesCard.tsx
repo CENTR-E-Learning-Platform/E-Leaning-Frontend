@@ -2,7 +2,7 @@ import React from "react";
 import UpcomingClassItem from "./UpcomingClassItem";
 import { useNavigate } from "react-router-dom";
 import UpcomingEmpty from "../EmptyState/UpcomingEmpty";
-import type { TeacherClass } from "../../Types/Types";
+import type { TeacherClass } from "../../Types/types";
 
 interface UpcomingClassesCardProps {
   upcomingClasses?: TeacherClass[];
@@ -15,7 +15,12 @@ const UpcomingClassesCard: React.FC<UpcomingClassesCardProps> = ({
   const classes = upcomingClasses ?? [];
 
   if (classes.length === 0) {
-    return <UpcomingEmpty />;
+    return (
+      <UpcomingEmpty
+        buttonLabel="Create New Session"
+        navigatePath="/Calendar"
+      />
+    );
   }
 
   return (
