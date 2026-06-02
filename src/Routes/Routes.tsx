@@ -9,7 +9,6 @@ import OTP from "../Features/Auth/Components/Log in/OTP";
 import ForgetPassword from "../Features/Auth/Components/Log in/ForgetPassword";
 import SetNewPassword from "../Features/Auth/Components/Log in/SetNewPassword";
 import EmailConfig from "../Features/Auth/Components/Register/EmailConfig";
-import MainPayment from "../Features/Payment/Pages/MainPayment";
 import DynamicPaymentCard from "../Features/Payment/Components/Payment/DynamicPaymentCard";
 import DynamicPaymentMobileWallet from "../Features/Payment/Components/Payment/DynamicPaymentMobileWallet";
 import DynamicPaymentMobileWalletconfirm from "../Features/Payment/Components/Payment/DynamicPaymentMobileWalletconfirm";
@@ -32,6 +31,7 @@ import ResultQuiz from "../Features/Quiz/Pages/ResultQuiz";
 import StartQuizforStudent from "../Features/Quiz/Pages/StartQuizforStudent";
 import { roleToAuth } from "../Utils/Constant";
 import DashboardQuiz from "../Features/Quiz/Pages/DashboardQuiz";
+import NotificationsPage from "../Features/Notification/Pages/NotificationsPage";
 const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000) => {
   return lazy(() =>
     Promise.all([
@@ -55,6 +55,8 @@ const QuizSetting = (lazyWithDelay(() => import("../Features/Quiz/Pages/QuizSett
 const CreateNewQuiz = Loadable(lazyWithDelay(() => import("../Features/Quiz/Pages/CreateNewQuiz")));
 const MainSetting = Loadable(lazyWithDelay(() => import("../Features/Setting/Pages/MainSetting")));
 const ViewTeacher = Loadable(lazyWithDelay(() => import("../Features/Profile/Pages/ViewTeacher")));
+const DynamicPaymewantMobileWallet = Loadable(lazyWithDelay(() => import("../Features/Payment/Components/Payment/DynamicPaymentMobileWallet")));
+const MainPayment = Loadable(lazyWithDelay(() => import("../Features/Payment/Pages/MainPayment")));
 // const MainStudentHome = Loadable(lazyWithDelay(() => import("../Features/Home/Pages/MainStudentHome")));
 
 const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
@@ -64,11 +66,11 @@ export const router = createBrowserRouter([
   { path: "/landing", element: <LandingPage /> },
 
   {
-    path: "/explore/TeacherPayment", element: <MainPayment />, children: [
-      { path: "/explore/TeacherPayment/paymentCart", element: <DynamicPaymentCard /> },
-      { path: "/explore/TeacherPayment", element: <DynamicPaymentCard /> },
-      { path: "/explore/TeacherPayment/mobileWallet", element: <DynamicPaymentMobileWallet /> },
-      { path: "/explore/TeacherPayment/mobileWallet/confirm", element: <DynamicPaymentMobileWalletconfirm /> }
+    path: "/payment", element: <MainPayment />, children: [
+      { path: "/payment/paymentCart", element: <DynamicPaymentCard /> },
+      { path: "/payment", element: <DynamicPaymentCard /> },
+      { path: "/payment/mobileWallet", element: <DynamicPaymentMobileWallet /> },
+      { path: "/payment/mobileWallet/confirm", element: <DynamicPaymentMobileWalletconfirm /> }
     ]
   },
 
@@ -82,6 +84,7 @@ export const router = createBrowserRouter([
       { path: "home", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
       { path: "", element: isTeacher ? <MainTeacherHome /> : <MainStudentHome /> },
       { path: "messages", element: <MainMessage /> },
+      { path: "notifications", element: <NotificationsPage /> },
     ] : [],
   },
 
@@ -92,8 +95,10 @@ export const router = createBrowserRouter([
       isTeacher ? { path: "financial", element: <MainFinancial /> } : {},
       { path: "security", element: <ChangePassword /> },
       { path: "notification", element: <NotificationsSettings /> },
+
     ]
   },
+  !isTeacher ? { path: "wallet", element: <DynamicPaymewantMobileWallet /> } : {},
   { path: "teacher-option", element: <TeacherOption /> },
   { path: "student-option", element: <StudentOption /> },
   { path: "/confing", element: <EmailConfig /> },
