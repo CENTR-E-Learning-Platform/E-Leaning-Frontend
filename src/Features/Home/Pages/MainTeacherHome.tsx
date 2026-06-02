@@ -1,4 +1,4 @@
-﻿import { StatCard } from "../Components/StudentHome/StatCard";
+import { StatCard } from "../Components/StudentHome/StatCard";
 import { HeroBanner } from "../Components/TeacherHome/HeroBanner";
 import solid_book from "../../../assets/icons/fa6-solid_book.svg";
 import rightIcon from "../../../assets/icons/Vector (28).svg";
@@ -7,14 +7,16 @@ import mdi_people from "../../../assets/icons/mdi_people.svg";
 import Dollar from "../../../assets/icons/Dollar.svg";
 import StarIcon from "../../../assets/icons/StarIcon.svg";
 import { roleToAuth } from "../../../Utils/Constant";
-import RecentMessages from "../Components/TeacherHome/RecentMessages";
-import RecentHomeworks from "../Components/TeacherHome/RecentHomeworks";
+// import RecentMessages from "../Components/TeacherHome/RecentMessages";
+// import RecentHomeworks from "../Components/TeacherHome/RecentHomeworks";
 import RecentReviews from "../Components/TeacherHome/RecentReviews";
 import { useTeacherDashboardInfo } from "../Hooks/useGetTeacherDashboardInfo";
 import ActiveQuizzes from "../Components/TeacherHome/ActiveQuizzes";
 import UpcomingClassesCard from "../Components/TeacherHome/UpcomingClassesCard";
 import { useUpcomingClassesForTeacher } from "../Hooks/useGetUpcomingCalssesForTeacher";
 import { useGetQuizzesTeacher } from "../Hooks/useGetQuizzesTeacher";
+import RecentHomeworksEmpty from "../Components/EmptyState/RecentHomeworksEmpty";
+import RecentMessagesEmpty from "../Components/EmptyState/RecentMessagesEmpty";
 
 const MainTeacherHome = () => {
   const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
@@ -126,9 +128,11 @@ const MainTeacherHome = () => {
                 <RecentReviews />
               </div>
               <div className="flex flex-col w-[453px] items-start gap-9 relative">
-                <RecentHomeworks />
+                {/* <RecentHomeworks /> */}
+                <RecentHomeworksEmpty />
                 <ActiveQuizzes quizzes={quizzesDataTeacher?.data?.data ?? []} />
-                <RecentMessages />
+                {/* <RecentMessages /> */}
+                <RecentMessagesEmpty />
               </div>
             </div>
           </div>
