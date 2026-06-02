@@ -1,8 +1,13 @@
 import React from "react";
 import CalenderPhoto from "../../../../assets/images/CalenderPhoto.png";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
+import type { UpcomingEmptyProps } from "../../Types/types";
 
-const UpcomingEmpty: React.FC = () => {
+
+const UpcomingEmpty: React.FC<UpcomingEmptyProps> = ({
+  buttonLabel = "Explore teachers",
+  navigatePath = "/explore",
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -34,11 +39,11 @@ const UpcomingEmpty: React.FC = () => {
         </div>
 
         <button
-          onClick={() => navigate("/explore")}
+          onClick={() => navigate(navigatePath)}
           className="box-border flex flex-row justify-center items-center px-[16px] py-[14px] gap-[4px] w-[400px] h-[41px] bg-[#525FE1] hover:bg-[#434dbd] transition-colors rounded-[8px] border-none outline-none"
         >
           <span className="w-full h-[13px] font-semibold text-[18px] leading-[13px] text-[#F9FBFC] text-center">
-            Explore teachers
+            {buttonLabel}
           </span>
         </button>
       </div>
