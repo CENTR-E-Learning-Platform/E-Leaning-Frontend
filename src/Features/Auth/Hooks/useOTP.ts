@@ -30,7 +30,10 @@ export const useOTP = () => {
           console.log(" Login successful:", res.data);
           var token = res.data.data.token;
           localStorage.setItem("token", token);
+          const roleToAuth = res.data.data.roles[0];
+          localStorage.setItem("roleToAuth", roleToAuth);
           console.log(token);
+          window.location.href = "/";
         } catch (error: any) {
           const MSError = error.response?.data.errors[0] || error.message;
           console.error(" Login failed:", MSError);
@@ -54,18 +57,13 @@ export const useOTPHandler = (formik: any) => {
   ) => {
     const value = e.target.value;
 
-    // منع أي إدخال غير رقمي
     if (/[^0-9]/.test(value)) {
       e.target.value = "";
       return;
     }
 
-    // تحديث قيمة الـ OTP داخل Formik
     formik.values.otp[index] = value;
-    // أو ممكن تستخدم setFieldValue لو عايز تعمل re-render:
-    // formik.setFieldValue(`otp[${index}]`, value);
 
-    // التنقل التلقائي بين الخانات
     if (value && index < inputRef.current.length - 1) {
       inputRef.current[index + 1]?.focus();
     }
