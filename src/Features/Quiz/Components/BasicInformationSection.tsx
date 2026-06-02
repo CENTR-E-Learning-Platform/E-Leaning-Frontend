@@ -7,18 +7,26 @@ import { useCreateQuiz } from '../Hooks/useCreateQuiz';
 export const BasicInformationSection: React.FC = () => {
   const { QuizDataTime, setQuizDataTime } = useQuiz();
   const { GetAllClassesQuiz } = useCreateQuiz();
+
+  const Subjects = localStorage.getItem("classesQuizData")? JSON.parse(localStorage.getItem("classesQuizData") || "[]") : [];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const data = JSON.parse(e.target.value);
-    localStorage.setItem("sessionId" , data.sessionId);
-    setQuizDataTime((prev) => ({ ...prev, ["Class"]: data.subjectName  }));
+    const { name, value } = e.target;
+    
+    if (name === "Title") {
+      setQuizDataTime((prev) => ({ ...prev, [name]: value }));
+    } else if (name === "Class") {
+      const selectedSubject = Subjects.find((s: any) => s.subjectName === value);
+      if (selectedSubject) {
+        localStorage.setItem("sessionId", selectedSubject.sessionId);
+        setQuizDataTime((prev) => ({ ...prev, [name]: value }));
+      }
+    }
   };
   
   useEffect(()=>{
     GetAllClassesQuiz();
   } , [GetAllClassesQuiz]);
-
-  const Subjects = localStorage.getItem("classesQuizData")? JSON.parse(localStorage.getItem("classesQuizData") || "") : [];
-  console.log(Subjects);
 
   const handlGrads = (grade:number)=>{
     switch(grade){
@@ -87,16 +95,12 @@ export const BasicInformationSection: React.FC = () => {
                 onChange={handleChange}
                 className="appearance-none flex flex-row items-center px-[15px] py-[11px] w-full h-[43px] bg-[#F1F4F9] rounded-lg border-none outline-none font-normal text-[15px] leading-[22px] text-[#2A2D34] cursor-pointer"
               >
-                {Subjects?.map((subject: any) => (
-                  <option value={JSON.stringify({
-                    subjectName : subject.subjectName,
-                    sessionId: subject.sessionId
-                  })} >
+                <option value="" disabled>Select a class</option>
+                {Subjects?.map((subject: any, index: number) => (
+                  <option key={index} value={subject.subjectName} >
                     {subject.subjectName} , {handlGrads(subject.grade)}
                   </option>
                 ))}
-                {/* <option value="Chemistry - Prep 2 (25 students)">Chemistry - Prep 2 (25 students)</option>
-                <option value="Physics - Prep 2 (30 students)">Physics - Prep 2 (30 students)</option> */}
               </select>
               <div className="absolute right-[15px] top-1/2 -translate-y-1/2 pointer-events-none">
                 <img src={arrow} className="w-[10px] h-[6px]" alt="arrow icon" />
