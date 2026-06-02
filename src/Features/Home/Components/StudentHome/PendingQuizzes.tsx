@@ -8,7 +8,6 @@ const PendingQuizzes: React.FC = () => {
   const navigate = useNavigate();
   const { data: quizzesData } = useGetQuizzesStudent();
   console.log("Quizzes data in PendingQuizzes component", quizzesData);
-  // Calculate days left from dueDate
   const calculateDaysLeft = (dueDate: string): string => {
     const due = new Date(dueDate);
     const now = new Date();
