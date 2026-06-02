@@ -2,8 +2,7 @@ import React from "react";
 
 import { HeroBanner } from "../Components/StudentHome/HeroBanner";
 import {
-  RecommendedTeacherCard,
-  type TeacherData,
+  RecommendedTeacherCard
 } from "../Components/StudentHome/RecommendedTeacherCard";
 import { StatCard } from "../Components/StudentHome/StatCard";
 import {
@@ -14,21 +13,24 @@ import {
 import vector from "../../../assets/icons/fa6-solid_book.svg";
 import image from "../../../assets/icons/Vector (28).svg";
 import vector3 from "../../../assets/icons/mdi_human-greeting-variant.svg";
-import RecentMessages from "../Components/StudentHome/RecentMessages";
+// import RecentMessages from "../Components/StudentHome/RecentMessages";
 import RecentHomeworks from "../Components/StudentHome/RecentHomeworks";
+import PendingQuizzes from "../Components/StudentHome/PendingQuizzes";
 import { useUpcomingClassesForStudent } from "../Hooks/useGetUpcomingClassesForStudent";
 import { useStudentDashboardInfo } from "../Hooks/useGetStudentDashboardInfo";
 import { useNavigate } from "react-router-dom";
 import UpcomingEmpty from "../Components/EmptyState/UpcomingEmpty";
 import { useRecommendedTeacher } from "../Hooks/useGetRecommendedTeacher";
+import RecentMessagesEmpty from "../Components/EmptyState/RecentMessagesEmpty";
+import { RecommendedTeachersEmpty } from "../Components/EmptyState/RecommendedTeachersEmpty";
+import type { TeacherData } from "../Types/types";
 
 export const MainStudentHome: React.FC = () => {
-    const navigate = useNavigate();
-  // Call API to get the dashboard info and pass it to the components as needed
+  const navigate = useNavigate();
   const { data: dataDashboard } = useStudentDashboardInfo();
   console.log("StudentDashboardInfo hook called", dataDashboard?.data?.data);
   const { data: dataUpcoming } = useUpcomingClassesForStudent();
-  const {data: dataRecommended} = useRecommendedTeacher();
+  const { data: dataRecommended } = useRecommendedTeacher();
   console.log("UpcomingClasses Student hook called", dataUpcoming);
   console.log("RecommendedTeachers hook called", dataRecommended);
 
@@ -104,38 +106,50 @@ export const MainStudentHome: React.FC = () => {
       joinBg: "bg-[#525fe1]",
     })) || [];
 
-  const recommendedTeachersData: TeacherData[] = [
-    {
-      img: "/rectangle.png",
-      name: "Mr. Ahmed Khalil",
-      subject: "Physics",
-      rating: "4.8",
-      reviews: "(102)",
-      price: "Egp 100",
-      starIcon: "/vector-4.svg",
-      lineIcon: "/line-50-2.svg",
-    },
-    {
-      img: "/image.png",
-      name: "Mr. Ahmed Khalil",
-      subject: "Physics",
-      rating: "4.8",
-      reviews: "(102)",
-      price: "Egp 100",
-      starIcon: "/vector-5.svg",
-      lineIcon: "/line-50-3.svg",
-    },
-    {
-      img: "/rectangle-2.png",
-      name: "Mr. Ahmed Khalil",
-      subject: "Physics",
-      rating: "4.8",
-      reviews: "(102)",
-      price: "Egp 100",
-      starIcon: "/vector-6.svg",
-      lineIcon: "/line-50-4.svg",
-    },
-  ];
+  const recommendedTeachersData: TeacherData[] =
+    dataRecommended?.data?.data && dataRecommended?.data?.data?.length > 0
+      ? dataRecommended?.data?.data?.map((teacher: any) => ({
+          img: teacher.teacherProfilePicture || "/rectangle.png",
+          name: teacher.teacherName,
+          subject: teacher.subjectName,
+          rating: teacher.averageRating?.toString() || "0.0",
+          reviews: `(${teacher.totalRatings || 0})`,
+          price: `EGP ${teacher.pricePerSession}`,
+          starIcon: "/vector-4.svg",
+          lineIcon: "/line-50-2.svg",
+        }))
+      : [
+          {
+            img: "/rectangle.png",
+            name: "Mr. Ahmed Khalil",
+            subject: "Physics",
+            rating: "4.8",
+            reviews: "(102)",
+            price: "EGP 100",
+            starIcon: "/vector-4.svg",
+            lineIcon: "/line-50-2.svg",
+          },
+          {
+            img: "/image.png",
+            name: "Mr. Ahmed Khalil",
+            subject: "Physics",
+            rating: "4.8",
+            reviews: "(102)",
+            price: "EGP 100",
+            starIcon: "/vector-5.svg",
+            lineIcon: "/line-50-3.svg",
+          },
+          {
+            img: "/rectangle-2.png",
+            name: "Mr. Ahmed Khalil",
+            subject: "Physics",
+            rating: "4.8",
+            reviews: "(102)",
+            price: "EGP 100",
+            starIcon: "/vector-6.svg",
+            lineIcon: "/line-50-4.svg",
+          },
+        ];
 
   return (
     <div className="flex justify-center items-center mt-[50px]">
@@ -161,31 +175,36 @@ export const MainStudentHome: React.FC = () => {
 
         <div className="flex items-start gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
           <div className="flex flex-col w-[687px] items-end gap-9 relative">
-            {dataUpcoming?.data?.data?.length === 0 ? <UpcomingEmpty /> : <div className="flex flex-col min-w-[643px] items-start gap-7 px-6 py-[30px] relative self-stretch w-full flex-[0_0_auto] bg-white rounded-lg border border-solid border-[#e8eaed]">
-              <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
-                <div className="relative w-fit mt-[-1.00px] font-bold text-[#2a2d34] text-2xl tracking-[0] leading-[17px] whitespace-nowrap">
-                  Upcoming classes
-                </div>
-                <button className="bg-transparent border-none cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-0 relative flex-[0_0_auto] rounded-lg">
-                  <div onClick={() => {
-                        navigate("/Calendar");
-                      }} className="relative w-fit mt-[-2.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap">
-                    View Schedule
+            {dataUpcoming?.data?.data?.length === 0 ? (
+              <UpcomingEmpty />
+            ) : (
+              <div className="flex flex-col min-w-[643px] items-start gap-7 px-6 py-[30px] relative self-stretch w-full flex-[0_0_auto] bg-white rounded-lg border border-solid border-[#e8eaed]">
+                <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
+                  <div className="relative w-fit mt-[-1.00px] font-bold text-[#2a2d34] text-2xl tracking-[0] leading-[17px] whitespace-nowrap">
+                    Upcoming classes
                   </div>
-                </button>
+                  <button className="bg-transparent border-none cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-0 relative flex-[0_0_auto] rounded-lg">
+                    <div
+                      onClick={() => {
+                        navigate("/Calendar");
+                      }}
+                      className="relative w-fit mt-[-2.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap"
+                    >
+                      View Schedule
+                    </div>
+                  </button>
+                </div>
+                <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                  {classes.map((cls: any, index: number) => (
+                    <UpcomingClassItem
+                      key={cls.id || index}
+                      cls={cls}
+                      isLast={index === classes.length - 1}
+                    />
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-                {classes.map((cls: any, index: number) => (
-                  <UpcomingClassItem
-                    key={cls.id || index}
-                    cls={cls}
-                    isLast={index === classes.length - 1}
-                  />
-                ))}
-              </div>
-            </div>
-            }
-            
+            )}
 
             <div className="flex flex-col items-start gap-7 relative self-stretch w-full flex-[0_0_auto]">
               <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
@@ -193,25 +212,38 @@ export const MainStudentHome: React.FC = () => {
                   Recommended Teachers
                 </div>
                 <button className="bg-transparent border-none cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-3.5 relative flex-[0_0_auto] rounded-lg">
-                  <div onClick={() => {
-                        navigate("/explore");
-                      }} className="relative w-fit mt-[-1.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap">
+                  <div
+                    onClick={() => {
+                      navigate("/explore");
+                    }}
+                    className="relative w-fit mt-[-1.00px] font-medium text-[#525fe1] text-lg tracking-[0] leading-[13px] whitespace-nowrap"
+                  >
                     Explore More
                   </div>
                 </button>
               </div>
-              <div className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                {recommendedTeachersData.map((teacher, index) => (
-                  <RecommendedTeacherCard key={index} teacher={teacher} />
-                ))}
-              </div>
+              {dataRecommended?.data?.data &&
+              dataRecommended?.data?.data?.length > 0 ? (
+                <div className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
+                  {recommendedTeachersData.map((teacher, index) => (
+                    <RecommendedTeacherCard key={index} teacher={teacher} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
+                  {recommendedTeachersData.map((teacher, index) => (
+                    <RecommendedTeachersEmpty key={index} teacher={teacher} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
           <div className="flex flex-col w-[453px] items-start gap-9 relative">
+            <PendingQuizzes />
             <RecentHomeworks />
-
-            <RecentMessages />
+            <RecentMessagesEmpty />
+            {/* <RecentMessages /> */}
           </div>
         </div>
       </div>
