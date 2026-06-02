@@ -1,16 +1,6 @@
 import React from "react";
 import image from '../../../../assets/images/Rectangle.png';
-
-export interface TeacherData {
-  img: string;
-  name: string;
-  subject: string;
-  rating: string;
-  reviews: string;
-  price: string;
-  starIcon: string;
-  lineIcon: string;
-}
+import type { TeacherData } from "../../Types/types";
 
 export const RecommendedTeacherCard: React.FC<{ teacher: TeacherData }> = ({ teacher }) => {
   return (
@@ -55,7 +45,7 @@ export const RecommendedTeacherCard: React.FC<{ teacher: TeacherData }> = ({ tea
       <div className="flex flex-col justify-center items-center p-0 gap-[16px] w-[157px] h-[69px] flex-none order-2 self-stretch grow-0">
         
         <div className="flex flex-row justify-end items-end p-0 gap-[4px] w-[144px] h-[14px] flex-none order-0 grow-0">
-          <span className="w-[76px] h-[14px] font-['Poppins'] font-bold text-[20px] leading-[13px] text-[#525FE1] flex-none order-0 grow-0 m-0 p-0 flex items-center">
+          <span className="h-[14px] font-['Poppins'] font-bold text-[20px] leading-[13px] text-[#525FE1] flex-none order-0 grow-0 m-0 p-0 flex items-center">
             {teacher.price}
           </span>
           <span className="w-[64px] h-[10px] font-['Poppins'] font-normal text-[14px] leading-[13px] text-[#393D44] flex-none order-1 grow-0 text-right lowercase m-0 p-0 flex items-center">
