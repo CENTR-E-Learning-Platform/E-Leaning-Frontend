@@ -1,4 +1,4 @@
-import { StatCard } from "../Components/StudentHome/StatCard";
+﻿import { StatCard } from "../Components/StudentHome/StatCard";
 import { HeroBanner } from "../Components/TeacherHome/HeroBanner";
 import solid_book from "../../../assets/icons/fa6-solid_book.svg";
 import rightIcon from "../../../assets/icons/Vector (28).svg";
@@ -125,7 +125,11 @@ const MainTeacherHome = () => {
                 <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                   <UpcomingClassesCard upcomingClasses={upcomingClasses} />
                 </div>
-                <RecentReviews />
+                <RecentReviews
+                  reviews={
+                    dataTeacherDashboardInfo?.data?.data?.recentReviews ?? []
+                  }
+                />
               </div>
               <div className="flex flex-col w-[453px] items-start gap-9 relative">
                 {/* <RecentHomeworks /> */}
