@@ -1,4 +1,3 @@
-// src/features/auth/hooks/useRegister.ts
 import { useFormik } from "formik";
 import { registerSchema } from "../Validation/registerSchema";
 import { useNavigate } from "react-router-dom";
@@ -6,9 +5,9 @@ import { useRegContext } from "../Contexts/RegContext";
 import { registerUser } from "../Services/registerAPI";
 
 export const useRegister = () => {
-  const { setUserData , educationLevelOrSubject , role } = useRegContext();
+  const { setUserData, educationLevelOrSubject, role } = useRegContext();
   const navigate = useNavigate();
-  const {RegisterClick} = usehandelClickLogin();
+  const { RegisterClick } = usehandelClickLogin();
   const initialValues = {
     fullName: "",
     email: "",
@@ -18,16 +17,24 @@ export const useRegister = () => {
   const formik = useFormik({
     initialValues,
     validationSchema: registerSchema,
-    onSubmit: (values) => {
-      const finalData = {
-        ...values,                 
-        role,                     
-        educationLevelOrSubject,
-      };
-      console.log("Form data", values);
-      setUserData(values);
-      RegisterClick(finalData);
-      navigate("/login");
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        setSubmitting(true);
+        const finalData = {
+          ...values,
+          role,
+          educationLevelOrSubject,
+        };
+        console.log("Form data", values);
+        setUserData(values);
+        await RegisterClick(finalData);
+        alert("Registration successful. Please check your email to verify your account.");
+        navigate("/login");
+      } catch (error: any) {
+        alert(error.response?.data?.errors?.[0] || error.message || "Registration failed");
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -45,7 +52,6 @@ const usehandelRegister = (
       }
     | any
 ) => {
-  
   return registerUser(formData)
     .then((res) => {
       console.log("Success :", res.data);
@@ -58,19 +64,21 @@ const usehandelRegister = (
       }
       throw error;
     });
-}
+};
+
 export const usehandelClickLogin = () => {
   const navigate = useNavigate();
-
-  const { educationLevelOrSubject , seteducationLevelOrSubject } = useRegContext();
+  const { educationLevelOrSubject, seteducationLevelOrSubject } = useRegContext();
 
   function RegisterClick(FormRegister: object) {
-    usehandelRegister(FormRegister);
+    return usehandelRegister(FormRegister);
   }
+
   function BackOption() {
     localStorage.removeItem("educationLevelOrSubject");
     navigate("/auth");
   }
+
   return {
     seteducationLevelOrSubject,
     RegisterClick,
