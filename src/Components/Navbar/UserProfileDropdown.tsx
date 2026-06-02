@@ -34,17 +34,26 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
   return (
     <div className="box-border flex flex-col items-start p-[8px] w-[256px] bg-white border border-[#E8EAED] shadow-[0px_20px_40px_rgba(0,19,85,0.12)] rounded-[12px] font-['Poppins']">
       <div className="box-border flex flex-row justify-between items-center p-[12px] w-[240px] h-[60px] border border-[#E8EAED] drop-shadow-[0px_2px_12px_rgba(0,0,0,0.04)] rounded-[8px]">
-        <div className="flex flex-col items-start w-[130px] ">
-          <h2 className="flex items-center m-0 font-semibold text-[14px] leading-[20px] text-[#2A2D34] truncate">
+
+        <div className="flex flex-col items-start w-[130px] min-w-0">
+
+          <h2 className="m-0 block w-full font-semibold text-[14px] leading-[20px] text-[#2A2D34] truncate">
             {userName}
           </h2>
-          <span className="flex items-center font-normal text-[12px] leading-[16px] text-[#434656] truncate">
+
+          <span className="block w-full font-normal text-[12px] leading-[16px] text-[#434656] truncate">
             {userEmail}
           </span>
-        </div>
-        <img src={avatarUrl} alt="User Avatar" className="w-[36px] h-[36px] rounded-full object-cover" />
-      </div>
 
+        </div>
+
+        <img
+          src={avatarUrl}
+          alt="User Avatar"
+          className="w-[36px] h-[36px] rounded-full object-cover shrink-0"
+        />
+
+      </div>
       <div className="flex flex-col items-center py-[8px] w-[240px]">
         {roleToAuth?.includes("Teacher") && (
           <NavLink
