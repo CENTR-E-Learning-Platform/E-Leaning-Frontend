@@ -1,7 +1,6 @@
 // src/features/auth/pages/MainRegister.tsx
 import image from "../../../assets/images/Online learning-amico 1.png";
 import RegisterForm from "../Components/Register/RegisterForm";
-import FacebookButton from "../Components/Shared/FacebookButton";
 import RegisterBar from "../Components/Register/RegisterBar";
 import logo from "../../../assets/icons/logo.svg";
 
@@ -16,7 +15,6 @@ const MainRegister = () => {
           <RegisterBar title="Create New Account" />
           <div >
             <RegisterForm />
-            {/* <FacebookButton /> */}
           </div>
         </div>
       </section>

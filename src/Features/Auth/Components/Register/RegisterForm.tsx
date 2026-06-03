@@ -1,7 +1,7 @@
 // src/features/auth/components/RegisterForm.tsx
 import { CircleUserRound, Mail } from "lucide-react";
 import PasswordInput from "./PasswordInput ";
-import GoogleButton from "../Shared/GoogleButton";
+// import GoogleButton from "../Shared/GoogleButton";
 import { useRegister } from "../../Hooks/useRegister";
 import { NavLink } from "react-router-dom";
 
@@ -10,7 +10,6 @@ const RegisterForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      {/* Name */}
       <div className="flex flex-col relative mt-[12px]">
         <label
           htmlFor="fullName"
@@ -38,7 +37,6 @@ const RegisterForm = () => {
         )}
       </div>
 
-      {/* Email */}
       <div className="flex flex-col relative mt-[13px]">
         <label
           htmlFor="email"
@@ -66,7 +64,6 @@ const RegisterForm = () => {
         )}
       </div>
 
-      {/* Password */}
       <div className="mt-[13px]">
         <PasswordInput
           value={formik.values.password}
@@ -90,7 +87,6 @@ const RegisterForm = () => {
         <div className="flex-grow border-t border-[#6D7588]" />
       </div>
        */}
-      {/* Updated Sign In Link */}
       <div className="flex justify-center items-center mt-1 w-[379px]">
         <p className="text-[13px] text-[#2A2D34] text-center">
           Already have an account?{" "}
@@ -102,7 +98,6 @@ const RegisterForm = () => {
           </NavLink>{" "}
         </p>
       </div>
-      {/* <GoogleButton /> */}
     </form>
   );
 };
