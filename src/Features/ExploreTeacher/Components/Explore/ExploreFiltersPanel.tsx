@@ -12,10 +12,10 @@ import SubjectFilterExplore from "./SubjectFilterExplore";
 import LineBetweenFilterElements from "./LineBetweenFilterElements";
 
 interface ExploreFiltersPanelProps {
-  selectedLanguage: string | null;
-  setSelectedLanguage: (value: string | null) => void;
-  selectedDay: string | null;
-  setSelectedDay: (value: string | null) => void;
+  selectedLanguage: string;
+  setSelectedLanguage: Dispatch<SetStateAction<string>>;
+  selectedDay: string;
+  setSelectedDay: Dispatch<SetStateAction<string>>;
   startTime: number;
   setStartTime: (value: number) => void;
   endTime: number;
@@ -170,11 +170,7 @@ const ExploreFiltersPanel = ({
     <div className="w-[275px] border-2 border-[#D1D5DB] p-[18px] rounded-[8px]">
       <SubjectFilterExplore
         selectedLanguage={selectedLanguage}
-        setSelectedLanguage={(value) => {
-          if (value !== null) {
-            setSelectedLanguage(value);
-          }
-        }}
+        setSelectedLanguage={setSelectedLanguage}
       />
 
       <LineBetweenFilterElements />
@@ -236,9 +232,7 @@ const ExploreFiltersPanel = ({
 
       <DaysFilterExplore
         selectedDay={selectedDay}
-        setSelectedDay={
-          setSelectedDay as unknown as (value: string | null) => void
-        }
+        setSelectedDay={setSelectedDay}
       />
 
       <LineBetweenFilterElements />
