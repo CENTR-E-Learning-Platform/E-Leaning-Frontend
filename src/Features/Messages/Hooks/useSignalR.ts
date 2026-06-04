@@ -81,16 +81,19 @@ export default function useSignalR(
       .withAutomaticReconnect()
       .build();
 
+    const getMessageTime = (message: any) => {
+      const timestamp =
+        message.sentAt || message.createdAt || message.timestamp || 0;
+      return new Date(timestamp).getTime();
+    };
+
     connect.on("ReceiveMessage", (msg: Message) => {
       setMessages((prev) => {
         const exists = prev.some(
           (m) =>
             m.content === msg.content &&
             m.senderId === msg.senderId &&
-            Math.abs(
-              new Date(m.sentAt || 0).getTime() -
-                new Date(msg.sentAt || 0).getTime(),
-            ) < 1000,
+            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 2000,
         );
 
         if (exists) return prev;
@@ -127,10 +130,7 @@ export default function useSignalR(
           (m) =>
             m.content === msg.content &&
             m.senderId === msg.senderId &&
-            Math.abs(
-              new Date(m.sentAt || 0).getTime() -
-                new Date(msg.sentAt || 0).getTime(),
-            ) < 1000,
+            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 2000,
         );
 
         if (exists) return prev;
