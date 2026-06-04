@@ -26,41 +26,43 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [chatData, setChatData] = useState<any[]>([]);
   const [otherUserId, setOtherUserId] = useState<any>(null);
   const [page, setPage] = useState(1);
-  const [selectedConversation, setSelectedConversation] = useState<object | null>(null);
+  const [selectedConversation, setSelectedConversation] = useState<
+    object | null
+  >(null);
   const [hasMore, setHasMore] = useState(true);
   const token = `${localStorage.getItem("token")}`;
   const signalR = useSignalR(token, BASE_URL, () => {});
 
-  const isGroup = selectedConversation && ('teacherId' in selectedConversation || 'name' in selectedConversation);
+  const isGroup =
+    selectedConversation &&
+    ("teacherId" in selectedConversation || "name" in selectedConversation);
 
   const filteredSignalRMessages = isGroup
-    ? ((signalR.groupMessages as any)[conversationId as any] || [])
+    ? (signalR.groupMessages as any)[conversationId as any] || []
     : signalR.messages.filter(
-        (msg: any) => String(msg.conversationId) === String(conversationId)
+        (msg: any) => String(msg.conversationId) === String(conversationId),
       );
+
+  const getMessageTime = (msg: any) => {
+    const timestamp = msg.sentAt || msg.createdAt || msg.timestamp || 0;
+    return new Date(timestamp).getTime();
+  };
 
   const allMessages = [...(chatData || []), ...filteredSignalRMessages]
     .filter(
       (msg, index, self) =>
         index ===
         self.findIndex((m) => {
-          if (msg.id && m.id) return m.id === msg.id;
+          if (msg.id && m.id) return String(msg.id) === String(m.id);
 
           return (
+            String(m.senderId) === String(msg.senderId) &&
             m.content === msg.content &&
-            m.senderId === msg.senderId &&
-            Math.abs(
-              new Date(m.sentAt || m.createdAt || 0).getTime() -
-                new Date(msg.sentAt || msg.createdAt || 0).getTime(),
-            ) < 1000
+            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 2000
           );
         }),
     )
-    .sort(
-      (a, b) =>
-        new Date(a.sentAt || a.createdAt || 0).getTime() -
-        new Date(b.sentAt || b.createdAt || 0).getTime(),
-    );
+    .sort((a, b) => getMessageTime(a) - getMessageTime(b));
 
   return (
     <ChatContext.Provider
@@ -78,7 +80,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         setHasMore,
         selectedConversation,
         setSelectedConversation,
-        signalR
+        signalR,
       }}
     >
       {children}
