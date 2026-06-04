@@ -1,6 +1,8 @@
+import { type Dispatch, type SetStateAction } from "react";
+
 interface DaysFilterExploreProps {
-  selectedDay: string | null;
-  setSelectedDay: (value: string | null) => void;
+  selectedDay: string;
+  setSelectedDay: Dispatch<SetStateAction<string>>;
 }
 
 const DaysFilterExplore = ({ selectedDay, setSelectedDay }: DaysFilterExploreProps) => {
