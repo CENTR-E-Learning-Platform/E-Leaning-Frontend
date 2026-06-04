@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 
 interface SubjectFilterExploreProps {
-    selectedLanguage: string | null;
-    setSelectedLanguage: (value: string | null) => void;
+    selectedLanguage: string;
+    setSelectedLanguage: Dispatch<SetStateAction<string>>;
 }
 
 const SubjectFilterExplore = ({ selectedLanguage, setSelectedLanguage }: SubjectFilterExploreProps) => {
