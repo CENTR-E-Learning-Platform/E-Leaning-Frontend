@@ -94,6 +94,7 @@ export const usefilterteach = () => {
     const [selectedRating, setSelectedRating] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [pageNum, setPageNum] = useState(1);
+    const teachersPerPage = 3;
     const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>(DEFAULT_APPLIED_FILTERS);
 
     const { data, error, isLoading, isFetching } = useQuery({
@@ -162,5 +163,6 @@ export const usefilterteach = () => {
         setSearchTerm,
         pageNum,
         setPageNum,
+        teachersPerPage,
     };
 };
