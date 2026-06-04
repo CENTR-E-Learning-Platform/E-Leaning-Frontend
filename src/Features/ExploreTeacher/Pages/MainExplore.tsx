@@ -1,17 +1,16 @@
-import { Star } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { usesearchteach } from "../Hooks/usesearchteach";
 import { usefilterteach } from "../Hooks/usefilterteach";
-import ButtomApplyFilter from "../Components/Explore/ButtomApplyFilter";
-import DaysFilterExplore from "../Components/Explore/DaysFilterExplore";
-import RattingFilterExplore from "../Components/Explore/RattingFilterExplore";
-import SubjectFilterExplore from "../Components/Explore/SubjectFilterExplore";
-import LineBetweenFilterElements from "../Components/Explore/LineBetweenFilterElements";
-import LayerBackgroundTeacher from "../Components/Explore/LayerBackgroundTeacher";
-import LeftTeacherSide from "../Components/Explore/LeftTeacherSide";
+import { useGetAllTeachers } from "../Hooks/useallTeacher";
+import ExploreSearchBar from "../Components/Explore/ExploreSearchBar";
+import ExploreFiltersPanel from "../Components/Explore/ExploreFiltersPanel";
+import TeacherList from "../Components/Explore/TeacherList";
+import TeacherProfileModal from "../Components/Explore/TeacherProfileModal";
 import Header from "../Components/Explore/Header";
 import { extractTeachersList } from "../Utils/extractTeachers";
 import { BASE_URL } from "../../Streaming/Utils/Apis";
+import { useChat } from "../../Messages/Contexts/ShareDataMessages";
 
 const MainExplore = () => {
   const {
@@ -19,6 +18,9 @@ const MainExplore = () => {
     error: searchError,
     isLoading: searchIsLoading,
     formik,
+    currentPage: searchCurrentPage,
+    setCurrentPage: setSearchCurrentPage,
+    teachersPerPage: searchTeachersPerPage,
   } = usesearchteach();
 
   const {
@@ -43,125 +45,70 @@ const MainExplore = () => {
     applyFilters,
     clearFilters,
     setSearchTerm,
+    pageNum: filterPageNum,
+    setPageNum: setFilterPageNum,
+    teachersPerPage: filterTeachersPerPage,
   } = usefilterteach();
 
-  const [resultsSource, setResultsSource] = useState<"filter" | "search">("filter");
+  const {
+    data: allTeachers,
+    isLoading: allIsLoading,
+    currentPage: allCurrentPage,
+    setCurrentPage: setAllCurrentPage,
+    teachersPerPage: allTeachersPerPage,
+  } = useGetAllTeachers();
 
-  console.log("Filter Data:", filterData);
+  const navigate = useNavigate();
+  const { setOtherUserId, setSelectedConversation, setConversationId } =
+    useChat();
+  const [selectedTeacherForModal, setSelectedTeacherForModal] =
+    useState<any>(null);
 
-  const [dragging2, setDragging2] = useState<string | null>(null);
-  const slider2Ref = useRef<HTMLDivElement>(null);
+  const [resultsSource, setResultsSource] = useState<
+    "all" | "filter" | "search"
+  >("all");
 
-  const handlePriceMouseDown =
-    (handle: string) => (e: { preventDefault: () => void }) => {
-      e.preventDefault();
-      setDragging2(handle);
-    };
-
-  const handlePriceMouseMove = (e: { clientX: number }) => {
-    if (!dragging2 || !slider2Ref.current) return;
-
-    const rect = slider2Ref.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-
-    const rawPrice = 50 + (percentage / 100) * 250;
-    const price = Math.round(rawPrice / 5) * 5;
-
-    if (dragging2 === "start") {
-      if (price < endPrice) {
-        setStartPrice(price);
-      }
-    } else if (dragging2 === "end") {
-      if (price > startPrice) {
-        setEndPrice(price);
-      }
+  const handlePageChange = (page: number) => {
+    if (resultsSource === "filter") {
+      setPageNum(page);
+    } else if (resultsSource === "search") {
+      setSearchCurrentPage(page);
+    } else {
+      setAllCurrentPage(page);
     }
   };
 
-  const handlePriceMouseUp = () => {
-    setDragging2(null);
+  const setPageNum = (page: number) => {
+    setResultsSource("filter");
+    setFilterPageNum(page);
   };
 
-  useEffect(() => {
-    if (dragging2) {
-      document.addEventListener("mousemove", handlePriceMouseMove);
-      document.addEventListener("mouseup", handlePriceMouseUp);
-      return () => {
-        document.removeEventListener("mousemove", handlePriceMouseMove);
-        document.removeEventListener("mouseup", handlePriceMouseUp);
-      };
-    }
-  }, [dragging2, startPrice, endPrice]);
+  const openTeacherProfile = (teacher: any) => {
+    const teacherId = teacher.teacherId ?? teacher.id ?? null;
+    const teacherName = teacher.teacherName ?? teacher.name ?? "Teacher";
+    const teacherPicture = teacher.teacherPic
+      ? `${BASE_URL}${teacher.teacherPic}`
+      : `https://api.dicebear.com/7.x/avataaars/svg?seed=${teacherName}`;
 
-  const startPercentage2 = ((startPrice - 50) / 250) * 100;
-  const endPercentage2 = ((endPrice - 50) / 250) * 100;
-
-  const [dragging, setDragging] = useState<string | null>(null);
-  const sliderRef = useRef<HTMLDivElement>(null);
-
-  const formatTime = (hour: number) => {
-    if (hour === 24) return "12am";
-    if (hour > 24) {
-      const h = hour - 24;
-      return `${h}am`;
-    }
-    if (hour === 12) return "12pm";
-    if (hour > 12) return `${hour - 12}pm`;
-    return `${hour}am`;
+    setOtherUserId(teacherId);
+    setConversationId(null);
+    setSelectedConversation({
+      otherUserName: teacherName,
+      otherUserPicture: teacherPicture,
+      isOnline: true,
+      otherUserId: teacherId,
+    });
+    setSelectedTeacherForModal(teacher);
   };
 
-  const handleMouseDown =
-    (handle: string) => (e: { preventDefault: () => void }) => {
-      e.preventDefault();
-      setDragging(handle);
-    };
-
-  const handleMouseMove = (e: { clientX: number }) => {
-    if (!dragging || !sliderRef.current) return;
-
-    const rect = sliderRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-
-    const hour = Math.round(8 + (percentage / 100) * 18);
-
-    if (dragging === "start") {
-      if (hour < endTime) {
-        setStartTime(hour);
-      }
-    } else if (dragging === "end") {
-      if (hour > startTime) {
-        setEndTime(hour);
-      }
-    }
+  const closeTeacherModal = () => {
+    setSelectedTeacherForModal(null);
   };
 
-  const handleMouseUp = () => {
-    setDragging(null);
+  const goToMessages = () => {
+    setSelectedTeacherForModal(null);
+    navigate("/messages");
   };
-
-  useEffect(() => {
-    if (dragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
-    }
-  }, [dragging, startTime, endTime]);
-
-  const startPercentage = ((startTime - 8) / 18) * 100;
-  const endPercentage = ((endTime - 8) / 18) * 100;
-
-  const isSearching = formik.values.SearchTeacher.trim() !== "";
-  const showFilterResults = resultsSource === "filter" || !isSearching;
-  const activeResponse = showFilterResults ? filterData : searchTeachers;
-  const teachersList = extractTeachersList(activeResponse);
-  const isLoadingTeachers = showFilterResults
-    ? filterIsLoading || filterIsFetching
-    : searchIsLoading;
 
   const handleApplyFilters = () => {
     setResultsSource("filter");
@@ -169,6 +116,47 @@ const MainExplore = () => {
     setSearchTerm("");
     applyFilters();
   };
+
+  const handleClearFilters = () => {
+    setResultsSource("all");
+    formik.setFieldValue("SearchTeacher", "");
+    clearFilters();
+  };
+
+  const activeResponse =
+    resultsSource === "filter"
+      ? filterData
+      : resultsSource === "search"
+        ? searchTeachers
+        : allTeachers;
+  const teachersList = extractTeachersList(activeResponse);
+  const isLoadingTeachers =
+    resultsSource === "filter"
+      ? filterIsLoading || filterIsFetching
+      : resultsSource === "search"
+        ? searchIsLoading
+        : allIsLoading;
+
+  const currentPage =
+    resultsSource === "filter"
+      ? filterPageNum
+      : resultsSource === "search"
+        ? searchCurrentPage
+        : allCurrentPage;
+
+  const pageSize =
+    resultsSource === "filter"
+      ? filterTeachersPerPage
+      : resultsSource === "search"
+        ? searchTeachersPerPage
+        : allTeachersPerPage;
+
+  const totalCount =
+    activeResponse?.data?.totalCount ||
+    activeResponse?.data?.totalItems ||
+    activeResponse?.data?.total ||
+    activeResponse?.data?.pagination?.totalCount ||
+    null;
 
   if (searchError && "response" in searchError) {
     console.log((searchError as any).response?.data?.message[0]);
@@ -201,312 +189,52 @@ const MainExplore = () => {
       <main className="w-[1140px] m-auto">
         <Header />
 
-        <div className="flex justify-between items-center mb-[27px]">
-          <div className="flex justify-between items-center w-[325px]">
-            <div className="w-[99px] h-[55px] text-[#2A2D34] flex justify-center gap-[9px] items-center border-2 border-[#D1D5DB] py-[17px] px-[19px] rounded-[8px]">
-              <img
-                src="../../../../../src/assets/icons/FilterIcon.svg"
-                alt="FilterIcon"
-              />
-              <p className="text-[16px] font-medium">filter</p>
-            </div>
-            <div className="w-[214px] h-[55px] text-[#2A2D34] flex justify-center items-center border-2 border-[#D1D5DB] py-[17px] px-[19px] rounded-[8px]">
-              <p className="font-normal text-[14px]">
-                Sort by :{" "}
-                <select
-                  className="focus:outline-none focus:border-none font-medium text-[16px]"
-                  name=""
-                  id=""
-                >
-                  <option value="Top rated">Top rated</option>
-                </select>
-              </p>
-            </div>
-          </div>
-          <div className="w-[393px] h-[55px] text-[#2A2D34] flex justify-start items-center border-2 border-[#D1D5DB] py-[21px] px-[15px] rounded-[8px]">
-            <div className="flex justify-between gap-[7px] items-center">
-              <img
-                className="w-[19px] h-[19px]"
-                src="../../../../../src/assets/icons/SearchIcon.svg"
-                alt="SearchIcon"
-              />
-              <input
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setSearchTerm(value);
-                  if (value.startsWith(" ")) return;
-                  formik.handleChange(e);
-                  if (value.trim()) {
-                    setResultsSource("search");
-                  }
-                }}
-                value={formik.values.SearchTeacher}
-                className="outline-none border-none w-[332px] focus:outline-none focus:border-none"
-                type="text"
-                placeholder="Search Teacher"
-                name="SearchTeacher"
-              />
-            </div>
-          </div>
-        </div>
+        <ExploreSearchBar
+          formik={formik}
+          setSearchTerm={setSearchTerm}
+          setResultsSource={setResultsSource}
+        />
 
         <div className="flex justify-between items-start gap-[28px]">
-          <div className="w-[275px] border-2 border-[#D1D5DB] p-[18px] rounded-[8px]">
-            <SubjectFilterExplore
-              selectedLanguage={selectedLanguage}
-              setSelectedLanguage={(value) => {
-                if (value !== null) {
-                  setSelectedLanguage(value);
-                }
-              }}
-            />
-
-            <LineBetweenFilterElements />
-
-            <div className="price w-[238px] mb-[20px] text-[#2A2D34]">
-              <h2 className="font-semibold mb-[25px] text-[16px]">
-                Price per class
-              </h2>
-
-              <p className="font-bold mb-[14px] text-center text-[16px]">
-                EGP{startPrice}-{endPrice}
-              </p>
-
-              <div className="rangePrice">
-                <div
-                  ref={slider2Ref}
-                  className="RangePrice relative flex justify-center items-center cursor-pointer"
-                  style={{ height: "25px" }}
-                >
-                  <div className="absolute w-full h-1 bg-gray-300"></div>
-
-                  <div
-                    className="absolute h-1 bg-[#2A2D34]"
-                    style={{
-                      left: `${startPercentage2}%`,
-                      width: `${endPercentage2 - startPercentage2}%`,
-                    }}
-                  ></div>
-
-                  <div
-                    className="absolute w-[25px] h-[25px] border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
-                    style={{
-                      left: `${startPercentage2}%`,
-                      transform: "translateX(-50%)",
-                      zIndex: dragging2 === "start" ? 10 : 5,
-                    }}
-                    onMouseDown={handlePriceMouseDown("start")}
-                  ></div>
-
-                  <div
-                    className="absolute w-[25px] h-[25px] border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
-                    style={{
-                      left: `${endPercentage2}%`,
-                      transform: "translateX(-50%)",
-                      zIndex: dragging2 === "end" ? 10 : 5,
-                    }}
-                    onMouseDown={handlePriceMouseDown("end")}
-                  ></div>
-                </div>
-              </div>
-            </div>
-
-            <LineBetweenFilterElements />
-
-            <RattingFilterExplore
-              selectedRating={selectedRating}
-              setSelectedRating={setSelectedRating}
-            />
-
-            <LineBetweenFilterElements />
-
-            <DaysFilterExplore
-              selectedDay={selectedDay}
-              setSelectedDay={setSelectedDay as unknown as (value: string | null) => void}
-            />
-
-            <LineBetweenFilterElements />
-
-            <div className="Times mb-[20px]">
-              <h2 className="font-semibold mb-[25px] text-[16px]">Times</h2>
-
-              <p className="font-bold mb-[14px] text-center text-[16px]">
-                {formatTime(startTime)}-{formatTime(endTime)}
-              </p>
-
-              <div
-                ref={sliderRef}
-                className="RangeTime relative flex justify-center items-center cursor-pointer"
-                style={{ height: "25px" }}
-              >
-                <div className="absolute w-full h-1 bg-gray-300"></div>
-
-                <div
-                  className="absolute h-1 bg-[#2A2D34]"
-                  style={{
-                    left: `${startPercentage}%`,
-                    width: `${endPercentage - startPercentage}%`,
-                  }}
-                ></div>
-
-                <div
-                  className="absolute w-[25px] h-[25px] border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
-                  style={{
-                    left: `${startPercentage}%`,
-                    transform: "translateX(-50%)",
-                    zIndex: dragging === "start" ? 10 : 5,
-                  }}
-                  onMouseDown={handleMouseDown("start")}
-                ></div>
-
-                <div
-                  className="absolute w-[25px] h-[25px] border-2 border-[#2A2D34] rounded-[4px] bg-white cursor-grab active:cursor-grabbing"
-                  style={{
-                    left: `${endPercentage}%`,
-                    transform: "translateX(-50%)",
-                    zIndex: dragging === "end" ? 10 : 5,
-                  }}
-                  onMouseDown={handleMouseDown("end")}
-                ></div>
-              </div>
-            </div>
-
-            <LineBetweenFilterElements />
-
-            <ButtomApplyFilter
-              setDragging={setDragging}
-              setDragging2={setDragging2}
-              setStartTime={setStartTime}
-              setEndTime={setEndTime}
-              setStartPrice={setStartPrice}
-              setEndPrice={setEndPrice}
-              applyFilters={handleApplyFilters}
-              clearFilters={() => {
-                setResultsSource("filter");
-                formik.setFieldValue("SearchTeacher", "");
-                clearFilters();
-              }}
-            />
-          </div>
+          <ExploreFiltersPanel
+            selectedLanguage={selectedLanguage}
+            setSelectedLanguage={setSelectedLanguage}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
+            startPrice={startPrice}
+            setStartPrice={setStartPrice}
+            endPrice={endPrice}
+            setEndPrice={setEndPrice}
+            selectedRating={selectedRating}
+            setSelectedRating={setSelectedRating}
+            applyFilters={handleApplyFilters}
+            clearFilters={handleClearFilters}
+            formik={formik}
+            setSearchTerm={setSearchTerm}
+            setResultsSource={setResultsSource}
+          />
 
           <div className="teachers">
-            {isLoadingTeachers ? (
-              [...Array(3)].map((_, index) => (
-                <div
-                  key={index}
-                  className="w-[836px] h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px] bg-gray-100 animate-pulse"
-                />
-              ))
-            ) : teachersList.length === 0 ? (
-              <div className="w-[836px] flex flex-col justify-center items-center py-16 px-6 border-2 border-dashed border-gray-300 rounded-[8px] bg-white text-gray-500">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
-                  alt="No Results"
-                  className="w-[80px] h-[80px] mb-4 opacity-60"
-                />
-                <h3 className="text-[18px] font-bold text-[#2A2D34] mb-1">No Teachers Found</h3>
-                <p className="text-[14px] text-gray-400 text-center max-w-[320px]">
-                  We couldn't find any teachers matching your criteria. Try adjusting your filters or search terms.
-                </p>
-              </div>
-            ) : (
-              teachersList.map((teacher: any, index: number) => (
-                  <div
-                    key={teacher.teacherId ?? teacher.id ?? `${teacher.teacherName}-${index}`}
-                    className="w-[836px] overflow-hidden relative h-[293px] rounded-[8px] px-[19px] py-[27px] border-2 border-[#D1D5DB] mb-[27px]"
-                  >
-                    <div className="flex justify-between items-center gap-[57px]">
-                      <div className="RightTeacher flex justify-between items-start gap-[15px] w-[456px] h-[239px]">
-                        <div className="w-[114px] h-[114px] RightRightTeacher">
-                          <img
-                            className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
-                            src={
-                              teacher.teacherPic ? `${BASE_URL}${teacher.teacherPic}` : "https://via.placeholder.com/114"
-                            }
-                            alt="teacher image"
-                          />
-                        </div>
-                        <div className="LeftRightTeacher">
-                          <div className="w-[326px] mb-[18px] h-[81px]">
-                            <h2 className="text-[18px] mb-[14px] leading-[13px] tracking-[0] font-bold">
-                              {teacher.teacherName}
-                            </h2>
-                            <div className="flex items-center gap-2 mb-[14px] text-[11px] mt-1">
-                              <div className="flex items-center gap-0.5">
-                                {[1, 2, 3, 4, 5].map((star) => {
-                                  const rating = teacher.rating ?? 0;
-                                  if (star <= Math.floor(rating)) {
-                                    return (
-                                      <span
-                                        key={star}
-                                        className="text-[#FFD057]"
-                                      >
-                                        <Star
-                                          fill="#FFD057"
-                                          className="w-[14px] h-[14px]"
-                                        />
-                                      </span>
-                                    );
-                                  } else if (
-                                    star === Math.ceil(rating) &&
-                                    rating % 1 !== 0
-                                  ) {
-                                    return (
-                                      <span
-                                        key={star}
-                                        className="relative inline-block"
-                                      >
-                                        <Star className="w-[14px] h-[14px] text-[#FFD057]" />
-                                        <span
-                                          className="absolute top-0 left-0 overflow-hidden"
-                                          style={{
-                                            width: `${(rating % 1) * 100}%`,
-                                          }}
-                                        >
-                                          <Star
-                                            fill="#FFD057"
-                                            className="w-[14px] h-[14px] text-[#FFD057]"
-                                          />
-                                        </span>
-                                      </span>
-                                    );
-                                  } else {
-                                    return (
-                                      <span
-                                        key={star}
-                                        className="text-[#FFD057]"
-                                      >
-                                        <Star className="w-[14px] h-[14px]" />
-                                      </span>
-                                    );
-                                  }
-                                })}
-                              </div>
-                              <span className="text-gray-500">
-                                ({teacher.numberOfReviews} reviews)
-                              </span>
-                            </div>
-                            <div className="h-[26px] w-[181px] flex justify-center items-center bg-[#FFDEDE] px-[9px] py-[7px] rounded-[18px]">
-                              <p className="font-semibold text-[16px] text-[#611D1D]">
-                                {teacher.subject}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="DetailsAboutTeacher w-[326px] h-[82px] mt-2">
-                            <p className="font-medium text-[14px] text-[#5A6272]">
-                              {teacher.bio}
-                            </p>
-                            <p className="font-medium text-[14px] w-fit underline cursor-pointer">
-                              {teacher.bio ? "Learn more" : ""}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <LeftTeacherSide teacher={teacher} />
-                    </div>
-                    <LayerBackgroundTeacher />
-                  </div>
-                ))
+            <TeacherList
+              teachersList={teachersList}
+              isLoading={isLoadingTeachers}
+              currentPage={currentPage}
+              pageSize={pageSize}
+              totalCount={totalCount}
+              onPageChange={handlePageChange}
+              onOpenProfile={openTeacherProfile}
+            />
+
+            {selectedTeacherForModal && (
+              <TeacherProfileModal
+                teacher={selectedTeacherForModal}
+                onClose={closeTeacherModal}
+                onMessage={goToMessages}
+              />
             )}
           </div>
         </div>
