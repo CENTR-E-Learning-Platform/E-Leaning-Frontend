@@ -11,7 +11,15 @@ const ChatContent = () => {
   const token = `${localStorage.getItem("token")}`;
   const { refetch } = useGetChatConversation();
   const signalR = useSignalR(token, BASE_URL, refetch);
-  const { allMessages, page, setPage, hasMore , conversationId  } = useChat();
+  const {
+    allMessages,
+    page,
+    setPage,
+    hasMore,
+    conversationId,
+    otherUserId,
+    selectedConversation,
+  } = useChat();
   const chatRef = useRef<HTMLDivElement>(null);
   const prevScrollHeight = useRef(0);
   const isLoadingHistory = useRef(false);
@@ -51,7 +59,6 @@ const ChatContent = () => {
         el.scrollTop = el.scrollHeight - prevScrollHeight.current;
         isLoadingHistory.current = false;
       } else {
-        
         el.scrollTo({
           top: el.scrollHeight,
           behavior: "smooth",
@@ -78,7 +85,9 @@ const ChatContent = () => {
           <div className="mb-6"></div>
           <TeacherTextMessage messages={allMessages} />
         </div>
-        { <ChatInput connection={signalR.connection} />}
+        {(conversationId || otherUserId || selectedConversation) && (
+          <ChatInput connection={signalR.connection} />
+        )}
       </section>
     </>
   );

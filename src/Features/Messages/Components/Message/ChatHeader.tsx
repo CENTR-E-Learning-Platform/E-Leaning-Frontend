@@ -86,9 +86,9 @@ const ChatHeader: React.FC = () => {
         </div>
 
 
-        <div className="flex flex-col items-start p-0 w-[132.05px] h-[31.5px]">
+        <div className="flex flex-col items-start p-0 h-[31.5px]">
 
-          <div className="flex flex-col items-start p-0 self-stretch w-[132.05px] h-[18px]">
+          <div className="flex flex-col items-start p-0 self-stretch h-[18px]">
             <h2 className="flex items-center w-full h-full font-bold text-[15.2px] leading-[18px] text-[#2A2D34]">
               {isGroup ? (selectedConversation?.name || "Group chat") : (selectedConversation?.otherUserName || "Select a chat")}
             </h2>
