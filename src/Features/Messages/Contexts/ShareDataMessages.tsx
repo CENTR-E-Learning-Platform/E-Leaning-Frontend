@@ -31,7 +31,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   >(null);
   const [hasMore, setHasMore] = useState(true);
   const token = `${localStorage.getItem("token")}`;
-  const signalR = useSignalR(token, BASE_URL, () => {});
+  const signalR = useSignalR(token, BASE_URL, () => { });
 
   const isGroup =
     selectedConversation &&
@@ -40,8 +40,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const filteredSignalRMessages = isGroup
     ? (signalR.groupMessages as any)[conversationId as any] || []
     : signalR.messages.filter(
-        (msg: any) => String(msg.conversationId) === String(conversationId),
-      );
+      (msg: any) => String(msg.conversationId) === String(conversationId),
+    );
 
   const getMessageTime = (msg: any) => {
     const timestamp = msg.sentAt || msg.createdAt || msg.timestamp || 0;
