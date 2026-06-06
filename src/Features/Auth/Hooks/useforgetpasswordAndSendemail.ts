@@ -11,7 +11,6 @@ export const useSendEmail = () => {
   const ClickSendEmail = () => {
     navigate("/login/SendEmail");
   }
-  ////////////////////////////////////////////////////////////////////////////
   const formik = useFormik({
     initialValues: {
       email: "",
