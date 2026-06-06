@@ -55,7 +55,7 @@ const EventDetailsCard = ({ event, statusConfig }: any) => {
         </div>
 
         <p className="text-[14px] text-[#6D7588] leading-[20px]">
-          {event.description || "Separable equations today. Bring your notebook. Quiz at the end."}
+          {event.description || "No description provided."}
         </p>
       </div>
 
