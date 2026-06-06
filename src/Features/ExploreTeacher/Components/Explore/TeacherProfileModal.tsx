@@ -35,15 +35,17 @@ const TeacherProfileModal = ({
         <div className="flex flex-col gap-6">
           <div className="flex items-center gap-4">
             <div className="w-[96px] h-[96px] rounded-[16px] overflow-hidden bg-gray-100">
-              <img
-                src={
-                  teacher.teacherPic
-                    ? `${BASE_URL}${teacher.teacherPic}`
-                    : "https://via.placeholder.com/96"
-                }
-                alt={teacher.teacherName}
-                className="w-full h-full object-cover"
-              />
+              {teacher.teacherPic ? (
+                <img
+                  src={`${BASE_URL}${teacher.teacherPic}`}
+                  alt={teacher.teacherName}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-[#525FE1] text-white text-[32px] font-bold uppercase">
+                  {teacher.teacherName?.substring(0, 2) || "T"}
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <p className="text-[16px] font-semibold text-[#111827]">
