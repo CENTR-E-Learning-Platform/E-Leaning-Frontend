@@ -16,15 +16,17 @@ const TeacherCard = ({ teacher, onOpenProfile }: TeacherCardProps) => {
       <div className="flex justify-between items-center gap-[57px]">
         <div className="RightTeacher flex justify-between items-start gap-[15px] w-[456px] h-[239px]">
           <div className="w-[114px] h-[114px] RightRightTeacher">
-            <img
-              className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
-              src={
-                teacher.teacherPic
-                  ? `${BASE_URL}${teacher.teacherPic}`
-                  : "https://via.placeholder.com/114"
-              }
-              alt="teacher image"
-            />
+            {teacher.teacherPic ? (
+              <img
+                className="w-full h-full object-cover rounded-[8px] border border-[#D1D5DB]"
+                src={`${BASE_URL}${teacher.teacherPic}`}
+                alt="teacher image"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-[#525FE1] text-white text-[32px] font-bold rounded-[8px] border border-[#D1D5DB] uppercase">
+                {teacher.teacherName?.substring(0, 2) || "T"}
+              </div>
+            )}
           </div>
           <div className="LeftRightTeacher">
             <div className="w-[326px] mb-[18px] h-[81px]">
