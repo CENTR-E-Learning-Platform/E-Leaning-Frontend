@@ -1,6 +1,7 @@
 import { useChat } from "../../Contexts/ShareDataMessages";
 import { useConvertDate } from "../../Hooks/useConvertDate";
 import { TypingIndicator } from "../TypingIndicator";
+import DefaultAvatar from "./DefaultAvatar";
 
 type Message = {
   senderId: string;
@@ -45,11 +46,7 @@ export const TeacherTextMessage = ({ messages }: Props) => {
                 </div>
               </div>
               <div className="flex flex-row justify-center items-center w-[30.4px] h-[28.8px] rounded-full">
-                <img
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.senderName}`}
-                  alt="Me"
-                  className="w-[30.4px] h-[28.8px] rounded-full object-cover"
-                />
+                <DefaultAvatar name={msg.senderName || "Me"} className="w-[30.4px] h-[28.8px] text-[12px]" />
               </div>
             </div>
           </div>
@@ -59,11 +56,7 @@ export const TeacherTextMessage = ({ messages }: Props) => {
             className="flex flex-col justify-start mb-2 items-start p-0 w-[730px] self-stretch"
           >
             <div className="flex flex-row items-start p-0 gap-[15.2px] w-[391.4px] max-w-[440.04px]">
-              <img
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.senderName}`}
-                alt="Avatar"
-                className="object-cover w-[30.4px] h-[28.8px] rounded-full flex-none"
-              />
+              <DefaultAvatar name={msg.senderName || "User"} className="flex-none w-[30.4px] h-[28.8px] text-[12px]" />
               <div className="">
                 <div className="flex w-fit pt-[13.39px] pr-[15px] pb-[14.63px] pl-[14.4px] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-tr-[16px] rounded-br-[16px] rounded-bl-[16px]">
                   <p className="flex items-center font-['Poppins'] max-w-[308.96px] font-normal text-[15px] leading-[21.6px] text-[#2A2D34]">
@@ -83,10 +76,7 @@ export const TeacherTextMessage = ({ messages }: Props) => {
       {signalR.typingUser && signalR.typingConversationId !== conversationId && (
         <div className="flex flex-col justify-start mb-2 items-start p-0 w-[730px] mt-5 self-stretch">
           <div className="flex flex-row items-start gap-[15.2px] max-w-[200px]">
-            <img
-              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${signalR.typingUser}`}
-              className="w-[30px] h-[30px] rounded-full"
-            />
+            <DefaultAvatar name={signalR.typingUser || "User"} className="w-[30px] h-[30px] text-[12px]" />
 
             <div className="bg-white px-[14px] py-[10px] rounded-tr-[16px] rounded-br-[16px] rounded-bl-[16px] shadow-sm">
               <TypingIndicator />
