@@ -4,7 +4,7 @@ import { roleToAuth } from "../../../Utils/Constant";
 import { getAllQuizzesStudent } from "../Services/getAllQuizStudent";
 export const useGetAllQuizes = () => {
     const isTeacher = !!roleToAuth?.includes("Teacher");
-     const { data , refetch } = useQuery({
+    const { data , refetch } = useQuery({
     queryKey: [isTeacher ? "getAllQuizTeacher" : "getAllQuizzesStudent"],
     queryFn: async() =>{
         if(isTeacher){
