@@ -17,7 +17,7 @@ const ChatHeader: React.FC = () => {
   const isGroup = selectedConversation && ('teacherId' in selectedConversation || 'name' in selectedConversation);
 
   return (
-    <div className="relative flex flex-row justify-between items-center px-[30.4px] py-0 w-[800px] h-[72px] bg-white shadow-[0px_0.9px_1.8px_rgba(0,0,0,0.05)] font-['Poppins']">
+    <div className="relative flex flex-row justify-between items-center px-[30.4px] py-0 h-[72px] bg-white shadow-[0px_0.9px_1.8px_rgba(0,0,0,0.05)] font-['Poppins']">
 
       <div className="flex flex-row items-center p-0 gap-[15.2px] flex-1 min-w-0 h-[36px] mr-[20px]">
 
