@@ -75,7 +75,7 @@ const ChatContent = () => {
 
   return (
     <>
-      <section className="ChatContent border border-[#C4C5D94D] relative bg-[#F3F6FF] w-[800px] h-[calc(100vh-66px)]">
+      <section className="ChatContent border border-[#C4C5D94D] relative bg-[#F3F6FF] h-[calc(100vh-66px)]">
         <ChatHeader />
         <div
           className="p-[32px] max-h-[calc(100vh-200px)] h-[calc(100vh-200px)] overflow-y-auto"
