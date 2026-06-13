@@ -29,7 +29,7 @@ export const TeacherTextMessage = ({ messages }: Props) => {
         return isMe ? (
           <div
             key={i}
-            className="flex flex-col justify-end mb-2 items-end p-0 w-[730px] self-stretch"
+            className="flex flex-col justify-end mb-2 items-end p-0 self-stretch"
           >
             <div className="flex flex-row items-start p-0 gap-[15.2px] w-[391.4px] max-w-[440.04px]">
               <div className="flex flex-col items-end p-0 w-[345.8px]">
