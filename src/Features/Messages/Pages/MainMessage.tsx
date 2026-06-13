@@ -28,14 +28,13 @@ const MainMessage = () => {
             <ContactList />
           </div>
 
-            <div className="center-content">
-              <ChatContent />
-            </div>
+          <div className="center-content flex-1">
+            <ChatContent />
+          </div>
           {/* {dataGetChatConversation?.data?.length >= 1 ? (
           ) : (
             ""
           )} */}
-          <div className="right-content"></div>
         </div>
       </section>
     </>
