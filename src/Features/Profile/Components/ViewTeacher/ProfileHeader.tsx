@@ -8,11 +8,13 @@ import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import EditPhotoModal from "./EditPhotoModal";
 import EditNameModal from "./EditNameModal";
 import { BASE_URL } from "../../Utils/Apis";
+import EditSubjectModal from "./EditSubjectModal";
 
 const ProfileHeader = () => {
   const { data , refetch } = useTeacherProfile();
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEditSubjectOpen, setIsEditSubjectOpen] = useState(false);
   const [isEditNameOpen, setIsEditNameOpen] = useState(false);
   console.log(data)
   useEffect(() => {
@@ -76,13 +78,16 @@ const ProfileHeader = () => {
                     <img src={editIcon} alt="edit" />
                   </div>
                 </div>
-                <div className="h-[29px] w-[191px] relative flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
-                  <div className="absolute flex justify-center items-center p-0 cursor-pointer w-9 h-9 z-50 left-50 -top-1 border-2 border-[#525FE1] rounded-full">
+                <div className="flex gap-2">
+                  <p className="inline-block bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px] font-semibold text-[18px] text-[#611D1D]">
+                    {data?.data?.data.subjects?.join(", ")}
+                  </p>
+
+                  <div 
+                    onClick={() => setIsEditSubjectOpen(true)}
+                    className="flex justify-center items-center cursor-pointer w-9 h-9 border-2 border-[#525FE1] rounded-full bg-white">
                     <img src={editIcon} alt="edit" />
                   </div>
-                  <p className="font-semibold text-[18px] text-[#611D1D]">
-                    Pure mathematics
-                  </p>
                 </div>
               </div>
             </div>
@@ -132,7 +137,7 @@ const ProfileHeader = () => {
 
               <div className="relative mt-2 inline-flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[4px] rounded-[18px] pr-10">
                 <p className="font-semibold text-[14px] text-[#611D1D]">
-                  Pure mathematics
+                  {data?.data?.data.subjects?.map((subject: string) => subject).join(", ")}
                 </p>
 
                 <div className="absolute right-[-10px] top-[-6px] flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white">
@@ -158,6 +163,13 @@ const ProfileHeader = () => {
           setPreviewImage={setPreviewImage}
           refetch={refetch}
         />
+        
+        <EditSubjectModal
+          isOpen={isEditSubjectOpen}
+          oldSubject={data?.data?.data.subjects?.[0] || ""}
+          refetch={refetch}
+          onClose={() => setIsEditSubjectOpen(false)}/>
+
 
         <EditNameModal
           isOpen={isEditNameOpen}
