@@ -7,6 +7,7 @@ const ADD_TEACHR_BIO_API = `${BASE_URL}/api/TeacherProfile/Add_Teacher_Bio`;
 const CHANGE_TEACHER_NAME_API = `${BASE_URL}/api/TeacherProfile/ChangeName`;
 const SUBSCRIPTION_API = `${BASE_URL}/api/Subscription/Subscription`;
 const UNSUBSCRIPTION_API = `${BASE_URL}/api/Subscription/UnSubscription`;
+const UPDATE_TEACHER_SUBJECTS_API = `${BASE_URL}/api/TeacherProfile/Update_Teacher_Subjects`;
 export {
   UPLOADIMAGE_API,
   TEACHERPROFILE_API,
@@ -16,5 +17,6 @@ export {
   CHANGE_TEACHER_NAME_API,
   SUBSCRIPTION_API,
   UNSUBSCRIPTION_API,
+  UPDATE_TEACHER_SUBJECTS_API,
   BASE_URL
 };
