@@ -2,7 +2,6 @@ import { useState } from "react";
 import IntroYourself from "../../../../assets/images/IntroYourself.png"
 import EditAboutMeModal from "./EditAboutMeModal";
 
-
 const AboutMe = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   return <>
