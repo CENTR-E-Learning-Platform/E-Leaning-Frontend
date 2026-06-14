@@ -49,6 +49,7 @@ export default function VideoDropBox({ onFileSelect }: VideoDropBoxProps) {
       </p>
 
       <button
+        type="button"
         onClick={() => inputRef.current?.click()}
         className="border-2 border-[#525FE1] duration-500 flex justify-center items-center text-[#525FE1] h-[43px] text-[16px] font-semibold px-4 py-4 rounded-[8px] hover:bg-[#525FE1] hover:text-white transition-colors"
       >
