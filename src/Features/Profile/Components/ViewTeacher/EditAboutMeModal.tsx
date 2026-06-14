@@ -1,8 +1,10 @@
-import { useState } from "react";
 import Close from "../../../../assets/icons/Close.svg";
 import VideoDropBox from "./VideoDropBox";
 import { useUploadIntroVideo } from "../../Hooks/useUploadIntroVideo";
 import { useAddBio } from "../../Hooks/useAddBio";
+import { useFormik } from "formik";
+import { IntroVideoAndBioSchema } from "../../Validation/BioAndVideoSchema";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function EditAboutMeModal({
   isOpen,
@@ -11,29 +13,42 @@ export default function EditAboutMeModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [bio, setBio] = useState<string>("");
-  const { mutate : uploadIntroVideoMutate } = useUploadIntroVideo();
-  const { mutate: addBioMutate } = useAddBio();
-  const handleAnyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setBio(e.target.value);
+  const { mutateAsync: uploadIntroVideoMutate } = useUploadIntroVideo();
+const { mutateAsync: addBioMutate } = useAddBio();
+  const queryClient = useQueryClient();
+
+  const formik = useFormik({
+    initialValues: {
+      bio: "",
+      video: null,
+    },
+    validationSchema: IntroVideoAndBioSchema,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validateOnMount: true,
+
+    onSubmit: async (values) => {
+
+      const { bio, video } = values;
+
+      if (video) {
+        await uploadIntroVideoMutate(video as File);
+      }
+
+      if (bio.trim()) {
+        await addBioMutate(bio);
+      }
+
+      await queryClient.invalidateQueries({ queryKey: ["teacherProfile"] });
+      resetAndClose();
+    },
+  });
+
+  const resetAndClose = () => {
+    formik.resetForm();
+    onClose();
   };
-  const SaveChange = () => {
 
-    if (!videoFile && !bio.trim()) {
-      return;
-    }
-
-    if (videoFile) {
-      uploadIntroVideoMutate(videoFile);
-    }
-
-    if (bio.trim()){
-      console.log(`true`)
-      addBioMutate(bio);
-    }
-
-  };
   if (!isOpen) return null;
   return (
     <>
@@ -58,7 +73,7 @@ export default function EditAboutMeModal({
               </button>
             </div>
 
-            <div className="px-6 pb-6">
+            <form onSubmit={formik.handleSubmit} className="px-6 pb-6">
               <h3 className="font-semibold text-[24px] text-[#2A2D34] mt-4 mb-1">
                 Upload an introduction
               </h3>
@@ -68,7 +83,18 @@ export default function EditAboutMeModal({
                 1080 pixels) in MP4 format.
               </p>
 
-              <VideoDropBox onFileSelect={setVideoFile} />
+              <VideoDropBox
+                onFileSelect={(file) => {
+                  formik.setFieldValue("video", file);
+                  formik.setFieldTouched("video", true, true);
+                }}
+              />
+
+              {formik.touched.video && formik.errors.video && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.video as string}
+                </p>
+              )}
 
               <h3 className="font-bold text-[#2A2D34] text-[24px] mb-1">
                 Profile overview
@@ -90,27 +116,36 @@ export default function EditAboutMeModal({
               </label>
 
               <textarea
-              onChange={handleAnyChange}
-                className="w-full bg-white border-2 border-[#D1D5DB] rounded-lg py-3 pr-[46px] pl-[16px] text-sm text-[#6D7588] resize-none focus:outline-none"
+                name="bio"
+                value={formik.values.bio}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 rows={5}
+                className="w-full bg-white border-2 border-[#D1D5DB] rounded-lg py-3 pr-[46px] pl-[16px] text-sm text-[#6D7588] resize-none focus:outline-none"
                 placeholder={`Example: Hi, I'm [Name]. I help students master Pure Math without the headache.\n\nI specialize in turning "blurry" concepts into clear results. Whether it's Calculus or Algebra, my lessons are tailored to your specific goals.\n\nWhy work with me? ✅ 15+ years of professional teaching ✅ Focus...`}
               />
 
+              {formik.touched.bio && formik.errors.bio && (
+                <p className="text-red-500 text-sm mt-1">{formik.errors.bio}</p>
+              )}
+
               <div className="flex justify-end gap-3 mt-6">
                 <button
-                  onClick={onClose}
+                  type="button"
+                  onClick={resetAndClose}
                   className="px-5 py-2 bg-white rounded-lg border-2 border-[#525FE1] text-[16px] font-semibold text-[#525FE1] hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={SaveChange}
+                  type="submit"
+                  disabled={!(formik.values.bio && formik.values.video)}
                   className="px-5 py-2 rounded-lg bg-[#525FE1] text-white text-sm font-semibold hover:bg-[#3f4bc4] transition-colors"
                 >
                   Save
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </section>
