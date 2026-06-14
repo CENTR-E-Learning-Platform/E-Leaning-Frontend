@@ -30,7 +30,7 @@ const AboutTeacher = () => {
         <iframe
           width="400"
           height="219"
-          src={data?.data.fullIntroVideoPath}
+          src={data?.data?.data?.introVideoPath}
           title="video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -38,7 +38,7 @@ const AboutTeacher = () => {
         ></iframe>
 
         <p ref={textRef} className={`text-[16px] font-medium font-Poppins text-[#2A2D34] ${!isExpanded ? "line-clamp-2" : ""}`}>
-          {data?.data.bio}
+          {data?.data?.data.bio}
         </p>
         {showButton && (
           <button
