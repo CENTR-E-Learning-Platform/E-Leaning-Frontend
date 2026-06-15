@@ -14,7 +14,7 @@ export default function EditAboutMeModal({
   onClose: () => void;
 }) {
   const { mutateAsync: uploadIntroVideoMutate } = useUploadIntroVideo();
-const { mutateAsync: addBioMutate } = useAddBio();
+  const { mutateAsync: addBioMutate } = useAddBio();
   const queryClient = useQueryClient();
 
   const formik = useFormik({
@@ -28,8 +28,8 @@ const { mutateAsync: addBioMutate } = useAddBio();
     validateOnMount: true,
 
     onSubmit: async (values) => {
-
       const { bio, video } = values;
+      console.log("Submitted", values);
 
       if (video) {
         await uploadIntroVideoMutate(video as File);
@@ -84,9 +84,11 @@ const { mutateAsync: addBioMutate } = useAddBio();
               </p>
 
               <VideoDropBox
-                onFileSelect={(file) => {
-                  formik.setFieldValue("video", file);
-                  formik.setFieldTouched("video", true, true);
+                onFileSelect={async (file) => {
+                  // formik.setFieldValue("video", file);
+                  // formik.setFieldTouched("video", true, true);
+                  await formik.setFieldValue("video", file);
+                  await formik.validateForm();
                 }}
               />
 
@@ -139,7 +141,7 @@ const { mutateAsync: addBioMutate } = useAddBio();
                 </button>
                 <button
                   type="submit"
-                  disabled={!(formik.values.bio && formik.values.video)}
+                  disabled={!formik.values.bio.trim() && !formik.values.video}
                   className="px-5 py-2 rounded-lg bg-[#525FE1] text-white text-sm font-semibold hover:bg-[#3f4bc4] transition-colors"
                 >
                   Save
