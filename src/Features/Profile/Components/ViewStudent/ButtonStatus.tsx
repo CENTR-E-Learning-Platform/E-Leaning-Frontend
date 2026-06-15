@@ -1,5 +1,5 @@
 
-const ButtonStatus = ( props : {imgClass: string, icon: string, rating: string, reviews: string}) => {
+const ButtonStatus = ( props : {imgClass: string, icon: string, rating: string, NumberOfReviews: string}) => {
   return <>
   
     <div className="bg-[#C8CCF44D] px-4 py-2 rounded-[4px] h-[60px]">
@@ -14,7 +14,7 @@ const ButtonStatus = ( props : {imgClass: string, icon: string, rating: string, 
           </div>
 
           <p className="text-[#4152FB] font-semibold text-[12px]">
-            {props.reviews}
+            {props.NumberOfReviews}
           </p>
 
     </div>
