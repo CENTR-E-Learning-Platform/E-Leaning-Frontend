@@ -1,7 +1,7 @@
 import bg_TeacherMath from "../../../../../src/assets/images/bg_TeacherMath.png";
 import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
 import PlusIcon from "../../../../../src/assets/icons/PlusIcon.svg";
-import editIcon from "../../../../../src/assets/icons/editIcon.svg"
+import editIcon from "../../../../../src/assets/icons/editIcon.svg";
 import { useEffect, useState } from "react";
 import ProfileCompletion from "./ProfileCompletion";
 import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
@@ -9,17 +9,20 @@ import EditPhotoModal from "./EditPhotoModal";
 import EditNameModal from "./EditNameModal";
 import { BASE_URL } from "../../Utils/Apis";
 import EditSubjectModal from "./EditSubjectModal";
+import { roleToAuth } from "../../../../Utils/Constant";
 
 const ProfileHeader = () => {
-  const { data , refetch } = useTeacherProfile();
+  const { data, refetch } = useTeacherProfile();
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditSubjectOpen, setIsEditSubjectOpen] = useState(false);
   const [isEditNameOpen, setIsEditNameOpen] = useState(false);
-  console.log(data)
+  const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
+
+  console.log(data);
   useEffect(() => {
     const path = data?.data?.data.profilePicturePath;
-    console.log("Path" ,  path)
+    console.log("Path", path);
     if (!path) return;
     if (path === BASE_URL) {
       setPreviewImage(bg_imptyPhoto);
@@ -56,12 +59,14 @@ const ProfileHeader = () => {
                   src={previewImage ?? bg_imptyPhoto}
                   alt="Teacher Profile Image"
                 />
-                <img
-                  onClick={() => setIsModalOpen(true)}
-                  className="absolute bg-[#F9FBFC] w-9 h-9 -bottom-[80px] z-50 cursor-pointer left-26 p-2.5  border-2 border-[#525FE1] rounded-full"
-                  src={PlusIcon}
-                  alt="PlusIcon"
-                />
+                {isTeacher && (
+                  <img
+                    onClick={() => setIsModalOpen(true)}
+                    className="absolute bg-[#F9FBFC] w-9 h-9 -bottom-[80px] z-50 cursor-pointer left-26 p-2.5  border-2 border-[#525FE1] rounded-full"
+                    src={PlusIcon}
+                    alt="PlusIcon"
+                  />
+                )}
               </div>
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
                 <div className="flex items-center gap-2 mb-4">
@@ -69,25 +74,30 @@ const ProfileHeader = () => {
                     {data?.data?.data.fullName}
                   </h2>
 
-                  <div
-                    onClick={() => {
-                      setIsEditNameOpen(true);
-                    }}
-                    className="flex justify-center items-center cursor-pointer w-9 h-9 border-2 border-[#525FE1] rounded-full"
-                  >
-                    <img src={editIcon} alt="edit" />
-                  </div>
+                  {isTeacher && (
+                    <div
+                      onClick={() => {
+                        setIsEditNameOpen(true);
+                      }}
+                      className="flex justify-center items-center cursor-pointer w-9 h-9 border-2 border-[#525FE1] rounded-full"
+                    >
+                      <img src={editIcon} alt="edit" />
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <p className="inline-block bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px] font-semibold text-[18px] text-[#611D1D]">
-                    {data?.data?.data.subjects?.join(", ")}
+                    {data?.data?.data.subjects?.join(" , ")}
                   </p>
 
-                  <div 
-                    onClick={() => setIsEditSubjectOpen(true)}
-                    className="flex justify-center items-center cursor-pointer w-9 h-9 border-2 border-[#525FE1] rounded-full bg-white">
-                    <img src={editIcon} alt="edit" />
-                  </div>
+                  {isTeacher && (
+                    <div
+                      onClick={() => setIsEditSubjectOpen(true)}
+                      className="flex justify-center items-center cursor-pointer w-9 h-9 border-2 border-[#525FE1] rounded-full bg-white"
+                    >
+                      <img src={editIcon} alt="edit" />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -103,7 +113,7 @@ const ProfileHeader = () => {
         </div>
 
         <div className="px-60 mt-30">
-          <ProfileCompletion/>
+          <ProfileCompletion />
         </div>
 
         {/* Responsive design  */}
@@ -111,38 +121,50 @@ const ProfileHeader = () => {
         <div className="block md:hidden px-4">
           <div className="flex items-center gap-3 -mt-8">
             <div className="Adding-Teacher-Profile-Image">
-                <img
-                  className="w-[90px] h-[90px] rounded-full border-2 border-[#D1D5DB] flex-shrink-0"
-                  src={previewImage || bg_imptyPhoto}
-                  alt="Teacher Profile Image"
-                />
+              <img
+                className="w-[90px] h-[90px] rounded-full border-2 border-[#D1D5DB] flex-shrink-0"
+                src={previewImage || bg_imptyPhoto}
+                alt="Teacher Profile Image"
+              />
+              {isTeacher && (
                 <img
                   onClick={() => setIsModalOpen(true)}
                   className="absolute bg-[#F9FBFC] w-9 h-9 -bottom-[80px] z-50 cursor-pointer left-26 p-2.5  border-2 border-[#525FE1] rounded-full"
                   src={PlusIcon}
                   alt="PlusIcon"
                 />
-              </div>
+              )}
+            </div>
             <div className="mt-4">
-
               <div className="flex items-center gap-2">
                 <h2 className="text-[20px] font-bold leading-snug">
                   {data?.data.data?.fullName}
                 </h2>
 
-                <div onClick={() => {setIsEditNameOpen(true)}} className="flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white">
-                  <img src={editIcon} alt="edit" className="w-4" />
-                </div>
+                {isTeacher && (
+                  <div
+                    onClick={() => {
+                      setIsEditNameOpen(true);
+                    }}
+                    className="flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white"
+                  >
+                    <img src={editIcon} alt="edit" className="w-4" />
+                  </div>
+                )}
               </div>
 
               <div className="relative mt-2 inline-flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[4px] rounded-[18px] pr-10">
                 <p className="font-semibold text-[14px] text-[#611D1D]">
-                  {data?.data?.data.subjects?.map((subject: string) => subject).join(", ")}
+                  {data?.data?.data.subjects
+                    ?.map((subject: string) => subject)
+                    .join(", ")}
                 </p>
 
-                <div className="absolute right-[-10px] top-[-6px] flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white">
-                  <img src={editIcon} alt="edit" className="w-4" />
-                </div>
+                {isTeacher && (
+                  <div className="absolute right-[-10px] top-[-6px] flex justify-center items-center w-8 h-8 border-2 border-[#525FE1] rounded-full cursor-pointer bg-white">
+                    <img src={editIcon} alt="edit" className="w-4" />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -163,18 +185,19 @@ const ProfileHeader = () => {
           setPreviewImage={setPreviewImage}
           refetch={refetch}
         />
-        
+
         <EditSubjectModal
           isOpen={isEditSubjectOpen}
           oldSubject={data?.data?.data.subjects?.[0] || ""}
           refetch={refetch}
-          onClose={() => setIsEditSubjectOpen(false)}/>
-
+          onClose={() => setIsEditSubjectOpen(false)}
+        />
 
         <EditNameModal
           isOpen={isEditNameOpen}
           oldName={data?.data?.data.fullName || ""}
-          onClose={() => setIsEditNameOpen(false)}/>
+          onClose={() => setIsEditNameOpen(false)}
+        />
       </section>
     </>
   );
