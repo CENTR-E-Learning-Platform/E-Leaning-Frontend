@@ -13,15 +13,12 @@ const TeacherStats = () => {
       
       <div className="TeacherStats-content flex justify-between items-start gap-2 w-[423px]">
         
-        <ButtonStatus imgClass="" icon={StartTeacher} rating="4.9" reviews="(120 reviews)"/>
-        <ButtonStatus imgClass="hidden" icon={""} rating="3+" reviews="Years Experience"/>
-        <ButtonStatus imgClass="hidden" icon={""} rating="174" reviews="Completed classes"/>
+        <ButtonStatus imgClass="" icon={StartTeacher} rating="4.9" NumberOfReviews="(120 Review)"/>
+        <ButtonStatus imgClass="hidden" icon={""} rating="3+" NumberOfReviews="Years Experience"/>
+        <ButtonStatus imgClass="hidden" icon={""} rating="174" NumberOfReviews="Completed classes"/>
 
       </div>
-
     </section>
-    
-  
   </>
 }
 
