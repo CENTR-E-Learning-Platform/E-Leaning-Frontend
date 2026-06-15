@@ -5,7 +5,6 @@ const AboutTeacher = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const {data} = useTeacherProfile();
-
   const textRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
@@ -17,12 +16,9 @@ const AboutTeacher = () => {
     }
   }, [data]);
 
-
-
   return (
     <>
-      <section className="AboutTeacher-section mb-12 w-[500px]">
-
+      <section className="AboutTeacher-section mb-12">
         <h2 className="text-[24px] mb-4 text-[#2A2D34] font-Poppins font-bold">
           About me
         </h2>
@@ -48,7 +44,6 @@ const AboutTeacher = () => {
             {isExpanded ? "Read less" : "Read more"}
           </button>
         )}
-
 
       </section>
     </>
