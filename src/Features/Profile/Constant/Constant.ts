@@ -17,3 +17,38 @@ export const SUBJECTS_LIST = [
   { id: 15, name: "Science" },
   { id: 16, name: "SocialStudies" },
 ];
+
+export const formatSessionDate = (startTime: string) => {
+  const date = new Date(startTime);
+
+  const weekday = date.toLocaleDateString("en-US", {
+    weekday: "short",
+  });
+
+  const day = date.getDate();
+
+  const month = date.toLocaleDateString("en-US", {
+    month: "short",
+  });
+
+  return `${weekday} ${day} ${month}`;
+};
+
+export const formatSessionTime = (startTime: string, endTime: string) => {
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+
+  const startFormatted = start.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  const endFormatted = end.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return `${startFormatted} - ${endFormatted}`;
+};
