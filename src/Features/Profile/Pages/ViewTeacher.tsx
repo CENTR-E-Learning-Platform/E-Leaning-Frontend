@@ -21,7 +21,7 @@ const ViewTeacher = () => {
           <div className="right-content">
             
             {
-              data?.data?.data?.introVideoPath !== BASE_URL
+              data?.data?.data?.introVideoPath !== BASE_URL || data?.data?.data?.bio !== null
                 ? <AboutTeacher />
                 : <AboutMe />
             }
