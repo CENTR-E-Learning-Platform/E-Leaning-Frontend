@@ -1,6 +1,8 @@
 const BASE_URL = "https://localhost:7251";
 const UPLOADIMAGE_API = `${BASE_URL}/api/TeacherProfile/AddImage`;
 const TEACHERPROFILE_API = `${BASE_URL}/api/TeacherProfile/Get_TeacherProfile_Data`;
+const STUDENT_TEACHERPROFILE_API = `${BASE_URL}/api/TeacherProfile/Student_Get_Teacher_Profile`;
+
 const UPLOAD_INTRO_VIDEO_API = `${BASE_URL}/api/TeacherProfile/Upload_Intro_Video`;
 const DELETE_FILE_API = `${BASE_URL}/api/TeacherProfile/DeleteFile`;
 const ADD_TEACHR_BIO_API = `${BASE_URL}/api/TeacherProfile/Add_Teacher_Bio`;
@@ -18,5 +20,6 @@ export {
   SUBSCRIPTION_API,
   UNSUBSCRIPTION_API,
   UPDATE_TEACHER_SUBJECTS_API,
+  STUDENT_TEACHERPROFILE_API,
   BASE_URL
 };
