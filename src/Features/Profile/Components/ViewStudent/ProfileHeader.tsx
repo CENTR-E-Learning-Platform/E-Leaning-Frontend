@@ -4,44 +4,21 @@ import MessageIcon from "../../../../../src/assets/icons/MessageIcon.svg";
 import ShareIcon from "../../../../../src/assets/icons/ShareIcon.svg";
 import bg_imptyPhoto from "../../../../../src/assets/images/imptyPhoto.jpg";
 import { BASE_URL } from "../../../Streaming/Utils/Apis";
-import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
 import { useState } from "react";
-import { useAddSubscription } from "../../Hooks/useAddsubscription";
-import { useAddUnsubscription } from "../../Hooks/useAddUnsubscription";
-
-
+import { useStudentProfileContext } from "../../Contexts/StudentProfileContext";
 
 const ProfileHeader = () => {
   const [love, setLoved] = useState(false);
-  const { data: teacherData } = useTeacherProfile();
-  const {mutate: subscriptionMutate} = useAddSubscription();
-  const {mutate: unsubscriptionMutate} = useAddUnsubscription();
-  const teacherId = teacherData?.data?.data?.teacherId;
-  
+  const { teacherProfile, isLoading } = useStudentProfileContext();
 
-  const handleSubscription = () => {
-    if(!love) {
-      subscriptionMutate(teacherId, {
-        onSuccess: (data) => {
-          setLoved(true);
-          console.log(data)
-        },
-        onError: () => {
-          alert("Failed to subscribe.");
-        }
-      });
-    } else {
-      unsubscriptionMutate(teacherId, {
-        onSuccess: (data) => {
-          setLoved(false);
-          console.log(data)
-        },
-        onError: () => {
-          alert("Failed to unsubscribe.");
-        }
-      });
-    }
-  }
+  const fullProfilePicture = teacherProfile?.profilePicturePath
+    ? teacherProfile.profilePicturePath === BASE_URL
+      ? bg_imptyPhoto
+      : `${BASE_URL}${teacherProfile.profilePicturePath}`
+    : bg_imptyPhoto;
+
+  const subject = teacherProfile?.subjects?.join(" , ") ?? "—";
+  console.log( "fullProfilePicture" , fullProfilePicture)
 
   return (
     <>
@@ -54,33 +31,28 @@ const ProfileHeader = () => {
           />
         </div>
 
+        {/* Desktop */}
         <div className="hidden md:block contentProfileTecher px-60">
           <div className="flex relative justify-between items-center">
             <div className="flex justify-between gap-4">
               <img
                 className="w-[144px] object-cover h-[144px] absolute bottom-[-85px] rounded-full border-2 border-[#D1D5DB]"
-                src={
-                  teacherData?.data?.fullPrfilePicturePath === BASE_URL
-                    ? bg_imptyPhoto
-                    : teacherData?.data?.fullPrfilePicturePath
-                }
+                src={fullProfilePicture}
                 alt="Teacher Profile Image"
               />
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
                 <h2 className="text-[28px] mb-4 leading-[13px] tracking-[0] font-bold">
-                  {teacherData?.data.fullName}
+                  {isLoading ? "Loading..." : teacherProfile?.fullName ?? "—"}
                 </h2>
-                <div className="h-[29px] w-[191px] flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px]">
-                  <p className="font-semibold text-[18px] text-[#611D1D]">
-                    {teacherData?.data?.subject || "Pure mathematics"}
+                  <p className="inline-block bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px] font-semibold text-[18px] text-[#611D1D]">
+                    {subject}
                   </p>
-                </div>
               </div>
             </div>
 
             <div className="flex gap-4 absolute top-[15px] right-[-5px] justify-center items-center">
               <img
-                onClick={handleSubscription}
+                onClick={() => setLoved(!love)}
                 className="p-4 border-2 border-[#525FE1] rounded-[8px] cursor-pointer transition"
                 src={love ? MessageIcon : heartIcon}
                 alt="Heart Icon"
@@ -101,24 +73,21 @@ const ProfileHeader = () => {
           </div>
         </div>
 
+        {/* Mobile */}
         <div className="block md:hidden px-4">
           <div className="flex items-center gap-3 -mt-8">
             <img
               className="w-[90px] h-[90px] rounded-full border-2 border-[#D1D5DB] flex-shrink-0"
-              src={
-                teacherData?.data?.fullPrfilePicturePath == "https://localhost:7251"
-                  ? bg_imptyPhoto
-                  : teacherData?.data?.fullPrfilePicturePath
-              }
+              src={fullProfilePicture}
               alt="Teacher Profile Image"
             />
             <div className="mt-4">
               <h2 className="text-[20px] font-bold leading-snug">
-                {teacherData?.data.fullName}
+                {isLoading ? "Loading..." : teacherProfile?.fullName ?? "—"}
               </h2>
               <div className="mt-2 inline-flex justify-center items-center bg-[#FFDEDE] px-[10px] py-[4px] rounded-[18px]">
                 <p className="font-semibold text-[14px] text-[#611D1D]">
-                  Pure mathematics
+                  {subject}
                 </p>
               </div>
             </div>
