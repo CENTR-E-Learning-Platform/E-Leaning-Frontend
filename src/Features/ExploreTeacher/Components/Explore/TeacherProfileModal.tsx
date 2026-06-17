@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+import { useStudentProfile } from "../../../Profile/Hooks/useViewStudentProfile";
 import { BASE_URL } from "../../../Streaming/Utils/Apis";
 
 interface TeacherProfileModalProps {
@@ -11,6 +13,34 @@ const TeacherProfileModal = ({
   onClose,
   onMessage,
 }: TeacherProfileModalProps) => {
+  const navigate = useNavigate();
+  const { mutate, isPending } = useStudentProfile();
+
+  const handleViewProfile = () => {
+    const teacherId = teacher.teacherId ?? teacher.id ?? null;
+    if (!teacherId) return;
+
+    mutate(teacherId, {
+      onSuccess: (response) => {
+        // Store the fetched profile data so ViewStudent page can read it
+        const profileData = response?.data?.data ?? null;
+        if (profileData) {
+          localStorage.setItem(
+            "viewStudentProfileData",
+            JSON.stringify(profileData)
+          );
+        }
+        // Also store the teacherId for re-fetching if needed
+        localStorage.setItem("viewStudentTeacherId", teacherId);
+        onClose();
+        navigate("/profile/view-student");
+      },
+      onError: () => {
+        alert("Failed to load teacher profile. Please try again.");
+      },
+    });
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-6">
       <div className="w-full max-w-[620px] rounded-[20px] bg-white p-[26px] shadow-[0px_20px_60px_rgba(0,0,0,0.15)]">
@@ -75,10 +105,11 @@ const TeacherProfileModal = ({
             </button>
             <button
               type="button"
-              onClick={onClose}
-              className="rounded-[12px] border border-gray-300 px-5 py-3 text-[#374151] font-semibold hover:bg-gray-100 transition"
+              onClick={handleViewProfile}
+              disabled={isPending}
+              className="rounded-[12px] border border-gray-300 px-5 py-3 text-[#374151] font-semibold hover:bg-gray-100 transition disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Cancel
+              {isPending ? "Loading..." : "Profile"}
             </button>
           </div>
         </div>
