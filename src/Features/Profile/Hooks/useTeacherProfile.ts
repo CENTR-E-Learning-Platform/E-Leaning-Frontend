@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetTeacherProfileData } from "../Services/TeacherProfileAPI";
 
 export const useTeacherProfile = () => {
-  const { data, refetch } = useQuery({
+  const { data, refetch, isLoading, isError, error } = useQuery({
     queryKey: ["teacherProfile"],
     queryFn: GetTeacherProfileData,
     refetchOnWindowFocus: false,
@@ -11,5 +11,5 @@ export const useTeacherProfile = () => {
     staleTime: Infinity,
   });
 
-  return { data, refetch };
+  return { data, refetch, isLoading, isError, error };
 };
