@@ -8,10 +8,12 @@ import Subject from '../../Components/Form/Subject';
 import { useCreateRoom } from "../../../Streaming/Hooks/useCreateRoom";
 import Price from "./Price";
 import { useGetAllClasses } from "../../Hooks/useGetAllClasses";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ClassForm = ({ onClose }: { onClose?: () => void }) => {
   const { formik } = useCreateRoom();
   const { fetchClasses } = useGetAllClasses();
+  const queryClient = useQueryClient();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -221,6 +223,7 @@ const ClassForm = ({ onClose }: { onClose?: () => void }) => {
                   await formik.submitForm();
                   if (Object.keys(formik.errors).length === 0) {
                     fetchClasses();
+                    queryClient.invalidateQueries({ queryKey: ["teacherProfile"] });
                     onClose?.();
                   }
                 }}
