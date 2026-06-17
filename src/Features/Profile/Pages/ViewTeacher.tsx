@@ -7,13 +7,27 @@ import ResumeMe from "../Components/ViewTeacher/ResumeMe"
 import Verifications from "../Components/ViewTeacher/Verifications"
 import { useTeacherProfile } from "../Hooks/useTeacherProfile"
 import { BASE_URL } from "../Utils/Apis"
+import { StudentProfileContext } from "../Contexts/StudentProfileContext"
 
 const ViewTeacher = () => {
-  const { data } = useTeacherProfile();
+  const { data, isLoading, isError, error } = useTeacherProfile();
   
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#F9FBFC]">
+        <h2 className="text-2xl font-bold text-red-600 mb-2">Backend Server Error</h2>
+        <p className="text-[#2A2D34] font-medium max-w-md text-center">
+          The server encountered an error while trying to fetch your profile (500 Internal Server Error).
+          Please check your backend console logs for the exact crash details.
+        </p>
+      </div>
+    );
+  }
+
   return <>
 
-    <section className="ProfileStudent-section bg-[#F9FBFC]">
+    <StudentProfileContext.Provider value={{ teacherProfile: data?.data?.data ?? null, isLoading: isLoading ?? false }}>
+      <section className="ProfileStudent-section bg-[#F9FBFC]">
 
       <ProfileHeader/>
 
@@ -28,7 +42,10 @@ const ViewTeacher = () => {
 
             <Verifications/>
 
-            <MyStudentSay/>
+            {
+              data?.data?.data?.reviews?.length === 0 &&
+              <MyStudentSay/>
+            }
 
             <ResumeMe/>
 
@@ -41,7 +58,7 @@ const ViewTeacher = () => {
           </div>
         </div>
     </section>
-  
+    </StudentProfileContext.Provider>
   
   </>
 }
