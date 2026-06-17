@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Calendar, Clock } from "lucide-react";
-import { useTeacherProfile } from "../../Hooks/useTeacherProfile";
+import { useStudentProfileContext } from "../../Contexts/StudentProfileContext";
 import { formatSessionDate, formatSessionTime } from "../../Constant/Constant";
-import { roleToAuth } from "../../../../Utils/Constant";
 import { useNavigate } from "react-router-dom";
+import { roleToAuth } from "../../../../Utils/Constant";
 
 const AvailableClasses = () => {
-  const { data } = useTeacherProfile();
+  const { teacherProfile } = useStudentProfileContext();
   const [selectedClass, setSelectedClass] = useState<number | null>(null);
   const navigate = useNavigate();
   const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
 
-  if (data?.data?.data?.upComingSessions?.length === 0) {
+  if (!teacherProfile || teacherProfile.upComingSessions?.length === 0) {
     return (
       <div className="border border-[#E8EAED] rounded-xl p-6 bg-white">
         <div className="flex flex-col items-center justify-center py-8">
@@ -29,6 +29,7 @@ const AvailableClasses = () => {
       </div>
     );
   }
+
   return (
     <>
       <section className="Available-section">
@@ -37,17 +38,15 @@ const AvailableClasses = () => {
             <h2 className="text-[24px] font-semibold text-[#2A2D34] mb-2">
               Available classes
             </h2>
-            {!isTeacher && (
-              <p className="text-[#6D7588] text-[16px] font-medium">
-                Choose a time that fits your schedule
-              </p>
-            )}
+            <p className="text-[#6D7588] text-[16px] font-medium">
+              Choose a time that fits your schedule
+            </p>
           </div>
 
           <hr className="border-[#D1D5DB] w-[327px] mb-6" />
 
           <div className="space-y-2.5 mb-4">
-            {data?.data?.data?.upComingSessions?.map(
+            {teacherProfile.upComingSessions?.map(
               (
                 session: {
                   price: number;
@@ -111,18 +110,22 @@ const AvailableClasses = () => {
             )}
           </div>
 
-          {isTeacher ? (
-            <button
+          {isTeacher ? <button
               onClick={() => navigate("/Calendar")}
               className="w-[327px] h-[45px] cursor-pointer flex justify-center items-center bg-[#525FE1] hover:bg-indigo-600 text-[#F9FBFC] font-semibold text-[18px] py-4 rounded-[8px] transition-colors"
             >
               Manage Schedule
-            </button>
-          ) : (
-            <button className="w-[327px] h-[45px] cursor-pointer flex justify-center items-center bg-[#525FE1] hover:bg-indigo-600 text-[#F9FBFC] font-semibold text-[18px] py-4 rounded-[8px] transition-colors">
-              Book class
-            </button>
-          )}
+            </button> :
+          <button 
+          disabled={selectedClass === null}
+          onClick={() => 
+            console.log("clicked",teacherProfile?.upComingSessions?.[selectedClass ?? 0]?.id)
+          }
+          className={`w-[327px] h-[45px] cursor-pointer flex justify-center items-center bg-[#525FE1] hover:bg-indigo-600 text-[#F9FBFC] font-semibold text-[18px] py-4 rounded-[8px] transition-colors ${selectedClass === null ? "opacity-50 cursor-not-allowed" : ""}`}
+          >
+            Book class
+          </button>}
+
         </div>
       </section>
     </>
