@@ -3,7 +3,7 @@ const ButtonStatus = ( props : {imgClass: string, icon: string, rating: string, 
   return <>
   
     <div className="bg-[#C8CCF44D] px-4 py-2 rounded-[4px] h-[60px]">
-          <div className="w-[50px] flex gap-1 justify-between items-center">
+          <div className="flex gap-1 items-center">
 
             <img className={props.imgClass} src={props.icon} />
 
