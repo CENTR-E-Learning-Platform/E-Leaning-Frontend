@@ -5,23 +5,33 @@ import { useAddBio } from "../../Hooks/useAddBio";
 import { useFormik } from "formik";
 import { IntroVideoAndBioSchema } from "../../Validation/BioAndVideoSchema";
 import { useQueryClient } from "@tanstack/react-query";
+import { BASE_URL } from "../../Utils/Apis";
 
 export default function EditAboutMeModal({
   isOpen,
   onClose,
+  initialBio = "",
+  initialVideoPath = "",
 }: {
   isOpen: boolean;
   onClose: () => void;
+  initialBio?: string;
+  initialVideoPath?: string;
 }) {
   const { mutateAsync: uploadIntroVideoMutate } = useUploadIntroVideo();
   const { mutateAsync: addBioMutate } = useAddBio();
   const queryClient = useQueryClient();
 
+  const currentBio = initialBio;
+  const introVideoPath = initialVideoPath;
+  const hasVideo = introVideoPath && introVideoPath !== BASE_URL;
+
   const formik = useFormik({
     initialValues: {
-      bio: "",
+      bio: currentBio,
       video: null,
     },
+    enableReinitialize: true,
     validationSchema: IntroVideoAndBioSchema,
     validateOnChange: true,
     validateOnBlur: true,
@@ -83,6 +93,13 @@ export default function EditAboutMeModal({
                 1080 pixels) in MP4 format.
               </p>
 
+              {hasVideo && !formik.values.video && (
+                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
+                  <span className="text-sm text-blue-700 font-medium">You already have an intro video uploaded.</span>
+                  <a href={introVideoPath.startsWith('http') ? introVideoPath : `${BASE_URL}${introVideoPath}`} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">View current</a>
+                </div>
+              )}
+      
               <VideoDropBox
                 onFileSelect={async (file) => {
                   // formik.setFieldValue("video", file);
