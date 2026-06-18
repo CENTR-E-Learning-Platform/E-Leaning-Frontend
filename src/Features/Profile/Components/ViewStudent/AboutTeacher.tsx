@@ -1,13 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useStudentProfileContext } from "../../Contexts/StudentProfileContext";
 import { BASE_URL } from "../../Utils/Apis";
+import { roleToAuth } from "../../../../Utils/Constant";
+import EditAboutMeModal from "../ViewTeacher/EditAboutMeModal";
+import editIcon from "../../../../../src/assets/icons/editIcon.svg";
 
 const AboutTeacher = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const { teacherProfile } = useStudentProfileContext();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
   const textRef = useRef<HTMLParagraphElement>(null);
-  console.log(teacherProfile)
+  const bio = teacherProfile?.bio ?? null;
+  const introVideoPath = teacherProfile?.introVideoPath ?? null;
+
+  console.log(teacherProfile);
 
   useEffect(() => {
     const el = textRef.current;
@@ -21,16 +29,29 @@ const AboutTeacher = () => {
   return (
     <>
       <section className="AboutTeacher-section mb-12">
-        <h2 className="text-[24px] mb-4 text-[#2A2D34] font-Poppins font-bold">
-          About me
-        </h2>
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-[24px] mb-4 text-[#2A2D34] font-Poppins font-bold">
+            About me
+          </h3>
+
+          {isTeacher && (
+            <div
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+              className="flex justify-center items-center cursor-pointer w-9 h-9 border-2 border-[#525FE1] rounded-full"
+            >
+              <img src={editIcon} alt="edit" />
+            </div>
+          )}
+        </div>
 
         {teacherProfile?.introVideoPath &&
           teacherProfile.introVideoPath !== BASE_URL && (
             <iframe
               width="400"
               height="219"
-              src={`${BASE_URL}${teacherProfile.introVideoPath}`}
+              src={`${teacherProfile.introVideoPath}${teacherProfile.introVideoPath.includes('?') ? '&' : '?'}t=${new Date().getTime()}`}
               title="video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -52,6 +73,13 @@ const AboutTeacher = () => {
             {isExpanded ? "Read less" : "Read more"}
           </button>
         )}
+
+        <EditAboutMeModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          initialBio={bio ?? ""}
+          initialVideoPath={introVideoPath ?? ""}
+        />
       </section>
     </>
   );
