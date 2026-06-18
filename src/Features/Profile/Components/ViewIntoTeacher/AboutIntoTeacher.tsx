@@ -49,7 +49,7 @@ const AboutIntoTeacher = () => {
           <iframe
             width="400"
             height="219"
-            src={introVideoPath}
+            src={`${introVideoPath}${introVideoPath.includes('?') ? '&' : '?'}t=${new Date().getTime()}`}
             title="video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
