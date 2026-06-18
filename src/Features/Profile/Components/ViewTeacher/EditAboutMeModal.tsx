@@ -45,8 +45,8 @@ export default function EditAboutMeModal({
         await uploadIntroVideoMutate(video as File);
       }
 
-      if (bio.trim()) {
-        await addBioMutate(bio);
+      if (bio.trim() !== currentBio.trim() || bio === "") {
+        await addBioMutate(bio.trim());
       }
 
       await queryClient.invalidateQueries({ queryKey: ["teacherProfile"] });
@@ -77,7 +77,7 @@ export default function EditAboutMeModal({
               </h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-700 transition-colors"
+                className="text-gray-400 cursor-pointer hover:text-gray-700 transition-colors"
               >
                 <img src={Close} alt="Close" />
               </button>
@@ -96,14 +96,12 @@ export default function EditAboutMeModal({
               {hasVideo && !formik.values.video && (
                 <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
                   <span className="text-sm text-blue-700 font-medium">You already have an intro video uploaded.</span>
-                  <a href={introVideoPath.startsWith('http') ? introVideoPath : `${BASE_URL}${introVideoPath}`} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">View current</a>
+                  <a href={(introVideoPath.startsWith('http') ? introVideoPath : `${BASE_URL}${introVideoPath}`) + (introVideoPath.includes('?') ? '&' : '?') + `t=${new Date().getTime()}`} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">View current</a>
                 </div>
               )}
       
               <VideoDropBox
                 onFileSelect={async (file) => {
-                  // formik.setFieldValue("video", file);
-                  // formik.setFieldTouched("video", true, true);
                   await formik.setFieldValue("video", file);
                   await formik.validateForm();
                 }}
@@ -152,14 +150,14 @@ export default function EditAboutMeModal({
                 <button
                   type="button"
                   onClick={resetAndClose}
-                  className="px-5 py-2 bg-white rounded-lg border-2 border-[#525FE1] text-[16px] font-semibold text-[#525FE1] hover:bg-gray-50 transition-colors"
+                  className="px-5 py-2 bg-white rounded-lg cursor-pointer border-2 border-[#525FE1] text-[16px] font-semibold text-[#525FE1] hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={!formik.values.bio.trim() && !formik.values.video}
-                  className="px-5 py-2 rounded-lg bg-[#525FE1] text-white text-sm font-semibold hover:bg-[#3f4bc4] transition-colors"
+                  disabled={formik.values.bio.trim() === currentBio.trim() && !formik.values.video}
+                  className="px-5 py-2 rounded-lg bg-[#525FE1] cursor-pointer text-white text-sm font-semibold hover:bg-[#3f4bc4] transition-colors"
                 >
                   Save
                 </button>
