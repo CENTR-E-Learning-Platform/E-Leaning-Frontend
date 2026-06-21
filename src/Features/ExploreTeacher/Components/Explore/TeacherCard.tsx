@@ -78,18 +78,15 @@ const TeacherCard = ({ teacher, onOpenProfile }: TeacherCardProps) => {
                   ({teacher.numberOfReviews} reviews)
                 </span>
               </div>
-              <div className="h-[26px] w-[181px] flex justify-center items-center bg-[#FFDEDE] px-[9px] py-[7px] rounded-[18px]">
+              <div className="h-[26px] w-fit flex justify-center items-center bg-[#FFDEDE] px-[9px] py-[7px] rounded-[18px]">
                 <p className="font-semibold text-[16px] text-[#611D1D]">
-                  {teacher.subject}
+                  {teacher.subjects?.join(" , ")}
                 </p>
               </div>
             </div>
             <div className="DetailsAboutTeacher w-[326px] h-[82px] mt-2">
               <p className="font-medium text-[14px] text-[#5A6272]">
                 {teacher.bio}
-              </p>
-              <p className="font-medium text-[14px] w-fit underline cursor-pointer">
-                {teacher.bio ? "Learn more" : ""}
               </p>
             </div>
           </div>
