@@ -14,7 +14,7 @@ const ProfileHeader = () => {
   const fullProfilePicture = teacherProfile?.profilePicturePath
     ? teacherProfile.profilePicturePath === BASE_URL
       ? bg_imptyPhoto
-      : `${BASE_URL}${teacherProfile.profilePicturePath}`
+      : `${teacherProfile.profilePicturePath}`
     : bg_imptyPhoto;
 
   const subject = teacherProfile?.subjects?.join(" , ") ?? "—";
@@ -31,7 +31,6 @@ const ProfileHeader = () => {
           />
         </div>
 
-        {/* Desktop */}
         <div className="hidden md:block contentProfileTecher px-60">
           <div className="flex relative justify-between items-center">
             <div className="flex justify-between gap-4">
@@ -73,7 +72,6 @@ const ProfileHeader = () => {
           </div>
         </div>
 
-        {/* Mobile */}
         <div className="block md:hidden px-4">
           <div className="flex items-center gap-3 -mt-8">
             <img
