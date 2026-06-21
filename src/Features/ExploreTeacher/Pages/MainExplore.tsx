@@ -156,6 +156,7 @@ const MainExplore = () => {
     activeResponse?.data?.totalItems ||
     activeResponse?.data?.total ||
     activeResponse?.data?.pagination?.totalCount ||
+    activeResponse?.data?.totalPages ||
     null;
 
   if (searchError && "response" in searchError) {
