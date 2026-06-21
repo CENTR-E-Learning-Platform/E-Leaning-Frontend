@@ -15,7 +15,7 @@ const AboutTeacher = () => {
   const bio = teacherProfile?.bio ?? null;
   const introVideoPath = teacherProfile?.introVideoPath ?? null;
 
-  console.log(teacherProfile);
+  console.log("Student prof", teacherProfile);
 
   useEffect(() => {
     const el = textRef.current;
@@ -30,7 +30,7 @@ const AboutTeacher = () => {
     <>
       <section className="AboutTeacher-section mb-12">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-[24px] mb-4 text-[#2A2D34] font-Poppins font-bold">
+          <h3 className="text-[24px] text-[#2A2D34] font-Poppins font-bold">
             About me
           </h3>
 
