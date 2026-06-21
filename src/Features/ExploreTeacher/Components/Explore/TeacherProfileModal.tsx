@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useStudentProfile } from "../../../Profile/Hooks/useViewStudentProfile";
 import { BASE_URL } from "../../../Streaming/Utils/Apis";
+import Close from "../../../../assets/icons/Close.svg";
 
 interface TeacherProfileModalProps {
   teacher: any;
@@ -22,7 +23,6 @@ const TeacherProfileModal = ({
 
     mutate(teacherId, {
       onSuccess: (response) => {
-        // Store the fetched profile data so ViewStudent page can read it
         const profileData = response?.data?.data ?? null;
         if (profileData) {
           localStorage.setItem(
@@ -30,7 +30,6 @@ const TeacherProfileModal = ({
             JSON.stringify(profileData)
           );
         }
-        // Also store the teacherId for re-fetching if needed
         localStorage.setItem("viewStudentTeacherId", teacherId);
         onClose();
         navigate("/profile/view-student");
@@ -53,13 +52,11 @@ const TeacherProfileModal = ({
               View profile details and start a message with this teacher.
             </p>
           </div>
-          <button
-            type="button"
+          <img
             onClick={onClose}
-            className="text-[14px] font-semibold text-[#6B7280] hover:text-[#111827]"
-          >
-            Close
-          </button>
+            src={Close}
+            className="text-[14px] cursor-pointer font-semibold text-[#6B7280] hover:text-[#111827]"
+          />
         </div>
 
         <div className="flex flex-col gap-6">
