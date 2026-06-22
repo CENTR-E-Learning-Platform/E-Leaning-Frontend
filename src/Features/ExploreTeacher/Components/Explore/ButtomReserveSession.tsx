@@ -1,29 +1,27 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { payforsession } from "../../Services/payforsession";
+import { useReserveSession } from "../../Hooks/useReserveSession";
 
 interface Teacher {
   closesetSessionPrice: number;
   closesetSessionAvailableSeats: number;
+  roomName?: string;
+  closesetSessionRoomName?: string;
+  closestSessionRoomName?: string;
+  closestRoomName?: string;
+  sessionRoomName?: string;
+  [key: string]: any;
 }
 
 const ButtomReserveSession = ({ teacher }: { teacher: Teacher }) => {
   const [showModal, setShowModal] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const navigate = useNavigate();
-
-  const handleReserve = async () => {
-    setIsProcessing(true);
-    try {
-      await payforsession();
-      navigate("/calendar");
-    } catch (error) {
-      setIsProcessing(false);
-    }
-  };
+  const { reserveSession, isProcessing, error } = useReserveSession();
 
   const studentBalance = 5000;
   const remainingBalance = studentBalance - (teacher.closesetSessionPrice || 0);
+
+  const handleReserve = async () => {
+    await reserveSession(teacher);
+  };
 
   return (
     <>
@@ -62,6 +60,10 @@ const ButtomReserveSession = ({ teacher }: { teacher: Teacher }) => {
                 </span>
               </div>
             </div>
+
+            {error && (
+              <p className="text-[13px] text-[#E15254] mb-[12px] text-center">{error}</p>
+            )}
 
             <div className="flex flex-row gap-[12px] w-full mt-[8px]">
               <button
