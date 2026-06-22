@@ -100,14 +100,14 @@ const Hero = () => {
               initial="hidden"
               animate="visible"
             >
-              <motion.div variants={itemVariants}>
+              <motion.div variants={itemVariants as any}>
                 <span className="inline-block bg-white/10 border border-white/20 text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 backdrop-blur-sm">
                   🎓 The Future of Online Learning
                 </span>
               </motion.div>
 
               <motion.h1
-                variants={itemVariants}
+                variants={itemVariants as any}
                 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6"
               >
                 Learn Smarter,{" "}
@@ -123,13 +123,13 @@ const Hero = () => {
               </motion.h1>
 
               <motion.p
-                variants={itemVariants}
+                variants={itemVariants as any}
                 className="text-white/75 text-lg md:text-xl leading-relaxed mb-10 max-w-[520px]"
               >
                 Connect with expert teachers, join live interactive sessions, track your progress, and master any subject — all in one powerful platform.
               </motion.p>
 
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
+              <motion.div variants={itemVariants as any} className="flex flex-col sm:flex-row gap-4">
                 <motion.button
                   onClick={() => navigate("/auth")}
                   whileHover={{ scale: 1.04, y: -2 }}
@@ -149,7 +149,7 @@ const Hero = () => {
               </motion.div>
 
               <motion.div
-                variants={itemVariants}
+                variants={itemVariants as any}
                 className="flex items-center gap-6 mt-10"
               >
                 <div className="flex -space-x-3">
@@ -171,7 +171,7 @@ const Hero = () => {
 
             <motion.div
               className="flex-1 flex justify-center"
-              variants={floatVariants}
+              variants={floatVariants as any}
               initial="initial"
               animate="animate"
             >
