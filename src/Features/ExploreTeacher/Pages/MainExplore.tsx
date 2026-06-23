@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 import { usesearchteach } from "../Hooks/usesearchteach";
 import { usefilterteach } from "../Hooks/usefilterteach";
 import { useGetAllTeachers } from "../Hooks/useallTeacher";
@@ -13,6 +16,8 @@ import { BASE_URL } from "../../Streaming/Utils/Apis";
 import { useChat } from "../../Messages/Contexts/ShareDataMessages";
 
 const MainExplore = () => {
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
   const {
     data: searchTeachers,
     error: searchError,
@@ -59,14 +64,18 @@ const MainExplore = () => {
   } = useGetAllTeachers();
 
   const navigate = useNavigate();
-  const { setOtherUserId, setSelectedConversation, setConversationId } =
-    useChat();
-  const [selectedTeacherForModal, setSelectedTeacherForModal] =
-    useState<any>(null);
+  const { setOtherUserId, setSelectedConversation, setConversationId } = useChat();
+  const [selectedTeacherForModal, setSelectedTeacherForModal] = useState<any>(null);
 
-  const [resultsSource, setResultsSource] = useState<
-    "all" | "filter" | "search"
-  >("all");
+  const [resultsSource, setResultsSource] = useState<"all" | "filter" | "search">("all");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handlePageChange = (page: number) => {
     if (resultsSource === "filter") {
@@ -188,57 +197,76 @@ const MainExplore = () => {
   return (
     <>
       <main className="w-[1140px] m-auto">
-        <Header />
+        {showSkeleton ? (
+          <div className="flex flex-col gap-8 w-full mt-8">
+            <Skeleton height={120} borderRadius={16} />
+            <Skeleton height={60} borderRadius={12} />
+            <div className="flex justify-between items-start gap-[28px]">
+              <div className="w-[300px]">
+                <Skeleton height={650} borderRadius={16} />
+              </div>
+              <div className="flex-1 flex flex-col gap-6">
+                <Skeleton height={180} borderRadius={16} />
+                <Skeleton height={180} borderRadius={16} />
+                <Skeleton height={180} borderRadius={16} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <Header />
 
-        <ExploreSearchBar
-          formik={formik}
-          setSearchTerm={setSearchTerm}
-          setResultsSource={setResultsSource}
-        />
-
-        <div className="flex justify-between items-start gap-[28px]">
-          <ExploreFiltersPanel
-            selectedLanguage={selectedLanguage}
-            setSelectedLanguage={setSelectedLanguage}
-            selectedDay={selectedDay}
-            setSelectedDay={setSelectedDay}
-            startTime={startTime}
-            setStartTime={setStartTime}
-            endTime={endTime}
-            setEndTime={setEndTime}
-            startPrice={startPrice}
-            setStartPrice={setStartPrice}
-            endPrice={endPrice}
-            setEndPrice={setEndPrice}
-            selectedRating={selectedRating}
-            setSelectedRating={setSelectedRating}
-            applyFilters={handleApplyFilters}
-            clearFilters={handleClearFilters}
-            formik={formik}
-            setSearchTerm={setSearchTerm}
-            setResultsSource={setResultsSource}
-          />
-
-          <div className="teachers">
-            <TeacherList
-              teachersList={teachersList}
-              isLoading={isLoadingTeachers}
-              currentPage={currentPage}
-              pageSize={pageSize}
-              totalCount={totalCount}
-              onPageChange={handlePageChange}
-              onOpenProfile={openTeacherProfile}
+            <ExploreSearchBar
+              formik={formik}
+              setSearchTerm={setSearchTerm}
+              setResultsSource={setResultsSource}
             />
 
-            {selectedTeacherForModal && (
-              <TeacherProfileModal
-                teacher={selectedTeacherForModal}
-                onClose={closeTeacherModal}
-                onMessage={goToMessages}
+            <div className="flex justify-between items-start gap-[28px]">
+              <ExploreFiltersPanel
+                selectedLanguage={selectedLanguage}
+                setSelectedLanguage={setSelectedLanguage}
+                selectedDay={selectedDay}
+                setSelectedDay={setSelectedDay}
+                startTime={startTime}
+                setStartTime={setStartTime}
+                endTime={endTime}
+                setEndTime={setEndTime}
+                startPrice={startPrice}
+                setStartPrice={setStartPrice}
+                endPrice={endPrice}
+                setEndPrice={setEndPrice}
+                selectedRating={selectedRating}
+                setSelectedRating={setSelectedRating}
+                applyFilters={handleApplyFilters}
+                clearFilters={handleClearFilters}
+                formik={formik}
+                setSearchTerm={setSearchTerm}
+                setResultsSource={setResultsSource}
               />
-            )}
-          </div>
-        </div>
+
+              <div className="teachers w-full">
+                <TeacherList
+                  teachersList={teachersList}
+                  isLoading={isLoadingTeachers}
+                  currentPage={currentPage}
+                  pageSize={pageSize}
+                  totalCount={totalCount}
+                  onPageChange={handlePageChange}
+                  onOpenProfile={openTeacherProfile}
+                />
+
+                {selectedTeacherForModal && (
+                  <TeacherProfileModal
+                    teacher={selectedTeacherForModal}
+                    onClose={closeTeacherModal}
+                    onMessage={goToMessages}
+                  />
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </main>
     </>
   );
