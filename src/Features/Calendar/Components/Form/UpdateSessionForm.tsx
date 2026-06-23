@@ -13,9 +13,11 @@ import SuccessUpdateCard from "./SuccessUpdateCard";
 interface UpdateSessionFormProps {
   session: Session;
   onClose: () => void;
+  numberOfWeeks?: number;
+  sessionSeriesId?: string;
 }
 
-const UpdateSessionForm = ({ session, onClose }: UpdateSessionFormProps) => {
+const UpdateSessionForm = ({ session, onClose, numberOfWeeks = 1, sessionSeriesId = "" }: UpdateSessionFormProps) => {
   const {
     formik,
     showConfirm,
@@ -24,7 +26,11 @@ const UpdateSessionForm = ({ session, onClose }: UpdateSessionFormProps) => {
     setShowSuccess,
     confirmUpdate,
     isPending,
-  } = useUpdateSession(session);
+    isSeries,
+    seriesMessage,
+    errorMessage,
+    clearError,
+  } = useUpdateSession(session, numberOfWeeks, sessionSeriesId);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -46,6 +52,7 @@ const UpdateSessionForm = ({ session, onClose }: UpdateSessionFormProps) => {
           setShowSuccess(false);
           onClose();
         }}
+        message={isSeries ? seriesMessage : null}
       />
     );
   }
@@ -179,16 +186,25 @@ const UpdateSessionForm = ({ session, onClose }: UpdateSessionFormProps) => {
 
             <div className="flex justify-center mt-[24px]">
               <Reminder
-                change={formik.handleChange}
+                change={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  formik.setFieldValue("reminder", e.target.value)
+                }
                 val={formik.values.reminder}
               />
             </div>
 
             <div className="flex justify-center mt-[24px]">
               <Description
-                change={formik.handleChange}
+                change={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  formik.setFieldValue("description", e.target.value)
+                }
                 val={formik.values.description}
               />
+              <div className="h-[20px]">
+                {formik.errors.description && formik.touched.description && (
+                  <p className="text-[#CC3363] text-[13px]">{formik.errors.description}</p>
+                )}
+              </div>
             </div>
 
             <div className="flex justify-center gap-[9px] mt-[24px]">
@@ -213,9 +229,41 @@ const UpdateSessionForm = ({ session, onClose }: UpdateSessionFormProps) => {
         <ConfirmUpdateCard
           title={formik.values.title}
           onCancel={() => setShowConfirm(false)}
-          onConfirm={confirmUpdate}
+          onConfirm={(scope) => confirmUpdate(scope)}
           isPending={isPending}
+          isSeries={isSeries}
         />
+      )}
+
+      {errorMessage && (
+        <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/40">
+          <div
+            className="bg-white rounded-[16px] p-[32px] w-[420px] shadow-2xl flex flex-col items-center gap-[20px]"
+            style={{ animation: "slideUp 0.3s ease" }}
+          >
+            <style>{`@keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+
+            <div className="w-[60px] h-[60px] rounded-full bg-[#FEE2E2] flex items-center justify-center">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </div>
+
+            <div className="text-center">
+              <h2 className="text-[20px] font-bold text-[#2A2D34] mb-[8px]">Update Failed</h2>
+              <p className="text-[14px] text-[#6D7588] leading-[22px]">{errorMessage}</p>
+            </div>
+
+            <button
+              onClick={clearError}
+              className="w-full py-[12px] rounded-[8px] font-semibold text-[15px] text-white bg-[#EF4444] hover:bg-[#DC2626] transition-colors cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </>
   );
