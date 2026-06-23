@@ -1,19 +1,5 @@
 import React from "react";
-
-interface TeacherClass {
-  additionalAttendeesCount?: number;
-  attendeeProfilePictures?: string[];
-  level?: string;
-  roomName?: string;
-  startTime?: string;
-  title?: string;
-}
-
-interface ClassItemProps {
-  cls: TeacherClass;
-  isLast: boolean;
-  upcomingClasses?: TeacherClass[];
-}
+import type { ClassItemProps } from "../../Types/types";
 
 const UpcomingClassItem: React.FC<ClassItemProps> = ({ cls , upcomingClasses}) => {
   const startDate = cls.startTime ? new Date(cls.startTime) : null;
