@@ -2,11 +2,7 @@ import React from "react";
 import UpcomingClassItem from "./UpcomingClassItem";
 import { useNavigate } from "react-router-dom";
 import UpcomingEmpty from "../EmptyState/UpcomingEmpty";
-import type { TeacherClass } from "../../Types/types";
-
-interface UpcomingClassesCardProps {
-  upcomingClasses?: TeacherClass[];
-}
+import type { UpcomingClassesCardProps } from "../../Types/types";
 
 const UpcomingClassesCard: React.FC<UpcomingClassesCardProps> = ({
   upcomingClasses,
