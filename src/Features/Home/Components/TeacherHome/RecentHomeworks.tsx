@@ -1,10 +1,5 @@
 import React from 'react';
-
-interface HomeworkCardProps {
-  title?: string;
-  subTitle?: string;
-  status?: string;
-}
+import type { HomeworkCardProps } from '../../Types/types';
 
 const RecentHomeworks: React.FC<HomeworkCardProps> = ({
   title = "The mole - Assignment 3",
