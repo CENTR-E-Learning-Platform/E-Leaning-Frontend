@@ -66,3 +66,59 @@ export interface TeacherData {
   starIcon: string;
   lineIcon: string;
 }
+
+export interface ClassItemProps {
+  cls: TeacherClass;
+  isLast: boolean;
+  upcomingClasses?: TeacherClass[];
+}
+
+export interface UpcomingClassesCardProps {
+  upcomingClasses?: TeacherClass[];
+}
+
+export interface MessageItem {
+  id: number;
+  name: string;
+  lastMessage: string;
+  avatarUrl: string;
+  unreadCount: number;
+}
+
+export interface HomeworkCardProps {
+  title?: string;
+  subTitle?: string;
+  status?: string;
+}
+
+export interface ActiveQuizzesProps {
+  quizzes?: TeacherQuizSummary[];
+}
+
+export interface HeroBannerProps {
+  date: string;
+  title: string;
+  subtitle: string;
+}
+export interface StatCardProps {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  labelWidth?: string;
+  iconWrapperClass?: string;
+}
+export interface UpcomingClassData {
+  time: string;
+  period: string;
+  title: string;
+  subject: string;
+  subjectBg: string;
+  subjectText: string;
+  teacherImg: string;
+  teacherName: string;
+  statusDot: string;
+  statusText: string;
+  statusLabel: string;
+  joinBg: string;
+  titleContainerClass?: string;
+}
