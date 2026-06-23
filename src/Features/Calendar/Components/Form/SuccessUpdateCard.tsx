@@ -1,8 +1,9 @@
 interface SuccessUpdateCardProps {
   onClose: () => void;
+  message?: string | null;
 }
 
-const SuccessUpdateCard = ({ onClose }: SuccessUpdateCardProps) => {
+const SuccessUpdateCard = ({ onClose, message }: SuccessUpdateCardProps) => {
   return (
     <div className="w-[498px] min-h-[400px] pb-[30px] bg-[#F9FBFC] rounded-[8px] flex flex-col items-center justify-center gap-[24px] px-[40px]">
       <div className="w-[72px] h-[72px] rounded-full bg-[#DCFCE7] flex items-center justify-center">
@@ -14,8 +15,12 @@ const SuccessUpdateCard = ({ onClose }: SuccessUpdateCardProps) => {
       <div className="text-center">
         <h2 className="text-[22px] font-bold text-[#2A2D34] mb-[10px]">Session Updated!</h2>
         <p className="text-[14px] text-[#6D7588] leading-[22px]">
-          Your session has been updated successfully.<br />
-          The new details are now active.
+          {message ?? (
+            <>
+              Your session has been updated successfully.<br />
+              The new details are now active.
+            </>
+          )}
         </p>
       </div>
 
