@@ -1,10 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import type { QuizItemProps, TeacherQuizSummary } from "../../Types/types";
-
-interface ActiveQuizzesProps {
-  quizzes?: TeacherQuizSummary[];
-}
+import type { ActiveQuizzesProps, QuizItemProps } from "../../Types/types";
 
 const QuizItem: React.FC<QuizItemProps> = ({
   title,
