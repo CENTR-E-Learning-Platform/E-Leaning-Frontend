@@ -10,19 +10,7 @@ import { BASE_URL } from "../Utils/Apis"
 import { StudentProfileContext } from "../Contexts/StudentProfileContext"
 
 const ViewTeacher = () => {
-  const { data, isLoading, isError, error } = useTeacherProfile();
-  
-  if (isError) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#F9FBFC]">
-        <h2 className="text-2xl font-bold text-red-600 mb-2">Backend Server Error</h2>
-        <p className="text-[#2A2D34] font-medium max-w-md text-center">
-          The server encountered an error while trying to fetch your profile (500 Internal Server Error).
-          Please check your backend console logs for the exact crash details.
-        </p>
-      </div>
-    );
-  }
+  const { data, isLoading } = useTeacherProfile();
 
   return <>
 

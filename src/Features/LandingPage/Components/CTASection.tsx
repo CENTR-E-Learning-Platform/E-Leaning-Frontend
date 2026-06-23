@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { usehandelBackRegister } from "../../Auth/Hooks/useRegister";
 
 const CTASection = () => {
   const navigate = useNavigate();
+  const { setrole } = usehandelBackRegister();
 
   return (
     <section className="py-24 px-8 md:px-16 relative overflow-hidden">
@@ -79,7 +81,10 @@ const CTASection = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <motion.button
-            onClick={() => navigate("/student-option")}
+            onClick={() => {
+              setrole("Student");
+              navigate("/student-option");
+            }}
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
             className="bg-white text-[#525FE1] font-bold text-base px-9 py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2"
@@ -87,7 +92,10 @@ const CTASection = () => {
             🎓 Join as Student
           </motion.button>
           <motion.button
-            onClick={() => navigate("/teacher-option")}
+            onClick={() => {
+              setrole("Teacher");
+              navigate("/teacher-option")
+            }}
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
             className="border-2 border-white/50 text-white font-bold text-base px-9 py-4 rounded-2xl hover:bg-white/10 backdrop-blur-sm transition-all duration-300 flex items-center justify-center gap-2"
