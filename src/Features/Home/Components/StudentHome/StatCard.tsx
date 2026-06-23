@@ -1,12 +1,7 @@
 import React from "react";
+import type { StatCardProps } from "../../Types/types";
 
-interface StatCardProps {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  labelWidth?: string;
-  iconWrapperClass?: string;
-}
+
 
 export const StatCard: React.FC<StatCardProps> = ({ icon, label, value, labelWidth, iconWrapperClass }) => {
   return (
