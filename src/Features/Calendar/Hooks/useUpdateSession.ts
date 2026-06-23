@@ -1,24 +1,63 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
-import { UpdateSession } from "../Services/updateSession";
+import { UpdateSession, UpdateSessionSeries } from "../Services/updateSession";
 import { type Session } from "../Types/types";
 import { UpdateSessionSchema } from "../Utils/UpdateSessionSchema";
 
-export const useUpdateSession = (session: Session | null) => {
+export type UpdateScope = "single" | "series" | null;
+
+export const useUpdateSession = (
+    session: Session | null,
+    numberOfWeeks: number = 1,
+    sessionSeriesId: string = ""
+) => {
     const [showConfirm, setShowConfirm] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [seriesMessage, setSeriesMessage] = useState<string | null>(null);
+    const [updateScope, setUpdateScope] = useState<UpdateScope>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const { mutate, isPending } = useMutation({
+    const isSeries = numberOfWeeks > 1;
+
+    const { mutate: mutateSingle, isPending: isPendingSingle } = useMutation({
         mutationFn: (data: Session) => UpdateSession(data),
         onSuccess: () => {
             setShowConfirm(false);
             setShowSuccess(true);
         },
-        onError: (error) => {
-            console.log("error", error);
-        }
+        onError: (error: any) => {
+            setShowConfirm(false);
+            const msg =
+                error?.response?.data?.message ??
+                error?.response?.data ??
+                null;
+            setErrorMessage(typeof msg === "string" ? msg : "There is a problem, maybe the session is reserved by a student or has timed out.");
+        },
     });
+
+    const { mutate: mutateSeries, isPending: isPendingSeries } = useMutation({
+        mutationFn: (data: Session) => UpdateSessionSeries(data),
+        onSuccess: (response) => {
+            setShowConfirm(false);
+            const msg =
+                response?.data?.message ??
+                response?.data ??
+                null;
+            setSeriesMessage(typeof msg === "string" ? msg : null);
+            setShowSuccess(true);
+        },
+        onError: (error: any) => {
+            setShowConfirm(false);
+            const msg =
+                error?.response?.data?.message ??
+                error?.response?.data ??
+                null;
+            setErrorMessage(typeof msg === "string" ? msg : "There is a problem, maybe the session is reserved by a student or has timed out.");
+        },
+    });
+
+    const isPending = isPendingSingle || isPendingSeries;
 
     const formik = useFormik<Session>({
         enableReinitialize: true,
@@ -27,7 +66,11 @@ export const useUpdateSession = (session: Session | null) => {
             id: session?.id ?? "",
             title: session?.title ?? "",
             startTime: session?.startTime
-                ? new Date(session.startTime).toISOString().slice(0, 16)
+                ? (() => {
+                    const d = new Date(session.startTime);
+                    const pad = (n: number) => String(n).padStart(2, "0");
+                    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+                })()
                 : "",
             durationMinutes: session?.durationMinutes ?? 60,
             grade: session?.grade ?? 0,
@@ -46,19 +89,34 @@ export const useUpdateSession = (session: Session | null) => {
         },
     });
 
-    const confirmUpdate = () => {
-        const payload: Session = {
-            id: formik.values.id,
-            price: Number(formik.values.price),
-            title: formik.values.title,
-            startTime: new Date(formik.values.startTime).toISOString(),
-            durationMinutes: Number(formik.values.durationMinutes),
-            grade: Number(formik.values.grade),
-            reminder: formik.values.reminder,
-            description: formik.values.description,
-        };
-        console.log("Sending payload:", JSON.stringify(payload, null, 2));
-        mutate(payload);
+    const confirmUpdate = (scope: UpdateScope) => {
+        if (scope === "series") {
+            const payload = {
+                sessionSeriesId,
+                price: Number(formik.values.price),
+                title: formik.values.title,
+                startTime: new Date(formik.values.startTime).toISOString(),
+                durationMinutes: Number(formik.values.durationMinutes),
+                grade: Number(formik.values.grade),
+                reminder: formik.values.reminder,
+                description: formik.values.description,
+            };
+            console.log("Series payload:", JSON.stringify(payload, null, 2));
+            mutateSeries(payload as any);
+        } else {
+            const payload = {
+                id: formik.values.id,
+                price: Number(formik.values.price),
+                title: formik.values.title,
+                startTime: new Date(formik.values.startTime).toISOString(),
+                durationMinutes: Number(formik.values.durationMinutes),
+                grade: Number(formik.values.grade),
+                reminder: formik.values.reminder,
+                description: formik.values.description,
+            };
+            console.log("Session payload:", JSON.stringify(payload, null, 2));
+            mutateSingle(payload);
+        }
     };
 
     return {
@@ -69,5 +127,11 @@ export const useUpdateSession = (session: Session | null) => {
         setShowSuccess,
         confirmUpdate,
         isPending,
+        isSeries,
+        seriesMessage,
+        updateScope,
+        setUpdateScope,
+        errorMessage,
+        clearError: () => setErrorMessage(null),
     };
 };
