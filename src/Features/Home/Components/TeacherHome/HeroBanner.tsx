@@ -1,12 +1,7 @@
 import React from "react";
 import learningBro from "../../../../assets/images/TeacherHome.png";
 import { useNavigate } from "react-router-dom";
-
-interface HeroBannerProps {
-  date: string;
-  title: string;
-  subtitle: string;
-}
+import type { HeroBannerProps } from "../../Types/types";
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({
   date,
