@@ -1,11 +1,7 @@
+import type { MessageItem } from "../../Types/types";
+
 const RecentMessages = () => {
-  interface MessageItem {
-    id: number;
-    name: string;
-    lastMessage: string;
-    avatarUrl: string;
-    unreadCount: number;
-  }
+  
 
   const messages: MessageItem[] = [
     {
