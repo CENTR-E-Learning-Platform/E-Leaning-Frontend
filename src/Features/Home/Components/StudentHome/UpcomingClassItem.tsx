@@ -1,21 +1,5 @@
 import React from "react";
-
-
-export interface UpcomingClassData {
-  time: string;
-  period: string;
-  title: string;
-  subject: string;
-  subjectBg: string;
-  subjectText: string;
-  teacherImg: string;
-  teacherName: string;
-  statusDot: string;
-  statusText: string;
-  statusLabel: string;
-  joinBg: string;
-  titleContainerClass?: string;
-}
+import type { UpcomingClassData } from "../../Types/types";
 
 interface Props {
   cls: UpcomingClassData;
