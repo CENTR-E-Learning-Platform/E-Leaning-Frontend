@@ -28,7 +28,7 @@ const ExploreSearchBar = ({
 
   return (
     <div className="flex justify-between items-center mb-[27px]">
-      <div className="flex justify-between items-center w-[325px]">
+      {/* <div className="flex justify-between items-center w-[325px]">
         <div className="w-[99px] h-[55px] text-[#2A2D34] flex justify-center gap-[9px] items-center border-2 border-[#D1D5DB] py-[17px] px-[19px] rounded-[8px]">
           <img
             src="../../../../../src/assets/icons/FilterIcon.svg"
@@ -48,8 +48,8 @@ const ExploreSearchBar = ({
             </select>
           </p>
         </div>
-      </div>
-      <div className="w-[393px] h-[55px] text-[#2A2D34] flex justify-start items-center border-2 border-[#D1D5DB] py-[21px] px-[15px] rounded-[8px]">
+      </div> */}
+      <div className="w-full h-[55px] border-2 border-[#D1D5DB] focus-within:border-[#525FE1] rounded-[8px] px-4 flex items-center transition-all duration-300">
         <div className="flex justify-between gap-[7px] items-center">
           <img
             className="w-[19px] h-[19px]"
@@ -59,7 +59,7 @@ const ExploreSearchBar = ({
           <input
             onChange={handleSearchChange}
             value={formik.values.SearchTeacher}
-            className="outline-none border-none w-[332px] focus:outline-none focus:border-none"
+            className="outline-none border-none w-[1100px] focus:outline-none focus:border-none"
             type="text"
             placeholder="Search Teacher"
             name="SearchTeacher"
