@@ -1,4 +1,8 @@
-﻿import { StatCard } from "../Components/StudentHome/StatCard";
+﻿import { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
+import { StatCard } from "../Components/StudentHome/StatCard";
 import { HeroBanner } from "../Components/TeacherHome/HeroBanner";
 import solid_book from "../../../assets/icons/fa6-solid_book.svg";
 import rightIcon from "../../../assets/icons/Vector (28).svg";
@@ -7,8 +11,6 @@ import mdi_people from "../../../assets/icons/mdi_people.svg";
 import Dollar from "../../../assets/icons/Dollar.svg";
 import StarIcon from "../../../assets/icons/StarIcon.svg";
 import { roleToAuth } from "../../../Utils/Constant";
-// import RecentMessages from "../Components/TeacherHome/RecentMessages";
-// import RecentHomeworks from "../Components/TeacherHome/RecentHomeworks";
 import RecentReviews from "../Components/TeacherHome/RecentReviews";
 import { useTeacherDashboardInfo } from "../Hooks/useGetTeacherDashboardInfo";
 import ActiveQuizzes from "../Components/TeacherHome/ActiveQuizzes";
@@ -19,9 +21,9 @@ import RecentHomeworksEmpty from "../Components/EmptyState/RecentHomeworksEmpty"
 import RecentMessagesEmpty from "../Components/EmptyState/RecentMessagesEmpty";
 
 const MainTeacherHome = () => {
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const isTeacher = roleToAuth?.includes("Teacher") ? true : false;
 
-  // Call API to get the dashboard info and pass it to the components as needed
   const { data: dataTeacherDashboardInfo } = useTeacherDashboardInfo();
   const { data: upcomingClassesDataTeacher } = useUpcomingClassesForTeacher();
   const { data: quizzesDataTeacher } = useGetQuizzesTeacher();
@@ -29,13 +31,6 @@ const MainTeacherHome = () => {
     upcomingClassesDataTeacher?.data?.data ??
     upcomingClassesDataTeacher?.data ??
     [];
-
-  console.log(
-    "TeacherDashboardInfo hook called",
-    dataTeacherDashboardInfo?.data?.data,
-  );
-  console.log("upcomingClassesDataTeacher hook called", upcomingClasses);
-  console.log("quizzesDataTeacher hook called", quizzesDataTeacher?.data?.data);
 
   const statsData = [
     {
@@ -97,48 +92,94 @@ const MainTeacherHome = () => {
       labelWidth: "w-[108px]",
     },
   ];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <section className="MainTeacherHome">
         <div className="flex justify-center items-center mt-[50px]">
           <div className="flex flex-col w-[1200px] items-start gap-9 pb-10">
-            <HeroBanner
-              date="Nov 22, 2025"
-              subtitle={`Welcome back, ${dataTeacherDashboardInfo?.data?.data?.teacherName}`}
-              title={`you have ${dataTeacherDashboardInfo?.data?.data?.classesCount} classes today`}
-            />
-
-            <div className="grid grid-cols-4 grid-rows-[repeat(1,fit-content(100%))] h-fit gap-[18px_12px] w-full">
-              {statsData.map((stat, index) => (
-                <StatCard
-                  key={index}
-                  icon={stat.icon}
-                  label={stat.label}
-                  value={stat.value}
-                  labelWidth={stat.labelWidth}
-                />
-              ))}
-            </div>
-
-            <div className="flex items-start gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
-              <div className="flex flex-col w-[687px] items-end gap-9 relative">
-                <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-                  <UpcomingClassesCard upcomingClasses={upcomingClasses} />
+            {showSkeleton ? (
+              <>
+                <div className="w-full">
+                  <Skeleton height={160} borderRadius={16} />
                 </div>
-                <RecentReviews
-                  reviews={
-                    dataTeacherDashboardInfo?.data?.data?.recentReviews ?? []
-                  }
+
+                <div className="grid grid-cols-4 grid-rows-[repeat(1,fit-content(100%))] h-fit gap-[18px_12px] w-full">
+                  <Skeleton height={110} borderRadius={16} />
+                  <Skeleton height={110} borderRadius={16} />
+                  <Skeleton height={110} borderRadius={16} />
+                  <Skeleton height={110} borderRadius={16} />
+                </div>
+
+                <div className="flex items-start gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
+                  <div className="flex flex-col w-[687px] items-end gap-9 relative">
+                    <div className="w-full">
+                      <Skeleton height={320} borderRadius={16} />
+                    </div>
+                    <div className="w-full">
+                      <Skeleton height={250} borderRadius={16} />
+                    </div>
+                  </div>
+                  <div className="flex flex-col w-[453px] items-start gap-9 relative">
+                    <div className="w-full">
+                      <Skeleton height={180} borderRadius={16} />
+                    </div>
+                    <div className="w-full">
+                      <Skeleton height={280} borderRadius={16} />
+                    </div>
+                    <div className="w-full">
+                      <Skeleton height={180} borderRadius={16} />
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <HeroBanner
+                  date="Nov 22, 2025"
+                  subtitle={`Welcome back, ${dataTeacherDashboardInfo?.data?.data?.teacherName}`}
+                  title={`you have ${dataTeacherDashboardInfo?.data?.data?.classesCount} classes today`}
                 />
-              </div>
-              <div className="flex flex-col w-[453px] items-start gap-9 relative">
-                {/* <RecentHomeworks /> */}
-                <RecentHomeworksEmpty />
-                <ActiveQuizzes quizzes={quizzesDataTeacher?.data?.data ?? []} />
-                {/* <RecentMessages /> */}
-                <RecentMessagesEmpty />
-              </div>
-            </div>
+
+                <div className="grid grid-cols-4 grid-rows-[repeat(1,fit-content(100%))] h-fit gap-[18px_12px] w-full">
+                  {statsData.map((stat, index) => (
+                    <StatCard
+                      key={index}
+                      icon={stat.icon}
+                      label={stat.label}
+                      value={stat.value}
+                      labelWidth={stat.labelWidth}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex items-start gap-[30px] relative self-stretch w-full flex-[0_0_auto]">
+                  <div className="flex flex-col w-[687px] items-end gap-9 relative">
+                    <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
+                      <UpcomingClassesCard upcomingClasses={upcomingClasses} />
+                    </div>
+                    <RecentReviews
+                      reviews={
+                        dataTeacherDashboardInfo?.data?.data?.recentReviews ?? []
+                      }
+                    />
+                  </div>
+                  <div className="flex flex-col w-[453px] items-start gap-9 relative">
+                    <RecentHomeworksEmpty />
+                    <ActiveQuizzes quizzes={quizzesDataTeacher?.data?.data ?? []} />
+                    <RecentMessagesEmpty />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>

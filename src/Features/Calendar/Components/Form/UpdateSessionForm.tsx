@@ -4,7 +4,6 @@ import Description from "./Description";
 import Grad from "./Grad";
 import Reminder from "./Reminder";
 import Price from "./Price";
-import { type Session } from "../../Types/types";
 import { useUpdateSession } from "../../Hooks/useUpdateSession";
 import ConfirmUpdateCard from "./ConfirmUpdateCard";
 import SuccessUpdateCard from "./SuccessUpdateCard";

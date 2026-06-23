@@ -5,14 +5,12 @@ import { parse } from "date-fns/parse";
 import { startOfWeek } from "date-fns/startOfWeek";
 import { getDay } from "date-fns/getDay";
 import { enUS } from "date-fns/locale/en-US";
-import "../Style/calendar.css";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-day-picker/dist/style.css";
+import { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+
 import Toolbar from "../Components/Toolbar";
 import Event from "../Components/Event";
 import QuizEvent from "../Components/QuizEvent";
-import { useEffect, useState } from "react";
-import "../Style/DayPicker.css";
 import DayPickerHeader from "../Components/DayPickerHeader";
 import Upcoming from "../Components/Upcoming";
 import ClassButton from "../Components/ClassButton";
@@ -21,6 +19,12 @@ import { useGetAllClasses } from "../Hooks/useGetAllClasses";
 import { useCalendar } from "../Contexts/CalendarContext";
 import { roleToAuth } from "../../../Utils/Constant";
 import { useGetAllQuizes } from "../Hooks/useGetAllQuizes";
+
+import "../Style/calendar.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-day-picker/dist/style.css";
+import "../Style/DayPicker.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const locales = {
   "en-US": enUS,
@@ -46,7 +50,7 @@ const eventPropGetter = () => {
   };
 };
 
-const CustomEventWrapper = (props: any) => {
+const CustomEventWrapper = (props:any) => {
   if (props.event.type === "quiz") {
     return <QuizEvent {...props} />;
   }
@@ -55,30 +59,31 @@ const CustomEventWrapper = (props: any) => {
 
 const MainCalendar = () => {
   const [month, setMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
   const { Class, active } = useCalendar();
   const { fetchClasses } = useGetAllClasses();
   const { data } = useGetAllQuizes();
-  
-  const formattedClasses = Class?.map((cls: any) => ({
+
+  const formattedClasses = Class?.map((cls:any) => ({
     ...cls,
     type: "class",
-    title: cls.title || cls.className, 
+    title: cls.title || cls.className,
     start: new Date(cls.startTime),
     end: new Date(cls.endTime),
   })) || [];
 
-  const formattedQuizzes = data?.data?.map((quiz: any) => {
+  const formattedQuizzes = data?.data?.map((quiz:any) => {
     const start = new Date(quiz.dueDate);
     const end = new Date(start);
-    end.setHours(end.getHours() + 1); 
+    end.setHours(end.getHours() + 1);
 
     return {
       ...quiz,
       type: "quiz",
-      title: quiz.quizName, 
+      title: quiz.quizName,
       start: start,
       end: end,
     };
@@ -93,8 +98,16 @@ const MainCalendar = () => {
   });
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     fetchClasses();
-    
+
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
@@ -109,10 +122,7 @@ const MainCalendar = () => {
   return (
     <div className="bg-[#F9FBFC] flex justify-center items-center">
       {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#1F2937]/20"
-          onClick={() => setOpen(false)}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1F2937]/20">
           <div
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-[12px] max-h-[90vh] overflow-y-auto"
@@ -121,76 +131,113 @@ const MainCalendar = () => {
           </div>
         </div>
       )}
+
       <div className=" mt-[50px] ">
-        <div className="flex ">
-          <Calendar
-            localizer={localizer}
-            events={formattedEvents}
-            startAccessor="start"
-            step={60}
-            timeslots={1}
-            endAccessor="end"
-            style={{ width: 895 }}
-            components={{
-              toolbar: Toolbar,
-              event: CustomEventWrapper, 
-            }}
-            eventPropGetter={eventPropGetter}
-            date={selectedDate || new Date()}
-            onNavigate={(newDate) => {
-              setSelectedDate(newDate);
-              setMonth(newDate);
-            }}
-            selectable={true}
-            onSelectSlot={(slotInfo) => {
-              if (slotInfo.start) {
-                setSelectedDate(slotInfo.start);
-                setMonth(slotInfo.start);
-              }
-            }}
-          />
-          <div className="w-[297px] rounded-[8px] border-[1px] border-[#E8EAED] bg-[#FFFFFF] ms-[20px] flex flex-col items-center">
-            {roleToAuth?.includes("Teacher") && (
-              <div onClick={() => setOpen(true)}>
-                <ClassButton />
+        {showSkeleton ? (
+          <div className="flex">
+            <div style={{ width: 895 }} className="flex flex-col gap-4">
+              <div className="flex justify-between items-center w-full">
+                <div className="flex gap-2">
+                  <Skeleton width={80} height={35} borderRadius={8} />
+                  <Skeleton width={80} height={35} borderRadius={8} />
+                </div>
+                <Skeleton width={150} height={35} />
+                <div className="flex gap-2">
+                  <Skeleton width={60} height={35} borderRadius={8} />
+                  <Skeleton width={60} height={35} borderRadius={8} />
+                  <Skeleton width={60} height={35} borderRadius={8} />
+                </div>
               </div>
-            )}
-            <div className="flex justify-center items-center">
-              <DayPicker
-                mode="single"
-                month={month}
-                onMonthChange={setMonth}
-                selected={selectedDate}
-                onSelect={(day) => {
-                  if (day) {
-                    setSelectedDate(day);
-                    setMonth(day);
-                  }
-                }}
-                showOutsideDays
-                hideNavigation
-                modifiersClassNames={{
-                  selected:
-                    "bg-[#525FE1] text-[#F9FBFC]  rounded-full w-[28px] h-[28px]",
-                  today: " font-bold",
-                  outside: "text-[#6D7588]",
-                }}
-                components={{
-                  CaptionLabel: (props) => (
-                    <DayPickerHeader
-                      {...props}
-                      month={month}
-                      setMonth={setMonth}
-                    />
-                  ),
-                }}
-              />
+              <div className="w-full">
+                <Skeleton height={550} borderRadius={8} />
+              </div>
             </div>
-            <div className="flex items-center justify-center">
-              <Upcoming selectedDate={selectedDate || new Date()} />
+
+            <div className="w-[297px] rounded-[8px] border-[1px] border-[#E8EAED] bg-[#FFFFFF] ms-[20px] flex flex-col p-4">
+              {roleToAuth?.includes("Teacher") && (
+                <div className="w-full mb-4">
+                  <Skeleton height={40} borderRadius={8} />
+                </div>
+              )}
+              <div className="w-full mb-4">
+                <Skeleton height={280} borderRadius={8} />
+              </div>
+              <div className="w-full flex-grow">
+                <Skeleton height={150} borderRadius={8} />
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex ">
+            <Calendar
+              localizer={localizer}
+              events={formattedEvents}
+              startAccessor="start"
+              step={60}
+              timeslots={1}
+              endAccessor="end"
+              style={{ width: 895 }}
+              components={{
+                toolbar: Toolbar,
+                event: CustomEventWrapper,
+              }}
+              eventPropGetter={eventPropGetter}
+              date={selectedDate || new Date()}
+              onNavigate={(newDate) => {
+                setSelectedDate(newDate);
+                setMonth(newDate);
+              }}
+              selectable={true}
+              onSelectSlot={(slotInfo) => {
+                if (slotInfo.start) {
+                  setSelectedDate(slotInfo.start);
+                  setMonth(slotInfo.start);
+                }
+              }}
+            />
+            <div className="w-[297px] rounded-[8px] border-[1px] border-[#E8EAED] bg-[#FFFFFF] ms-[20px] flex flex-col items-center">
+              {roleToAuth?.includes("Teacher") && (
+                <div onClick={() => setOpen(true)}>
+                  <ClassButton />
+                </div>
+              )}
+              <div className="flex justify-center items-center">
+                <DayPicker
+                  mode="single"
+                  month={month}
+                  onMonthChange={setMonth}
+                  selected={selectedDate}
+                  onSelect={(day) => {
+                    if (day) {
+                      setSelectedDate(day);
+                      setMonth(day);
+                    }
+                  }}
+                  showOutsideDays
+                  hideNavigation
+                  modifiersClassNames={{
+                    selected:
+                      "bg-[#525FE1] text-[#F9FBFC]  rounded-full w-[28px] h-[28px]",
+                    today: " font-bold",
+                    outside: "text-[#6D7588]",
+                  }}
+                  components={{
+                    CaptionLabel: (props) => (
+                      <DayPickerHeader
+                        {...props}
+                        month={month}
+                        setMonth={setMonth}
+                      />
+                    ),
+                  }}
+                />
+              </div>
+              <div className="flex items-center justify-center">
+                <Upcoming selectedDate={selectedDate || new Date()} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
