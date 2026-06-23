@@ -94,8 +94,8 @@ const EventDetailsCard = ({ event, statusConfig }: any) => {
                 }}
                 disabled={isDisabled}
                 className={`px-[20px] py-[8px] rounded-[6px] text-[14px] font-semibold transition-all duration-300 ${isDisabled
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-[#525FE1] text-white hover:bg-[#404DDD] cursor-pointer"
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-[#525FE1] text-white hover:bg-[#404DDD] cursor-pointer"
                   }`}
               >
                 Join
@@ -130,6 +130,9 @@ const EventDetailsCard = ({ event, statusConfig }: any) => {
             <UpdateSessionForm
               session={sessionData}
               onClose={() => setShowUpdateForm(false)}
+              numberOfWeeks={event.numberOfWeeks ?? 1
+              }
+              sessionSeriesId={event.sessionSeriesId ?? ""}
             />
           </div>
         </div>
