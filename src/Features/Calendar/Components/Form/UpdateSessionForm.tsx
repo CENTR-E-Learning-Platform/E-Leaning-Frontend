@@ -1,4 +1,3 @@
-import { useRef, useEffect, useState } from "react";
 import classForm from "../../../../assets/icons/class.svg";
 import Button from "./Button";
 import Description from "./Description";
@@ -11,7 +10,7 @@ import ConfirmUpdateCard from "./ConfirmUpdateCard";
 import SuccessUpdateCard from "./SuccessUpdateCard";
 
 interface UpdateSessionFormProps {
-  session: Session;
+  session: any;
   onClose: () => void;
   numberOfWeeks?: number;
   sessionSeriesId?: string;
@@ -32,18 +31,8 @@ const UpdateSessionForm = ({ session, onClose, numberOfWeeks = 1, sessionSeriesI
     clearError,
   } = useUpdateSession(session, numberOfWeeks, sessionSeriesId);
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+
 
   if (showSuccess) {
     return (
@@ -124,37 +113,6 @@ const UpdateSessionForm = ({ session, onClose, numberOfWeeks = 1, sessionSeriesI
                 </div>
               </div>
 
-              <div className="flex flex-col w-[449px] mt-[15px]" ref={dropdownRef}>
-                <label className="text-[16px] font-[400] text-[#2A2D34] mb-[6px]">Repeat for weeks</label>
-                <div className="relative w-full">
-                  <button
-                    type="button"
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="w-full flex justify-between items-center border-[1px] border-[#D1D5DB] bg-[#FFFFFF] h-[40px] rounded-[6px] px-[10px] cursor-pointer focus:outline-none transition-colors duration-200 hover:border-[#525FE1]"
-                  >
-                    <span className="text-[#2A2D34]">Week 1</span>
-                    <svg
-                      className={`w-4 h-4 text-[#2A2D34] transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
-                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <div
-                    className={`absolute z-50 w-full mt-1 bg-[#FFFFFF] border-[#D1D5DB] rounded-[6px] shadow-lg transition-all duration-300 ease-in-out origin-top ${isDropdownOpen ? "opacity-100 scale-y-100 border-[2px] max-h-[160px] overflow-y-auto" : "opacity-0 scale-y-0 border-0 max-h-0 overflow-hidden"}`}
-                  >
-                    {Array.from({ length: 26 }, (_, i) => (
-                      <div
-                        key={i + 1}
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="px-[10px] py-[8px] cursor-pointer hover:bg-[#F9FBFC] hover:text-[#525FE1] transition-colors text-[#2A2D34]"
-                      >
-                        Week {i + 1}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div className="flex items-center flex-col mt-[24px]">

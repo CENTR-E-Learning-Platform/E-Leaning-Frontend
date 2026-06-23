@@ -72,7 +72,7 @@ export const useUpdateSession = (
                     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
                 })()
                 : "",
-            durationMinutes: session?.durationMinutes ?? 60,
+            durationMinutes: session?.durationMinutes ?? 0,
             grade: session?.grade ?? 0,
             price: session?.price ?? 0,
             reminder: (() => {

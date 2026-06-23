@@ -3,7 +3,6 @@ import profile from "../../../assets/images/imptyPhoto.jpg";
 import alert from "../../../assets/icons/alert2.svg";
 import { format } from "date-fns";
 import { BASE_URL } from "../Utils/api";
-import { type Session } from "../Types/types";
 import UpdateSessionForm from "./Form/UpdateSessionForm";
 import { roleToAuth } from "../../../Utils/Constant";
 
@@ -33,11 +32,11 @@ const EventDetailsCard = ({ event, statusConfig }: any) => {
   const { dot, isDisabled } = statusConfig;
   const statusDetails = getStatusDetails(event.status);
 
-  const sessionData: Session = {
+  const sessionData = {
     id: event.id ?? "",
     title: event.title ?? "",
     startTime: event.start ? new Date(event.start).toISOString() : "",
-    durationMinutes: event.durationMinutes ?? 60,
+    durationMinutes: event.durationMinutes ?? 0,
     grade: event.grade ?? 0,
     price: event.price ?? 0,
     reminder: event.reminder ?? "01:00:00",
