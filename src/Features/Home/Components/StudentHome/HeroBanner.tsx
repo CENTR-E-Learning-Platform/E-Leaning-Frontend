@@ -1,12 +1,7 @@
 import React from "react";
 import learningBro from "../../../../assets/images/Learning-bro.png";
+import type { HeroBannerProps } from "../../Types/types";
 
-
-interface HeroBannerProps {
-  date: string;
-  title: string;
-  subtitle: string;
-}
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ date, title, subtitle }) => {
   
