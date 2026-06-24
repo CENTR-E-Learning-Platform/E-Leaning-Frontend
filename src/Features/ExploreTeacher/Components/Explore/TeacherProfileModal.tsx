@@ -2,12 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useStudentProfile } from "../../../Profile/Hooks/useViewStudentProfile";
 import { BASE_URL } from "../../../Streaming/Utils/Apis";
 import Close from "../../../../assets/icons/Close.svg";
-
-interface TeacherProfileModalProps {
-  teacher: any;
-  onClose: () => void;
-  onMessage: () => void;
-}
+import type { TeacherProfileModalProps } from "../../Types/type";
 
 const TeacherProfileModal = ({
   teacher,
@@ -95,7 +90,7 @@ const TeacherProfileModal = ({
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={onMessage}
+              onClick={() => onMessage(teacher)}
               className="rounded-[12px] bg-[#4F46E5] px-5 py-3 text-white font-semibold hover:bg-[#4338CA] transition"
             >
               Message Teacher
