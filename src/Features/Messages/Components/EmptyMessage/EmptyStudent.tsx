@@ -1,60 +1,77 @@
 import React from "react";
-import { Calendar } from "lucide-react";
-import PhotoMessage from "../../../../assets/images/PhotoMessage.png";
-import PersonalIcon from "../../../../assets/icons/PersonalIcon.svg"
+import { Calendar, Lock, UserCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const EmptyStudent: React.FC = () => {
   const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col items-center justify-center gap-[24px] h-[calc(100vh-66px)] w-[580px] mx-auto">
-      <div className="relative w-[214px] h-[214px] flex-none order-0 flex-grow-0">
-        <img
-          src={PhotoMessage}
-          alt="No messages"
-          className="w-full h-full object-contain"
-        />
-      </div>
+    <div className="flex flex-col items-center justify-center h-full w-full bg-[#F3F6FF] select-none">
+      {/* Illustration */}
+      <div className="relative flex items-center justify-center mb-8">
+        {/* Outer glow ring */}
+        <div className="absolute w-[220px] h-[220px] rounded-full bg-[#525FE1]/8 animate-pulse" />
+        <div className="absolute w-[170px] h-[170px] rounded-full bg-[#525FE1]/10" />
 
-      <div className="flex flex-col items-center p-0 gap-[24px] w-full flex-none order-1 self-stretch">
-        <div className="flex flex-col items-start p-0 w-[418px] h-[120px] flex-none order-0">
-          <div className="flex flex-col items-start p-0 gap-[16px] w-full">
-            <h1 className="w-full h-[48px] flex items-center justify-center text-center font-semibold text-[36px] leading-[48px] text-[#2A2D34]">
-              No messages yet
-            </h1>
-
-            <p className="w-full h-[56px] flex items-center justify-center text-center font-normal text-[18px] leading-[28px] text-[#434656]">
-              Once students start booking sessions with you, your conversations
-              will show up here.
-            </p>
+        {/* Chat bubbles illustration */}
+        <div className="relative w-[140px] h-[140px] flex items-center justify-center">
+          {/* Left bubble */}
+          <div className="absolute left-0 top-6 w-[52px] h-[36px] bg-white rounded-t-[14px] rounded-br-[14px] shadow-md flex items-center justify-center gap-[5px] px-3">
+            <div className="w-[6px] h-[6px] rounded-full bg-[#525FE1]/40" />
+            <div className="w-[14px] h-[5px] rounded-full bg-[#525FE1]/40" />
+            <div className="w-[8px] h-[5px] rounded-full bg-[#525FE1]/25" />
+          </div>
+          {/* Right bubble */}
+          <div className="absolute right-0 top-14 w-[56px] h-[36px] bg-[#525FE1] rounded-t-[14px] rounded-bl-[14px] shadow-md flex items-center justify-center gap-[5px] px-3">
+            <div className="w-[8px] h-[5px] rounded-full bg-white/50" />
+            <div className="w-[14px] h-[5px] rounded-full bg-white/60" />
+            <div className="w-[6px] h-[5px] rounded-full bg-white/40" />
+          </div>
+          {/* Center shield / lock icon */}
+          <div className="w-[72px] h-[72px] rounded-[20px] bg-white shadow-[0_8px_32px_rgba(82,95,225,0.18)] flex items-center justify-center">
+            <Lock className="w-[34px] h-[34px] text-[#525FE1]" strokeWidth={1.8} />
           </div>
         </div>
+      </div>
 
-        <div className="flex flex-row items-center p-0 gap-[16px] w-[558px] h-[56px] flex-none order-1 self-stretch">
-          <button
-            onClick={() => {
-              navigate("/profile");
-            }}
-            className="flex flex-row justify-center items-center cursor-pointer py-[16px] px-[32px] gap-[12px] h-[56px] bg-[#525FE1] rounded-[8px] transition-hover hover:bg-[#414cb1] flex-none order-0"
-          >
-            <img src={PersonalIcon} className="w-[18px] h-[18px]" alt="PersonalIcon" />
-            <span className="font-semibold text-[16px] leading-[24px] text-[#F9FBFC]">
-              Complete Your Profile
-            </span>
-          </button>
-
-          <button
-            onClick={() => {
-              navigate("/Calendar");
-            }}
-            className="box-border cursor-pointer flex flex-row justify-center items-center py-[16px] px-[32px] gap-[12px] h-[56px] bg-[#F9FBFC] border-2 border-[#525FE1] rounded-[8px] transition-hover hover:bg-gray-50 flex-none order-1"
-          >
-            <Calendar className="w-[30px] h-[20px] text-[#525FE1]" />
-            <span className="font-semibold text-[16px] leading-[24px] text-[#525FE1]">
-              Manage Your Classes
-            </span>
-          </button>
+      {/* Text */}
+      <div className="flex flex-col items-center gap-3 mb-8 px-6 max-w-[380px] text-center">
+        <h1 className="font-['Poppins'] font-bold text-[26px] leading-[34px] text-[#2A2D34]">
+          No messages yet
+        </h1>
+        <p className="font-['Poppins'] font-normal text-[14px] leading-[22px] text-[#6D7588]">
+          Once students start booking sessions with you, your conversations will show up here.
+        </p>
+        {/* Encryption badge */}
+        <div className="flex items-center gap-[6px] mt-1 px-3 py-[5px] bg-[#525FE1]/8 rounded-full">
+          <Lock className="w-[11px] h-[11px] text-[#525FE1]" strokeWidth={2.5} />
+          <span className="font-['Poppins'] font-medium text-[11px] text-[#525FE1]">
+            Your personal messages are end-to-end encrypted
+          </span>
         </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex flex-row items-center gap-[12px] flex-wrap justify-center">
+        <button
+          onClick={() => navigate("/profile")}
+          className="flex flex-row justify-center items-center cursor-pointer py-[14px] px-[28px] gap-[10px] h-[52px] bg-[#525FE1] rounded-[10px] transition-all hover:bg-[#414cb1] hover:shadow-[0_6px_20px_rgba(82,95,225,0.35)] active:scale-[0.97]"
+        >
+          <UserCheck className="w-[17px] h-[17px] text-white" />
+          <span className="font-['Poppins'] font-semibold text-[15px] text-white">
+            Complete Your Profile
+          </span>
+        </button>
+
+        <button
+          onClick={() => navigate("/Calendar")}
+          className="flex flex-row justify-center items-center cursor-pointer py-[14px] px-[28px] gap-[10px] h-[52px] bg-white border-[1.5px] border-[#525FE1] rounded-[10px] transition-all hover:bg-[#525FE1]/5 active:scale-[0.97]"
+        >
+          <Calendar className="w-[17px] h-[17px] text-[#525FE1]" />
+          <span className="font-['Poppins'] font-semibold text-[15px] text-[#525FE1]">
+            Manage Your Classes
+          </span>
+        </button>
       </div>
     </div>
   );
