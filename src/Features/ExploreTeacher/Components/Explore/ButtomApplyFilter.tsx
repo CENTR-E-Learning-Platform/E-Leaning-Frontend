@@ -1,15 +1,5 @@
 import React from "react";
-
-interface ButtomApplyFilterProps {
-  setDragging: (value: null) => void;
-  setDragging2: (value: null) => void;
-  setStartTime: (value: number) => void;
-  setEndTime: (value: number) => void;
-  setStartPrice: (value: number) => void;
-  setEndPrice: (value: number) => void;
-  applyFilters: () => void;
-  clearFilters: () => void;
-}
+import type { ButtomApplyFilterProps } from "../../Types/type";
 
 const ButtomApplyFilter = ({
   setDragging,
