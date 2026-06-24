@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { useReserveSession } from "../../Hooks/useReserveSession";
+import type { Teacher } from "../../Types/type";
 
-interface Teacher {
-  closesetSessionPrice: number;
-  closesetSessionAvailableSeats: number;
-  roomName?: string;
-  closesetSessionRoomName?: string;
-  closestSessionRoomName?: string;
-  closestRoomName?: string;
-  sessionRoomName?: string;
-  [key: string]: any;
-}
 
 const ButtomReserveSession = ({ teacher }: { teacher: Teacher }) => {
   const [showModal, setShowModal] = useState(false);
