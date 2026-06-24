@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const IntroVideoAndBioSchema = Yup.object({
-  bio: Yup.string(),
+  bio: Yup.string().max(500 , "You can't write more than 500 characters"),
   video: Yup.mixed()
     .nullable()
     .test(
