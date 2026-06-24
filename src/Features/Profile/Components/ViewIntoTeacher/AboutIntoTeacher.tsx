@@ -51,7 +51,7 @@ const AboutIntoTeacher = () => {
             height="219"
             src={`${introVideoPath}${introVideoPath.includes('?') ? '&' : '?'}t=${new Date().getTime()}`}
             title="video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="w-[400px] h-[219px] rounded-[4px] mb-6"
           ></iframe>
