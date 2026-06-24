@@ -2,11 +2,7 @@ import { Star } from "lucide-react";
 import LayerBackgroundTeacher from "./LayerBackgroundTeacher";
 import LeftTeacherSide from "./LeftTeacherSide";
 import { BASE_URL } from "../../../Streaming/Utils/Apis";
-
-interface TeacherCardProps {
-  teacher: any;
-  onOpenProfile: (teacher: any) => void;
-}
+import type { TeacherCardProps } from "../../Types/type";
 
 const TeacherCard = ({ teacher, onOpenProfile }: TeacherCardProps) => {
   const rating = teacher.rating ?? 0;
