@@ -1,10 +1,6 @@
-import type { ChangeEvent, Dispatch, SetStateAction } from "react";
+import type { ChangeEvent } from "react";
+import type { ExploreSearchBarProps } from "../../Types/type";
 
-interface ExploreSearchBarProps {
-  formik: any;
-  setSearchTerm: (value: string) => void;
-  setResultsSource: Dispatch<SetStateAction<"all" | "filter" | "search">>;
-}
 
 const ExploreSearchBar = ({
   formik,
