@@ -5,7 +5,7 @@ export interface ContactProps {
   avatarUrl: string;
   isActive?: boolean;
   isOnline?: boolean;
-  hasUnread?: number;
+  hasUnread?: number | null;
 }
 export interface Conversation {
   otherUserId: string;
