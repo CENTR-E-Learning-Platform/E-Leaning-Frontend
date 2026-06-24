@@ -12,7 +12,6 @@ import TeacherList from "../Components/Explore/TeacherList";
 import TeacherProfileModal from "../Components/Explore/TeacherProfileModal";
 import Header from "../Components/Explore/Header";
 import { extractTeachersList } from "../Utils/extractTeachers";
-import { BASE_URL } from "../../Streaming/Utils/Apis";
 import { useChat } from "../../Messages/Contexts/ShareDataMessages";
 
 const MainExplore = () => {
@@ -93,20 +92,6 @@ const MainExplore = () => {
   };
 
   const openTeacherProfile = (teacher: any) => {
-    const teacherId = teacher.teacherId ?? teacher.id ?? null;
-    const teacherName = teacher.teacherName ?? teacher.name ?? "Teacher";
-    const teacherPicture = teacher.teacherPic
-      ? `${BASE_URL}${teacher.teacherPic}`
-      : `https://api.dicebear.com/7.x/avataaars/svg?seed=${teacherName}`;
-
-    setOtherUserId(teacherId);
-    setConversationId(null);
-    setSelectedConversation({
-      otherUserName: teacherName,
-      otherUserPicture: teacherPicture,
-      isOnline: true,
-      otherUserId: teacherId,
-    });
     setSelectedTeacherForModal(teacher);
   };
 
@@ -114,9 +99,23 @@ const MainExplore = () => {
     setSelectedTeacherForModal(null);
   };
 
-  const goToMessages = () => {
-    setSelectedTeacherForModal(null);
-    navigate("/messages");
+  const goToMessages = (teacher: any) => {
+    const teacherId = teacher.teacherId ?? teacher.id ?? null;
+  if (!teacherId) return;
+
+  setConversationId(null);
+  setOtherUserId(teacherId);
+  setSelectedConversation({
+    otherUserId: teacherId,
+    otherUserName: teacher.teacherName,
+    otherUserPicture: teacher.teacherPic || "",
+    isOnline: false,
+    isGroup: false,
+  });
+
+  setSelectedTeacherForModal(null);
+  navigate("/messages");
+
   };
 
   const handleApplyFilters = () => {
@@ -160,13 +159,9 @@ const MainExplore = () => {
         ? searchTeachersPerPage
         : allTeachersPerPage;
 
-  const totalCount =
-    activeResponse?.data?.totalCount ||
-    activeResponse?.data?.totalItems ||
-    activeResponse?.data?.total ||
-    activeResponse?.data?.pagination?.totalCount ||
-    activeResponse?.data?.totalPages ||
-    null;
+  const totalCount = activeResponse?.data?.totalPages;
+
+    console.log("activeResponse?.data" , activeResponse?.data?.totalPages)
 
   if (searchError && "response" in searchError) {
     console.log((searchError as any).response?.data?.message[0]);
