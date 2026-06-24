@@ -53,12 +53,15 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       (msg, index, self) =>
         index ===
         self.findIndex((m) => {
+          // Both have IDs → compare by ID only
           if (msg.id && m.id) return String(msg.id) === String(m.id);
 
+          // At least one is a SignalR message (no id yet) →
+          // treat as duplicate if same sender + content + within 10 s
           return (
             String(m.senderId) === String(msg.senderId) &&
             m.content === msg.content &&
-            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 2000
+            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 10_000
           );
         }),
     )
