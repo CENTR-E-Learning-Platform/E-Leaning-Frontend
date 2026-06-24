@@ -2,36 +2,14 @@ import {
   useEffect,
   useRef,
   useState,
-  type Dispatch,
-  type SetStateAction,
 } from "react";
 import ButtomApplyFilter from "./ButtomApplyFilter";
 import DaysFilterExplore from "./DaysFilterExplore";
 import RattingFilterExplore from "./RattingFilterExplore";
 import SubjectFilterExplore from "./SubjectFilterExplore";
 import LineBetweenFilterElements from "./LineBetweenFilterElements";
+import type { ExploreFiltersPanelProps } from "../../Types/type";
 
-interface ExploreFiltersPanelProps {
-  selectedLanguage: string;
-  setSelectedLanguage: Dispatch<SetStateAction<string>>;
-  selectedDay: string;
-  setSelectedDay: Dispatch<SetStateAction<string>>;
-  startTime: number;
-  setStartTime: (value: number) => void;
-  endTime: number;
-  setEndTime: (value: number) => void;
-  startPrice: number;
-  setStartPrice: (value: number) => void;
-  endPrice: number;
-  setEndPrice: (value: number) => void;
-  selectedRating: number | null;
-  setSelectedRating: (value: number | null) => void;
-  applyFilters: () => void;
-  clearFilters: () => void;
-  formik: any;
-  setSearchTerm: (value: string) => void;
-  setResultsSource: Dispatch<SetStateAction<"all" | "filter" | "search">>;
-}
 
 const ExploreFiltersPanel = ({
   selectedLanguage,
