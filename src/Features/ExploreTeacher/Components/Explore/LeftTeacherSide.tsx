@@ -1,11 +1,6 @@
+import type { Teacher } from "../../Types/type";
 import ButtomReserveSession from "./ButtomReserveSession";
 import SelectTime from "./SelectTime";
-
-interface Teacher {
-  closesetSessionPrice: number;
-  closesetSessionAvailableSeats: number;
-  roomName: string;
-}
 
 function LeftTeacherSide({ teacher }: { teacher: Teacher }) {
   return (
