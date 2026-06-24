@@ -76,9 +76,13 @@ const ContactItem: React.FC<ContactProps> = ({
         </div>
       </div>
 
-      {hasUnread && (
-        <div className="w-[9.5px] h-[9px] bg-[#525FE1] rounded-full flex-none" />
-      )}
+      {hasUnread && hasUnread > 0 ? (
+        <div className="min-w-[18px] h-[18px] px-[4px] bg-[#525FE1] rounded-full flex-none flex items-center justify-center">
+          <span className="font-['Poppins'] font-semibold text-[10px] leading-none text-white">
+            {hasUnread > 99 ? "99+" : hasUnread}
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -88,9 +92,7 @@ const ContactList: React.FC = () => {
     ShareDataContactItems,
   );
   const { data: dataGetChatConversation } = useGetChatConversation();
-  console.log(dataGetChatConversation);
   const { data: dataGetChatMyGroups } = useGetChatMyGroups();
-  console.log(dataGetChatMyGroups?.data)
 
   const formatTime = useConvertDate();
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -189,7 +191,7 @@ const ContactList: React.FC = () => {
   return (
     <div className="flex flex-col items-start py-[14.4px] pl-[14.4px] gap-[7.2px] w-[360px] h-[744.3px] overflow-y-auto scroll-smooth">
       {activeMessage === (isTeacher ? "Teachers" : "Students") ? (
-        dataGetChatConversation?.data?.length > 0 ? (
+        (dataGetChatConversation?.data?.length ?? 0) > 0 ? (
           dataGetChatConversation?.data?.map((conversation: Conversation) => {
             return (
               <div
@@ -203,11 +205,11 @@ const ContactList: React.FC = () => {
                   isActive={activeId === `${conversation.id}_direct`}
                   isOnline={conversation.isOnline}
                   hasUnread={conversation.unreadCount}
-                  name={conversation.otherUserName}
+                  name={conversation.otherUserName ?? ""}
                   message={
-                    signalR.typingUser ? "typing..." : conversation.lastMessage
+                    signalR.typingUser ? "typing..." : (conversation.lastMessage ?? "")
                   }
-                  time={formatTime(conversation.lastMessageAt)}
+                  time={formatTime(conversation.lastMessageAt) ?? ""}
                   avatarUrl={conversation.otherUserPicture || ""}
                 />
               </div>
@@ -217,7 +219,7 @@ const ContactList: React.FC = () => {
           "No Conversation"
         )
       ) : (
-        dataGetChatMyGroups?.data?.length > 0 ? (
+        (dataGetChatMyGroups?.data?.length ?? 0) > 0 ? (
           dataGetChatMyGroups?.data?.map((conversation: ConversationGroup) => {
             return (
               <div
@@ -229,11 +231,11 @@ const ContactList: React.FC = () => {
               >
                 <ContactItem
                   isActive={activeId === `${conversation.id}_group`}
-                  name={conversation.name}
+                  name={conversation.name ?? ""}
                   message={
-                    signalR.typingUser ? "typing..." : conversation.lastMessage
+                    signalR.typingUser ? "typing..." : (conversation.lastMessage ?? "")
                   }
-                  time={formatTime(conversation.lastMessageAt)}
+                  time={formatTime(conversation.lastMessageAt) ?? ""}
                   avatarUrl={conversation.groupPicture || ""}
                 />
               </div>
