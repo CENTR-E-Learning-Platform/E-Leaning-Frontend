@@ -9,6 +9,7 @@ import { useUpdateProfileStudent } from "../../Hooks/useUpdateProfileStudent";
 import { studentProfileSchema } from "../../Validation/studentProfileSchema";
 import { roleToAuth } from "../../../../Utils/Constant";
 import { Major } from "../../Constant/major";
+import { disabledMajorGrades } from "../../Constant/majorDisable";
 const ProfileStudent = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState(bg_imptyPhoto);
@@ -20,13 +21,6 @@ const ProfileStudent = () => {
   const [, setIndexSelectedGrade] = useState<number>(0);
   const [indexSelectedMajor, setIndexSelectedMajor] = useState<number>(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const disabledMajorGrades = [
-    "First Preparatory",
-    "First Secondary",
-    "Second Secondary",
-    "Third Secondary",
-  ];
-
   const isMajorDisabled = disabledMajorGrades.includes(selectedGrade);
   const { data } = useStudentProfile();
   const [form, setForm] = useState({
