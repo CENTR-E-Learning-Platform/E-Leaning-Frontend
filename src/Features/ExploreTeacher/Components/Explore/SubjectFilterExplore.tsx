@@ -1,9 +1,6 @@
-import { type Dispatch, type SetStateAction, useState } from "react";
+import { useState } from "react";
+import type { SubjectFilterExploreProps } from "../../Types/type";
 
-interface SubjectFilterExploreProps {
-  selectedLanguage: string;
-  setSelectedLanguage: Dispatch<SetStateAction<string>>;
-}
 
 const SubjectFilterExplore = ({
   selectedLanguage,
