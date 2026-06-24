@@ -1,8 +1,4 @@
-type ApiBody = {
-  data?: unknown;
-  teachers?: unknown[];
-  items?: unknown[];
-};
+import type { ApiBody } from "../Types/type";
 
 const isTeacherObject = (value: unknown): value is Record<string, unknown> => {
   return (
