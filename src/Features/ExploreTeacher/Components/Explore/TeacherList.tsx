@@ -1,15 +1,7 @@
 import TeacherCard from "./TeacherCard";
 import Pagination from "./Pagination";
+import type { TeacherListProps } from "../../Types/type";
 
-interface TeacherListProps {
-  teachersList: any[];
-  isLoading: boolean;
-  currentPage: number;
-  pageSize: number;
-  totalCount: number | null;
-  onPageChange: (page: number) => void;
-  onOpenProfile: (teacher: any) => void;
-}
 
 const TeacherList = ({
   teachersList,
@@ -33,7 +25,7 @@ const TeacherList = ({
     );
   }
 
-  if (teachersList.length === 0) {
+  if (teachersList?.length === 0) {
     return (
       <div className="w-[836px] flex flex-col justify-center items-center py-16 px-6 border-2 border-dashed border-gray-300 rounded-[8px] bg-white text-gray-500">
         <img
