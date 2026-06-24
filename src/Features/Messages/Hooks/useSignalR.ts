@@ -93,14 +93,15 @@ export default function useSignalR(
           (m) =>
             m.content === msg.content &&
             m.senderId === msg.senderId &&
-            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 2000,
+            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 5000,
         );
 
         if (exists) return prev;
 
         return [...prev, msg];
       });
-      refetchRef.current();
+      // NOTE: do NOT refetch chat messages here — that causes duplicates.
+      // The contact-list refetch is handled separately by ChatContent.
     });
 
     connect.on("UserTyping", (userName: string, convId: string) => {
@@ -130,7 +131,7 @@ export default function useSignalR(
           (m) =>
             m.content === msg.content &&
             m.senderId === msg.senderId &&
-            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 2000,
+            Math.abs(getMessageTime(m) - getMessageTime(msg)) < 5000,
         );
 
         if (exists) return prev;
@@ -140,8 +141,7 @@ export default function useSignalR(
           [msg.groupChatId]: [...group, msg],
         };
       });
-
-      refetchRef.current();
+      // NOTE: do NOT refetch group messages here — that causes duplicates.
     });
 
     connect.on("ReceiveGroupTypingIndicator", (data) => {
