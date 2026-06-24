@@ -1,9 +1,5 @@
 import { Star } from "lucide-react";
-
-interface RattingFilterExploreProps {
-  selectedRating: number | null;
-  setSelectedRating: (value: number | null) => void;
-}
+import type { RattingFilterExploreProps } from "../../Types/type";
 
 const RattingFilterExplore = ({ selectedRating, setSelectedRating }: RattingFilterExploreProps) => {
   return <>
