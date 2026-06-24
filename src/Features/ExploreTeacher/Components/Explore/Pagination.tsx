@@ -1,12 +1,5 @@
 import { ChevronRight } from "lucide-react";
-
-interface PaginationProps {
-  currentPage: number;
-  pageSize: number;
-  totalCount: number | null;
-  itemsCount: number;
-  onPageChange: (page: number) => void;
-}
+import type { PaginationProps } from "../../Types/type";
 
 const Pagination = ({
   currentPage,
@@ -16,8 +9,9 @@ const Pagination = ({
   onPageChange,
 }: PaginationProps) => {
   const hasTotalCount = totalCount !== null;
+
   const totalPages = hasTotalCount
-    ? Math.ceil(totalCount / pageSize)
+    ? totalCount
     : Math.max(1, currentPage + (itemsCount === pageSize ? 1 : 0));
 
   const canGoNext = hasTotalCount
