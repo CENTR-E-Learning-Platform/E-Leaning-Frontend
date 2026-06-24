@@ -1,9 +1,4 @@
-import { type Dispatch, type SetStateAction } from "react";
-
-interface DaysFilterExploreProps {
-  selectedDay: string;
-  setSelectedDay: Dispatch<SetStateAction<string>>;
-}
+import type { DaysFilterExploreProps } from "../../Types/type";
 
 const DaysFilterExplore = ({
   selectedDay,
