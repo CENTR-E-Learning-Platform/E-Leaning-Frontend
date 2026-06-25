@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useStudentProfile } from "../../../Profile/Hooks/useViewStudentProfile";
-import { BASE_URL } from "../../../Streaming/Utils/Apis";
 import Close from "../../../../assets/icons/Close.svg";
 import type { TeacherProfileModalProps } from "../../Types/type";
+import { BASE_URL } from "../../Utils/api";
 
 const TeacherProfileModal = ({
   teacher,
