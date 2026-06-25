@@ -61,7 +61,7 @@ const ProfileStudent = () => {
         email: data.data.email || "",
         phoneNum: data.data.phoneNum || "",
         parentPhoneNumber: data.data.parentPhoneNum || "",
-        major: data.data.major || "علمي علوم",
+        major: data.data.major || "",
         grade: data.data.grade || 0,
       });
 
