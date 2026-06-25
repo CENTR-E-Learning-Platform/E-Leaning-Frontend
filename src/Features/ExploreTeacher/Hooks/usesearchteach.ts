@@ -13,7 +13,6 @@ export const usesearchteach = () => {
     onSubmit: () => {},
   });
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, error, isLoading } = useQuery({
     queryKey: [
       "search",
@@ -30,7 +29,7 @@ export const usesearchteach = () => {
     },
     retry: false,
     enabled: formik.values.SearchTeacher.trim() !== "",
-    refetchOnMount: false,
+    refetchOnMount: true,
     staleTime: 60000,
     refetchOnWindowFocus: false,
   });
