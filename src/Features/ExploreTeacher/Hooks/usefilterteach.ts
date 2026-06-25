@@ -106,7 +106,7 @@ export const usefilterteach = () => {
         },
         enabled: true,
         retry: false,
-        refetchOnMount: false,
+        refetchOnMount: true,
         staleTime: 0,
         refetchOnWindowFocus: false,
     });
