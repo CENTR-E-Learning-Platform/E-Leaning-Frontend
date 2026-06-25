@@ -1,6 +1,6 @@
 export const disabledMajorGrades = [
-    "First Preparatory",
-    "First Secondary",
-    "Second Secondary",
-    "Third Secondary",
-  ];
+  "First Preparatory",
+  "First Secondary",
+  "Second Preparatory",
+  "Third Preparatory",
+];
