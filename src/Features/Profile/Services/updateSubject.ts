@@ -1,9 +1,6 @@
 import axios from "axios";
 import { UPDATE_TEACHER_SUBJECTS_API } from "../Utils/Apis";
-
-type UpdateSubjectsPayload = {
-  subjects: number[];
-};
+import type { UpdateSubjectsPayload } from "../Types/SubjectsPayload";
 
 export const UpdateSubjects = async (data: UpdateSubjectsPayload) => {
   const token = localStorage.getItem("token");
