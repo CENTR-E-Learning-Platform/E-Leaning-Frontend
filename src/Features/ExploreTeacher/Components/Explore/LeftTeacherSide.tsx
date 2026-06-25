@@ -1,5 +1,3 @@
-import { useStudentProfileContext } from "../../../Profile/Contexts/StudentProfileContext";
-
 import type { Teacher } from "../../Types/type";
 import ButtomReserveSession from "./ButtomReserveSession";
 import SelectTime from "./SelectTime";
@@ -7,34 +5,51 @@ import UnSubscribtion from "../../../../../src/assets/icons/UnSubscribtion.svg";
 import SubscribtionIcon from "../../../../../src/assets/icons/Subscribtion.svg";
 import { useAddSubscription } from "../../../Profile/Hooks/useAddsubscription";
 import { useAddUnsubscription } from "../../../Profile/Hooks/useAddUnsubscription";
-
+import { useQueryClient } from "@tanstack/react-query";
+import { useStudentProfileContext } from "../../../Profile/Contexts/StudentProfileContext";
 function LeftTeacherSide({ teacher }: { teacher: Teacher }) {
-  const { fetchTeacherProfile } = useStudentProfileContext();
-
+  const queryClient = useQueryClient();
   const { mutate: addSubscription } = useAddSubscription();
   const { mutate: addUnsubscription } = useAddUnsubscription();
+  const { fetchTeacherProfile } = useStudentProfileContext();
+
   const handleFavoriteClick = () => {
     const teacherId = teacher?.teacherId;
-    console.log("clicked");
-
-    console.log("teacherId:", teacherId);
-
     if (!teacherId) return;
 
-    console.log("teacher.status", teacher?.status);
-    
     const subscribed = teacher?.status === 1;
-    console.log("subscribed:", subscribed);
 
     if (subscribed) {
       addUnsubscription(teacherId, {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["allTeachers"],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["search"],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["filter"],
+          });
           fetchTeacherProfile();
         },
       });
     } else {
       addSubscription(teacherId, {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["allTeachers"],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["search"],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["filter"],
+          });
           fetchTeacherProfile();
         },
       });
