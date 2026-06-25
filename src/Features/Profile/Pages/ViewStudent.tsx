@@ -18,7 +18,8 @@ import { useStudentProfile } from "../Hooks/useViewStudentProfile";
 const ViewStudent = () => {
   const [showSkeleton, setShowSkeleton] = useState(true);
   const { mutate, isPending } = useStudentProfile();
-  const [teacherProfile, setTeacherProfile] = useState<TeacherProfileData | null>(null);
+  const [teacherProfile, setTeacherProfile] =
+    useState<TeacherProfileData | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,6 +28,25 @@ const ViewStudent = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const fetchTeacherProfile = () => {
+    const teacherId = localStorage.getItem("viewStudentTeacherId");
+    if (!teacherId) return;
+    mutate(teacherId, {
+      onSuccess: (response) => {
+        const profileData = response?.data?.data ?? null;
+
+        if (profileData) {
+          setTeacherProfile(profileData);
+
+          localStorage.setItem(
+            "viewStudentProfileData",
+            JSON.stringify(profileData),
+          );
+        }
+      },
+    });
+  };
 
   useEffect(() => {
     const cached = localStorage.getItem("viewStudentProfileData");
@@ -37,27 +57,16 @@ const ViewStudent = () => {
         console.log(err);
       }
     }
-
-    const teacherId = localStorage.getItem("viewStudentTeacherId");
-    if (teacherId) {
-      mutate(teacherId, {
-        onSuccess: (response) => {
-          const profileData = response?.data?.data ?? null;
-          if (profileData) {
-            setTeacherProfile(profileData);
-            localStorage.setItem(
-              "viewStudentProfileData",
-              JSON.stringify(profileData)
-            );
-          }
-        },
-      });
-    }
+    fetchTeacherProfile();
   }, []);
 
   return (
     <StudentProfileContext.Provider
-      value={{ teacherProfile, isLoading: isPending }}
+      value={{
+        teacherProfile,
+        isLoading: isPending,
+        fetchTeacherProfile,
+      }}
     >
       <React.Fragment>
         <section className="MainProfileTeacther min-h-screen pb-10">
