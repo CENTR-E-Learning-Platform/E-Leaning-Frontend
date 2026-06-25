@@ -63,7 +63,8 @@ const ProfileHeader = () => {
               />
               <div className="text-xl absolute top-[15px] left-[160px] font-bold">
                 <h2 className="text-[28px] mb-4 leading-[13px] tracking-[0] font-bold">
-                  {isLoading ? "Loading..." : (teacherProfile?.fullName ?? "—")}
+                  {/* {isLoading ? "Loading..." : (teacherProfile?.fullName ?? "—")} */}
+                  {teacherProfile?.fullName ?? "—"}
                 </h2>
                 <p className="inline-block bg-[#FFDEDE] px-[10px] py-[8px] rounded-[18px] font-semibold text-[18px] text-[#611D1D]">
                   {subject}
