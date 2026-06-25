@@ -8,12 +8,14 @@ import { BASE_URL } from "../../../Streaming/Utils/Apis";
 import { useStudentProfileContext } from "../../Contexts/StudentProfileContext";
 import { useAddSubscription } from "../../Hooks/useAddsubscription";
 import { useAddUnsubscription } from "../../Hooks/useAddUnsubscription";
-
+import { useQueryClient } from "@tanstack/react-query";
 const ProfileHeader = () => {
   const { teacherProfile , isLoading , fetchTeacherProfile } =
     useStudentProfileContext();
   const { mutate: addSubscription } = useAddSubscription();
   const { mutate: addUnsubscription } = useAddUnsubscription();
+  const queryClient = useQueryClient();
+
   const fullProfilePicture = teacherProfile?.profilePicturePath
     ? teacherProfile.profilePicturePath === BASE_URL
       ? bg_imptyPhoto
@@ -28,13 +30,39 @@ const ProfileHeader = () => {
     if (subscribed) {
       addUnsubscription(teacherId, {
         onSuccess: () => {
+
           fetchTeacherProfile();
+
+          queryClient.invalidateQueries({
+            queryKey: ["allTeachers"],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["search"],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["filter"],
+          });
         },
       });
     } else {
       addSubscription(teacherId, {
         onSuccess: () => {
+
           fetchTeacherProfile();
+
+          queryClient.invalidateQueries({
+            queryKey: ["allTeachers"],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["search"],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["filter"],
+          });
         },
       });
     }
