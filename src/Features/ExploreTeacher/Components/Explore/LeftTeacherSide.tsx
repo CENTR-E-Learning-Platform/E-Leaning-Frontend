@@ -1,8 +1,45 @@
+import { useStudentProfileContext } from "../../../Profile/Contexts/StudentProfileContext";
+
 import type { Teacher } from "../../Types/type";
 import ButtomReserveSession from "./ButtomReserveSession";
 import SelectTime from "./SelectTime";
+import UnSubscribtion from "../../../../../src/assets/icons/UnSubscribtion.svg";
+import SubscribtionIcon from "../../../../../src/assets/icons/Subscribtion.svg";
+import { useAddSubscription } from "../../../Profile/Hooks/useAddsubscription";
+import { useAddUnsubscription } from "../../../Profile/Hooks/useAddUnsubscription";
 
 function LeftTeacherSide({ teacher }: { teacher: Teacher }) {
+  const { fetchTeacherProfile } = useStudentProfileContext();
+
+  const { mutate: addSubscription } = useAddSubscription();
+  const { mutate: addUnsubscription } = useAddUnsubscription();
+  const handleFavoriteClick = () => {
+    const teacherId = teacher?.teacherId;
+    console.log("clicked");
+
+    console.log("teacherId:", teacherId);
+
+    if (!teacherId) return;
+
+    console.log("teacher.status", teacher?.status);
+    
+    const subscribed = teacher?.status === 1;
+    console.log("subscribed:", subscribed);
+
+    if (subscribed) {
+      addUnsubscription(teacherId, {
+        onSuccess: () => {
+          fetchTeacherProfile();
+        },
+      });
+    } else {
+      addSubscription(teacherId, {
+        onSuccess: () => {
+          fetchTeacherProfile();
+        },
+      });
+    }
+  };
   return (
     <>
       <section className="LeftTeacher w-[285px] h-[239px]">
@@ -23,11 +60,21 @@ function LeftTeacherSide({ teacher }: { teacher: Teacher }) {
             </div>
           </div>
           <div className="heartImage">
-            <img
-              src="../../../../../src/assets/icons/heartIcon.svg"
-              alt="heartIcon"
-              className="w-[22px] h-[22px]"
-            />
+            {teacher?.status === 1 ? (
+              <img
+                className="cursor-pointer"
+                onClick={handleFavoriteClick}
+                src={SubscribtionIcon}
+                alt="Subscribed"
+              />
+            ) : (
+              <img
+                className="cursor-pointer"
+                onClick={handleFavoriteClick}
+                src={UnSubscribtion}
+                alt="UnSubscribed"
+              />
+            )}
           </div>
         </div>
 
