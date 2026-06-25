@@ -15,8 +15,6 @@ const AboutTeacher = () => {
   const bio = teacherProfile?.bio ?? null;
   const introVideoPath = teacherProfile?.introVideoPath ?? null;
 
-  console.log("Student prof", teacherProfile);
-
   useEffect(() => {
     const el = textRef.current;
     if (el) {
