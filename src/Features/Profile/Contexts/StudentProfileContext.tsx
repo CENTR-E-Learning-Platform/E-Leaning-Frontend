@@ -20,17 +20,20 @@ export interface TeacherProfileData {
   upComingSessions: any[];
   completionPercentage: number;
   numberOfReviews: number;
+  status: number;
   reviews: any[];
 }
 
 interface StudentProfileContextType {
   teacherProfile: TeacherProfileData | null;
   isLoading: boolean;
+  fetchTeacherProfile: () => void;
 }
 
 export const StudentProfileContext = createContext<StudentProfileContextType>({
   teacherProfile: null,
   isLoading: false,
+  fetchTeacherProfile: () => {},
 });
 
 export const useStudentProfileContext = () => useContext(StudentProfileContext);
