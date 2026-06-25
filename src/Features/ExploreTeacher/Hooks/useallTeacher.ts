@@ -15,7 +15,7 @@ export const useGetAllTeachers = () => {
       }),
     retry: false,
     enabled: true,
-    refetchOnMount: false,
+    refetchOnMount: true,
     staleTime: 60000,
     refetchOnWindowFocus: false,
   });
