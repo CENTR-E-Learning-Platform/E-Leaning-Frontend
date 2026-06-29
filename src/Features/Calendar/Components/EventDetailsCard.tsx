@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { BASE_URL } from "../Utils/api";
 import UpdateSessionForm from "./Form/UpdateSessionForm";
 import { roleToAuth } from "../../../Utils/Constant";
+import EventBigCard from "./EventBigCard";
 
 const getStatusDetails = (status: number) => {
   switch (status) {
@@ -21,6 +22,7 @@ const getStatusDetails = (status: number) => {
 
 const EventDetailsCard = ({ event, statusConfig }: any) => {
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [showBigCard, setShowBigCard] = useState(false);
 
   const start = new Date(event.start);
   const end = new Date(event.end);
@@ -46,8 +48,9 @@ const EventDetailsCard = ({ event, statusConfig }: any) => {
   return (
     <>
       <div
-        className="absolute z-[999] top-0 left-full ms-2 w-[390px] bg-[#FFFFFF] rounded-[8px] border border-[#E5E7EB] p-[20px] shadow-lg flex flex-col justify-between cursor-default"
+        className="absolute z-[999] top-0 left-full ms-2 w-[390px] bg-[#FFFFFF] rounded-[8px] border border-[#E5E7EB] p-[20px] shadow-lg flex flex-col justify-between cursor-pointer"
         style={{ gap: "32px" }}
+        onClick={() => setShowBigCard(true)}
       >
         <div className="flex flex-col gap-[12px]">
           <div className="flex justify-between items-start">
@@ -128,12 +131,19 @@ const EventDetailsCard = ({ event, statusConfig }: any) => {
             <UpdateSessionForm
               session={sessionData}
               onClose={() => setShowUpdateForm(false)}
-              numberOfWeeks={event.numberOfWeeks ?? 1
-              }
+              numberOfWeeks={event.numberOfWeeks ?? 1}
               sessionSeriesId={event.sessionSeriesId ?? ""}
             />
           </div>
         </div>
+      )}
+
+      {showBigCard && (
+        <EventBigCard
+          event={event}
+          statusConfig={statusConfig}
+          onClose={() => setShowBigCard(false)}
+        />
       )}
     </>
   );
