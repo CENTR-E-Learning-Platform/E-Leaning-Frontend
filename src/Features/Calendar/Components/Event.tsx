@@ -40,7 +40,7 @@ const Event = ({ event }: any) => {
       const rect = eventRef.current.getBoundingClientRect();
       setCoords({
         top: rect.top + window.scrollY + 60,
-        left: rect.right + window.scrollX - 135, 
+        left: rect.right + window.scrollX - 135,
       });
     }
     setIsHovered(true);
@@ -59,9 +59,8 @@ const Event = ({ event }: any) => {
         onMouseLeave={handleMouseLeave}
       >
         <div
-          className={`${bg} ${border} ${
-            isDisabled ? "opacity-50 grayscale pointer-events-none" : ""
-          } w-full h-full rounded-[4px] border-s-[4px] transition-all duration-300 cursor-pointer`}
+          className={`${bg} ${border} ${isDisabled ? "opacity-50 grayscale pointer-events-none" : ""
+            } w-full h-full rounded-[4px] border-s-[4px] transition-all duration-300 cursor-pointer`}
         >
           <div>
             <h1 className="text-[14px] w-fit ps-[12px] pt-[12px] pb-[10px] text-[#2A2D34] font-semibold truncate">
