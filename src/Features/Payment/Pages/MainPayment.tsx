@@ -1,6 +1,5 @@
-import React from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import StaticPayment from '../Components/Payment/StaticPayment'
+
 
 const MainPayment = () => {
   return <>

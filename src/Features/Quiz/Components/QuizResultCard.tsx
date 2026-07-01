@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useQuiz } from '../Context/QuizContext';
 
 interface QuizResultCardProps {
   quizTitle?: string;
@@ -8,7 +7,7 @@ interface QuizResultCardProps {
 export const QuizResultCard: React.FC<QuizResultCardProps> = ({
   quizTitle = "Stoichiometry Quiz",
 }) => {
-  const { QuizDataTime } = useQuiz();
+  
   
   const [finalScore, setFinalScore] = useState(0);
   const [maxPossibleScore, setMaxPossibleScore] = useState(0);

@@ -33,7 +33,7 @@ interface StudentProfileContextType {
 export const StudentProfileContext = createContext<StudentProfileContextType>({
   teacherProfile: null,
   isLoading: false,
-  fetchTeacherProfile: () => {},
+  fetchTeacherProfile: () => void {},
 });
 
 export const useStudentProfileContext = () => useContext(StudentProfileContext);

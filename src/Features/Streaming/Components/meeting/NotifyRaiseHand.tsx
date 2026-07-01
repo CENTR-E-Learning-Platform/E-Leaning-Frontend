@@ -1,7 +1,7 @@
 import close from '../../../../assets/icons/closeHand.svg';
 import hand from '../../../../assets/icons/hand.svg';
 
-const NotifyRaiseHand = ({st ,names , st2}:any) => {
+const NotifyRaiseHand = ({st ,names }:any) => {
 
   if (!names || names.length === 0) return null;
 

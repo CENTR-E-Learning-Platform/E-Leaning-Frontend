@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useFinancial } from '../../Hooks/useFinancial';
 import { useSettingContext } from '../../Context/useSettingContext';
-import { set } from 'date-fns';
 
 interface WalletCardProps {
   icon: string;
@@ -21,8 +20,6 @@ const WalletCard: React.FC<WalletCardProps> = ({
   buttonText,
   buttonIcon,
   list,
-  onButtonClick,
-  onOptionsClick,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);

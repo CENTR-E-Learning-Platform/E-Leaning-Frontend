@@ -1,4 +1,3 @@
-import React from 'react';
 import date from '../../../assets/icons/date.svg';
 import book from '../../../assets/icons/book.svg';
 import chem from '../../../assets/icons/chems.svg';

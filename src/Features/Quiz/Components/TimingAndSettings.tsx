@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuiz } from '../Context/QuizContext';
 import time from '../../../assets/icons/time.svg';
 import inputtime from '../../../assets/icons/inputTime.svg';

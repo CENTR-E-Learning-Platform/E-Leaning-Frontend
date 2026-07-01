@@ -11,7 +11,7 @@ import { useQuizSearch } from '../Hooks/useQuizSearch';
 
 const DashboardQuiz = () => {
   const { searchData } = useQuiz();
-  const { isLoading } = useQuizSearch(searchData);
+  const { isLoading } = useQuizSearch(searchData , 0);
 
   return (
     <div className="flex flex-col justify-center items-center mt-[20px] bg-[#f9fbfc]">

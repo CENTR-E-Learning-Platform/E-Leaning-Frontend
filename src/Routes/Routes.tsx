@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Children, lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import LandingPage from "../Features/LandingPage/Pages/LandingPage";
 import MainRegister from "../Features/Auth/Pages/MainRegister";
 import MainLogin from "../Features/Auth/Pages/MainLogin";

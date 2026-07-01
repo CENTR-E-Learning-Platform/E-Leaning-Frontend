@@ -15,7 +15,7 @@ import { useNotifications } from '../../Features/Notification/Contexts/Notificat
 const Navbar = () => {
     const teacherData = useTeacherProfile();
     const studentData = useStudentProfile();
-    const [isAuth, setIsAuth] = useState(false);
+    const [, setIsAuth] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);

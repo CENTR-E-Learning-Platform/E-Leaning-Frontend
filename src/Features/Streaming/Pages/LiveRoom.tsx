@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { LiveKitRoom } from "@livekit/components-react";
 import "@livekit/components-styles";
 import Meeting from "./Meeting";

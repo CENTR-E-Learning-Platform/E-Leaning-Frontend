@@ -1,4 +1,4 @@
-import React, { use, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useQuizHeaderDashboard } from '../../Hooks/useQuizHeaderDashboard';
 import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';

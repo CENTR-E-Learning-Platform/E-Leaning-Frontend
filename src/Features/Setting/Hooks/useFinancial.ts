@@ -6,7 +6,6 @@ import { getBalance } from "../Services/getBalance";
 import { useSettingContext } from "../Context/useSettingContext";
 import { deleteWallet } from "../Services/deleteWallet";
 import { disburse } from "../Services/disburse";
-import { ca } from "date-fns/locale";
 export const useFinancial = () => {
 
     const {setIsCreated} = useSettingContext();

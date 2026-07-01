@@ -19,7 +19,7 @@ const DynamicPaymentCard = () => {
           console.log("public id: " + testPublicKey);
           console.log("client secret: " + testClientSecret);
 
-          const pixel = new (window as any).Pixel({
+            new (window as any).Pixel({
             publicKey: testPublicKey,
             clientSecret: testClientSecret,
             paymentMethods: ['wallet', 'card'],

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import teacher from "../../../assets/images/mester.jpg";
-import vector from "../../../assets/icons/Vector.svg";
-import fullscreen from "../../../assets/icons/fullscreen.svg";
 import StudentActions from "../Components/meeting/StudentActions";
 import Bar from "../Components/chat/Bar";
 import Attend from "../Components/meeting/Attend";
@@ -16,7 +14,7 @@ import { useControlContext } from "../Context/ControlContext";
 import Leave from "../Components/meeting/Leave";
 import { useFooter } from "../Hooks/useFooter";
 import { useRole } from "../Hooks/useRole";
-import { useRoomContext, useLocalParticipant } from "@livekit/components-react";
+import { useRoomContext} from "@livekit/components-react";
 import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
 import NotifyRaiseHand from "../Components/meeting/NotifyRaiseHand";
 
@@ -27,13 +25,11 @@ const Meeting: React.FC = () => {
   const [hand, setHand] = useState<boolean>(false);
   const [rais, setRaise] = useState<any[]>([]);
 
-  const { emoji, optionLeave, isfull, setIsFull, isClickattend, setIsClickattend, setCameraPermitted, setScreensharePermitted } = useControlContext();
+  const { emoji, optionLeave, isfull, isClickattend, setIsClickattend, setCameraPermitted, setScreensharePermitted } = useControlContext();
   const participant = useParticipant();
   const { getEmojiIcon, removeEmoji, AddEmoji } = useFooter();
   const { MuteParticipant, ToggleCameraParticipant, ToggleScreenShareParticipant, LowerHandParticipant } = useRole();
   const room = useRoomContext();
-  const { localParticipant } = useLocalParticipant();
-  const startResizing = () => setIsResizing(true);
   const stopResizing = () => setIsResizing(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 

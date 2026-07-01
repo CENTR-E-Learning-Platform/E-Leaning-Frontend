@@ -8,7 +8,7 @@ type VideoDropBoxProps = {
 export default function VideoDropBox({ onFileSelect }: VideoDropBoxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const [, setIsDragging] = useState(false);
 
   
 

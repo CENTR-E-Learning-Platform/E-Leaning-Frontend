@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { HeroBanner } from "../Components/StudentHome/HeroBanner";
 import { RecommendedTeacherCard } from "../Components/StudentHome/RecommendedTeacherCard";
 import { StatCard } from "../Components/StudentHome/StatCard";
-import { UpcomingClassItem, type UpcomingClassData } from "../Components/StudentHome/UpcomingClassItem";
-
+import { UpcomingClassItem } from "../Components/StudentHome/UpcomingClassItem";
+import type {UpcomingClassData} from "../Types/types";
 import vector from "../../../assets/icons/fa6-solid_book.svg";
 import image from "../../../assets/icons/Vector (28).svg";
 import vector3 from "../../../assets/icons/mdi_human-greeting-variant.svg";

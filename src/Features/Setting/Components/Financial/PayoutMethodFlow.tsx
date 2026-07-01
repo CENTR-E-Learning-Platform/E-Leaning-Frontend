@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFinancial } from '../../Hooks/useFinancial';
 export const PayoutMethodFlow = () => {
   const [selectedMethod, setSelectedMethod] = useState<'mobile' | 'card' | undefined>("mobile");
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [pin, setPin] = useState('');
-  const [otp, setOtp] = useState('');
+  // const [phoneNumber, setPhoneNumber] = useState('');
+  // const [pin, setPin] = useState('');
+  // const [otp, setOtp] = useState('');
   const {formik} = useFinancial();
   return (
 

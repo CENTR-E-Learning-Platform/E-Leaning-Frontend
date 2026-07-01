@@ -31,7 +31,7 @@ const ViewTeacher = () => {
         value={{
           teacherProfile: data?.data?.data ?? null,
           isLoading: isLoading ?? false,
-        }}
+        } as any}
       >
         <section className="ProfileStudent-section bg-[#F9FBFC] min-h-screen pb-10">
           {showSkeleton ? (

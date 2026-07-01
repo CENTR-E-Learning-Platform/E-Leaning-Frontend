@@ -21,7 +21,7 @@ const JoinNow = () => {
   const {
     cameraView, setCameraView,
     mic, setMic,
-    openStream, setOpenStream,
+    setOpenStream,
   } = useControlContext();
 
   const { JoinRoom } = useCreateRoom();

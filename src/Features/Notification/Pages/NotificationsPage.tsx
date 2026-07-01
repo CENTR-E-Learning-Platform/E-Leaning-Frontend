@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNotifications } from "../Contexts/NotificationContext";
 import { type INotification } from "../Types/notification";
 import { getHistoryNotifications } from "../Services/historyNotify";
-import { readNotifyById } from "../Services/readNotifyById";
 import { getNotificationIcon, formatNotificationTime } from "../Utils/notificationHelpers";
 
 const PAGE_SIZE = 10;
