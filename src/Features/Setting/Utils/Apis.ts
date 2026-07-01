@@ -1,4 +1,5 @@
-const BASE_URL = "https://localhost:7251";
+import { BASE_URL } from "../../../APIs/APIs";
+
 const GET_STUDENT_PROFILE_API = `${BASE_URL}/api/StudentProfile/Get_StudentProfile_Data`;
 const UPDATE_STUDENT_PROFILE_API = `${BASE_URL}/api/StudentProfile/Update_Studnet_Profile`;
 const DELETE_FILE_API = `${BASE_URL}/api/TeacherProfile/DeleteFile`;
@@ -20,4 +21,3 @@ export{
     DELETE_WALLET,
     DISBURSE
 }
-

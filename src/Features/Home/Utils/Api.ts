@@ -1,4 +1,5 @@
-const BASE_URL = "https://localhost:7251";
+import { BASE_URL } from "../../../APIs/APIs";
+
 const GET_STUDENT_DASHBOARD_INFO = `${BASE_URL}/api/StudentDashboard/GetStudentDashboardInfo`;
 const UPCOMING_CLASSES_STUDENT = `${BASE_URL}/api/StudentDashboard/upcoming-classes`;
 const UPCOMING_CLASSES_TEACHER = `${BASE_URL}/api/TeacherDashboard/GetUpcomingClasses`;
@@ -6,7 +7,6 @@ const RECOMMENDED_TEACHERS = `${BASE_URL}/api/StudentDashboard/recommended-teach
 const GET_ACTIVE_QUIZZES_SUMMARY_TEACHER = `${BASE_URL}/api/TeacherDashboard/GetActiveQuizzesSummary`;
 const GET_DASHBOARD_QUIZZES_STUDENT = `${BASE_URL}/api/StudentDashboard/get-student-dashboard-quiz`;
 const GET_TEACHER_DASHBOARD_INFO = `${BASE_URL}/api/TeacherDashboard/GetTeacherDashboardInfo`;
-
 
 export {
   GET_STUDENT_DASHBOARD_INFO,

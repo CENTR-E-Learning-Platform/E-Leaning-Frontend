@@ -1,4 +1,5 @@
-const BASE_URL = "https://localhost:7251"; 
+import { BASE_URL } from "../../../APIs/APIs";
+
 const ADD_QUIZ_API = `${BASE_URL}/api/TeacherQuiz/add-quiz`;
 const GET_ALL_CLASSES_QUIZ_API = `${BASE_URL}/api/TeacherQuiz/get-sessions-data`;
 const ATTEND_QUIZ_API = `${BASE_URL}/api/StudentQuiz/attend-quiz`;

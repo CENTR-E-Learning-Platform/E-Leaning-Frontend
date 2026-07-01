@@ -1,4 +1,5 @@
-const BASE_URL = "https://localhost:7251";
+import { BASE_URL } from "../../../APIs/APIs";
+
 const CHAT_GET_MESSAGES= `${BASE_URL}/Chat/get/messages`;
 const CHAT_GET_CONVERSATION= `${BASE_URL}/Chat/get/conversations`;
 const CHAT_GET_MY_GROUPS= `${BASE_URL}/Chat/my-groups`;

@@ -1,4 +1,5 @@
-const BASE_URL = "https://localhost:7251";
+import { BASE_URL } from "../../../APIs/APIs";
+
 const SEARCH_TEACHER_API = `${BASE_URL}/Search`;
 const FILTER_TEACHER_API = `${BASE_URL}/Filter`;
 const ALL_TEACHER_API = `${BASE_URL}/GetAllTeachers`;
