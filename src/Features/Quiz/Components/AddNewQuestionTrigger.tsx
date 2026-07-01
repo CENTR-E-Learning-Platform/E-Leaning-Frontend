@@ -1,5 +1,5 @@
 import React from 'react';
-import add from '../../../assets/icons/add.svg';
+import add from '../../../assets/icons/Add.svg';
 interface AddNewQuestionTriggerProps {
   onClick: () => void;
 }
