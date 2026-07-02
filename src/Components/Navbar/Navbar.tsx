@@ -11,6 +11,10 @@ import { useStudentProfile } from '../../Features/Setting/Hooks/useStudentProfil
 import { roleToAuth } from '../../Utils/Constant';
 import NotificationDropdown from '../../Features/Notification/Components/NotificationDropdown';
 import { useNotifications } from '../../Features/Notification/Contexts/NotificationContext';
+import HomeIcon from "../../assets/icons/HomeIcon.svg";
+import ExploreIcon from "../../assets/icons/Explore.svg";
+import ScheduleIcon from "../../assets/icons/Schedule.svg";
+import MessagesIcon from "../../assets/icons/Messages.svg";
 
 const Navbar = () => {
     const teacherData = useTeacherProfile();
@@ -71,21 +75,21 @@ const Navbar = () => {
             <div className="">
                 <ul className="flex gap-[16px]">
                     <NavLink to="/home" className={navLinkClasses}>
-                        <img src="../../../src/assets/icons/HomeIcon.svg" className='p-[2px]' alt="HomeIcon" />
+                        <img src={HomeIcon} className='p-[2px]' alt="HomeIcon" />
                         <p className='text-[16px]'>Home</p>
                     </NavLink>
                     {!isTeacher && (
                         <NavLink to="/explore" className={navLinkClasses}>
-                            <img src="../../../src/assets/icons/Explore.svg" className='p-[2px]' alt="ExploreTeacher" />
+                            <img src={ExploreIcon} className='p-[2px]' alt="ExploreTeacher" />
                             <p className='text-[16px]'>Explore Teacher</p>
                         </NavLink>
                     )}
                     <NavLink to="/Calendar" className={navLinkClasses}>
-                        <img src="../../../src/assets/icons/Schedule.svg" className='p-[2px]' alt="Schedule" />
+                        <img src={ScheduleIcon} className='p-[2px]' alt="Schedule" />
                         <p className='text-[16px]'>Schedule</p>
                     </NavLink>
                     <NavLink to="/messages" className={navLinkClasses}>
-                        <img src="../../../src/assets/icons/Messages.svg" className='p-[2px]' alt="Messages" />
+                        <img src={MessagesIcon} className='p-[2px]' alt="Messages" />
                         <p className='text-[16px]'>Messages</p>
                     </NavLink>
                 </ul>
