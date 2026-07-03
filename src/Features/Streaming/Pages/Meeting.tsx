@@ -14,7 +14,7 @@ import { useControlContext } from "../Context/ControlContext";
 import Leave from "../Components/meeting/Leave";
 import { useFooter } from "../Hooks/useFooter";
 import { useRole } from "../Hooks/useRole";
-import { useRoomContext} from "@livekit/components-react";
+import { useRoomContext , RoomAudioRenderer} from "@livekit/components-react";
 import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
 import NotifyRaiseHand from "../Components/meeting/NotifyRaiseHand";
 
@@ -269,6 +269,7 @@ const Meeting: React.FC = () => {
         })}
       </div>
       {!isfull && <FooterBar setRais={setRaise} handsound={audioRef} />}
+      <RoomAudioRenderer/>
     </div>
   );
 };
