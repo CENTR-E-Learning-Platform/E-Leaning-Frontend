@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import 'paymob-pixel';
 import { useInitialAmount } from "../../Hooks/useInitialAmount";
-
+import card  from "../../../../assets/icons/PaymentCardW.svg"
+import mobileWallet from "../../../../assets/icons/MobilewalletB.svg"
 const DynamicPaymentCard = () => {
   const isInitialized = useRef(false);
   const { sendAmount } = useInitialAmount();
@@ -64,7 +65,7 @@ const DynamicPaymentCard = () => {
 
       <div className="flex mb-6 justify-between h-[77px] w-[310px] gap-[20px]">
         <div className="h-[77px] w-[145px] rounded-[4px] p-[16px] bg-[#525FE1] flex flex-col items-center justify-center gap-[10px] cursor-pointer">
-          <img src="/src/assets/icons/PaymentCardW.svg" alt="Card" />
+          <img src={card} alt="Card" />
           <p className="text-[16px] w-[115px] text-center font-medium text-white leading-[17px] tracking-[0]">
             Payment card
           </p>
@@ -73,7 +74,7 @@ const DynamicPaymentCard = () => {
           to={"/payment/mobileWallet"}
           className="h-[77px] w-[145px] flex flex-col items-center justify-center rounded-[4px] p-[16px] border gap-[10px] border-gray-300"
         >
-          <img src="/src/assets/icons/MobilewalletB.svg" alt="Wallet" />
+          <img src={mobileWallet} alt="Wallet" />
           <p className="text-[16px] font-medium leading-[13px] tracking-[0] text-[#2A2D34]">
             Mobile wallet
           </p>
