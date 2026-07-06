@@ -28,8 +28,7 @@ export const useRegister = () => {
         console.log("Form data", values);
         setUserData(values);
         await RegisterClick(finalData);
-        alert("Registration successful. Please check your email to verify your account.");
-        navigate("/login");
+        navigate("/emailconfirmation");
       } catch (error: any) {
         alert(error.response?.data?.errors?.[0] || error.message || "Registration failed");
       } finally {
