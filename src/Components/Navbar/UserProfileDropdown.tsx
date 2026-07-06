@@ -26,7 +26,7 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
     if (onLogout) {
       onLogout();
       e.preventDefault();
-      window.location.href = "http://localhost:5173/landing";
+      window.location.href = "https://e-leaning-frontend-one.vercel.app/";
 
     }
   };
