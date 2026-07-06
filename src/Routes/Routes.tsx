@@ -33,6 +33,7 @@ import { roleToAuth } from "../Utils/Constant";
 import DashboardQuiz from "../Features/Quiz/Pages/DashboardQuiz";
 import NotificationsPage from "../Features/Notification/Pages/NotificationsPage";
 import ViewStudent from "../Features/Profile/Pages/ViewStudent";
+import VerifyHandler from "../Features/Auth/Components/Register/VerifyHandler";
 const lazyWithDelay = (importFunction: () => Promise<any>, delay: number = 2000) => {
   return lazy(() =>
     Promise.all([
@@ -128,4 +129,7 @@ export const router = createBrowserRouter([
   { path: "/quiz/result", element: <ResultQuiz /> },
   { path: "/quiz/:quizId", element: <StartQuizforStudent /> },
   { path: "/quiz/dashboard/:quizId", element: <DashboardQuiz /> },
+  { path: "/emailconfirmation", element: <EmailConfig/> },
+  { path: "/verify", element: <VerifyHandler/> },
+  { path: "verify", element: <VerifyHandler/> },
 ]);
