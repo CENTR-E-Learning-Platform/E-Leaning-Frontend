@@ -1,5 +1,5 @@
 import React from "react";
-
+import logo from '../../../../assets/icons/logo.svg';
 import email_Config from "../../../../assets/images/EmailConfig.png";
 import { useRegContext } from "../../Contexts/RegContext";
 import { Link } from "react-router";
@@ -25,20 +25,18 @@ const EmailConfig = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
           <section className="flex items-start justify-center">
             <div className="w-[450px]">
-              <header className="flex justify-center items-center">
-                <h1 className="mt-[34.453125px] font-semibold text-[32px] text-[#2A2D34]">
-                  logo
-                </h1>
+              <header className="flex justify-center items-center mt-[150px]">
+                <img src={logo} className="w-[150px] h-full" alt="" />
               </header>
 
               <article className="flex flex-col w-[640px] items-start justify-center">
-                <h2 className="text-[29px] mt-[160px] font-bold leading-[20.390625px] text-[#2A2D34]">
+                <h2 className="text-[29px] mt-[100px] font-bold leading-[20.390625px] text-[#2A2D34]">
                   Confirm your email to continue
                 </h2>
                 
                 <section className="h-[90px] w-[640px] mt-[20px] mb-[10px]">
                   <p className="text-[17px] leading-[155%] font-normal text-gray-900 mb-1">
-                    We’ve sent an email to {userData?.email} <br />
+                    We’ve sent an email to <span className="font-semibold">{userData?.email}</span> <br />
                     Confirm this is correct by clicking the link in the email.
                   </p>
 
@@ -53,14 +51,14 @@ const EmailConfig = () => {
                     onClick={handleResend}
                     disabled={isLoading}
                     type="button"
-                    className="w-[230px] p-1 font-medium cursor-pointer h-[36.6px] bg-[#525FE1] text-[#fff] border border-[#525FE1] rounded-[8px]"
+                    className="w-[230px] text-[14px] p-1 font-medium cursor-pointer h-[36.6px] bg-[#525FE1] text-[#fff] border border-[#525FE1] rounded-[8px]"
                   >
                     {isLoading ? "Sending..." : "Resend confirmation email"}
 
                   </button>
                   <Link
                     to = "/register"
-                    className="w-[178.6px] flex items-center justify-center cursor-pointer h-[36.6px] text-[#525FE1] border border-[#525FE1] rounded-[8px]"
+                    className="w-[178.6px] text-[14px] flex items-center justify-center cursor-pointer h-[36.6px] text-[#525FE1] border border-[#525FE1] rounded-[8px]"
                   >
                     Create new account
                   </Link>
