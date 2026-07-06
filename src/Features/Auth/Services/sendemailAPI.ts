@@ -8,3 +8,6 @@ export const SendEmail = async (data: any) => {
             type: 0,
         });
 }
+// 0 -> login 
+// 1 -> forget
+// 2 -> verify
