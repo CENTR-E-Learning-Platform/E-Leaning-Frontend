@@ -21,7 +21,7 @@ export const useLogin = () => {
         const roleToAuth = res.data.data.roles[0];
         localStorage.setItem("roleToAuth", roleToAuth);
         console.log(res.data.message);
-        window.location.href = "http://localhost:5173/home";
+        window.location.href = "https://e-leaning-frontend-one.vercel.app/";
       } catch (error: any) {
         const MSError = error.response?.data.errors[0] || error.message;
         console.error(" Login failed:", error.status);
