@@ -5,15 +5,12 @@ import { useUploadImage } from "../../Hooks/useUploadImage";
 import { useState } from "react";
 import { useDeleteFile } from "../../Hooks/useDeleteFile";
 
-
-
-
 const EditPhotoModal = ({
   isOpen,
   onClose,
   previewImage,
   setPreviewImage,
-  refetch
+  refetch,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -21,16 +18,14 @@ const EditPhotoModal = ({
   setPreviewImage: React.Dispatch<React.SetStateAction<string>>;
   refetch: () => void;
 }) => {
-
-
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { mutate } = useUploadImage();
   const { mutate: deleteMutate } = useDeleteFile();
+  const CurrentImage = previewImage ?? bg_imptyPhoto;
 
-  
-  const handleDeleteImage = ()=>{
+  const handleDeleteImage = () => {
     setPreviewImage(bg_imptyPhoto);
-  }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,10 +34,9 @@ const EditPhotoModal = ({
     const imageUrl = URL.createObjectURL(file);
     setPreviewImage(imageUrl);
   };
-  
-  const saveChange = () => {
 
-    if(previewImage === bg_imptyPhoto) {
+  const saveChange = () => {
+    if (previewImage === bg_imptyPhoto) {
       deleteMutate(0, {
         onSuccess: () => {
           setPreviewImage(bg_imptyPhoto);
@@ -53,16 +47,16 @@ const EditPhotoModal = ({
         },
       });
     } else if (previewImage !== bg_imptyPhoto) {
-    
-    if (!selectedFile) return;
-    mutate(selectedFile, {
-      onSuccess: () => {
-        onClose();
-      },
-      onError: () => {
-        setPreviewImage(bg_imptyPhoto);
-      },
-    })};
+      if (!selectedFile) return;
+      mutate(selectedFile, {
+        onSuccess: () => {
+          onClose();
+        },
+        onError: () => {
+          setPreviewImage(bg_imptyPhoto);
+        },
+      });
+    }
 
     onClose();
   };
@@ -71,7 +65,7 @@ const EditPhotoModal = ({
 
   const close = () => {
     onClose();
-    refetch();  
+    refetch();
   };
 
   return (
@@ -99,26 +93,47 @@ const EditPhotoModal = ({
 
             <div className="px-6 pb-6">
               <div className="flex flex-col items-center gap-6 mb-6">
-                <img className="w-[160px] h-[160px] rounded-full object-cover" src={previewImage ?? bg_imptyPhoto} alt="Empty profile photo" />
-                <button onClick={handleDeleteImage} className="text-[16px] cursor-pointer border-2 p-4 rounded-[8px] border-[#525FE1] flex justify-center items-center gap-1 text-[#525FE1] hover:text-[#3f4bc4] transition-colors">
-                  <img src={DeleteCurrentImage} alt="Delete current image" />
-                  <p className="w-[171px] font-medium">
-                    Delete current image
-                  </p>
-                </button>
+                <img
+                  className="w-[160px] h-[160px] rounded-full object-cover"
+                  src={CurrentImage}
+                  alt="Profile photo"
+                />
+                {CurrentImage === bg_imptyPhoto ? null : (
+                  <button
+                    onClick={handleDeleteImage}
+                    className="text-[16px] cursor-pointer border-2 p-4 rounded-[8px] border-[#525FE1] flex justify-center items-center gap-1 text-[#525FE1] hover:text-[#3f4bc4] transition-colors"
+                  >
+                    <img src={DeleteCurrentImage} alt="Delete current image" />
+                    <p className="w-[171px] font-medium">
+                      Delete current image
+                    </p>
+                  </button>
+                )}
               </div>
-              
+
               <div className="flex items-center justify-center">
                 <div className="w-[439px]">
                   <p className="text-[16px] mb-8 font-medium text-[#6D7588]">
-                    <span className="font-semibold">Must be an actual photo of you.</span> Logos, clip-art, group photos, and digitally-altered images are not allowed.
+                    <span className="font-semibold">
+                      Must be an actual photo of you.
+                    </span>{" "}
+                    Logos, clip-art, group photos, and digitally-altered images
+                    are not allowed.
                   </p>
-                  
+
                   <div className="flex justify-center items-center gap-3">
-                    <button onClick={() => document.getElementById("fileInput")?.click()} className="text-[16px] cursor-pointer border-2 py-2 px-4 rounded-[8px] border-[#525FE1] flex justify-center items-center gap-1 text-[#525FE1] hover:text-[#3f4bc4] transition-colors">
+                    <button
+                      onClick={() =>
+                        document.getElementById("fileInput")?.click()
+                      }
+                      className="text-[16px] cursor-pointer border-2 py-2 px-4 rounded-[8px] border-[#525FE1] flex justify-center items-center gap-1 text-[#525FE1] hover:text-[#3f4bc4] transition-colors"
+                    >
                       Change image
                     </button>
-                    <button onClick={saveChange} className="text-[16px] cursor-pointer border-2 py-2 px-4 rounded-[8px] border-[#525FE1] bg-[#525FE1] flex justify-center hover:bg-[#3f4bc4] items-center gap-1 text-white hover:text-white transition-colors">
+                    <button
+                      onClick={saveChange}
+                      className="text-[16px] cursor-pointer border-2 py-2 px-4 rounded-[8px] border-[#525FE1] bg-[#525FE1] flex justify-center hover:bg-[#3f4bc4] items-center gap-1 text-white hover:text-white transition-colors"
+                    >
                       save photo
                     </button>
                   </div>
