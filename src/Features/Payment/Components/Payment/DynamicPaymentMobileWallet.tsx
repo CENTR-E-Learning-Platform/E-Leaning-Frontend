@@ -3,7 +3,8 @@ import { useState } from "react";
 import type { mobileData } from "../../Types/types";
 import { Link } from "react-router-dom";
 import { MobileWalletSchema } from "../../Validation/MobileWalletSchema";
-
+import card from '../../../../assets/icons/PaymentCardB.svg';
+import wallet from '../../../../assets/icons/MobilewalletW.svg';
 const DynamicPaymentMobileWallet = () => {
   const { sendPayByWallet } = useInitialAmount();
   const [errors, setErrors] = useState<{ mobileNumber?: string; amount?: string }>({});
@@ -84,7 +85,7 @@ const DynamicPaymentMobileWallet = () => {
             className="h-[77px] w-[145px] flex flex-col items-center justify-center rounded-[4px] p-[16px] border gap-[10px] border-gray-300"
           >
             <img
-              src="../../../../../src/assets/icons/PaymentCardB.svg"
+              src={card}
               alt="PaymentCardBlack"
             />
             <p className="text-[16px] w-[115px] font-medium leading-[17px] tracking-[0]">
@@ -97,7 +98,7 @@ const DynamicPaymentMobileWallet = () => {
             className="h-[77px] w-[145px] flex flex-col items-center justify-center rounded-[4px] bg-[#525FE1] p-[16px] gap-[10px]"
           >
             <img
-              src="../../../../../src/assets/icons/MobilewalletW.svg"
+              src={wallet}
               alt="Mobilewalletwhite"
             />
             <p className="text-[16px] font-medium leading-[13px] text-white tracking-[0]">
