@@ -15,6 +15,8 @@ import HomeIcon from "../../assets/icons/HomeIcon.svg";
 import ExploreIcon from "../../assets/icons/Explore.svg";
 import ScheduleIcon from "../../assets/icons/Schedule.svg";
 import MessagesIcon from "../../assets/icons/Messages.svg";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const Navbar = () => {
     const teacherData = useTeacherProfile();
@@ -30,6 +32,8 @@ const Navbar = () => {
 
     const isTeacher = roleToAuth?.includes("Teacher");
     const data = isTeacher ? teacherData.data : studentData.data;
+    
+    const isLoading = isTeacher ? teacherData.isLoading : studentData.isLoading;
 
     const userName = isTeacher ? data?.data?.data?.fullName : data?.data?.firstName;
     const userEmail = isTeacher ? data?.data?.data?.email : data?.data?.email;
@@ -121,12 +125,17 @@ const Navbar = () => {
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         className="p[13px] rounded-3xl flex justify-center items-center w-[37px] h-[37px] cursor-pointer"
                     >
-                        <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full object-cover' src={avatarImage} alt="Profile" />
+                        {isLoading ? (
+                            <Skeleton circle width={37} height={37} />
+                        ) : (
+                            <img className='w-[37px] h-[37px] rounded-e-full rounded-l-full object-cover' src={avatarImage} alt="Profile" />
+                        )}
                     </div>
 
                     {isDropdownOpen && (
                         <div className="absolute right-0 top-[calc(100%+10px)] z-50">
                             <UserProfileDropdown
+                                isLoading={isLoading}
                                 userName={userName || "Ahmed Mohamed"}
                                 userEmail={userEmail || "ahmed@email.com"}
                                 avatarUrl={avatarImage}
