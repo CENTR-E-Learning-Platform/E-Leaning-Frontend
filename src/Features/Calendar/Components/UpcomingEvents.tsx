@@ -1,12 +1,15 @@
 import { useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import alert from "../../../assets/icons/alert2.svg";
 import profile from "../../../assets/icons/profile.svg";
 import { useCalendar } from "../Contexts/CalendarContext";
 import { useNavigate } from "react-router-dom";
 import { isSameDay } from "date-fns";
 import { useGetAllQuizes } from "../Hooks/useGetAllQuizes";
+import { useGetAllClasses } from "../Hooks/useGetAllClasses";
 import { roleToAuth } from "../../../Utils/Constant";
 import { useAttemptQuiz } from "../../Quiz/Hooks/useAttemptQuiz";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const getStatusConfig = (status: number) => {
   switch (status) {
@@ -45,9 +48,12 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
   const isTeacher = roleToAuth?.includes("Teacher");
   const { fetchQuestions } = useAttemptQuiz();
   const { Class } = useCalendar();
-  const { data } = useGetAllQuizes();
+  const { data, isLoading: quizzesLoading } = useGetAllQuizes();
+  const { isLoading: classesLoading } = useGetAllClasses();
   const navigator = useNavigate();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const isLoading = classesLoading || quizzesLoading;
 
   const formattedClasses = (Class || []).map((cls: any) => ({
     ...cls,
@@ -78,6 +84,18 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
     .filter((e: any) => isSameDay(e.displayStart, selectedDate))
     .sort((a: any, b: any) => a.displayStart.getTime() - b.displayStart.getTime())
     .slice(0, 3);
+
+  if (isLoading) {
+    return (
+      <>
+        {[0, 1].map((i) => (
+          <div key={i} className="w-[265px] h-[153px] rounded-[10px] mb-[10px]">
+            <Skeleton height={153} borderRadius={10} />
+          </div>
+        ))}
+      </>
+    );
+  }
 
   return (
     <>
@@ -198,4 +216,4 @@ const UpcomingEvents = ({ selectedDate }: { selectedDate: Date }) => {
   );
 };
 
-export default UpcomingEvents;
+export default UpcomingEvents;
