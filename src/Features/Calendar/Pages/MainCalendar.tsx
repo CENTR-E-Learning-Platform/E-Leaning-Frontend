@@ -61,11 +61,12 @@ const MainCalendar = () => {
   const [month, setMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const [showSkeleton, setShowSkeleton] = useState(true);
 
   const { Class, active } = useCalendar();
-  const { fetchClasses } = useGetAllClasses();
-  const { data } = useGetAllQuizes();
+  const { fetchClasses, isLoading: classesLoading } = useGetAllClasses();
+  const { data, isLoading: quizzesLoading } = useGetAllQuizes();
+
+  const isLoading = classesLoading || quizzesLoading;
 
   const formattedClasses = Class?.map((cls:any) => ({
     ...cls,
@@ -98,16 +99,10 @@ const MainCalendar = () => {
   });
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
+    fetchClasses(month);
   }, []);
 
   useEffect(() => {
-    fetchClasses();
-
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
@@ -133,7 +128,7 @@ const MainCalendar = () => {
       )}
 
       <div className=" mt-[50px] ">
-        {showSkeleton ? (
+        {isLoading ? (
           <div className="flex">
             <div style={{ width: 895 }} className="flex flex-col gap-4">
               <div className="flex justify-between items-center w-full">
@@ -186,12 +181,14 @@ const MainCalendar = () => {
               onNavigate={(newDate) => {
                 setSelectedDate(newDate);
                 setMonth(newDate);
+                fetchClasses(newDate);
               }}
               selectable={true}
               onSelectSlot={(slotInfo) => {
                 if (slotInfo.start) {
                   setSelectedDate(slotInfo.start);
                   setMonth(slotInfo.start);
+                  fetchClasses(slotInfo.start);
                 }
               }}
             />
@@ -205,12 +202,16 @@ const MainCalendar = () => {
                 <DayPicker
                   mode="single"
                   month={month}
-                  onMonthChange={setMonth}
+                  onMonthChange={(m) => {
+                    setMonth(m);
+                    fetchClasses(m);
+                  }}
                   selected={selectedDate}
                   onSelect={(day) => {
                     if (day) {
                       setSelectedDate(day);
                       setMonth(day);
+                      fetchClasses(day);
                     }
                   }}
                   showOutsideDays
@@ -243,4 +244,4 @@ const MainCalendar = () => {
   );
 };
 
-export default MainCalendar;
+export default MainCalendar;
