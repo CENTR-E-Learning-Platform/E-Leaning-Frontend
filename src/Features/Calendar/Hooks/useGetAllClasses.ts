@@ -24,7 +24,7 @@ export const useGetAllClasses = () => {
           const response = await getAllTeacherClasses(start, end);
           fetchedData = response.data.data;
         } else {
-          const response = await getAllStudentClasses(start, end);
+          const response = await getAllStudentClasses();
           fetchedData = response.data.data;
         }
 
