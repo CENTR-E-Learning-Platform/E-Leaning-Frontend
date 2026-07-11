@@ -1,6 +1,5 @@
 import type { ChangeEvent } from "react";
 import type { ExploreSearchBarProps } from "../../Types/type";
-import FilterIcon from "../../../../assets/icons/FilterIcon.svg";
 import SearchIcon from "../../../../assets/icons/SearchIcon.svg";
 
 const ExploreSearchBar = ({
