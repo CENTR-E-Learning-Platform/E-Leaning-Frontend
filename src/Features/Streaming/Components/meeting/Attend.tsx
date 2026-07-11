@@ -2,6 +2,7 @@ import attend from "../../../../assets/icons/attend.svg";
 import menu from "../../../../assets/icons/menu.svg";
 import { useParticipant } from "../../Hooks/useParticipant";
 import { BASE_URL } from "../../Utils/Apis";
+import DefaultImage from "../meeting/DefaultImage";
 
 const Attend = ({ click }: any) => {
   const participants = useParticipant();
@@ -11,14 +12,26 @@ const Attend = ({ click }: any) => {
       {!click && (
         <div className="h-[48px] bg-[#393D44] rounded-[43px] flex items-center p-[4px] cursor-pointer">
           <div className="flex justify-center">
-            {participants.tracks.slice(0, 3).map((track: any, index: number) => (
-              <img
-                key={index}
-                src={`${BASE_URL}/${track.participant.attributes["UserImage"]}`}
-                className="w-[40px] h-[39px] rounded-full -ml-2 first:ml-0 border-[1px] border-[#F9FBFC] object-cover"
-                alt=""
-              />
-            ))}
+            {participants.tracks.slice(0, 3).map((track: any, index: number) => {
+              const userImage = track.participant.attributes["UserImage"];
+              const name = track.participant.name ?? "";
+              return (
+                <div
+                  key={index}
+                  className="w-[40px] h-[39px] rounded-full -ml-2 first:ml-0 border-[1px] border-[#F9FBFC] overflow-hidden shrink-0"
+                >
+                  {userImage ? (
+                    <img
+                      src={`${BASE_URL}/${userImage}`}
+                      className="w-full h-full object-cover"
+                      alt=""
+                    />
+                  ) : (
+                    <DefaultImage character={name.substring(0, 2).toLocaleUpperCase()} />
+                  )}
+                </div>
+              );
+            })}
           </div>
           {participants.tracks.length > 3 && (
             <h1 className="text-[16px] text-[#F9FBFC] ms-[8px]">
