@@ -6,7 +6,10 @@ import settingsIcon from '../../assets/icons/setting.svg';
 import logoutIcon from '../../assets/icons/logout.svg';
 import userAvatar from '../../assets/icons/profile.svg';
 import { roleToAuth } from '../../Utils/Constant';
+import Skeleton from 'react-loading-skeleton';
+
 interface UserProfileDropdownProps {
+  isLoading?: boolean;
   userName?: string;
   userEmail?: string;
   avatarUrl?: string;
@@ -14,6 +17,7 @@ interface UserProfileDropdownProps {
 }
 
 const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
+  isLoading = false,
   userName = 'Ahmed Mohamed',
   userEmail = 'ahmed@email.com',
   avatarUrl = userAvatar,
@@ -27,7 +31,6 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
       onLogout();
       e.preventDefault();
       window.location.href = "https://e-leaning-frontend-one.vercel.app/";
-
     }
   };
 
@@ -36,22 +39,24 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
       <div className="box-border flex flex-row justify-between items-center p-[12px] w-[240px] h-[60px] border border-[#E8EAED] drop-shadow-[0px_2px_12px_rgba(0,0,0,0.04)] rounded-[8px]">
 
         <div className="flex flex-col items-start w-[130px] min-w-0">
-
           <h2 className="m-0 block w-full font-semibold text-[14px] leading-[20px] text-[#2A2D34] truncate">
-            {userName}
+            {isLoading ? <Skeleton width={100} /> : userName}
           </h2>
 
-          <span className="block w-full font-normal text-[12px] leading-[16px] text-[#434656] truncate">
-            {userEmail}
+          <span className="block w-full font-normal text-[12px] leading-[16px] text-[#434656] truncate mt-1">
+            {isLoading ? <Skeleton width={120} /> : userEmail}
           </span>
-
         </div>
 
-        <img
-          src={avatarUrl}
-          alt="User Avatar"
-          className="w-[36px] h-[36px] rounded-full object-cover shrink-0"
-        />
+        {isLoading ? (
+          <Skeleton circle width={36} height={36} />
+        ) : (
+          <img
+            src={avatarUrl}
+            alt="User Avatar"
+            className="w-[36px] h-[36px] rounded-full object-cover shrink-0"
+          />
+        )}
 
       </div>
       <div className="flex flex-col items-center py-[8px] w-[240px]">
@@ -99,7 +104,6 @@ const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
 
         <button
           onClick={handleLogout}
-
           className="flex flex-row items-center pt-[14px] pb-[10px] pr-[16px] pl-[12px] gap-[12px] w-full bg-transparent border-none cursor-pointer hover:bg-[#FEF2F2] transition-colors rounded-[6px] mt-[4px]"
         >
           <img src={logoutIcon} alt="Logout Icon" className="w-[15px] h-[15px]" />
