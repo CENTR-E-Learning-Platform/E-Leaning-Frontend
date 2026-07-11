@@ -1,6 +1,7 @@
 import type { ChangeEvent } from "react";
 import type { ExploreSearchBarProps } from "../../Types/type";
-
+import FilterIcon from "../../../../assets/icons/FilterIcon.svg";
+import SearchIcon from "../../../../assets/icons/SearchIcon.svg";
 
 const ExploreSearchBar = ({
   formik,
@@ -27,7 +28,7 @@ const ExploreSearchBar = ({
       {/* <div className="flex justify-between items-center w-[325px]">
         <div className="w-[99px] h-[55px] text-[#2A2D34] flex justify-center gap-[9px] items-center border-2 border-[#D1D5DB] py-[17px] px-[19px] rounded-[8px]">
           <img
-            src="../../../../../src/assets/icons/FilterIcon.svg"
+            src={FilterIcon}
             alt="FilterIcon"
           />
           <p className="text-[16px] font-medium">filter</p>
@@ -49,7 +50,7 @@ const ExploreSearchBar = ({
         <div className="flex justify-between gap-[7px] items-center">
           <img
             className="w-[19px] h-[19px]"
-            src="../../../../../src/assets/icons/SearchIcon.svg"
+            src={SearchIcon}
             alt="SearchIcon"
           />
           <input
