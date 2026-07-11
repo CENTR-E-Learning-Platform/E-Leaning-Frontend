@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import teacher from "../../../assets/images/mester.jpg";
 import StudentActions from "../Components/meeting/StudentActions";
+import DefaultImage from "../Components/meeting/DefaultImage";
 import Bar from "../Components/chat/Bar";
 import Attend from "../Components/meeting/Attend";
 import FooterBar from "../Components/meeting/FooterBar";
@@ -130,15 +130,21 @@ const Meeting: React.FC = () => {
     }
   };
   const teacherName = localStorage.getItem("teacherName") || "Host";
-  const teacherProfileImagePath = localStorage.getItem("teacherProfileImagePath") || teacher;
+  const teacherProfileImagePath = localStorage.getItem("teacherProfileImagePath");
 
   return (
     <div className="h-screen overflow-hidden bg-[#2A2D34] flex flex-col">
       {!isfull && (
         <div className="ms-[24px] mt-[24px] flex justify-between">
           <div className="w-fit pe-[10px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center p-[4px]">
-            <img src={teacherProfileImagePath} className="w-[40px] h-[40px] rounded-full me-[13px]" alt="Host" />
-            <h1 className="text-[16px] text-[#F9FBFC] me-[13px]">Mr {teacherName}</h1>
+            <div className="w-[40px] h-[40px] rounded-full me-[13px] overflow-hidden shrink-0">
+              {teacherProfileImagePath ? (
+                <img src={teacherProfileImagePath} className="w-full h-full object-cover" alt="Host" />
+              ) : (
+                <DefaultImage character={teacherName.substring(0, 2).toLocaleUpperCase()} />
+              )}
+            </div>
+            <h1 className="text-[16px] text-[#F9FBFC] me-[13px]">By {teacherName}</h1>
           </div>
           <div className="flex me-[30px] gap-4">
             {/* <div className="w-[187px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center cursor-pointer">
