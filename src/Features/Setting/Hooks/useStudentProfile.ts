@@ -3,7 +3,7 @@ import { GetStudentProfileData } from "../Services/studentProfileAPI";
 
 export const useStudentProfile = () => {
 
-   const { data , refetch } = useQuery({
+   const { data , refetch , isLoading } = useQuery({
         queryKey: ["StudentProfileData"],
         queryFn: ()=>{
             return GetStudentProfileData()
@@ -15,5 +15,5 @@ export const useStudentProfile = () => {
         refetchOnReconnect: false,
     });
 
-    return {data , refetch};
+    return {data , refetch , isLoading};
 }
