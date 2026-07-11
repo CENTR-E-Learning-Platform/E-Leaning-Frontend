@@ -1,8 +1,9 @@
 import type { Teacher } from "../../Types/type";
 import ButtomReserveSession from "./ButtomReserveSession";
 import SelectTime from "./SelectTime";
-import UnSubscribtion from "../../../../../src/assets/icons/UnSubscribtion.svg";
-import SubscribtionIcon from "../../../../../src/assets/icons/Subscribtion.svg";
+import UnSubscribtion from "../../../../assets/icons/UnSubscribtion.svg";
+import SubscribtionIcon from "../../../../assets/icons/Subscribtion.svg";
+import MoneyIcon from "../../../../assets/icons/MoneyIcon.svg";
 import { useAddSubscription } from "../../../Profile/Hooks/useAddsubscription";
 import { useAddUnsubscription } from "../../../Profile/Hooks/useAddUnsubscription";
 import { useQueryClient } from "@tanstack/react-query";
@@ -61,7 +62,7 @@ function LeftTeacherSide({ teacher }: { teacher: Teacher }) {
         <div className="w-[285px] mb-6 flex justify-between items-start">
           <div className="w-[124px] flex justify-center items-start gap-2">
             <img
-              src="../../../../../src/assets/icons/MoneyIcon.svg"
+              src={MoneyIcon}
               alt="MoneyIcon"
               className="w-[22px] mt-2 h-[22px]"
             />
