@@ -219,6 +219,7 @@ const ClassForm = ({ onClose }: { onClose?: () => void }) => {
                 title="Add Class"
                 bg="#525FE1"
                 txt="#F9FBFC"
+                isLoading={formik.isSubmitting}
                 meth={async () => {
                   await formik.submitForm();
                   if (Object.keys(formik.errors).length === 0) {
