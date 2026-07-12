@@ -128,14 +128,14 @@ const JoinNow = () => {
             ) : (
               <>
                 {
-                  data?.data.fullPrfilePicturePath !== BASE_URL ?
+                  data?.data.data.profilePicturePath !== BASE_URL ?
                     <img
                       src={data?.data.data.profilePicturePath}
                       className="rounded-full w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] object-cover"
                       alt="Avatar"
                     /> :
                     <div className="w-[100px] h-[100px] rounded-full">
-                      <DefaultImage character={data?.data.fullName.slice(0, 2).toUpperCase()} />
+                      <DefaultImage character={data?.data.data.fullName.slice(0, 2).toUpperCase()} />
                     </div>
                 }
 
