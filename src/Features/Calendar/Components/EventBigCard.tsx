@@ -171,7 +171,7 @@ const EventBigCard = ({ event, statusConfig, onClose }: any) => {
                 >
                   Join
                 </button>
-                {roleToAuth?.includes("Teacher") && (
+                {roleToAuth?.includes("Teacher") && event.status === 0 && (
                   <>
                     <button
                       onClick={() => setShowUpdateForm(true)}
