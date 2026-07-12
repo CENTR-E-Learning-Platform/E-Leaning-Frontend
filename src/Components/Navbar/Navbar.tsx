@@ -70,7 +70,7 @@ const Navbar = () => {
 
     return <>
         <nav className="py-[20px] h-[66px] w-full shadow-[0px_20px_40px_rgba(0,6,69,0.04)] border-[#D1D5DB] px-[40px] bg-white flex justify-between items-center">
-            <NavLink to="/landing" className="Logo">
+            <NavLink to="/home" className="Logo">
                 <h2 className="font-extrabold text-[#2A2D34] text-[28px] leading-[17px] tracking-normal">
                     <img src={logo} className='w-full h-full' alt="" />
                 </h2>
