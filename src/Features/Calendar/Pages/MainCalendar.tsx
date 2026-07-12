@@ -5,7 +5,7 @@ import { parse } from "date-fns/parse";
 import { startOfWeek } from "date-fns/startOfWeek";
 import { getDay } from "date-fns/getDay";
 import { enUS } from "date-fns/locale/en-US";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
 import Toolbar from "../Components/Toolbar";
@@ -61,6 +61,14 @@ const MainCalendar = () => {
   const [month, setMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const fetchedMonth = useRef<string | null>(null);
+
+  const fetchIfNewMonth = (date: Date) => {
+    const key = `${date.getFullYear()}-${date.getMonth()}`;
+    if (fetchedMonth.current === key) return;
+    fetchedMonth.current = key;
+    fetchClasses(date);
+  };
 
   const { Class, active } = useCalendar();
   const { fetchClasses, isLoading: classesLoading } = useGetAllClasses();
@@ -99,7 +107,7 @@ const MainCalendar = () => {
   });
 
   useEffect(() => {
-    fetchClasses(month);
+    fetchIfNewMonth(month);
   }, []);
 
   useEffect(() => {
@@ -181,7 +189,7 @@ const MainCalendar = () => {
               onNavigate={(newDate) => {
                 setSelectedDate(newDate);
                 setMonth(newDate);
-                fetchClasses(newDate);
+                fetchIfNewMonth(newDate);
               }}
               selectable={true}
               onSelectSlot={(slotInfo) => {
