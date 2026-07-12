@@ -17,6 +17,7 @@ import { useRole } from "../Hooks/useRole";
 import { useRoomContext , RoomAudioRenderer} from "@livekit/components-react";
 import { RoomEvent, RemoteParticipant, LocalParticipant } from "livekit-client";
 import NotifyRaiseHand from "../Components/meeting/NotifyRaiseHand";
+import { BASE_URL } from "../Utils/Apis";
 
 const Meeting: React.FC = () => {
   const [width, setWidth] = useState<number>(1500);
@@ -138,7 +139,7 @@ const Meeting: React.FC = () => {
         <div className="ms-[24px] mt-[24px] flex justify-between">
           <div className="w-fit pe-[10px] h-[48px] bg-[#393D44] rounded-[43px] flex items-center p-[4px]">
             <div className="w-[40px] h-[40px] rounded-full me-[13px] overflow-hidden shrink-0">
-              {teacherProfileImagePath ? (
+              {teacherProfileImagePath !== BASE_URL && teacherProfileImagePath ? (
                 <img src={teacherProfileImagePath} className="w-full h-full object-cover" alt="Host" />
               ) : (
                 <DefaultImage character={teacherName.substring(0, 2).toLocaleUpperCase()} />
