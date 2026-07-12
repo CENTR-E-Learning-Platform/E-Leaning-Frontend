@@ -103,7 +103,7 @@ const EventDetailsCard = ({ event, statusConfig }: any) => {
                 Join
               </button>
 
-              {roleToAuth?.includes("Teacher") && (
+              {roleToAuth?.includes("Teacher") && event.status === 0 && (
                 <button
                   onClick={() => setShowUpdateForm(true)}
                   className="px-[20px] py-[8px] rounded-[6px] text-[14px] font-semibold border border-[#525FE1] text-[#525FE1] hover:bg-[#EEF0FD] transition-all duration-300 cursor-pointer"
