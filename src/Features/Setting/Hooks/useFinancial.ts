@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useFormik } from "formik";
 import { initialValues } from "../Types/Types";
 import { addWallet } from "../Services/addWallet";
@@ -6,15 +7,18 @@ import { getBalance } from "../Services/getBalance";
 import { useSettingContext } from "../Context/useSettingContext";
 import { deleteWallet } from "../Services/deleteWallet";
 import { disburse } from "../Services/disburse";
-export const useFinancial = () => {
 
-    const {setIsCreated} = useSettingContext();
+export const useFinancial = () => {
+    const { setIsCreated } = useSettingContext();
+    const [isAdding, setIsAdding] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isWithdrawing, setIsWithdrawing] = useState(false);
+
     const formik = useFormik({
         initialValues,
         validationSchema: walletValidationSchema,
         onSubmit: async (values) => {
-            
-            let currentIssuer = values.walletIssuer; 
+            let currentIssuer = values.walletIssuer;
             if (values.walletNumber.startsWith("011") || values.walletNumber.startsWith("11")) {
                 currentIssuer = 0;
             } else if (values.walletNumber.startsWith("010")) {
@@ -26,18 +30,18 @@ export const useFinancial = () => {
             const params = {
                 walletNumber: values.walletNumber,
                 paymentMethod: values.paymentMethod,
-                walletIssuer: currentIssuer 
+                walletIssuer: currentIssuer,
             };
-    
+
             try {
-                console.log("Data to send: ", params);
+                setIsAdding(true);
                 const response = await addWallet(params);
                 console.log(response.data);
-                console.log("success");
                 setIsCreated(true);
             } catch (err: any) {
                 console.log("Error Details:", err.response?.data);
-                console.log(err);
+            } finally {
+                setIsAdding(false);
             }
         },
     });
@@ -48,28 +52,30 @@ export const useFinancial = () => {
             console.log(response.data);
         } catch (err: any) {
             console.log("Error Details:", err.response?.data);
-            console.log(err);
         }
-    }
+    };
 
     const DeleteWallet = async () => {
+        setIsDeleting(true);
         try {
             await deleteWallet();
-            console.log("deleted");
-        }catch (err: any) {
+        } catch (err: any) {
             console.log("Error Details:", err.response?.data);
-            console.log(err);
+        } finally {
+            setIsDeleting(false);
         }
-    }
-    
+    };
+
     const Disburse = async () => {
+        setIsWithdrawing(true);
         try {
             await disburse();
-            console.log("disbursed");
-        }catch (err: any) {
+        } catch (err: any) {
             console.log("Error Details:", err.response?.data);
-            console.log(err);
+        } finally {
+            setIsWithdrawing(false);
         }
-    }
-    return { formik , GetBalance , DeleteWallet , Disburse};
+    };
+
+    return { formik, GetBalance, DeleteWallet, Disburse, isAdding, isDeleting, isWithdrawing };
 };
