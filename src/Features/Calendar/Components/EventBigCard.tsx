@@ -134,7 +134,7 @@ const EventBigCard = ({ event, statusConfig, onClose }: any) => {
               {event.price != null && (
                 <div className="flex flex-col gap-[4px]">
                   <span className="text-[12px] text-[#9CA3AF] font-medium uppercase tracking-wide">Price</span>
-                  <span className="text-[15px] font-semibold text-[#2A2D34]">${event.price}</span>
+                  <span className="text-[15px] font-semibold text-[#2A2D34]">EGP {event.price}</span>
                 </div>
               )}
             </div>
