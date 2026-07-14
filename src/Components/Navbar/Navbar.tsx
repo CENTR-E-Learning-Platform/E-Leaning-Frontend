@@ -3,6 +3,7 @@ import { useTeacherProfile } from '../../Features/Profile/Hooks/useTeacherProfil
 import bg_imptyPhoto from "../../assets/images/imptyPhoto.jpg";
 import { BASE_URL } from '../../Features/Calendar/Utils/api';
 import { useEffect, useState, useRef, Suspense } from 'react';
+import notifySound from '../../../src/assets/audio/notify.mp3';
 import logo from '../../assets/icons/logo.svg';
 import notify from '../../../src/assets/icons/NotificationIcon.svg';
 import UserProfileDropdown from './UserProfileDropdown';
@@ -29,10 +30,26 @@ const Navbar = () => {
     const location = useLocation();
 
     const { unreadCount } = useNotifications();
+    const audioRef = useRef<HTMLAudioElement>(new Audio(notifySound));
+    const prevCountRef = useRef<number | null>(null);
+
+    useEffect(() => {
+        if (prevCountRef.current === null) {
+            prevCountRef.current = unreadCount;
+            return;
+        }
+        console.log(unreadCount);
+        
+        if (unreadCount > prevCountRef.current) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play().catch(() => {});
+        }
+        prevCountRef.current = unreadCount;
+    }, [unreadCount]);
 
     const isTeacher = roleToAuth?.includes("Teacher");
     const data = isTeacher ? teacherData.data : studentData.data;
-    
+
     const isLoading = isTeacher ? teacherData.isLoading : studentData.isLoading;
 
     const userName = isTeacher ? data?.data?.data?.fullName : data?.data?.firstName;
@@ -105,11 +122,10 @@ const Navbar = () => {
                         onClick={() => setIsNotifOpen(prev => !prev)}
                         className="relative p-[2px] border border-[#D1D5DB] rounded-full flex justify-center items-center w-[37px] h-[37px] bg-white hover:bg-[#F3F4F6] transition-colors cursor-pointer"
                     >
+                        
                         <img src={notify} alt="NotificationIcon" />
                         {unreadCount > 0 && (
-                            <span className="absolute -top-[5px] -right-[5px] min-w-[18px] h-[18px] bg-[#525FE1] text-white text-[10px] font-bold rounded-full flex items-center justify-center px-[4px] leading-none">
-                                {unreadCount > 99 ? "99+" : unreadCount}
-                            </span>
+                            <span className="absolute -top-[3px] -right-[3px] w-[10px] h-[10px] bg-[#525FE1] rounded-full border-[2px] border-white" />
                         )}
                     </button>
 
@@ -121,6 +137,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="relative" ref={dropdownRef}>
+                    
                     <div
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         className="p[13px] rounded-3xl flex justify-center items-center w-[37px] h-[37px] cursor-pointer"
