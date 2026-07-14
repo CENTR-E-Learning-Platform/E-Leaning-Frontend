@@ -2,7 +2,6 @@ import React from "react";
 import { useNotifications } from "../Contexts/NotificationContext";
 import { type INotification } from "../Types/notification";
 import { getNotificationIcon, formatNotificationTime } from "../Utils/notificationHelpers";
-
 interface NotificationDropdownProps {
     onClose: () => void;
 }
