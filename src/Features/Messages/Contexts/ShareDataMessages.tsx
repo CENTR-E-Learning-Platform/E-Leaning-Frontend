@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useRef, useEffect, type ReactNode } from "react";
 import { BASE_URL } from "../Utils/Api";
 import useSignalR from "../Hooks/useSignalR";
 
@@ -17,6 +17,8 @@ type ChatContextType = {
   selectedConversation: object | null;
   setSelectedConversation: (conversation: object | null) => void;
   signalR: any;
+  hasUnreadChat: boolean;
+  setHasUnreadChat: (val: boolean) => void;
 };
 
 const ChatContext = createContext<ChatContextType | null>(null);
@@ -29,16 +31,23 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [selectedConversation, setSelectedConversation] = useState<
     object | null
   >(null);
+  const [hasUnreadChat, setHasUnreadChat] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const token = `${localStorage.getItem("token")}`;
-  const signalR = useSignalR(token, BASE_URL, () => { });
+
+  const activeConversationIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    activeConversationIdRef.current = conversationId;
+  }, [conversationId]);
+
+  const signalR = useSignalR(token, BASE_URL, () => { }, setHasUnreadChat, activeConversationIdRef);
 
   const isGroup =
     selectedConversation &&
-    ("teacherId" in selectedConversation || "name" in selectedConversation);
+    (selectedConversation as any).isGroup === true;
 
   const filteredSignalRMessages = isGroup
-    ? (signalR.groupMessages as any)[conversationId as any] || []
+    ? signalR.groupMessages[Number(conversationId)] || []
     : signalR.messages.filter(
       (msg: any) => String(msg.conversationId) === String(conversationId),
     );
@@ -53,11 +62,10 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       (msg, index, self) =>
         index ===
         self.findIndex((m) => {
-          // Both have IDs → compare by ID only
-          if (msg.id && m.id) return String(msg.id) === String(m.id);
+          const msgKey = msg.messageId ?? msg.id;
+          const mKey = m.messageId ?? m.id;
+          if (msgKey && mKey) return String(msgKey) === String(mKey);
 
-          // At least one is a SignalR message (no id yet) →
-          // treat as duplicate if same sender + content + within 10 s
           return (
             String(m.senderId) === String(msg.senderId) &&
             m.content === msg.content &&
@@ -84,6 +92,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         selectedConversation,
         setSelectedConversation,
         signalR,
+        hasUnreadChat,
+        setHasUnreadChat,
       }}
     >
       {children}
