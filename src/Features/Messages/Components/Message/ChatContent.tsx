@@ -1,12 +1,9 @@
-import { useEffect, useRef } from "react";
-import { useGetChatConversation } from "../../Hooks/useGetChatConversation";
-import useSignalR from "../../Hooks/useSignalR";
-import { BASE_URL } from "../../Utils/Api";
+import { useEffect, useRef, useState } from "react";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import { TeacherTextMessage } from "./TextMessage";
 import { useChat } from "../../Contexts/ShareDataMessages";
-import { Lock, MessageCircle } from "lucide-react";
+import { Lock, MessageCircle, Loader2, ChevronDown } from "lucide-react";
 
 const SelectChatPanel = () => (
   <div className="flex flex-col items-center justify-center h-full w-full bg-[#F3F6FF] select-none">
@@ -53,9 +50,6 @@ const SelectChatPanel = () => (
 );
 
 const ChatContent = () => {
-  const token = `${localStorage.getItem("token")}`;
-  const { refetch } = useGetChatConversation();
-  const signalR = useSignalR(token, BASE_URL, refetch);
   const {
     allMessages,
     page,
@@ -64,40 +58,66 @@ const ChatContent = () => {
     conversationId,
     otherUserId,
     selectedConversation,
+    signalR,
   } = useChat();
   const chatRef = useRef<HTMLDivElement>(null);
   const prevScrollHeight = useRef(0);
   const isLoadingHistory = useRef(false);
   const prevMessagesLength = useRef(0);
   const prevConversationId = useRef<string | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   const hasActiveChat = !!(conversationId || otherUserId || selectedConversation);
+
+  const scrollToBottom = () => {
+    if (chatRef.current) {
+      chatRef.current.scrollTo({
+        top: chatRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
 
   useEffect(() => {
     const el = chatRef.current;
     if (!el) return;
 
     const handleScroll = () => {
+      // Prevent pagination if messages don't even fill the container
+      if (el.scrollHeight <= el.clientHeight) return;
+
+      const isScrolledUp = el.scrollHeight - el.scrollTop - el.clientHeight > 150;
+      setShowScrollButton(isScrolledUp);
+
       if (el.scrollTop <= 5 && hasMore && !isLoadingHistory.current) {
         prevScrollHeight.current = el.scrollHeight;
         isLoadingHistory.current = true;
+        setIsFetching(true);
         setPage(page + 1);
       }
     };
 
     el.addEventListener("scroll", handleScroll);
     return () => el.removeEventListener("scroll", handleScroll);
-  }, [page, setPage, hasMore]);
+  }, [hasMore, setPage, page]);
 
   useEffect(() => {
     const el = chatRef.current;
     if (!el) return;
 
     if (conversationId !== prevConversationId.current) {
-      el.scrollTop = el.scrollHeight;
       prevConversationId.current = conversationId;
       prevMessagesLength.current = allMessages.length;
       isLoadingHistory.current = false;
+      setIsFetching(false);
+      setShowScrollButton(false);
+
+      if (allMessages.length > 0) {
+        setTimeout(() => {
+          if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }, 50);
+      }
       return;
     }
 
@@ -105,16 +125,27 @@ const ChatContent = () => {
       if (isLoadingHistory.current) {
         el.scrollTop = el.scrollHeight - prevScrollHeight.current;
         isLoadingHistory.current = false;
+        setIsFetching(false);
       } else {
-        el.scrollTo({
-          top: el.scrollHeight,
-          behavior: "smooth",
-        });
+        const isInitialLoad = prevMessagesLength.current === 0;
+        setTimeout(() => {
+          if (chatRef.current) {
+            if (isInitialLoad) {
+              chatRef.current.scrollTop = chatRef.current.scrollHeight;
+            } else {
+              chatRef.current.scrollTo({
+                top: chatRef.current.scrollHeight,
+                behavior: "smooth",
+              });
+            }
+          }
+        }, 100);
       }
     }
 
     if (isLoadingHistory.current && !hasMore) {
       isLoadingHistory.current = false;
+      setIsFetching(false);
     }
 
     prevMessagesLength.current = allMessages.length;
@@ -137,9 +168,22 @@ const ChatContent = () => {
           className="p-[32px] max-h-[calc(100vh-200px)] h-[calc(100vh-200px)] overflow-y-auto"
           ref={chatRef}
         >
+          {isFetching && (
+            <div className="flex justify-center items-center py-4">
+              <Loader2 className="w-6 h-6 text-[#525FE1] animate-spin" />
+            </div>
+          )}
           <div className="mb-6"></div>
           <TeacherTextMessage messages={allMessages} />
         </div>
+        {showScrollButton && (
+          <button
+            onClick={scrollToBottom}
+            className="absolute bottom-[90px] right-8 p-2 bg-white rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-gray-100 text-[#525FE1] hover:bg-[#F3F6FF] hover:scale-105 transition-all z-50 flex items-center justify-center w-[40px] h-[40px]"
+          >
+            <ChevronDown className="w-6 h-6" strokeWidth={2.5} />
+          </button>
+        )}
         <ChatInput connection={signalR.connection} />
       </section>
     </>
