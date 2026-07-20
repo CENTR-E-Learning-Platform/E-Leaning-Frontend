@@ -8,6 +8,7 @@ import { useChat } from "../../Contexts/ShareDataMessages";
 import { ShareDataContactItems } from "../../Contexts/ShareDataContactItems";
 import { useGetChatMyGroups } from "../../Hooks/useGetChatMyGroups";
 import DefaultAvatar from "./DefaultAvatar";
+import { BASE_URL } from "../../Utils/Api";
 
 const ContactItem: React.FC<ContactProps> = ({
   name,
@@ -88,9 +89,7 @@ const ContactItem: React.FC<ContactProps> = ({
 };
 
 const ContactList: React.FC = () => {
-  const { activeMessage, isTeacher } = useContext(
-    ShareDataContactItems,
-  );
+  const { activeMessage, isTeacher } = useContext(ShareDataContactItems);
   const { data: dataGetChatConversation } = useGetChatConversation();
   const { data: dataGetChatMyGroups } = useGetChatMyGroups();
 
@@ -109,6 +108,63 @@ const ContactList: React.FC = () => {
   } = useChat();
   const { mutate } = useGetChatMessages();
   const { mutate: mutateGroup } = useGetChatGroupMessages();
+  const [localUnreadMap, setLocalUnreadMap] = useState<Record<string, number>>({});
+  const [localLastMessageMap, setLocalLastMessageMap] = useState<Record<string, { content: string; sentAt: string }>>({});
+
+  const currentUserId = localStorage.getItem("currentUserId");
+
+  useEffect(() => {
+    if (signalR.messages.length === 0) return;
+    const latest = signalR.messages[signalR.messages.length - 1];
+    const convIdStr = String(latest.conversationId);
+    const activeConvId = conversationId ? String(conversationId) : null;
+
+    setLocalLastMessageMap((prev) => ({
+      ...prev,
+      [convIdStr]: { content: latest.content, sentAt: String(latest.sentAt ?? "") },
+    }));
+
+    if (convIdStr !== activeConvId && String(latest.senderId) !== String(currentUserId)) {
+      setLocalUnreadMap((prev) => ({
+        ...prev,
+        [convIdStr]: (prev[convIdStr] ?? 0) + 1,
+      }));
+    }
+  }, [signalR.messages.length]);
+
+  useEffect(() => {
+    const allGroupMsgs = signalR.groupMessages as Record<number, any[]>;
+    Object.entries(allGroupMsgs).forEach(([groupIdStr, msgs]) => {
+      if (!msgs || msgs.length === 0) return;
+      const latest = msgs[msgs.length - 1];
+      const activeGroupId = conversationId ? String(conversationId) : null;
+
+      setLocalLastMessageMap((prev) => ({
+        ...prev,
+        [groupIdStr]: { content: latest.content, sentAt: String(latest.sentAt ?? "") },
+      }));
+
+      if (groupIdStr !== activeGroupId && String(latest.senderId) !== String(currentUserId)) {
+        setLocalUnreadMap((prev) => {
+          const prevCount = prev[groupIdStr] ?? 0;
+          const prevMsgsLen = (prev as any)[`_grp_len_${groupIdStr}`] ?? 0;
+          if (msgs.length > prevMsgsLen) {
+            return {
+              ...prev,
+              [groupIdStr]: prevCount + (msgs.length - prevMsgsLen),
+              [`_grp_len_${groupIdStr}`]: msgs.length,
+            };
+          }
+          return prev;
+        });
+      } else {
+        setLocalUnreadMap((prev) => ({
+          ...prev,
+          [`_grp_len_${groupIdStr}`]: msgs.length,
+        }));
+      }
+    });
+  }, [JSON.stringify(Object.fromEntries(Object.entries(signalR.groupMessages as Record<number, any[]>).map(([k, v]) => [k, v.length])))]);
 
   useEffect(() => {
     if (!conversationId) return;
@@ -117,17 +173,11 @@ const ContactList: React.FC = () => {
 
     if (isGroupChat) {
       mutateGroup(
-        {
-          groupId: conversationId,
-          pageNumber: page,
-          pageSize: 50,
-        },
+        { groupId: Number(conversationId), PageNumber: page, PageSize: 50 },
         {
           onSuccess: (res) => {
             const messages = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-            if (messages.length < 50) {
-              setHasMore(false);
-            }
+            if (messages.length < 50) setHasMore(false);
             if (page === 1) {
               setChatData(messages);
             } else {
@@ -138,24 +188,18 @@ const ContactList: React.FC = () => {
       );
     } else {
       mutate(
-        {
-          conversationId,
-          pageNumber: page,
-          pageSize: 50,
-        },
+        { conversationId: Number(conversationId), PageNumber: page, pageSize: 50 },
         {
           onSuccess: (res) => {
             const messages = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-            if (messages.length < 50) {
-              setHasMore(false);
-            }
+            if (messages.length < 50) setHasMore(false);
             if (page === 1) {
               setChatData(messages);
             } else {
               setChatData((prev: any[]) => [...messages, ...(prev || [])]);
             }
           },
-        },
+        }
       );
     }
   }, [conversationId, page, activeMessage, isTeacher]);
@@ -168,24 +212,39 @@ const ContactList: React.FC = () => {
     setChatData([]);
 
     const token = localStorage.getItem("token");
-
     if (token) {
       const payload = token.split(".")[1];
       const decoded = JSON.parse(atob(payload));
-
-      // console.log("decoded", decoded);
-
-      const userId =
-        decoded[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-        ];
-
+      const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
       localStorage.setItem("currentUserId", userId);
     }
 
     setOtherUserId(otherUserId);
     setPage(1);
     setHasMore(true);
+
+    setLocalUnreadMap((prev) => ({ ...prev, [String(id)]: 0 }));
+
+    if (!isGroupChat && signalR.connection?.state === "Connected") {
+      signalR.connection.invoke("MarkAsRead", { ConversationId: Number(id) }).catch(() => {});
+    }
+  };
+
+  const getDisplayMessage = (convIdStr: string, fallback: string) => {
+    const local = localLastMessageMap[convIdStr];
+    if (!local) return fallback;
+    return local.content || fallback;
+  };
+
+  const getDisplayTime = (convIdStr: string, fallback: string) => {
+    const local = localLastMessageMap[convIdStr];
+    if (!local?.sentAt) return fallback;
+    return formatTime(local.sentAt) || fallback;
+  };
+
+  const getUnread = (convIdStr: string, fallback: number) => {
+    if (localUnreadMap[convIdStr] !== undefined) return localUnreadMap[convIdStr];
+    return fallback;
   };
 
   return (
@@ -193,6 +252,7 @@ const ContactList: React.FC = () => {
       {activeMessage === (isTeacher ? "Teachers" : "Students") ? (
         (dataGetChatConversation?.data?.length ?? 0) > 0 ? (
           dataGetChatConversation?.data?.map((conversation: Conversation) => {
+            const convIdStr = String(conversation.id);
             return (
               <div
                 key={conversation.id}
@@ -204,13 +264,21 @@ const ContactList: React.FC = () => {
                 <ContactItem
                   isActive={activeId === `${conversation.id}_direct`}
                   isOnline={conversation.isOnline}
-                  hasUnread={conversation.unreadCount}
+                  hasUnread={getUnread(convIdStr, conversation.unreadCount)}
                   name={conversation.otherUserName ?? ""}
                   message={
-                    signalR.typingUser ? "typing..." : (conversation.lastMessage ?? "")
+                    signalR.typingUser
+                      ? "typing..."
+                      : getDisplayMessage(convIdStr, conversation.lastMessage ?? "")
                   }
-                  time={formatTime(conversation.lastMessageAt) ?? ""}
-                  avatarUrl={conversation.otherUserPicture || ""}
+                  time={getDisplayTime(convIdStr, formatTime(conversation.lastMessageAt) ?? "")}
+                  avatarUrl={
+                    conversation.otherUserPicture
+                      ? conversation.otherUserPicture.startsWith("http")
+                        ? conversation.otherUserPicture
+                        : `${BASE_URL}${conversation.otherUserPicture}`
+                      : ""
+                  }
                 />
               </div>
             );
@@ -221,6 +289,7 @@ const ContactList: React.FC = () => {
       ) : (
         (dataGetChatMyGroups?.data?.length ?? 0) > 0 ? (
           dataGetChatMyGroups?.data?.map((conversation: ConversationGroup) => {
+            const groupIdStr = String(conversation.id);
             return (
               <div
                 key={conversation.id}
@@ -232,11 +301,20 @@ const ContactList: React.FC = () => {
                 <ContactItem
                   isActive={activeId === `${conversation.id}_group`}
                   name={conversation.name ?? ""}
+                  hasUnread={getUnread(groupIdStr, 0)}
                   message={
-                    signalR.typingUser ? "typing..." : (conversation.lastMessage ?? "")
+                    signalR.typingUser
+                      ? "typing..."
+                      : getDisplayMessage(groupIdStr, conversation.lastMessage ?? "")
                   }
-                  time={formatTime(conversation.lastMessageAt) ?? ""}
-                  avatarUrl={conversation.groupPicture || ""}
+                  time={getDisplayTime(groupIdStr, formatTime(conversation.lastMessageAt) ?? "")}
+                  avatarUrl={
+                    conversation.groupPicture
+                      ? conversation.groupPicture.startsWith("http")
+                        ? conversation.groupPicture
+                        : `${BASE_URL}${conversation.groupPicture}`
+                      : ""
+                  }
                 />
               </div>
             );
@@ -244,10 +322,10 @@ const ContactList: React.FC = () => {
         ) : (
           "No Conversation"
         )
-      )
-      }
+      )}
     </div>
   );
 };
 
 export default ContactList;
+
