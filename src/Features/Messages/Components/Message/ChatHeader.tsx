@@ -1,5 +1,4 @@
 import React from "react";
-import { MoreVertical } from "lucide-react";
 import { useChat } from "../../Contexts/ShareDataMessages";
 import { BASE_URL } from "../../Utils/Api";
 
@@ -87,11 +86,6 @@ const ChatHeader: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-center p-0 gap-[7.6px] w-[30px] h-[30px]">
-        <button className="flex flex-col justify-center items-center p-[7.2px] w-[30px] h-[30px] rounded-full hover:bg-gray-50 transition-colors">
-          <MoreVertical className="w-[30px] h-[30px] text-[#434656]" />
-        </button>
-      </div>
     </div>
   );
 };
