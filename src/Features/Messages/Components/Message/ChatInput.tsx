@@ -1,4 +1,4 @@
-import { Paperclip, Smile, SendHorizontal } from "lucide-react";
+import {Smile, SendHorizontal } from "lucide-react";
 import { useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { useChat } from "../../Contexts/ShareDataMessages";
@@ -10,21 +10,15 @@ type Props = {
 const ChatInput = ({ connection }: Props) => {
   const [message, setMessage] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
-  const { otherUserId, conversationId, setChatData, selectedConversation } = useChat();
-  const isGroup = selectedConversation && ('teacherId' in selectedConversation || 'name' in selectedConversation);
+  const { otherUserId, conversationId, selectedConversation } = useChat();
+  const isGroup = !!(selectedConversation && (selectedConversation as any).isGroup === true);
   const isTyping = useRef<any>(null);
   const sendMessage = async () => {
     if (!message.trim()) return;
     if (!connection || connection.state !== "Connected") return;
 
-    const currentUserId = localStorage.getItem("currentUserId");
-    const { fullName } = JSON.parse(localStorage.getItem("userData") || "{}");
-
     if (isGroup) {
-      connection.invoke("SendGroupTypingIndicator", {
-        GroupChatId: conversationId,
-        IsTyping: false,
-      });
+      connection.invoke("SendGroupTypingIndicator", Number(conversationId), false);
     } else {
       connection.invoke("SendTypingIndicator", {
         RecipientId: otherUserId,
@@ -37,49 +31,33 @@ const ChatInput = ({ connection }: Props) => {
       isTyping.current = null;
     }
 
-    const tempMessage = {
-      id: `temp-${Date.now()}`,
-      content: message,
-      senderId: currentUserId,
-      senderName: fullName,
-      conversationId: conversationId,
-      sentAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    };
-
-    setChatData((prev: any) => [...(prev || []), tempMessage]);
+    const text = message;
+    setMessage("");
 
     try {
       if (isGroup) {
         await connection.invoke("SendGroupMessage", {
-          GroupChatId: conversationId,
-          Content: message,
+          GroupChatId: Number(conversationId),
+          content: text,
         });
       } else {
         await connection.invoke("SendMessage", {
           RecipientId: otherUserId,
-          Content: message,
+          Content: text,
         });
       }
     } catch (err) {
-      console.error("Send failed", err);
-      setChatData((prev: any) =>
-        (prev || []).filter((m: any) => m.id !== tempMessage.id),
-      );
+      setMessage(text);
     }
-
-    setMessage("");
   };
+
 
   const handleTyping = () => {
     if (connection?.state !== "Connected") return;
 
     if (!isTyping.current) {
       if (isGroup) {
-        connection.invoke("SendGroupTypingIndicator", {
-          GroupChatId: conversationId,
-          IsTyping: true,
-        });
+        connection.invoke("SendGroupTypingIndicator", Number(conversationId), true);
       } else {
         connection.invoke("SendTypingIndicator", {
           RecipientId: otherUserId,
@@ -95,10 +73,7 @@ const ChatInput = ({ connection }: Props) => {
 
     isTyping.current = setTimeout(() => {
       if (isGroup) {
-        connection.invoke("SendGroupTypingIndicator", {
-          GroupChatId: conversationId,
-          IsTyping: false,
-        });
+        connection.invoke("SendGroupTypingIndicator", Number(conversationId), false);
       } else {
         connection.invoke("SendTypingIndicator", {
           RecipientId: otherUserId,
@@ -111,9 +86,9 @@ const ChatInput = ({ connection }: Props) => {
 
   return (
     <div className="relative overflow-visible left-0 right-0 bottom-0 flex h-[60px] w-[100%] flex-row items-center bg-white px-[22.8px] gap-[15.2px] shadow-[0px_-4px_20px_rgba(0,19,85,0.03)]">
-      <button className="flex h-[32.4px] w-[27px] flex-none items-center justify-center p-[7.2px]">
+      {/* <button className="flex h-[32.4px] w-[27px] flex-none items-center justify-center p-[7.2px]">
         <Paperclip size={18} color="#747688" />
-      </button>
+      </button> */}
 
       <div className="relative">
         <div
