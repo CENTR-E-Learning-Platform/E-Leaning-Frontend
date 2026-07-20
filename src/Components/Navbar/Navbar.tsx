@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useTeacherProfile } from '../../Features/Profile/Hooks/useTeacherProfile';
+import { useChat } from '../../Features/Messages/Contexts/ShareDataMessages';
 import bg_imptyPhoto from "../../assets/images/imptyPhoto.jpg";
 import { BASE_URL } from '../../Features/Calendar/Utils/api';
 import { useEffect, useState, useRef, Suspense } from 'react';
@@ -30,6 +31,7 @@ const Navbar = () => {
     const location = useLocation();
 
     const { unreadCount } = useNotifications();
+    const { hasUnreadChat, setHasUnreadChat } = useChat();
     const audioRef = useRef<HTMLAudioElement>(new Audio(notifySound));
     const prevCountRef = useRef<number | null>(null);
 
@@ -74,6 +76,12 @@ const Navbar = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        if (location.pathname === '/messages') {
+            setHasUnreadChat(false);
+        }
+    }, [location.pathname, setHasUnreadChat]);
+
     const handleLogout = () => {
         localStorage.removeItem("token");
         setIsAuth(false);
@@ -110,7 +118,12 @@ const Navbar = () => {
                         <p className='text-[16px]'>Schedule</p>
                     </NavLink>
                     <NavLink to="/messages" className={navLinkClasses}>
-                        <img src={MessagesIcon} className='p-[2px]' alt="Messages" />
+                        <div className="relative">
+                            <img src={MessagesIcon} className='p-[2px]' alt="Messages" />
+                            {hasUnreadChat && (
+                                <span className="absolute top-[0px] right-[0px] w-[9px] h-[9px] bg-[#525FE1] rounded-full border-[1.5px] border-white" />
+                            )}
+                        </div>
                         <p className='text-[16px]'>Messages</p>
                     </NavLink>
                 </ul>
