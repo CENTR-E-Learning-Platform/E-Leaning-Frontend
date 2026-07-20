@@ -19,66 +19,115 @@ type Props = {
 export const TeacherTextMessage = ({ messages }: Props) => {
   const formatTime = useConvertDate();
   const currentUserId = localStorage.getItem("currentUserId");
-  const { signalR  , conversationId } = useChat();
-  
+  const { signalR, otherUserId, selectedConversation } = useChat();
+  const isGroup = selectedConversation && (selectedConversation as any).isGroup === true;
+
+  const isSameMinute = (date1: string, date2: string) => {
+    if (!date1 || !date2) return false;
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate() &&
+      d1.getHours() === d2.getHours() &&
+      d1.getMinutes() === d2.getMinutes()
+    );
+  };
+
   return (
-    <div>
+    <div className="flex flex-col w-full pb-4">
       {messages.map((msg, i) => {
         const isMe = String(msg.senderId) === String(currentUserId);
 
+        const prevMsg = messages[i - 1];
+        const nextMsg = messages[i + 1];
+
+        const isSameSenderAsPrev = prevMsg && String(prevMsg.senderId) === String(msg.senderId);
+        const isSameMinuteAsPrev = prevMsg && isSameMinute(msg.sentAt || msg.createdAt, prevMsg.sentAt || prevMsg.createdAt);
+        const isGroupStart = !(isSameSenderAsPrev && isSameMinuteAsPrev);
+
+        const isSameSenderAsNext = nextMsg && String(nextMsg.senderId) === String(msg.senderId);
+        const isSameMinuteAsNext = nextMsg && isSameMinute(msg.sentAt || msg.createdAt, nextMsg.sentAt || nextMsg.createdAt);
+        const isGroupEnd = !(isSameSenderAsNext && isSameMinuteAsNext);
+
+        const marginClass = i === 0 ? "" : isGroupStart ? "mt-4" : "mt-1";
+
         return isMe ? (
-          <div
-            key={i}
-            className="flex flex-col justify-end mb-2 items-end p-0 self-stretch"
-          >
-            <div className="flex flex-row items-start p-0 gap-[15.2px] w-[391.4px] max-w-[440.04px]">
-              <div className="flex flex-col items-end p-0 w-[345.8px]">
-                <div className="relative flex flex-col items-start pt-[14.4px] pr-[20.5px] pb-[14.4px] pl-[15.2px] bg-[#525FE1] rounded-l-[16px] rounded-br-[16px] shadow-sm overflow-hidden">
-                  <div className="absolute inset-0 bg-white opacity-[0.002] shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1)]" />
-                  <p className="z-10 flex items-center max-w-[308.96px] font-['Poppins'] font-normal text-[15px] leading-[21.6px] text-white">
+          <div key={i} className={`flex w-full justify-end ${marginClass}`}>
+            <div className={`flex items-end max-w-[85%] md:max-w-[70%] ${isGroup ? "gap-3" : ""}`}>
+              <div className="flex flex-col items-end">
+                <div
+                  className={`bg-[#525FE1] text-white px-4 py-2.5 shadow-sm break-words w-fit rounded-2xl transition-all
+                    ${!isGroupStart ? 'rounded-tr-[4px]' : ''} 
+                    ${!isGroupEnd ? 'rounded-br-[4px]' : 'rounded-br-sm'}
+                  `}
+                >
+                  <p className="font-['Poppins'] text-[15px] leading-relaxed">
                     {msg.content}
                   </p>
                 </div>
-                <div className="flex flex-col items-start pt-[7.2px] px-[3.8px] pb-0 h-[20.7px]">
-                  <span className="h-[13.5px] font-['Poppins'] font-light text-[10px] leading-[13.5px] text-[#434656]">
+                {isGroupEnd && (
+                  <span className="font-['Poppins'] text-[10px] text-gray-500 mt-1.5 px-1">
                     {formatTime(msg.sentAt) || formatTime(msg.createdAt)}
                   </span>
+                )}
+              </div>
+              {isGroup && (
+                <div className={`flex-shrink-0 ${isGroupEnd ? 'mb-6' : 'mb-0'} w-8 h-8`}>
+                  {isGroupEnd && (
+                    <DefaultAvatar name={msg.senderName || "Me"} className="w-8 h-8 text-[12px]" />
+                  )}
                 </div>
-              </div>
-              <div className="flex flex-row justify-center items-center w-[30.4px] h-[28.8px] rounded-full">
-                <DefaultAvatar name={msg.senderName || "Me"} className="w-[30.4px] h-[28.8px] text-[12px]" />
-              </div>
+              )}
             </div>
           </div>
         ) : (
-          <div
-            key={i}
-            className="flex flex-col justify-start mb-2 items-start p-0 w-[730px] self-stretch"
-          >
-            <div className="flex flex-row items-start p-0 gap-[15.2px] w-[391.4px] max-w-[440.04px]">
-              <DefaultAvatar name={msg.senderName || "User"} className="flex-none w-[30.4px] h-[28.8px] text-[12px]" />
-              <div className="">
-                <div className="flex w-fit pt-[13.39px] pr-[15px] pb-[14.63px] pl-[14.4px] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-tr-[16px] rounded-br-[16px] rounded-bl-[16px]">
-                  <p className="flex items-center font-['Poppins'] max-w-[308.96px] font-normal text-[15px] leading-[21.6px] text-[#2A2D34]">
+          <div key={i} className={`flex w-full justify-start ${marginClass}`}>
+            <div className={`flex items-end max-w-[85%] md:max-w-[70%] ${isGroup ? "gap-3" : ""}`}>
+              {isGroup && (
+                <div className={`flex-shrink-0 ${isGroupEnd ? 'mb-6' : 'mb-0'} w-8 h-8`}>
+                  {isGroupEnd && (
+                    <DefaultAvatar name={msg.senderName || "User"} className="w-8 h-8 text-[12px]" />
+                  )}
+                </div>
+              )}
+              <div className="flex flex-col items-start">
+                {isGroup && isGroupStart && (
+                  <span className="font-['Poppins'] text-[11px] text-gray-500 mb-1 ml-1">
+                    {msg.senderName || "User"}
+                  </span>
+                )}
+                <div
+                  className={`bg-white text-[#2A2D34] px-4 py-2.5 shadow-sm border border-gray-100 break-words w-fit rounded-2xl transition-all
+                    ${!isGroupStart ? 'rounded-tl-[4px]' : ''} 
+                    ${!isGroupEnd ? 'rounded-bl-[4px]' : 'rounded-bl-sm'}
+                  `}
+                >
+                  <p className="font-['Poppins'] text-[15px] leading-relaxed">
                     {msg.content}
                   </p>
                 </div>
-
-                <span className="mt-2 flex items-center font-['Poppins'] font-light text-[10px] leading-[13.5px] text-[#434656]">
-                  {formatTime(msg.sentAt) || formatTime(msg.createdAt)}
-                </span>
+                {isGroupEnd && (
+                  <span className="font-['Poppins'] text-[10px] text-gray-500 mt-1.5 px-1">
+                    {formatTime(msg.sentAt) || formatTime(msg.createdAt)}
+                  </span>
+                )}
               </div>
             </div>
           </div>
         );
       })}
 
-      {signalR.typingUser && signalR.typingConversationId !== conversationId && (
-        <div className="flex flex-col justify-start mb-2 items-start p-0 w-[730px] mt-5 self-stretch">
-          <div className="flex flex-row items-start gap-[15.2px] max-w-[200px]">
-            <DefaultAvatar name={signalR.typingUser || "User"} className="w-[30px] h-[30px] text-[12px]" />
-
-            <div className="bg-white px-[14px] py-[10px] rounded-tr-[16px] rounded-br-[16px] rounded-bl-[16px] shadow-sm">
+      {signalR.typingUser && String(signalR.typingUserId) === String(otherUserId) && (
+        <div className="flex w-full justify-start mt-4">
+          <div className={`flex items-end max-w-[85%] md:max-w-[70%] ${isGroup ? "gap-3" : ""}`}>
+            {isGroup && (
+              <div className="flex-shrink-0 mb-1 w-8 h-8">
+                <DefaultAvatar name={signalR.typingUser || "User"} className="w-8 h-8 text-[12px]" />
+              </div>
+            )}
+            <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 w-fit">
               <TypingIndicator />
             </div>
           </div>
