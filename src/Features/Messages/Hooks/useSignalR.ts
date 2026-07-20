@@ -1,5 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
+import notifySound from "../../../assets/audio/notify.mp3";
+const audio = new Audio(notifySound);
+const lastSoundPlayedTimePerSender = new Map<string, number>();
+
+const playNotificationSound = (senderId: string) => {
+  const currentUserId = localStorage.getItem("currentUserId");
+  if (String(senderId) === String(currentUserId)) return;
+
+  const now = Date.now();
+  const lastTime = lastSoundPlayedTimePerSender.get(String(senderId)) || 0;
+
+  // 60 seconds cooldown per sender
+  if (now - lastTime > 60000) {
+    audio.currentTime = 0;
+    audio.play().catch(() => { });
+    lastSoundPlayedTimePerSender.set(String(senderId), now);
+  }
+};
 
 type Message = {
   senderId: string;
@@ -15,16 +33,8 @@ type TypingIndicator = {
   isTyping: boolean;
 };
 
-type UseSignalRReturn = {
-  connection: signalR.HubConnection | null;
-  messages: Message[];
-  typingUser: string | null;
-  groupMessages: Record<number, GroupMessage[]>;
-  groupTypingUsers: TypingUser[];
-  typingConversationId: string | null;
-};
-
 type GroupMessage = {
+  messageId?: number;
   senderId: string;
   senderName: string;
   content: string;
@@ -32,23 +42,28 @@ type GroupMessage = {
   sentAt?: string | number;
 };
 
-// type GroupTypingIndicator = {
-//   senderId: string;
-//   senderName: string;
-//   groupChatId: number;
-//   isTyping: boolean;
-// };
-
 type TypingUser = {
   senderId: string;
   senderName: string;
   groupChatId: number;
 };
 
+type UseSignalRReturn = {
+  connection: signalR.HubConnection | null;
+  messages: Message[];
+  typingUser: string | null;
+  typingUserId: string | null;
+  groupMessages: Record<number, GroupMessage[]>;
+  groupTypingUsers: TypingUser[];
+  typingConversationId: string | null;
+};
+
 export default function useSignalR(
   token: string,
   BASE_URL: string,
   refetch: () => void,
+  setHasUnreadChat?: (val: boolean) => void,
+  activeConversationIdRef?: React.MutableRefObject<string | null>
 ): UseSignalRReturn {
   const [connection, setConnection] = useState<signalR.HubConnection | null>(
     null,
@@ -56,7 +71,7 @@ export default function useSignalR(
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [typingUser, setTypingUser] = useState<string | null>(null);
-  // const [groupMessages, setGroupMessages] = useState<GroupMessage[]>([]);
+  const [typingUserId, setTypingUserId] = useState<string | null>(null);
   const [groupMessages, setGroupMessages] = useState<
     Record<number, GroupMessage[]>
   >({});
@@ -98,33 +113,46 @@ export default function useSignalR(
 
         if (exists) return prev;
 
+        // Play sound and show badge if message is from someone else
+        const currentUserId = localStorage.getItem("currentUserId");
+        if (String(msg.senderId) !== String(currentUserId)) {
+          const isActiveChat = activeConversationIdRef?.current && String(activeConversationIdRef.current) === String(msg.conversationId);
+
+          if (!isActiveChat) {
+            playNotificationSound(msg.senderId);
+            if (setHasUnreadChat && window.location.pathname !== '/messages') {
+              setHasUnreadChat(true);
+            }
+          }
+        }
+
         return [...prev, msg];
       });
-      // NOTE: do NOT refetch chat messages here — that causes duplicates.
-      // The contact-list refetch is handled separately by ChatContent.
-    });
-
-    connect.on("UserTyping", (userName: string, convId: string) => {
-      setTypingUser(userName);
-      setTypingConversationId(convId);
     });
 
     connect.on("ReceiveTypingIndicator", (data: TypingIndicator) => {
       if (data.isTyping) {
         setTypingUser(data.senderName);
+        setTypingUserId(data.senderId);
+        setTypingConversationId(data.senderId);
       } else {
         setTypingUser(null);
+        setTypingUserId(null);
+        setTypingConversationId(null);
       }
     });
 
-    connect.on("MessageRead", (conversationId: number) => {
-      console.log("Read:", conversationId);
-    });
+    connect.on("MessageRead", () => { });
 
-    //     Group Chat
-
-    //          ReceiveGroupMessage
-    connect.on("RecieveGroupMessage", (msg) => {
+    connect.on("RecieveGroupMessage", (raw) => {
+      const msg: GroupMessage = {
+        messageId: raw.messageId ?? raw.MessageId,
+        senderId: raw.senderId ?? raw.SenderId ?? "",
+        senderName: raw.senderName ?? raw.SenderName ?? "",
+        content: raw.content ?? raw.Content ?? "",
+        groupChatId: raw.groupChatId ?? raw.GroupChatId ?? 0,
+        sentAt: raw.sentAt ?? raw.SentAt,
+      };
       setGroupMessages((prev) => {
         const group = prev[msg.groupChatId] || [];
         const exists = group.some(
@@ -136,12 +164,23 @@ export default function useSignalR(
 
         if (exists) return prev;
 
+        const currentUserId = localStorage.getItem("currentUserId");
+        if (String(msg.senderId) !== String(currentUserId)) {
+          const isActiveChat = activeConversationIdRef?.current && String(activeConversationIdRef.current) === String(msg.groupChatId);
+
+          if (!isActiveChat) {
+            playNotificationSound(msg.groupChatId.toString());
+            if (setHasUnreadChat && window.location.pathname !== '/messages') {
+              setHasUnreadChat(true);
+            }
+          }
+        }
+
         return {
           ...prev,
           [msg.groupChatId]: [...group, msg],
         };
       });
-      // NOTE: do NOT refetch group messages here — that causes duplicates.
     });
 
     connect.on("ReceiveGroupTypingIndicator", (data) => {
@@ -156,18 +195,12 @@ export default function useSignalR(
       });
     });
 
-    connect.on("GroupMessageSeen", (data: any) => {
-      console.log("Group Seen:", data);
-    });
+    connect.on("GroupMessageSeen", () => { });
 
     connect
       .start()
-      .then(() => {
-        console.log("Connected ✅");
-      })
-      .catch((err) => {
-        console.error("Connection failed ❌", err);
-      });
+      .then(() => { })
+      .catch(() => { });
 
     setConnection(connect);
 
@@ -186,6 +219,7 @@ export default function useSignalR(
     connection,
     messages,
     typingUser,
+    typingUserId,
     groupMessages,
     groupTypingUsers,
     typingConversationId,
