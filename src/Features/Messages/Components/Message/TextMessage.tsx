@@ -19,7 +19,7 @@ type Props = {
 export const TeacherTextMessage = ({ messages }: Props) => {
   const formatTime = useConvertDate();
   const currentUserId = localStorage.getItem("currentUserId");
-  const { signalR, otherUserId, selectedConversation } = useChat();
+  const { signalR, otherUserId, selectedConversation, conversationId } = useChat();
   const isGroup = selectedConversation && (selectedConversation as any).isGroup === true;
 
   const isSameMinute = (date1: string, date2: string) => {
@@ -119,20 +119,36 @@ export const TeacherTextMessage = ({ messages }: Props) => {
         );
       })}
 
-      {signalR.typingUser && String(signalR.typingUserId) === String(otherUserId) && (
+      {!isGroup && signalR.typingUsers?.[String(otherUserId)] && (
         <div className="flex w-full justify-start mt-4">
-          <div className={`flex items-end max-w-[85%] md:max-w-[70%] ${isGroup ? "gap-3" : ""}`}>
-            {isGroup && (
-              <div className="flex-shrink-0 mb-1 w-8 h-8">
-                <DefaultAvatar name={signalR.typingUser || "User"} className="w-8 h-8 text-[12px]" />
-              </div>
-            )}
+          <div className="flex items-end max-w-[85%] md:max-w-[70%]">
             <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 w-fit">
               <TypingIndicator />
             </div>
           </div>
         </div>
       )}
+
+      {isGroup &&
+        signalR.groupTypingUsers
+          ?.filter((u: any) => String(u.groupChatId) === String(conversationId))
+          .map((typingUser: any, idx: number) => (
+            <div key={`typing-${typingUser.senderId}-${idx}`} className="flex w-full justify-start mt-4">
+              <div className="flex items-end max-w-[85%] md:max-w-[70%] gap-3">
+                <div className="flex-shrink-0 mb-1 w-8 h-8">
+                  <DefaultAvatar name={typingUser.senderName || "User"} className="w-8 h-8 text-[12px]" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="font-['Poppins'] text-[11px] text-gray-500 mb-1 ml-1">
+                    {typingUser.senderName || "User"}
+                  </span>
+                  <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 w-fit">
+                    <TypingIndicator />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
     </div>
   );
 };
