@@ -2,14 +2,6 @@ import React from "react";
 import { useChat } from "../../Contexts/ShareDataMessages";
 import { BASE_URL } from "../../Utils/Api";
 
-interface Conversation {
-  otherUserName?: string;
-  otherUserPicture?: string;
-  isOnline?: boolean;
-  name?: string;
-  groupPicture?: string;
-  teacherId?: string;
-}
 
 const getInitials = (name: string) => {
   return name
@@ -21,12 +13,14 @@ const getInitials = (name: string) => {
 };
 
 const ChatHeader: React.FC = () => {
-  const { selectedConversation } = useChat() as {
-    selectedConversation: Conversation | undefined;
-  };
+  const { selectedConversation, signalR, otherUserId, conversationId } = useChat() as any;
   const isGroup =
     selectedConversation &&
     ("teacherId" in selectedConversation || "name" in selectedConversation);
+
+  const isTyping = isGroup
+    ? signalR?.groupTypingUsers?.some((u: any) => String(u.groupChatId) === String(conversationId))
+    : signalR?.typingUsers?.[String(otherUserId)];
 
   return (
     <div className="relative flex flex-row justify-between items-center px-[30.4px] py-0 h-[72px] bg-white shadow-[0px_0.9px_1.8px_rgba(0,0,0,0.05)] font-['Poppins']">
@@ -74,13 +68,25 @@ const ChatHeader: React.FC = () => {
 
           <div className="flex flex-col items-start p-0 self-stretch w-full h-[13.5px]">
             <span
-              className={`block w-full font-semibold text-[9.5px] leading-[13.5px] tracking-[0.475px] uppercase truncate ${isGroup ? "text-[#525FE1]" : selectedConversation?.isOnline ? "text-[#16A34A]" : "text-[#9CA3AF]"} `}
+              className={`block w-full font-semibold text-[9.5px] leading-[13.5px] tracking-[0.475px] uppercase truncate ${
+                isTyping
+                  ? "text-[#525FE1]"
+                  : isGroup
+                  ? "text-[#525FE1]"
+                  : selectedConversation?.isOnline
+                  ? "text-[#16A34A]"
+                  : "text-[#9CA3AF]"
+              } `}
             >
               {isGroup
-                ? "Group"
-                : selectedConversation?.isOnline
-                  ? "Online Now"
-                  : "Offline"}
+                ? isTyping
+                  ? "typing..."
+                  : "Group"
+                : isTyping
+                  ? "typing..."
+                  : selectedConversation?.isOnline
+                    ? "Online Now"
+                    : "Offline"}
             </span>
           </div>
         </div>
