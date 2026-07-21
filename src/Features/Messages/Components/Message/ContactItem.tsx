@@ -285,7 +285,7 @@ const ContactList: React.FC = () => {
                       hasUnread={getUnread(convIdStr, conversation.unreadCount)}
                       name={conversation.otherUserName ?? ""}
                       message={
-                        signalR.typingUser
+                        signalR.typingUsers?.[String(conversation.otherUserId)]
                           ? "typing..."
                           : getDisplayMessage(convIdStr, conversation.lastMessage ?? "")
                       }
@@ -320,7 +320,7 @@ const ContactList: React.FC = () => {
                       name={conversation.name ?? ""}
                       hasUnread={getUnread(groupIdStr, 0)}
                       message={
-                        signalR.typingUser
+                        signalR.groupTypingUsers?.some((u: any) => String(u.groupChatId) === groupIdStr)
                           ? "typing..."
                           : getDisplayMessage(groupIdStr, conversation.lastMessage ?? "")
                       }
