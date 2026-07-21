@@ -93,6 +93,13 @@ const Navbar = () => {
         return `${baseClasses} ${isActive ? 'text-[#525FE1] after:w-full' : 'text-[#2A2D34] after:w-0'}`;
     };
 
+    const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, to: string) => {
+        if (location.pathname === '/messages') {
+            e.preventDefault();
+            window.location.href = to;
+        }
+    };
+
     return <>
         <nav className="py-[20px] h-[66px] w-full shadow-[0px_20px_40px_rgba(0,6,69,0.04)] border-[#D1D5DB] px-[40px] bg-white flex justify-between items-center">
             <NavLink to="/home" className="Logo">
@@ -103,21 +110,21 @@ const Navbar = () => {
 
             <div className="">
                 <ul className="flex gap-[16px]">
-                    <NavLink to="/home" className={navLinkClasses}>
+                    <NavLink to="/home" className={navLinkClasses} onClick={(e) => handleNavClick(e, '/home')}>
                         <img src={HomeIcon} className='p-[2px]' alt="HomeIcon" />
                         <p className='text-[16px]'>Home</p>
                     </NavLink>
                     {!isTeacher && (
-                        <NavLink to="/explore" className={navLinkClasses}>
+                        <NavLink to="/explore" className={navLinkClasses} onClick={(e) => handleNavClick(e, '/explore')}>
                             <img src={ExploreIcon} className='p-[2px]' alt="ExploreTeacher" />
                             <p className='text-[16px]'>Explore Teacher</p>
                         </NavLink>
                     )}
-                    <NavLink to="/Calendar" className={navLinkClasses}>
+                    <NavLink to="/Calendar" className={navLinkClasses} onClick={(e) => handleNavClick(e, '/Calendar')}>
                         <img src={ScheduleIcon} className='p-[2px]' alt="Schedule" />
                         <p className='text-[16px]'>Schedule</p>
                     </NavLink>
-                    <NavLink to="/messages" className={navLinkClasses}>
+                    <NavLink to="/messages" className={navLinkClasses} onClick={(e) => handleNavClick(e, '/messages')}>
                         <div className="relative">
                             <img src={MessagesIcon} className='p-[2px]' alt="Messages" />
                             {hasUnreadChat && (
