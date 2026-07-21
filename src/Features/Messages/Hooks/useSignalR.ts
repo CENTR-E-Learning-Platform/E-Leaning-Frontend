@@ -31,6 +31,7 @@ type TypingIndicator = {
   senderId: string;
   senderName: string;
   isTyping: boolean;
+  conversationId?: number;
 };
 
 type GroupMessage = {
@@ -51,11 +52,9 @@ type TypingUser = {
 type UseSignalRReturn = {
   connection: signalR.HubConnection | null;
   messages: Message[];
-  typingUser: string | null;
-  typingUserId: string | null;
+  typingUsers: Record<string, string>;
   groupMessages: Record<number, GroupMessage[]>;
   groupTypingUsers: TypingUser[];
-  typingConversationId: string | null;
 };
 
 export default function useSignalR(
@@ -70,17 +69,13 @@ export default function useSignalR(
   );
 
   const [messages, setMessages] = useState<Message[]>([]);
-  const [typingUser, setTypingUser] = useState<string | null>(null);
-  const [typingUserId, setTypingUserId] = useState<string | null>(null);
+  const [typingUsers, setTypingUsers] = useState<Record<string, string>>({});
   const [groupMessages, setGroupMessages] = useState<
     Record<number, GroupMessage[]>
   >({});
   const [groupTypingUsers, setGroupTypingUsers] = useState<TypingUser[]>([]);
   const refetchRef = useRef(refetch);
-
-  const [typingConversationId, setTypingConversationId] = useState<
-    string | null
-  >(null);
+  const typingTimeouts = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   useEffect(() => {
     refetchRef.current = refetch;
@@ -131,15 +126,29 @@ export default function useSignalR(
     });
 
     connect.on("ReceiveTypingIndicator", (data: TypingIndicator) => {
-      if (data.isTyping) {
-        setTypingUser(data.senderName);
-        setTypingUserId(data.senderId);
-        setTypingConversationId(data.senderId);
-      } else {
-        setTypingUser(null);
-        setTypingUserId(null);
-        setTypingConversationId(null);
+      const targetId = String(data.senderId);
+
+      if (typingTimeouts.current[targetId]) {
+        clearTimeout(typingTimeouts.current[targetId]);
+        delete typingTimeouts.current[targetId];
       }
+
+      setTypingUsers((prev) => {
+        if (data.isTyping) {
+          typingTimeouts.current[targetId] = setTimeout(() => {
+            setTypingUsers((curr) => {
+              const next = { ...curr };
+              delete next[targetId];
+              return next;
+            });
+          }, 3000);
+          return { ...prev, [targetId]: data.senderName };
+        } else {
+          const next = { ...prev };
+          delete next[targetId];
+          return next;
+        }
+      });
     });
 
     connect.on("MessageRead", () => { });
@@ -184,8 +193,17 @@ export default function useSignalR(
     });
 
     connect.on("ReceiveGroupTypingIndicator", (data) => {
+      const timerKey = `group_${data.senderId}_${data.groupChatId}`;
+      if (typingTimeouts.current[timerKey]) {
+        clearTimeout(typingTimeouts.current[timerKey]);
+        delete typingTimeouts.current[timerKey];
+      }
+
       setGroupTypingUsers((prev) => {
         if (data.isTyping) {
+          typingTimeouts.current[timerKey] = setTimeout(() => {
+            setGroupTypingUsers((curr) => curr.filter((u) => u.senderId !== data.senderId));
+          }, 3000);
           const exists = prev.some((u) => u.senderId === data.senderId);
           if (exists) return prev;
           return [...prev, data];
@@ -218,10 +236,8 @@ export default function useSignalR(
   return {
     connection,
     messages,
-    typingUser,
-    typingUserId,
+    typingUsers,
     groupMessages,
     groupTypingUsers,
-    typingConversationId,
   };
 }
