@@ -22,6 +22,7 @@ const ChatInput = ({ connection }: Props) => {
     } else {
       connection.invoke("SendTypingIndicator", {
         RecipientId: otherUserId,
+        ConversationId: Number(conversationId),
         IsTyping: false,
       });
     }
@@ -61,6 +62,7 @@ const ChatInput = ({ connection }: Props) => {
       } else {
         connection.invoke("SendTypingIndicator", {
           RecipientId: otherUserId,
+          ConversationId: Number(conversationId),
           IsTyping: true,
         });
       }
