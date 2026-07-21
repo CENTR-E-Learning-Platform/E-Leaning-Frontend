@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useRef, useEffect, useCallback, type ReactNode } from "react";
 import { BASE_URL } from "../Utils/Api";
 import useSignalR from "../Hooks/useSignalR";
 
@@ -19,6 +19,7 @@ type ChatContextType = {
   signalR: any;
   hasUnreadChat: boolean;
   setHasUnreadChat: (val: boolean) => void;
+  resetChat: () => void;
 };
 
 const ChatContext = createContext<ChatContextType | null>(null);
@@ -41,6 +42,15 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   }, [conversationId]);
 
   const signalR = useSignalR(token, BASE_URL, () => { }, setHasUnreadChat, activeConversationIdRef);
+
+  const resetChat = useCallback(() => {
+    setConversationId(null);
+    setChatData([]);
+    setOtherUserId(null);
+    setPage(1);
+    setHasMore(true);
+    setSelectedConversation(null);
+  }, []);
 
   const isGroup =
     selectedConversation &&
@@ -94,6 +104,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         signalR,
         hasUnreadChat,
         setHasUnreadChat,
+        resetChat,
       }}
     >
       {children}
