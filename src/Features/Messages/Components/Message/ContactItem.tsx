@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { useGetChatConversation } from "../../Hooks/useGetChatConversation";
 import { useConvertDate } from "../../Hooks/useConvertDate";
 import type { ContactProps, Conversation, ConversationGroup } from "../../Types/itemContact";
@@ -90,8 +92,8 @@ const ContactItem: React.FC<ContactProps> = ({
 
 const ContactList: React.FC = () => {
   const { activeMessage, isTeacher } = useContext(ShareDataContactItems);
-  const { data: dataGetChatConversation } = useGetChatConversation();
-  const { data: dataGetChatMyGroups } = useGetChatMyGroups();
+  const { data: dataGetChatConversation, isLoading: isLoadingConversation } = useGetChatConversation();
+  const { data: dataGetChatMyGroups, isLoading: isLoadingGroups } = useGetChatMyGroups();
 
   const formatTime = useConvertDate();
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -247,82 +249,94 @@ const ContactList: React.FC = () => {
     return fallback;
   };
 
+  const renderSkeletons = () => (
+    <div className="flex flex-col gap-5 w-full pr-4">
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="flex gap-3 items-center w-full">
+          <Skeleton circle width={44} height={44} />
+          <div className="flex-1 min-w-0">
+            <Skeleton height={14} width="60%" className="mb-1" />
+            <Skeleton height={10} width="40%" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="flex flex-col items-start py-[14.4px] pl-[14.4px] gap-[7.2px] w-[360px] h-[744.3px] overflow-y-auto scroll-smooth">
-      {activeMessage === (isTeacher ? "Teachers" : "Students") ? (
-        (dataGetChatConversation?.data?.length ?? 0) > 0 ? (
-          dataGetChatConversation?.data?.map((conversation: Conversation) => {
-            const convIdStr = String(conversation.id);
-            return (
-              <div
-                key={conversation.id}
-                onClick={() => {
-                  getConversationId(conversation.id, conversation.otherUserId, false);
-                  setSelectedConversation({ ...conversation, isGroup: false });
-                }}
-              >
-                <ContactItem
-                  isActive={activeId === `${conversation.id}_direct`}
-                  isOnline={conversation.isOnline}
-                  hasUnread={getUnread(convIdStr, conversation.unreadCount)}
-                  name={conversation.otherUserName ?? ""}
-                  message={
-                    signalR.typingUser
-                      ? "typing..."
-                      : getDisplayMessage(convIdStr, conversation.lastMessage ?? "")
-                  }
-                  time={getDisplayTime(convIdStr, formatTime(conversation.lastMessageAt) ?? "")}
-                  avatarUrl={
-                    conversation.otherUserPicture
-                      ? conversation.otherUserPicture.startsWith("http")
-                        ? conversation.otherUserPicture
-                        : `${BASE_URL}${conversation.otherUserPicture}`
-                      : ""
-                  }
-                />
-              </div>
-            );
-          })
-        ) : (
-          "No Conversation"
-        )
-      ) : (
-        (dataGetChatMyGroups?.data?.length ?? 0) > 0 ? (
-          dataGetChatMyGroups?.data?.map((conversation: ConversationGroup) => {
-            const groupIdStr = String(conversation.id);
-            return (
-              <div
-                key={conversation.id}
-                onClick={() => {
-                  getConversationId(conversation.id, "", true);
-                  setSelectedConversation({ ...conversation, isGroup: true });
-                }}
-              >
-                <ContactItem
-                  isActive={activeId === `${conversation.id}_group`}
-                  name={conversation.name ?? ""}
-                  hasUnread={getUnread(groupIdStr, 0)}
-                  message={
-                    signalR.typingUser
-                      ? "typing..."
-                      : getDisplayMessage(groupIdStr, conversation.lastMessage ?? "")
-                  }
-                  time={getDisplayTime(groupIdStr, formatTime(conversation.lastMessageAt) ?? "")}
-                  avatarUrl={
-                    conversation.groupPicture
-                      ? conversation.groupPicture.startsWith("http")
-                        ? conversation.groupPicture
-                        : `${BASE_URL}${conversation.groupPicture}`
-                      : ""
-                  }
-                />
-              </div>
-            );
-          })
-        ) : (
-          "No Conversation"
-        )
-      )}
+      {activeMessage === (isTeacher ? "Teachers" : "Students")
+        ? isLoadingConversation
+          ? renderSkeletons()
+          : (dataGetChatConversation?.data?.length ?? 0) > 0
+            ? dataGetChatConversation?.data?.map((conversation: Conversation) => {
+                const convIdStr = String(conversation.id);
+                return (
+                  <div
+                    key={conversation.id}
+                    onClick={() => {
+                      getConversationId(conversation.id, conversation.otherUserId, false);
+                      setSelectedConversation({ ...conversation, isGroup: false });
+                    }}
+                  >
+                    <ContactItem
+                      isActive={activeId === `${conversation.id}_direct`}
+                      isOnline={conversation.isOnline}
+                      hasUnread={getUnread(convIdStr, conversation.unreadCount)}
+                      name={conversation.otherUserName ?? ""}
+                      message={
+                        signalR.typingUser
+                          ? "typing..."
+                          : getDisplayMessage(convIdStr, conversation.lastMessage ?? "")
+                      }
+                      time={getDisplayTime(convIdStr, formatTime(conversation.lastMessageAt) ?? "")}
+                      avatarUrl={
+                        conversation.otherUserPicture
+                          ? conversation.otherUserPicture.startsWith("http")
+                            ? conversation.otherUserPicture
+                            : `${BASE_URL}${conversation.otherUserPicture}`
+                          : ""
+                      }
+                    />
+                  </div>
+                );
+              })
+            : "No Conversation"
+        : isLoadingGroups
+          ? renderSkeletons()
+          : (dataGetChatMyGroups?.data?.length ?? 0) > 0
+            ? dataGetChatMyGroups?.data?.map((conversation: ConversationGroup) => {
+                const groupIdStr = String(conversation.id);
+                return (
+                  <div
+                    key={conversation.id}
+                    onClick={() => {
+                      getConversationId(conversation.id, "", true);
+                      setSelectedConversation({ ...conversation, isGroup: true });
+                    }}
+                  >
+                    <ContactItem
+                      isActive={activeId === `${conversation.id}_group`}
+                      name={conversation.name ?? ""}
+                      hasUnread={getUnread(groupIdStr, 0)}
+                      message={
+                        signalR.typingUser
+                          ? "typing..."
+                          : getDisplayMessage(groupIdStr, conversation.lastMessage ?? "")
+                      }
+                      time={getDisplayTime(groupIdStr, formatTime(conversation.lastMessageAt) ?? "")}
+                      avatarUrl={
+                        conversation.groupPicture
+                          ? conversation.groupPicture.startsWith("http")
+                            ? conversation.groupPicture
+                            : `${BASE_URL}${conversation.groupPicture}`
+                          : ""
+                      }
+                    />
+                  </div>
+                );
+              })
+            : "No Conversation"}
     </div>
   );
 };
