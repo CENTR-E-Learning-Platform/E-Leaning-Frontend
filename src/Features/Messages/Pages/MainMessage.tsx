@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -12,21 +12,20 @@ import { useGetChatConversation } from "../Hooks/useGetChatConversation";
 import { useChat } from "../Contexts/ShareDataMessages";
 
 const MainMessage = () => {
-  const [showSkeleton, setShowSkeleton] = useState(true);
   const { isTeacher } = useContext(ShareDataContactItems);
-  const { otherUserId } = useChat();
-  const { data: dataGetChatConversation } = useGetChatConversation();
+  const { otherUserId, resetChat } = useChat();
+  const { data: dataGetChatConversation, isLoading } = useGetChatConversation();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      setTimeout(() => {
+        resetChat();
+      }, 0);
+    };
+  }, [resetChat]);
 
   /* ── Loading skeleton ── */
-  if (showSkeleton) {
+  if (isLoading) {
     return (
       <section className="MainMessage">
         <div className="flex justify-start items-start bg-[#F9FBFC] h-[calc(100vh-66px)]">
@@ -71,17 +70,14 @@ const MainMessage = () => {
     );
   }
 
-  /* ── No conversations at all → full-screen empty state ── */
   if (dataGetChatConversation?.data?.length === 0 && !otherUserId) {
     return (
       <section className="MainMessage">
         <div className="flex justify-start items-start bg-[#F9FBFC] h-[calc(100vh-66px)]">
-          {/* Keep the sidebar so the user can still see headers / switch tabs */}
           <div className="left-content bg-[#F9FBFC] h-full flex flex-col border-r border-[#E8EAED]">
             <MessagesHeader />
             <ContactList />
           </div>
-          {/* Right panel → empty state */}
           <div className="flex-1 h-full">
             {isTeacher ? <EmptyStudent /> : <EmptyTeacher />}
           </div>
@@ -90,7 +86,6 @@ const MainMessage = () => {
     );
   }
 
-  /* ── Normal view ── */
   return (
     <section className="MainMessage">
       <div className="controlMessage flex justify-start items-start bg-[#F9FBFC]">
