@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import { TeacherTextMessage } from "./TextMessage";
@@ -67,6 +69,7 @@ const ChatContent = () => {
   const prevConversationId = useRef<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
 
   const hasActiveChat = !!(conversationId || otherUserId || selectedConversation);
 
@@ -84,7 +87,7 @@ const ChatContent = () => {
     if (!el) return;
 
     const handleScroll = () => {
-      // Prevent pagination if messages don't even fill the container
+  
       if (el.scrollHeight <= el.clientHeight) return;
 
       const isScrolledUp = el.scrollHeight - el.scrollTop - el.clientHeight > 150;
@@ -112,8 +115,10 @@ const ChatContent = () => {
       isLoadingHistory.current = false;
       setIsFetching(false);
       setShowScrollButton(false);
+      setIsLoadingMessages(true);
 
       if (allMessages.length > 0) {
+        setIsLoadingMessages(false);
         setTimeout(() => {
           if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }, 50);
@@ -122,6 +127,7 @@ const ChatContent = () => {
     }
 
     if (allMessages.length > prevMessagesLength.current) {
+      setIsLoadingMessages(false);
       if (isLoadingHistory.current) {
         el.scrollTop = el.scrollHeight - prevScrollHeight.current;
         isLoadingHistory.current = false;
@@ -151,7 +157,6 @@ const ChatContent = () => {
     prevMessagesLength.current = allMessages.length;
   }, [allMessages, conversationId, hasMore]);
 
-  /* ── No conversation selected → WhatsApp-style placeholder ── */
   if (!hasActiveChat) {
     return (
       <section className="ChatContent border border-[#C4C5D94D] relative bg-[#F3F6FF] h-[calc(100vh-66px)]">
@@ -174,7 +179,21 @@ const ChatContent = () => {
             </div>
           )}
           <div className="mb-6"></div>
-          <TeacherTextMessage messages={allMessages} />
+          {isLoadingMessages ? (
+            <div className="flex-1 flex flex-col gap-6 justify-end pb-6">
+              <div className="self-start w-[45%]">
+                <Skeleton height={80} borderRadius={16} />
+              </div>
+              <div className="self-end w-[45%]">
+                <Skeleton height={80} borderRadius={16} />
+              </div>
+              <div className="self-start w-[35%]">
+                <Skeleton height={60} borderRadius={16} />
+              </div>
+            </div>
+          ) : (
+            <TeacherTextMessage messages={allMessages} />
+          )}
         </div>
         {showScrollButton && (
           <button
